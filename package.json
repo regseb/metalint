@@ -1,0 +1,47 @@
+{
+    "name": "metalint",
+    "version": "0.1.0",
+    "description": "Un linter pour les gouverner tous.",
+    "keywords": ["linter", "checker"],
+    "homepage": "https://regseb.github.io/metalint/",
+    "bugs": {
+        "url": "https://github.com/regseb/metalint/issues"
+    },
+    "license": "Licence Public Rien À Branler",
+    "author": "Sébastien Règne <regseb@gmail.com> (https://github.com/regseb)",
+    "contributors": [],
+    "files": [
+        "bin/",
+        "lib/",
+        "LICENSE",
+        "package.json",
+        "README.md"
+    ],
+    "main": "metalint.js",
+    "bin": "bin/cli.js",
+    "directories": {
+        "lib": "lib",
+        "bin": "bin"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/regseb/metalint.git"
+    },
+    "scripts": {
+        "lint": "metalint"
+    },
+    "dependencies": {
+        "colors": "^1.1.2",
+        "globby": "^2.1.0",
+        "minimatch": "^2.0.8",
+        "yargs": "^3.14.0",
+
+        "csslint": "^0.10.0",
+        "eslint": "^0.23.0",
+        "jscs": "^1.13.1",
+        "jshint": "^2.8.0",
+        "json-lint": "^0.1.0",
+        "jsonlint": "^1.6.2",
+        "markdownlint": "^0.0.6"
+    }
+}
