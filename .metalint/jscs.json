@@ -1,6 +1,5 @@
 {
     "esnext": true,
-    "excludeFiles": ["node_modules/**"],
 
     "disallowDanglingUnderscores": true,
     "disallowEmptyBlocks": true,
@@ -10,7 +9,7 @@
     ],
     "disallowKeywordsInComments": true,
     "disallowKeywordsOnNewLine": ["else", "catch"],
-    "disallowKeywords": ["with"],
+    "disallowKeywords": ["const", "var", "with"],
     "disallowMixedSpacesAndTabs": true,
     "disallowMultipleLineStrings": true,
     "disallowMultipleVarDecl": true,
@@ -51,9 +50,9 @@
     ],
     "requirePaddingNewLinesAfterUseStrict": true,
     "requireQuotedKeysInObjects": true,
-    "requireSemicolons": true,
     "requireSpaceAfterBinaryOperators": [
-        "=", ",", "+", "-", "/", "*", "==", "===", "!=", "!=="
+        "=", ",", "+", "-", "/", "*", "==", "===", "!=", "!==", ">", ">=",
+        "<", "<="
     ],
     "requireSpaceAfterKeywords": [
         "do", "for", "if", "else", "switch", "case", "try", "catch", "void",
@@ -61,7 +60,8 @@
     ],
     "requireSpaceAfterLineComment": true,
     "requireSpaceBeforeBinaryOperators": [
-        "=", "+", "-", "/", "*", "==", "===", "!=", "!=="
+        "=", "+", "-", "/", "*", "==", "===", "!=", "!==", ">", ">=", "<",
+        "<="
     ],
     "requireSpaceBeforeBlockStatements": 1,
     "requireSpaceBeforeKeywords": ["else", "while", "catch"],

@@ -1,108 +1,246 @@
 #!/usr/bin/env node
 
-var fs        = require("fs");
-var path      = require("path");
-var yargs     = require("yargs");
-var globby    = require("globby");
-var minimatch = require("minimatch");
-var metalint  = require("../lib/index");
-var reporters = require("../lib/reporters");
-var SEVERITY  = require("../lib/severity");
+"use strict";
 
-var argv = yargs
+let fs        = require("fs");
+let path      = require("path");
+let yargs     = require("yargs");
+let globby    = require("globby");
+let minimatch = require("minimatch");
+let metalint  = require("../lib/index");
+let reporters = require("../lib/reporters");
+let SEVERITY  = require("../lib/severity");
+
+let argv = yargs
         .usage("Usage: $0 [options] [files...]")
-        .option("level", {
-            "demand": false,
-            "describe": "Set the level of severity",
-            "type": "string"
+        .options({
+            "c": {
+                "alias":       "config",
+                "default":     ".metalint/metalint.json",
+                "requiresArg": true,
+                "type":        "string"
+            },
+            "h": {
+                "alias":   "hidden",
+                "default": undefined,
+                "type":    "boolean"
+            },
+            "l": {
+                "alias":       "level",
+                "requiresArg": true,
+                "type":        "string"
+            },
+            "o": {
+                "alias":       "output",
+                "requiresArg": true,
+                "type":        "string"
+            },
+            "p": {
+                "alias":       "patterns",
+                "requiresArg": true,
+                "type":        "array"
+            },
+            "r": {
+                "alias":       "reporter",
+                "requiresArg": true,
+                "type":        "string"
+            },
+            "v": {
+                "alias":   "verbose",
+                "default": undefined,
+                "type":    "count"
+            },
+            "help": {
+                "alias": "help",
+                "type":  "boolean"
+            },
+            "version": {
+                "alias": "version",
+                "type":  "boolean"
+            }
         })
-        .requiresArg("level")
-        .option("options", {
-            "demand": false,
-            "default": ".metalint/metalint.json",
-            "describe": "Set the location at options",
-            "type": "string"
-        })
-        .requiresArg("options")
-        .option("reporter", {
-            "demand": false,
-            "default": "console",
-            "describe": "Use your reporter implmentation",
-            "type": "string"
-        })
-        .requiresArg("reporter")
-        .count("verbose")
-        .alias("v", "verbose")
-        .help("help")
         .argv;
 
 /**
- * Normaliser les options. La structure de l'objet JSON contenant les options
- * est souple pour rendre la configuration moins verbeuse. Cette fonction
- * renseigne les valeurs par défaut pour les propriétes non-présentes.
+ * Fusionner deux objets JSON. Si une propriété est présente dans les deux
+ * objets : c'est valeur du second objet qui sera copié dans le nouvel objet.
  *
- * @param options L'objet JSON conenant les options.
- * @return L'objet JSON normalisé.
+ * @param {Object} first  Le premier objet JSON.
+ * @param {Object} second Le second objet JSON.
+ * @return {Object} Le nouvel objet JSON contenant les propriétés des deux
+ *                  objets.
  */
-var normalize = function (rotten, dir) {
-    var standard = {};
+let merge = function (first, second) {
+    let third = {};
+    for (let key in first) {
+        third[key] = first[key];
+    }
+    for (let key in second) {
+        third[key] = second[key];
+    }
+    return third;
+}; // merge()
+
+/**
+ * Normaliser la configuration. La structure de l'objet JSON contenant la
+ * configuration est souple pour rendre le fichier moins verbeuse. Cette
+ * fonction renseigne les valeurs par défaut pour les propriétes non-présentes.
+ *
+ * @param {Object} rotten L'objet JSON contenant la configuration.
+ * @param {string} dir    Le repertoire où se trouve le fichier de
+                          configuration.
+ * @return {Object} L'objet JSON normalisé.
+ */
+let normalize = function (rotten, dir) {
+    let standard = {};
     if (!("patterns" in rotten)) {
         standard.patterns = ["**"];
-    } else if (!Array.isArray(rotten.patterns)) {
+    } else if ("string" === typeof rotten.patterns) {
         standard.patterns = [rotten.patterns];
-    } else {
+    } else if (Array.isArray(rotten.patterns)) {
         standard.patterns = rotten.patterns;
+    } else {
+        throw new Error("patterns incorrect type.");
     }
 
     if (!("hidden" in rotten)) {
         standard.hidden = false;
-    } else {
+    } else if ("boolean" === typeof rotten.hidden) {
         standard.hidden = rotten.hidden;
+    } else {
+        throw new Error("hidden incorrect type.");
     }
 
     if (!("level" in rotten)) {
         standard.level = SEVERITY.INFO;
     } else if ("string" === typeof rotten.level) {
-        standard.level = SEVERITY[rotten.level];
+        if (rotten.level in SEVERITY) {
+            standard.level = SEVERITY[rotten.level];
+        } else {
+            throw new Error("level unkonwn.");
+        }
     } else {
-        standard.level = rotten.level;
+        throw new Error("level incorrect type.");
+    }
+
+    if (!("reporter" in rotten)) {
+        standard.reporter = reporters.console;
+    } else if ("string" === typeof rotten.reporter) {
+        if (rotten.reporter in reporters) {
+            standard.reporter = reporters[rotten.reporter];
+        } else {
+            throw new Error("reporter unkonwn.");
+        }
+    } else {
+        throw new Error("reporter incorrect type.");
+    }
+
+    if (!("verbose" in rotten)) {
+        standard.verbose = 0;
+    } else if ("number" === typeof rotten.verbose) {
+        standard.verbose = rotten.verbose;
+    } else {
+        throw new Error("reporter incorrect type.");
+    }
+
+    if (!("output" in rotten) || null === rotten.output) {
+        standard.output = process.stdout;
+    } else if ("string" === typeof rotten.output) {
+        try {
+            standard.output = fs.createWriteStream(rotten.output,
+                                                   { "flags": "w" });
+        } catch (exc) {
+            throw new Error("output don't writable.");
+        }
+    } else {
+        throw new Error("output incorrect type.");
     }
 
     standard.checkers = rotten.checkers.map(function (checker) {
-        var checkest = {};
+        let checkest = {};
         if (!("patterns" in checker)) {
             checkest.patterns = ["**"];
-        } else if (!Array.isArray(checker.patterns)) {
+        } else if ("string" === typeof checker.patterns) {
             checkest.patterns = [checker.patterns];
-        } else {
+        } else if (Array.isArray(checker.patterns)) {
             checkest.patterns = checker.patterns;
+        } else {
+            throw new Error("cherkers[].patterns incorrect type.");
         }
 
         if (!("hidden" in checker)) {
             checkest.hidden = standard.hidden;
+        } else if ("boolean" === typeof rotten.hidden) {
+            standard.hidden = rotten.hidden;
         } else {
-            checkest.hidden = checkest.hidden;
+            throw new Error("checkers[].hidden incorrect type.");
         }
 
         if (!("level" in checker)) {
             checkest.level = standard.level;
         } else if ("string" === typeof checker.level) {
-            checkest.level = SEVERITY[checker.level];
+            if (checker.level in SEVERITY) {
+                checkest.level = SEVERITY[checker.level];
+            } else {
+                throw new Error("checkers[].level unkonwn.");
+            }
         } else {
-            checkest.level = checker.level;
+            throw new Error("checkers[].level incorrect type.");
         }
 
         checkest.linters = {};
-        if ("string" === typeof checker.linters) {
+        if (!("linters" in checker)) {
+            throw new Error("checkers[].linters is undefined.");
+        } else if (null === checker.linters) {
+            throw new Error("checkers[].linters is null.");
+        // "linters": "foolint"
+        } else if ("string" === typeof checker.linters) {
             checkest.linters[checker.linters] = JSON.parse(fs.readFileSync(
                     path.join(dir, checker.linters + ".json"), "utf-8"));
+        // "linters": ["foolint", "barlint"]
         } else if (Array.isArray(checker.linters)) {
-            checker.linters.forEach(function (linter) {
+            for (let linter of checker.linters) {
                 checkest.linters[linter] = JSON.parse(fs.readFileSync(
                         path.join(dir, linter + ".json"), "utf-8"));
-            });
+            }
+        // "linters": { "foolint": ..., "barlint": ... }
+        } else if ("object" === typeof checker.linters) {
+            for (let linter in checker.linters) {
+                // "linters": { "foolint": "qux.json" }
+                if ("string" === typeof checker.linters[linter]) {
+                    checkest.linters[linter] = JSON.parse(fs.readFileSync(
+                            path.join(dir, checker.linters[linter] + ".json"),
+                            "utf-8"));
+                // "linters": { "foolint": { "qux": ..., "corge": ... } }
+                // "linters": { "foolint": null }
+                } else if ("object" === typeof checker.linters[linter]) {
+                    checkest.linters[linter] = checker.linters[linter];
+                // "linters": { "foolint": [..., ...] }
+                } else if (Array.isArray(checker.linters[linter])) {
+                    checkest.linters[linter] = {};
+                    for (let option of checker.linters[linter]) {
+                        if (null === option) {
+                            throw new Error("linter option is null.");
+                        // "linters": { "foolint": ["qux.json", ...] }
+                        } else if ("string" === typeof option) {
+                            checkest.linters[linter] = merge(
+                                checkest.linters[linter],
+                                JSON.parse(fs.readFileSync(
+                                    path.join(dir, option), "utf-8")));
+                        // "linters": { "foolint": [{ "qux": ..., ... }, ...]
+                        } else if ("object" === typeof option) {
+                            checkest.linters[linter] = merge(
+                                checkest.linters[linter], option);
+                        } else {
+                            throw new Error("linter option incorrect type");
+                        }
+                    }
+                } else {
+                    throw new Error("linter incorrect type");
+                }
+            }
         } else {
-            checkest.linters = checker.linters;
+            throw new Error("checkers[].linters incorrect type.");
         }
 
         return checkest;
@@ -113,15 +251,16 @@ var normalize = function (rotten, dir) {
 /**
  * Filtrer une liste de fichier en fonction de patrons.
  *
- * @param files    La liste des fichiers.
- * @param patterns La liste des patrons.
- * @return La liste des fichiers respectant un des patrons.
+ * @param {Array.<string>} files    La liste des fichiers.
+ * @param {Array.<string>} patterns La liste des patrons.
+ * @param {boolean}        hidden   L'indicateur pour savoir s'il faut chercher
+                                    dans les fichiers cachés.
+ * @return {Array.<string>} La liste des fichiers respectant un des patrons.
  */
-var filter = function (files, patterns, hidden) {
+let filter = function (files, patterns, hidden) {
     return files.filter(function (file) {
-        var match = false;
-        for (var i in patterns) {
-            var pattern = patterns[i];
+        let match = false;
+        for (let pattern of patterns) {
             if ("!" !== pattern[0]) {
                 if (minimatch(file, pattern, { "dot": hidden })) {
                     match = true;
@@ -137,104 +276,125 @@ var filter = function (files, patterns, hidden) {
 /**
  * Trier les propriétés (en fonction de la clé) d'un objet JSON.
  *
- * @param mess L'objet JSON avec des propriétés dans le désordre.
- * @return L'objet JSON avec les propriétés triées.
+ * @param {Object} mess L'objet JSON avec des propriétés dans le désordre.
+ * @return {Object} L'objet JSON avec les propriétés triées.
  */
-var sort = function (mess) {
-    var order = {};
-    Object.keys(mess).sort().forEach(function (key) {
+let sort = function (mess) {
+    let order = {};
+    for (let key of Object.keys(mess).sort()) {
         order[key] = mess[key];
-    });
+    }
     return order;
 }; // order()
 
 /**
- * Vérifier une liste de fichiers.
+ * Vérifier (en appelant des linters) une liste de fichiers.
  *
- * @param files    La liste des fichiers.
- * @param checkers La liste des vérifications faites sur les fichiers.
- * @return Les listes des notifications (regroupées par fichier) retournées par
- *         les linters.
+ * @param {Array.<string>} files    La liste des fichiers.
+ * @param {Array.<Object>} checkers La liste des vérifications faites sur les
+ *                                  fichiers.
+ * @return {Object} Les listes des notifications (regroupées par fichier)
+ *                  retournées par les linters.
  */
-var check = function (files, checkers) {
-    var results = {};
-    checkers.forEach(function (checker) {
-        var subfiles = filter(files, checker.patterns, checker.hidden);
-        subfiles.forEach(function (subfile) {
+let check = function (files, checkers) {
+    let results = {};
+    for (let checker of checkers) {
+        let subfiles = filter(files, checker.patterns, checker.hidden);
+        for (let subfile of subfiles) {
             if (!(subfile in results)) {
                 results[subfile] = [];
             }
-            var content =  fs.readFileSync(subfile, "utf-8");
+            let content =  fs.readFileSync(subfile, "utf-8");
             results[subfile] = results[subfile].concat(
                             metalint(content, checker.linters, checker.level));
-        });
-    });
+        }
+    }
 
     // Ajouter les fichiers qui n'ont pas été vérifiés dans les résultats.
-    files.forEach(function (file) {
+    for (let file of files) {
         if (!(file in results)) {
             results[file] = null;
         }
-    });
+    }
 
     return sort(results);
 }; // check()
 
+if (argv.help) {
+    process.stdout.write(
+        "Usage: metalint [OPTION...] [FILE...]\n" +
+        "Check FILEs.\n" +
+        "\n"
+    );
+    process.exit(0);
+}
+if (argv.version) {
+    let pack = JSON.parse(fs.readFileSync(__dirname + "/../package.json",
+                                          "utf-8"));
+    process.stdout.write(pack.name + " " + pack.version + "\n");
+    // TODO Afficher aussi la version des linters.
+    process.exit(0);
+}
 
-var cwd = process.cwd();
-var root = process.cwd();
-// Rechercher le fichier d'options dans le répertoire courant, puis les parents.
-while (!fs.existsSync(path.join(root, argv.options))) {
+let cwd = process.cwd();
+let root = process.cwd();
+// Rechercher le fichier de configuration dans le répertoire courant, puis les
+// parents.
+while (!fs.existsSync(path.join(root, argv.config))) {
     // Si on est remonté à la racine.
     if (path.join(root, "..") === root) {
-        console.err("options unknown");
+        process.stderr.write("config unknown\n");
         process.exit(1);
     }
     root = path.join(root, "..");
 }
-var ancestors = "";
+let ancestors = "";
 if (root !== cwd) {
     ancestors = process.cwd().replace(root + "/", "");
     process.chdir(root);
 }
 
-var options = JSON.parse(fs.readFileSync(argv.options, "utf-8"));
-// Si le niveau est spécifié dans la ligne de commande : utiliser celui-ci.
-if (undefined !== argv.level) {
-    options.level = SEVERITY[argv.level];
+let config = JSON.parse(fs.readFileSync(argv.config, "utf-8"));
+// Surcharger les données du fichier de configuration par les paramètres de la
+// ligne de commande.
+for (let key of ["hidden", "level", "output", "patterns", "reporter",
+                 "verbose"]) {
+    if (undefined !== argv[key]) {
+        config[key] = argv[key];
+    }
 }
-options = normalize(options, path.dirname(argv.options));
+config = normalize(config, path.dirname(argv.config));
 
-var files = globby.sync(options.patterns, { "dot": options.hidden });
+let files = globby.sync(config.patterns, { "dot": config.hidden });
+files = files.filter(function (file) {
+    return !fs.lstatSync(file).isDirectory();
+});
 
-var results = {};
+let results = {};
 if (0 === argv._.length) {
-    var subfiles = filter(files, [path.join(ancestors, "**")], options.hidden);
-    var subresults = check(subfiles, options.checkers);
+    let subfiles = filter(files, [path.join(ancestors, "**")], config.hidden);
+    let subresults = check(subfiles, config.checkers);
     if ("" === ancestors) {
         results = subresults;
     } else {
-        for (var file in subresults) {
+        for (let file in subresults) {
             results[file.replace(ancestors + "/", "")] = subresults[file];
         }
     }
 } else {
-    argv._.forEach(function (file) {
-        var subfiles = filter(files, [path.join(ancestors, file)],
-                              options.hidden);
-        var subresults = check(subfiles, options.checkers);
-        for (var subfile in subresults) {
+    for (let file of argv._) {
+        let subfiles = filter(files, [path.join(ancestors, file)],
+                              config.hidden);
+        let subresults = check(subfiles, config.checkers);
+        for (let subfile in subresults) {
             results[file] = subresults[subfile];
         }
-    });
+    }
 }
 
 process.chdir(cwd);
 
-if (argv.reporter in reporters) {
-    reporters[argv.reporter](results, process.stdout, argv.verbose);
-} else {
-    console.err("reporter unknown");
-    process.exit(1);
-}
-process.exit(0);
+let severity = config.reporter(results, config.output, config.verbose);
+config.output.write("", function () {
+    process.exit(null === severity || SEVERITY.ERROR < severity ? 0 : 1);
+});
