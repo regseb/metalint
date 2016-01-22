@@ -2,16 +2,16 @@
 
 "use strict";
 
-let fs        = require("fs");
-let path      = require("path");
-let yargs     = require("yargs");
-let globby    = require("globby");
-let minimatch = require("minimatch");
-let metalint  = require("../lib/index");
-let reporters = require("../lib/reporters");
-let SEVERITY  = require("../lib/severity");
+const fs        = require("fs");
+const path      = require("path");
+const yargs     = require("yargs");
+const globby    = require("globby");
+const minimatch = require("minimatch");
+const metalint  = require("../lib/index");
+const reporters = require("../lib/reporters");
+const SEVERITY  = require("../lib/severity");
 
-let argv = yargs
+const argv = yargs
         .usage("Usage: $0 [options] [files...]")
         .options({
             "c": {
@@ -70,12 +70,12 @@ let argv = yargs
  * @return {Object} Le nouvel objet JSON contenant les propriétés des deux
  *                  objets.
  */
-let merge = function (first, second) {
-    let third = {};
-    for (let key in first) {
+const merge = function (first, second) {
+    const third = {};
+    for (const key in first) {
         third[key] = first[key];
     }
-    for (let key in second) {
+    for (const key in second) {
         third[key] = second[key];
     }
     return third;
@@ -87,12 +87,12 @@ let merge = function (first, second) {
  * fonction renseigne les valeurs par défaut pour les propriétes non-présentes.
  *
  * @param {Object} rotten L'objet JSON contenant la configuration.
- * @param {string} dir    Le repertoire où se trouve le fichier de
-                          configuration.
+ * @param {string} dir    Le répertoire où se trouve le fichier de
+ *                        configuration.
  * @return {Object} L'objet JSON normalisé.
  */
-let normalize = function (rotten, dir) {
-    let standard = {};
+const normalize = function (rotten, dir) {
+    const standard = {};
     if (!("patterns" in rotten)) {
         standard.patterns = ["**"];
     } else if ("string" === typeof rotten.patterns) {
@@ -157,7 +157,7 @@ let normalize = function (rotten, dir) {
     }
 
     standard.checkers = rotten.checkers.map(function (checker) {
-        let checkest = {};
+        const checkest = {};
         if (!("patterns" in checker)) {
             checkest.patterns = ["**"];
         } else if ("string" === typeof checker.patterns) {
@@ -199,13 +199,13 @@ let normalize = function (rotten, dir) {
                     path.join(dir, checker.linters + ".json"), "utf-8"));
         // "linters": ["foolint", "barlint"]
         } else if (Array.isArray(checker.linters)) {
-            for (let linter of checker.linters) {
+            for (const linter of checker.linters) {
                 checkest.linters[linter] = JSON.parse(fs.readFileSync(
                         path.join(dir, linter + ".json"), "utf-8"));
             }
         // "linters": { "foolint": ..., "barlint": ... }
         } else if ("object" === typeof checker.linters) {
-            for (let linter in checker.linters) {
+            for (const linter in checker.linters) {
                 // "linters": { "foolint": "qux.json" }
                 if ("string" === typeof checker.linters[linter]) {
                     checkest.linters[linter] = JSON.parse(fs.readFileSync(
@@ -218,7 +218,7 @@ let normalize = function (rotten, dir) {
                 // "linters": { "foolint": [..., ...] }
                 } else if (Array.isArray(checker.linters[linter])) {
                     checkest.linters[linter] = {};
-                    for (let option of checker.linters[linter]) {
+                    for (const option of checker.linters[linter]) {
                         if (null === option) {
                             throw new Error("linter option is null.");
                         // "linters": { "foolint": ["qux.json", ...] }
@@ -249,43 +249,28 @@ let normalize = function (rotten, dir) {
 }; // normalize()
 
 /**
- * Filtrer une liste de fichier en fonction de patrons.
+ * Vérifier si un fichier respectent un des patrons.
  *
- * @param {Array.<string>} files    La liste des fichiers.
+ * @param {string}         file     L'adresse du fichier qui sera vérifié.
  * @param {Array.<string>} patterns La liste des patrons.
- * @param {boolean}        hidden   L'indicateur pour savoir s'il faut chercher
-                                    dans les fichiers cachés.
- * @return {Array.<string>} La liste des fichiers respectant un des patrons.
+ * @param {boolean}        hidden   La marque pour indiquer s'il faut vérifier
+ *                                  les fichiers cachés.
+ * @return {boolean} <code>true</code> si le fichier respectent au moins un
+ *                   patron ; sinon <code>false</code>.
  */
-let filter = function (files, patterns, hidden) {
-    return files.filter(function (file) {
-        let match = false;
-        for (let pattern of patterns) {
-            if ("!" !== pattern[0]) {
-                if (minimatch(file, pattern, { "dot": hidden })) {
-                    match = true;
-                }
-            } else if (!minimatch(file, pattern, { "dot": hidden })) {
-                return false;
+const match = function (file, patterns, hidden) {
+    let matched = false;
+    for (const pattern of patterns) {
+        if ("!" !== pattern[0]) {
+            if (minimatch(file, pattern, { "dot": hidden })) {
+                matched = true;
             }
+        } else if (!minimatch(file, pattern, { "dot": hidden })) {
+            return false;
         }
-        return match;
-    });
-}; // filter()
-
-/**
- * Trier les propriétés (en fonction de la clé) d'un objet JSON.
- *
- * @param {Object} mess L'objet JSON avec des propriétés dans le désordre.
- * @return {Object} L'objet JSON avec les propriétés triées.
- */
-let sort = function (mess) {
-    let order = {};
-    for (let key of Object.keys(mess).sort()) {
-        order[key] = mess[key];
     }
-    return order;
-}; // order()
+    return matched;
+}; // match()
 
 /**
  * Vérifier (en appelant des linters) une liste de fichiers.
@@ -296,28 +281,39 @@ let sort = function (mess) {
  * @return {Object} Les listes des notifications (regroupées par fichier)
  *                  retournées par les linters.
  */
-let check = function (files, checkers) {
-    let results = {};
-    for (let checker of checkers) {
-        let subfiles = filter(files, checker.patterns, checker.hidden);
-        for (let subfile of subfiles) {
-            if (!(subfile in results)) {
-                results[subfile] = [];
+const check = function (files, checkers) {
+    const promises = [];
+    for (const file of files) {
+        let linters = [];
+        for (const checker of checkers) {
+            if (match(file, checker.patterns, checker.hidden)) {
+                linters.push({
+                    "linters": checker.linters,
+                    "level":   checker.level
+                });
             }
-            let content =  fs.readFileSync(subfile, "utf-8");
-            results[subfile] = results[subfile].concat(
-                            metalint(content, checker.linters, checker.level));
         }
+        let promise;
+        if (0 !== linters.length) {
+            promise = metalint(fs.readFileSync(file, "utf-8"), linters);
+        } else {
+            promise = Promise.resolve(null);
+        }
+        promises.push(promise.then(function (notices) {
+            return {
+                "file":    file,
+                "notices": notices
+            };
+        }));
     }
 
-    // Ajouter les fichiers qui n'ont pas été vérifiés dans les résultats.
-    for (let file of files) {
-        if (!(file in results)) {
-            results[file] = null;
+    return Promise.all(promises).then(function (raws) {
+        const obj = {};
+        for (const raw of raws) {
+            obj[raw.file] = raw.notices;
         }
-    }
-
-    return sort(results);
+        return obj;
+    });
 }; // check()
 
 if (argv.help) {
@@ -329,14 +325,14 @@ if (argv.help) {
     process.exit(0);
 }
 if (argv.version) {
-    let pack = JSON.parse(fs.readFileSync(__dirname + "/../package.json",
-                                          "utf-8"));
+    const pack = JSON.parse(fs.readFileSync(__dirname + "/../package.json",
+                                            "utf-8"));
     process.stdout.write(pack.name + " " + pack.version + "\n");
     // TODO Afficher aussi la version des linters.
     process.exit(0);
 }
 
-let cwd = process.cwd();
+const cwd = process.cwd();
 let root = process.cwd();
 // Rechercher le fichier de configuration dans le répertoire courant, puis les
 // parents.
@@ -357,8 +353,8 @@ if (root !== cwd) {
 let config = JSON.parse(fs.readFileSync(argv.config, "utf-8"));
 // Surcharger les données du fichier de configuration par les paramètres de la
 // ligne de commande.
-for (let key of ["hidden", "level", "output", "patterns", "reporter",
-                 "verbose"]) {
+for (const key of ["hidden", "level", "output", "patterns", "reporter",
+                   "verbose"]) {
     if (undefined !== argv[key]) {
         config[key] = argv[key];
     }
@@ -372,21 +368,24 @@ files = files.filter(function (file) {
 
 let results = {};
 if (0 === argv._.length) {
-    let subfiles = filter(files, [path.join(ancestors, "**")], config.hidden);
-    let subresults = check(subfiles, config.checkers);
+    const subfiles = files.filter(function (file) {
+        return match(file, [path.join(ancestors, "**")], config.hidden);
+    });
+    const subresults = check(subfiles.sort(), config.checkers);
     if ("" === ancestors) {
         results = subresults;
     } else {
-        for (let file in subresults) {
+        for (const file in subresults) {
             results[file.replace(ancestors + "/", "")] = subresults[file];
         }
     }
 } else {
-    for (let file of argv._) {
-        let subfiles = filter(files, [path.join(ancestors, file)],
-                              config.hidden);
-        let subresults = check(subfiles, config.checkers);
-        for (let subfile in subresults) {
+    for (const file of argv._) {
+        const subfiles = files.filter(function (file) {
+            return match(file, [path.join(ancestors, file)], config.hidden);
+        });
+        const subresults = check(subfiles.sort(), config.checkers);
+        for (const subfile in subresults) {
             results[file] = subresults[subfile];
         }
     }
@@ -394,7 +393,9 @@ if (0 === argv._.length) {
 
 process.chdir(cwd);
 
-let severity = config.reporter(results, config.output, config.verbose);
-config.output.write("", function () {
-    process.exit(null === severity || SEVERITY.ERROR < severity ? 0 : 1);
+config.reporter(results, config.output,
+                         config.verbose).then(function (severity) {
+    config.output.write("", function () {
+        process.exit(null === severity || SEVERITY.ERROR < severity ? 0 : 1);
+    });
 });

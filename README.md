@@ -11,49 +11,65 @@
 
 ## Description
 
-**Metalint** est pour outil pour vérifier (avec des analyseurs syntaxique) tous
-les fichiers d'un projet.
+**Metalint** est un outil pour vérifier tous les fichiers de votre projet. La
+vérification est déléguée à des outils d'analyse statique de code source
+(*linters*) selon le type de fichier :
+
+- CSS : [CSSLint](//github.com/CSSLint/csslint) ;
+- HTML : [html5-lint](//github.com/mozilla/html5-lint),
+  [HTMLHint](//github.com/yaniswang/HTMLHint) et
+  [htmllint](//github.com/htmllint/htmllint) ;
+- JavaScript : [ESLint](//github.com/eslint/eslint),
+  [JSCS](//github.com/jscs-dev/node-jscs) et
+  [JSHint](//github.com/jshint/jshint) ;
+- JSON : [JSON-Lint](//github.com/codenothing/jsonlint) et
+  [JSONLint](//github.com/zaach/jsonlint) ;
+- Markdown : [MarkdownLint](//github.com/DavidAnson/markdownlint).
 
 ## Installation
 
 Vous pouvez installer Metalint en utilisant
-[npm](//www.npmjs.com/package/metalint "Node Packaged Modules") :
+[npm](//www.npmjs.com/package/metalint) :
 
 ```shell
-sudo npm install -g metalint
+npm install -g metalint
 ```
 
 ## Configuration
 
 Tous les fichiers de configuration sont à regrouper dans un répertoire qui doit
-être placé à la racine du projet et avoir pour nom : `.metalint`. Ce dossier
-doit contenir un fichier `metalint.json`.
+être placé à la racine du projet et avoir pour nom : `.metalint/`. Le fichier
+`metalint.json` contient un objet JSON indiquant les linters à utiliser pour
+chaque fichier. Les autres fichiers contiennent les options pour les linters.
+
+## Exemple
+
+Dans cet exemple du fichier de configuration `metalint.json`, Metalint vérifie
+les fichiers HTML, CSS et JavaScript ; avec les linters HTMLHint, JSCS, JSHint
+et CSSLint.
+
+```JSON
+{
+    "patterns": ["**", "!*_modules/**"],
+    "checkers": [
+        {
+            "patterns": "**/*.html",
+            "linters": "htmlhlint"
+        }, {
+            "patterns": ["**/*.js", "!**/*.min.js"],
+            "linters": ["jscs", "jshint"]
+        }, {
+            "patterns": "**/*.css",
+            "linters": "csslint"
+        }
+    ]
+}
+```
 
 ## Usage
 
 ```shell
 metalint
-```
-
-## Intégration dans package.json
-
-Il est possible d'intégrer Metalint dans les scripts d'un projet npm, en
-ajoutant la commande dans la propriété `"scripts"` du fichier package.json :
-
-```JSON
-{
-    "...": "...",
-    "scripts": {
-        "lint": "metalint"
-    }
-    "...": "..."
-}
-```
-
-Vous pourrez lancer Metalint avec la commande suivante :
-
-```shell
-npm run lint
 ```
 
 [img-npm]:https://img.shields.io/npm/v/metalint.svg
