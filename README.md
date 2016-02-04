@@ -37,8 +37,8 @@ npm install -g metalint
 
 ## Configuration
 
-Tous les fichiers de configuration sont à regrouper dans un répertoire qui doit
-être placé à la racine du projet et avoir pour nom : `.metalint/`. Le fichier
+Tous les fichiers de configuration sont à regrouper dans le répertoire
+`.metalint/` qui doit être placé à la racine du projet. Le fichier
 `metalint.json` contient un objet JSON indiquant les linters à utiliser pour
 chaque fichier. Les autres fichiers contiennent les options pour les linters.
 

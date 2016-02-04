@@ -25,7 +25,10 @@
         "url": "http://github.com/regseb/metalint.git"
     },
     "scripts": {
-        "lint": "metalint"
+        "lint": "bin/cli.js",
+        "test": "mocha",
+        "cover": "istanbul cover _mocha",
+        "coveralls": "npm run cover -- --report text-lcov | coveralls"
     },
     "dependencies": {
         "colors": "^1.1.2",
@@ -45,5 +48,10 @@
         "jsonlint": "^1.6.2",
         "markdownlint": "^0.1.0"
     },
-    "devDependencies": { }
+    "devDependencies": {
+        "coveralls": "^2.11.6",
+        "istanbul": "^0.4.2",
+        "memory-streams": "^0.1.0",
+        "mocha": "^2.3.4"
+    }
 }

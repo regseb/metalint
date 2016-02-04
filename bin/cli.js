@@ -11,75 +11,52 @@ const metalint  = require("../lib/index");
 const reporters = require("../lib/reporters");
 const SEVERITY  = require("../lib/severity");
 
-const argv = yargs
-        .usage("Usage: $0 [options] [files...]")
-        .options({
-            "c": {
-                "alias":       "config",
-                "default":     ".metalint/metalint.json",
-                "requiresArg": true,
-                "type":        "string"
-            },
-            "h": {
-                "alias":   "hidden",
-                "default": undefined,
-                "type":    "boolean"
-            },
-            "l": {
-                "alias":       "level",
-                "requiresArg": true,
-                "type":        "string"
-            },
-            "o": {
-                "alias":       "output",
-                "requiresArg": true,
-                "type":        "string"
-            },
-            "p": {
-                "alias":       "patterns",
-                "requiresArg": true,
-                "type":        "array"
-            },
-            "r": {
-                "alias":       "reporter",
-                "requiresArg": true,
-                "type":        "string"
-            },
-            "v": {
-                "alias":   "verbose",
-                "default": undefined,
-                "type":    "count"
-            },
-            "help": {
-                "alias": "help",
-                "type":  "boolean"
-            },
-            "version": {
-                "alias": "version",
-                "type":  "boolean"
-            }
-        })
-        .argv;
-
-/**
- * Fusionner deux objets JSON. Si une propriété est présente dans les deux
- * objets : c'est valeur du second objet qui sera copié dans le nouvel objet.
- *
- * @param {Object} first  Le premier objet JSON.
- * @param {Object} second Le second objet JSON.
- * @return {Object} Le nouvel objet JSON contenant les propriétés des deux
- *                  objets.
- */
-const merge = function (first, second) {
-    const third = {};
-    for (const key in first) {
-        third[key] = first[key];
+const argv = yargs.options({
+    "c": {
+        "alias":       "config",
+        "default":     ".metalint/metalint.json",
+        "requiresArg": true,
+        "type":        "string"
+    },
+    "h": {
+        "alias":   "hidden",
+        "default": undefined,
+        "type":    "boolean"
+    },
+    "l": {
+        "alias":       "level",
+        "requiresArg": true,
+        "type":        "string"
+    },
+    "o": {
+        "alias":       "output",
+        "requiresArg": true,
+        "type":        "string"
+    },
+    "p": {
+        "alias":       "patterns",
+        "requiresArg": true,
+        "type":        "array"
+    },
+    "r": {
+        "alias":       "reporter",
+        "requiresArg": true,
+        "type":        "string"
+    },
+    "v": {
+        "alias":   "verbose",
+        "default": undefined,
+        "type":    "count"
+    },
+    "help": {
+        "alias": "help",
+        "type":  "boolean"
+    },
+    "version": {
+        "alias": "version",
+        "type":  "boolean"
     }
-    for (const key in second) {
-        third[key] = second[key];
-    }
-    return third;
-}; // merge()
+}).argv;
 
 /**
  * Normaliser la configuration. La structure de l'objet JSON contenant la
@@ -209,7 +186,7 @@ const normalize = function (rotten, dir) {
                 // "linters": { "foolint": "qux.json" }
                 if ("string" === typeof checker.linters[linter]) {
                     checkest.linters[linter] = JSON.parse(fs.readFileSync(
-                            path.join(dir, checker.linters[linter] + ".json"),
+                            path.join(dir, checker.linters[linter]),
                             "utf-8"));
                 // "linters": { "foolint": { "qux": ..., "corge": ... } }
                 // "linters": { "foolint": null }
@@ -223,14 +200,12 @@ const normalize = function (rotten, dir) {
                             throw new Error("linter option is null.");
                         // "linters": { "foolint": ["qux.json", ...] }
                         } else if ("string" === typeof option) {
-                            checkest.linters[linter] = merge(
-                                checkest.linters[linter],
-                                JSON.parse(fs.readFileSync(
-                                    path.join(dir, option), "utf-8")));
+                            Object.assign(checkest.linters[linter],
+                                          JSON.parse(fs.readFileSync(
+                                             path.join(dir, option), "utf-8")));
                         // "linters": { "foolint": [{ "qux": ..., ... }, ...]
                         } else if ("object" === typeof option) {
-                            checkest.linters[linter] = merge(
-                                checkest.linters[linter], option);
+                            Object.assign(checkest.linters[linter], option);
                         } else {
                             throw new Error("linter option incorrect type");
                         }
@@ -361,6 +336,8 @@ for (const key of ["hidden", "level", "output", "patterns", "reporter",
 }
 config = normalize(config, path.dirname(argv.config));
 
+// Récupérer tous les fichiers (répertoires exlus) respectant les patrons
+// généraux.
 let files = globby.sync(config.patterns, { "dot": config.hidden });
 files = files.filter(function (file) {
     return !fs.lstatSync(file).isDirectory();
@@ -393,8 +370,10 @@ if (0 === argv._.length) {
 
 process.chdir(cwd);
 
+// Afficher les résultats.
 config.reporter(results, config.output,
                          config.verbose).then(function (severity) {
+    // Attendre que tous les textes soient écrits avant de retourner le status.
     config.output.write("", function () {
         process.exit(null === severity || SEVERITY.ERROR < severity ? 0 : 1);
     });

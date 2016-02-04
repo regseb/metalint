@@ -1,5 +1,6 @@
 {
-    "patterns": ["**", "!.git/**", "!*_modules/**"],
+    "patterns": ["**", "!.git/**", "!*_modules/**", "!coverage/**",
+                       "!web/**"],
     "hidden": true,
     "checkers": [
         {
