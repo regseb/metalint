@@ -28,7 +28,7 @@
         "lint": "bin/cli.js",
         "test": "mocha",
         "cover": "istanbul cover _mocha",
-        "coveralls": "npm run cover -- --report text-lcov | coveralls"
+        "coveralls": "npm run cover -- --report lcovonly && cat coverage/lcov.info | coveralls"
     },
     "dependencies": {
         "colors": "^1.1.2",
