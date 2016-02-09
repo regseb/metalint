@@ -5,8 +5,7 @@
 const fs        = require("fs");
 const path      = require("path");
 const yargs     = require("yargs");
-const globby    = require("globby");
-const minimatch = require("minimatch");
+const glob      = require("./glob");
 const metalint  = require("../lib/index");
 const reporters = require("../lib/reporters");
 const SEVERITY  = require("../lib/severity");
@@ -224,30 +223,6 @@ const normalize = function (rotten, dir) {
 }; // normalize()
 
 /**
- * Vérifier si un fichier respectent un des patrons.
- *
- * @param {string}         file     L'adresse du fichier qui sera vérifié.
- * @param {Array.<string>} patterns La liste des patrons.
- * @param {boolean}        hidden   La marque pour indiquer s'il faut vérifier
- *                                  les fichiers cachés.
- * @return {boolean} <code>true</code> si le fichier respectent au moins un
- *                   patron ; sinon <code>false</code>.
- */
-const match = function (file, patterns, hidden) {
-    let matched = false;
-    for (const pattern of patterns) {
-        if ("!" !== pattern[0]) {
-            if (minimatch(file, pattern, { "dot": hidden })) {
-                matched = true;
-            }
-        } else if (!minimatch(file, pattern, { "dot": hidden })) {
-            return false;
-        }
-    }
-    return matched;
-}; // match()
-
-/**
  * Vérifier (en appelant des linters) une liste de fichiers.
  *
  * @param {Array.<string>} files    La liste des fichiers.
@@ -256,12 +231,12 @@ const match = function (file, patterns, hidden) {
  * @return {Object} Les listes des notifications (regroupées par fichier)
  *                  retournées par les linters.
  */
-const check = function (files, checkers) {
+const check = function (files, checkers, root) {
     const promises = [];
     for (const file of files) {
         let linters = [];
         for (const checker of checkers) {
-            if (match(file, checker.patterns, checker.hidden)) {
+            if (glob.match(file, checker.patterns, checker.hidden, root)) {
                 linters.push({
                     "linters": checker.linters,
                     "level":   checker.level
@@ -300,14 +275,14 @@ if (argv.help) {
     process.exit(0);
 }
 if (argv.version) {
-    const pack = JSON.parse(fs.readFileSync(__dirname + "/../package.json",
+    const pack = JSON.parse(fs.readFileSync(path.join(__dirname,
+                                                      "/../package.json"),
                                             "utf-8"));
     process.stdout.write(pack.name + " " + pack.version + "\n");
     // TODO Afficher aussi la version des linters.
     process.exit(0);
 }
 
-const cwd = process.cwd();
 let root = process.cwd();
 // Rechercher le fichier de configuration dans le répertoire courant, puis les
 // parents.
@@ -319,13 +294,8 @@ while (!fs.existsSync(path.join(root, argv.config))) {
     }
     root = path.join(root, "..");
 }
-let ancestors = "";
-if (root !== cwd) {
-    ancestors = process.cwd().replace(root + "/", "");
-    process.chdir(root);
-}
 
-let config = JSON.parse(fs.readFileSync(argv.config, "utf-8"));
+let config = JSON.parse(fs.readFileSync(path.join(root, argv.config), "utf-8"));
 // Surcharger les données du fichier de configuration par les paramètres de la
 // ligne de commande.
 for (const key of ["hidden", "level", "output", "patterns", "reporter",
@@ -334,41 +304,22 @@ for (const key of ["hidden", "level", "output", "patterns", "reporter",
         config[key] = argv[key];
     }
 }
-config = normalize(config, path.dirname(argv.config));
+config = normalize(config, path.dirname(path.join(root, argv.config)));
 
-// Récupérer tous les fichiers (répertoires exlus) respectant les patrons
-// généraux.
-let files = globby.sync(config.patterns, { "dot": config.hidden });
-files = files.filter(function (file) {
-    return !fs.lstatSync(file).isDirectory();
-});
-
-let results = {};
+let files = [];
 if (0 === argv._.length) {
-    const subfiles = files.filter(function (file) {
-        return match(file, [path.join(ancestors, "**")], config.hidden);
-    });
-    const subresults = check(subfiles.sort(), config.checkers);
-    if ("" === ancestors) {
-        results = subresults;
-    } else {
-        for (const file in subresults) {
-            results[file.replace(ancestors + "/", "")] = subresults[file];
-        }
-    }
+    files = files.concat(glob.walk(null, config.patterns, config.hidden, root));
 } else {
     for (const file of argv._) {
-        const subfiles = files.filter(function (file) {
-            return match(file, [path.join(ancestors, file)], config.hidden);
-        });
-        const subresults = check(subfiles.sort(), config.checkers);
-        for (const subfile in subresults) {
-            results[file] = subresults[subfile];
-        }
+        files = files.concat(glob.walk(file, config.patterns, config.hidden,
+                                       root));
     }
 }
-
-process.chdir(cwd);
+// Supprimer les doublons.
+files = files.filter(function (value, index, self) {
+    return self.indexOf(value) === index;
+});
+const results = check(files, config.checkers, root);
 
 // Afficher les résultats.
 config.reporter(results, config.output,
