@@ -250,10 +250,7 @@ const check = function (files, checkers, root) {
             promise = Promise.resolve(null);
         }
         promises.push(promise.then(function (notices) {
-            return {
-                "file":    file,
-                "notices": notices
-            };
+            return { file, notices };
         }));
     }
 
