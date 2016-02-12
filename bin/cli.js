@@ -5,9 +5,8 @@
 const fs        = require("fs");
 const path      = require("path");
 const yargs     = require("yargs");
-const glob      = require("./glob");
+const glob      = require("../lib/glob");
 const metalint  = require("../lib/index");
-const reporters = require("../lib/reporters");
 const SEVERITY  = require("../lib/severity");
 
 const argv = yargs.options({
@@ -100,12 +99,14 @@ const normalize = function (rotten, dir) {
     }
 
     if (!("reporter" in rotten)) {
-        standard.reporter = reporters.console;
+        standard.reporter = require("../lib/reporter/console");
     } else if ("string" === typeof rotten.reporter) {
-        if (rotten.reporter in reporters) {
-            standard.reporter = reporters[rotten.reporter];
+        if (-1 !== ["checkstyle", "console", "csv",
+                    "json", "none", "unix"].indexOf(rotten.reporter)) {
+            standard.reporter = require("../lib/reporter/" + rotten.reporter);
         } else {
-            throw new Error("reporter unkonwn.");
+            standard.reporter = require(path.join(process.cwd(),
+                                                  rotten.reporter));
         }
     } else {
         throw new Error("reporter incorrect type.");
@@ -228,6 +229,8 @@ const normalize = function (rotten, dir) {
  * @param {Array.<string>} files    La liste des fichiers.
  * @param {Array.<Object>} checkers La liste des vérifications faites sur les
  *                                  fichiers.
+ * @param {string}         root     L'adresse du répertoire où se trouve le
+ *                                  dossier <code>.metalint/</code>.
  * @return {Object} Les listes des notifications (regroupées par fichier)
  *                  retournées par les linters.
  */
@@ -264,11 +267,7 @@ const check = function (files, checkers, root) {
 }; // check()
 
 if (argv.help) {
-    process.stdout.write(
-        "Usage: metalint [OPTION...] [FILE...]\n" +
-        "Check FILEs.\n" +
-        "\n"
-    );
+    process.stdout.write(fs.readFileSync(path.join(__dirname, "/help.txt")));
     process.exit(0);
 }
 if (argv.version) {
@@ -303,19 +302,9 @@ for (const key of ["hidden", "level", "output", "patterns", "reporter",
 }
 config = normalize(config, path.dirname(path.join(root, argv.config)));
 
-let files = [];
-if (0 === argv._.length) {
-    files = files.concat(glob.walk(null, config.patterns, config.hidden, root));
-} else {
-    for (const file of argv._) {
-        files = files.concat(glob.walk(file, config.patterns, config.hidden,
-                                       root));
-    }
-}
-// Supprimer les doublons.
-files = files.filter(function (value, index, self) {
-    return self.indexOf(value) === index;
-});
+const files = glob.walk(0 === argv._.length ? [null]
+                                            : argv._,
+                        config.patterns, config.hidden, root);
 const results = check(files, config.checkers, root);
 
 // Afficher les résultats.

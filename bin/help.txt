@@ -1,0 +1,17 @@
+Utilisation : metalint [OPTION]... [FICHIER]...
+Vérifier les FICHIERs avec des linters.
+
+Les arguments obligatoires pour les options longues le sont aussi pour les
+options courtes.
+  -c, --config=CONFIG      spécifier l'emplacement du fichier de configuration
+  -h, --hidden             vérifier aussi les fichiers cachés
+  -l, --level=LEVEL        définir le niveau de sévérité global
+  -o, --output=OUTPUT      spécifier le fichier de sortie où seront écrit les
+                             résultats
+  -p, --patterns=PATTERN   spécifier les patrons pour filtrer les fichiers qui
+                             qui seront vérifiés
+  -r, --reporter=REPORTER  définir le rapporteur utilisé pour afficher les
+                             résultats
+  -v, --verbose            augmenter le niveau de verbosité
+      --help     afficher l'aide
+      --version  afficher le numéro de version de Metalint
