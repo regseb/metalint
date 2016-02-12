@@ -8,18 +8,6 @@ const wrapper  = require("../../../lib/wrapper/csslint.js");
 
 describe("lib/wrapper/csslint.js", function () {
     it("", function () {
-        const source = "";
-        const options = { "zero-units": 2 };
-        const level = SEVERITY.INFO;
-
-        return wrapper(source, options, level).then(function (notices) {
-            // FIXME Décommenter quand CSSLint gèrera correctement les fichiers
-            //       vide. (https://github.com/CSSLint/parser-lib/pull/183)
-            // assert.deepStrictEqual(notices, []);
-        });
-    });
-
-    it("", function () {
         const source = "aside { float: right; }";
         const options = { "floats": true };
         const level = SEVERITY.INFO;
