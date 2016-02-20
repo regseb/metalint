@@ -75,7 +75,7 @@ const normalize = function (rotten, dir) {
     } else if (Array.isArray(rotten.patterns)) {
         standard.patterns = rotten.patterns;
     } else {
-        throw new Error("patterns incorrect type.");
+        throw new Error("'patterns': incorrect type.");
     }
 
     if (!("hidden" in rotten)) {
@@ -83,7 +83,7 @@ const normalize = function (rotten, dir) {
     } else if ("boolean" === typeof rotten.hidden) {
         standard.hidden = rotten.hidden;
     } else {
-        throw new Error("hidden incorrect type.");
+        throw new Error("'hidden' incorrect type.");
     }
 
     if (!("level" in rotten)) {
@@ -92,10 +92,10 @@ const normalize = function (rotten, dir) {
         if (rotten.level in SEVERITY) {
             standard.level = SEVERITY[rotten.level];
         } else {
-            throw new Error("level unkonwn.");
+            throw new Error("'level' unkonwn.");
         }
     } else {
-        throw new Error("level incorrect type.");
+        throw new Error("'level' incorrect type.");
     }
 
     if (!("reporter" in rotten)) {
@@ -109,7 +109,7 @@ const normalize = function (rotten, dir) {
                                                   rotten.reporter));
         }
     } else {
-        throw new Error("reporter incorrect type.");
+        throw new Error("'reporter' incorrect type.");
     }
 
     if (!("verbose" in rotten)) {
@@ -117,7 +117,7 @@ const normalize = function (rotten, dir) {
     } else if ("number" === typeof rotten.verbose) {
         standard.verbose = rotten.verbose;
     } else {
-        throw new Error("reporter incorrect type.");
+        throw new Error("'reporter' incorrect type.");
     }
 
     if (!("output" in rotten) || null === rotten.output) {
@@ -127,10 +127,10 @@ const normalize = function (rotten, dir) {
             standard.output = fs.createWriteStream(rotten.output,
                                                    { "flags": "w" });
         } catch (exc) {
-            throw new Error("output don't writable.");
+            throw new Error("'output' don't writable.");
         }
     } else {
-        throw new Error("output incorrect type.");
+        throw new Error("'output' incorrect type.");
     }
 
     standard.checkers = rotten.checkers.map(function (checker) {
@@ -142,7 +142,7 @@ const normalize = function (rotten, dir) {
         } else if (Array.isArray(checker.patterns)) {
             checkest.patterns = checker.patterns;
         } else {
-            throw new Error("cherkers[].patterns incorrect type.");
+            throw new Error("'cherkers[].patterns' incorrect type.");
         }
 
         if (!("hidden" in checker)) {
@@ -150,7 +150,7 @@ const normalize = function (rotten, dir) {
         } else if ("boolean" === typeof rotten.hidden) {
             standard.hidden = rotten.hidden;
         } else {
-            throw new Error("checkers[].hidden incorrect type.");
+            throw new Error("'checkers[].hidden' incorrect type.");
         }
 
         if (!("level" in checker)) {
@@ -159,17 +159,17 @@ const normalize = function (rotten, dir) {
             if (checker.level in SEVERITY) {
                 checkest.level = SEVERITY[checker.level];
             } else {
-                throw new Error("checkers[].level unkonwn.");
+                throw new Error("'checkers[].level' unkonwn.");
             }
         } else {
-            throw new Error("checkers[].level incorrect type.");
+            throw new Error("'checkers[].level' incorrect type.");
         }
 
         checkest.linters = {};
         if (!("linters" in checker)) {
-            throw new Error("checkers[].linters is undefined.");
+            throw new Error("'checkers[].linters' is undefined.");
         } else if (null === checker.linters) {
-            throw new Error("checkers[].linters is null.");
+            throw new Error("'checkers[].linters' is null.");
         // "linters": "foolint"
         } else if ("string" === typeof checker.linters) {
             checkest.linters[checker.linters] = JSON.parse(fs.readFileSync(
@@ -215,7 +215,7 @@ const normalize = function (rotten, dir) {
                 }
             }
         } else {
-            throw new Error("checkers[].linters incorrect type.");
+            throw new Error("'checkers[].linters' incorrect type.");
         }
 
         return checkest;
@@ -285,8 +285,8 @@ let root = process.cwd();
 while (!fs.existsSync(path.join(root, argv.config))) {
     // Si on est remonté à la racine.
     if (path.join(root, "..") === root) {
-        process.stderr.write("config unknown\n");
-        process.exit(1);
+        process.stderr.write("metalint: no such config file.\n");
+        process.exit(10);
     }
     root = path.join(root, "..");
 }
@@ -300,7 +300,12 @@ for (const key of ["hidden", "level", "output", "patterns", "reporter",
         config[key] = argv[key];
     }
 }
-config = normalize(config, path.dirname(path.join(root, argv.config)));
+try {
+    config = normalize(config, path.dirname(path.join(root, argv.config)));
+} catch (exc) {
+    process.stderr.write("metalint: " + exc.message);
+    process.exit(11);
+}
 
 const files = glob.walk(0 === argv._.length ? [null]
                                             : argv._,
@@ -312,6 +317,16 @@ config.reporter(results, config.output,
                          config.verbose).then(function (severity) {
     // Attendre que tous les textes soient écrits avant de retourner le status.
     config.output.write("", function () {
-        process.exit(null === severity || SEVERITY.ERROR < severity ? 0 : 1);
+        let exit;
+        if (null === severity) {
+            exit = 0;
+        } else {
+            switch (severity) {
+                case SEVERITY.FATAL: exit = 2; break;
+                case SEVERITY.ERROR: exit = 1; break;
+                default:             exit = 0;
+            }
+        }
+        process.exit(exit);
     });
 });
