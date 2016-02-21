@@ -274,11 +274,21 @@ if (argv.help) {
     process.exit(0);
 }
 if (argv.version) {
-    const pack = JSON.parse(fs.readFileSync(path.join(__dirname,
-                                                      "/../package.json"),
-                                            "utf-8"));
-    process.stdout.write(pack.name + " " + pack.version + "\n");
-    // TODO Afficher aussi la version des linters.
+    let manifest = JSON.parse(fs.readFileSync(path.join(__dirname,
+                                                        "/../package.json"),
+                                              "utf-8"));
+    process.stdout.write(manifest.name + " " + manifest.version + "\n\n");
+
+    for (const linter of ["csslint", "eslint", "html5-lint", "htmlhint",
+                          "htmllint", "jscs", "jshint", "json-lint", "jsonlint",
+                          "markdownlint"]) {
+        manifest = JSON.parse(fs.readFileSync(path.join(__dirname,
+                                                        "/../node_modules/" +
+                                                        linter +
+                                                        "/package.json"),
+                                              "utf-8"));
+        process.stdout.write(manifest.name + " " + manifest.version + "\n");
+    }
     process.exit(0);
 }
 
