@@ -238,7 +238,7 @@ const normalize = function (rotten, dir) {
  *                  retournées par les linters.
  */
 const check = function (files, checkers, root) {
-    const promises = [];
+    const results = {};
     for (const file of files) {
         let linters = [];
         for (const checker of checkers) {
@@ -249,18 +249,18 @@ const check = function (files, checkers, root) {
                 });
             }
         }
-        let promise;
         if (0 !== linters.length) {
-            promise = metalint(fs.readFileSync(file, "utf-8"), linters);
+            results[file] = metalint(fs.readFileSync(file, "utf-8"), linters);
         } else {
-            promise = Promise.resolve(null);
+            results[file] = Promise.resolve(null);
         }
-        promises.push(promise.then(function (notices) {
-            return { file, notices };
-        }));
     }
 
-    return Promise.all(promises).then(function (raws) {
+    return Promise.all(Object.keys(results).map(function (file) {
+        return results[file].then(function (notices) {
+            return { file, notices };
+        });
+    })).then(function (raws) {
         const obj = {};
         for (const raw of raws) {
             obj[raw.file] = raw.notices;
