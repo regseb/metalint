@@ -48,4 +48,36 @@ describe("lib/index.js", function () {
             assert.deepStrictEqual(notices, expected);
         });
     });
+
+    it("", function () {
+        const source = "## README\n";
+        const checkers = [
+            {
+                "linters": {
+                    "markdownlint": null
+                },
+                "level": SEVERITY.INFO
+            }
+        ];
+
+        return metalint(source, checkers).then(function (notices) {
+            const expected = [
+                {
+                    "linter":    "markdownlint",
+                    "rule":      "MD002",
+                    "severity":  SEVERITY.ERROR,
+                    "message":   "First header should be a h1 header",
+                    "locations": [{ "line": 1 }]
+                }, {
+                    "linter":    "markdownlint",
+                    "rule":      "MD041",
+                    "severity":  SEVERITY.ERROR,
+                    "message":   "First line in file should be a top level" +
+                                 " header",
+                    "locations": [{ "line": 1 }]
+                }
+            ];
+            assert.deepStrictEqual(notices, expected);
+        });
+    });
 });
