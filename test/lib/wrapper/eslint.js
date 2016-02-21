@@ -65,7 +65,7 @@ describe("lib/wrapper/eslint.js", function () {
                     "rule":      null,
                     "severity":  SEVERITY.FATAL,
                     "message":   "Parsing error: Unexpected token ;",
-                    "locations": [{ "line": 1, "column": 10 }]
+                    "locations": [{ "line": 1, "column": 9 }]
                 }
             ]);
         });
