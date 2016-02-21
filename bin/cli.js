@@ -158,6 +158,9 @@ const normalize = function (rotten, dir) {
         } else if ("string" === typeof checker.level) {
             if (checker.level in SEVERITY) {
                 checkest.level = SEVERITY[checker.level];
+                if (checkest.level > standard.level) {
+                    checkest.level = standard.level;
+                }
             } else {
                 throw new Error("'checkers[].level' unkonwn.");
             }
