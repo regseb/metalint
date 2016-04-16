@@ -1,6 +1,4 @@
 {
-    "esnext": true,
-
     "disallowDanglingUnderscores": true,
     "disallowEmptyBlocks": true,
     "disallowFunctionDeclarations": true,
@@ -41,7 +39,7 @@
         "if", "else", "for", "while", "do", "try", "catch"
     ],
     "requireDollarBeforejQueryAssignment": true,
-    "requireDotNotation": "except_snake_case",
+    "requireDotNotation": { "allExcept": ["snake_case"] },
     "requireLineBreakAfterVariableAssignment": true,
     "requireLineFeedAtFileEnd": true,
     "requireOperatorBeforeLineBreak": [
@@ -81,7 +79,7 @@
     },
     "requireSpacesInsideObjectBrackets": "all",
     "requireYodaConditions": true,
-    "validateIndentation": 4,
+    "requireUseStrict": true,
     "validateLineBreaks": "LF",
     "validateParameterSeparator": ", ",
     "validateQuoteMarks": "\"",
@@ -105,5 +103,4 @@
         "requireParamDescription": true,
         "requireReturnDescription": true
     }
-
 }

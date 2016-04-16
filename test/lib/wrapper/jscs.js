@@ -19,7 +19,7 @@ describe("lib/wrapper/jscs.js", function () {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jscs",
-                    "rule":      null,
+                    "rule":      "disallowMultipleLineStrings",
                     "severity":  SEVERITY.ERROR,
                     "message":   "Multiline strings are disallowed.",
                     "locations": [{ "line": 2, "column": 4 }]

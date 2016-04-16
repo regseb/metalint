@@ -27,16 +27,16 @@ describe("lib/index.js", function () {
             const expected = [
                 {
                     "linter":    "jscs",
-                    "rule":      null,
+                    "rule":      "disallowFunctionDeclarations",
                     "severity":  SEVERITY.ERROR,
                     "message":   "Illegal function declaration",
                     "locations": [{ "line": 1, "column": 0 }]
                 }, {
                     "linter":    "jscs",
-                    "rule":      null,
+                    "rule":      "validateQuoteMarks",
                     "severity":  SEVERITY.ERROR,
                     "message":   "Invalid quote mark found",
-                    "locations": [{ "line": 2, "column": 10 }]
+                    "locations": [{ "line": 2, "column": 17 }]
                 }, {
                     "linter":    "jshint",
                     "rule":      "W033",
