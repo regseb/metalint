@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* global Promise, require, process, __dirname */
+
 "use strict";
 
 const fs        = require("fs");
@@ -240,7 +242,7 @@ const normalize = function (rotten, dir) {
 const check = function (files, checkers, root) {
     const results = {};
     for (const file of files) {
-        let linters = [];
+        const linters = [];
         for (const checker of checkers) {
             if (glob.match(file, checker.patterns, checker.hidden, root)) {
                 linters.push({

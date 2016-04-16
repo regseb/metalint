@@ -1,4 +1,4 @@
-/* global require, describe, it */
+/* global Promise, require, describe, it */
 
 "use strict";
 

@@ -5,7 +5,7 @@
     "checkers": [
         {
             "patterns": ["**/*.js", "!**/*.min.js"],
-            "linters": ["jscs", "jshint"]
+            "linters": ["jscs", "eslint"]
         }, {
             "patterns": "**/*.md",
             "linters": "markdownlint"
