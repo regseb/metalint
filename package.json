@@ -32,14 +32,14 @@
     },
     "dependencies": {
         "colors": "^1.1.2",
-        "glob": "^7.0.0",
+        "glob": "^7.0.3",
         "minimatch": "^3.0.0",
-        "yargs": "^4.1.0",
+        "yargs": "^4.6.0",
 
         "csslint": "^0.10.0",
-        "eslint": "^2.2.0",
+        "eslint": "^2.8.0",
         "html5-lint": "^0.2.5",
-        "htmllint": "^0.2.7",
+        "htmllint": "^0.3.0",
         "htmlhint": "^0.9.12",
         "jscs": "^3.0.2",
         "jscs-jsdoc": "^2.0.0",
@@ -49,9 +49,9 @@
         "markdownlint": "^0.1.1"
     },
     "devDependencies": {
-        "coveralls": "^2.11.6",
-        "istanbul": "^0.4.2",
+        "coveralls": "^2.11.9",
+        "istanbul": "^0.4.3",
         "memory-streams": "^0.1.0",
-        "mocha": "^2.3.4"
+        "mocha": "^2.4.5"
     }
 }
