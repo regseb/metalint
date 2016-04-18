@@ -193,10 +193,6 @@ const normalize = function (rotten, dir) {
                     checkest.linters[linter] = JSON.parse(fs.readFileSync(
                             path.join(dir, checker.linters[linter]),
                             "utf-8"));
-                // "linters": { "foolint": { "qux": ..., "corge": ... } }
-                // "linters": { "foolint": null }
-                } else if ("object" === typeof checker.linters[linter]) {
-                    checkest.linters[linter] = checker.linters[linter];
                 // "linters": { "foolint": [..., ...] }
                 } else if (Array.isArray(checker.linters[linter])) {
                     checkest.linters[linter] = {};
@@ -215,6 +211,10 @@ const normalize = function (rotten, dir) {
                             throw new Error("linter option incorrect type");
                         }
                     }
+                // "linters": { "foolint": { "qux": ..., "corge": ... } }
+                // "linters": { "foolint": null }
+                } else if ("object" === typeof checker.linters[linter]) {
+                    checkest.linters[linter] = checker.linters[linter];
                 } else {
                     throw new Error("linter incorrect type");
                 }
