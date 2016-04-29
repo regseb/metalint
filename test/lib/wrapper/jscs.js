@@ -37,4 +37,22 @@ describe("lib/wrapper/jscs.js", function () {
             assert.deepStrictEqual(notices, []);
         });
     });
+
+    it("", function () {
+        const source = "I'm a **Markdown** text !";
+        const options = { "disallowSemicolons": true };
+        const level = SEVERITY.INFO;
+
+        return wrapper(source, options, level).then(function (notices) {
+            assert.deepStrictEqual(notices, [
+                {
+                    "linter":    "jscs",
+                    "rule":      "parseError",
+                    "severity":  SEVERITY.ERROR,
+                    "message":   "Unterminated string constant (1:1)",
+                    "locations": [{ "line": 1, "column": 1 }]
+                }
+            ]);
+        });
+    });
 });
