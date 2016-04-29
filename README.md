@@ -17,16 +17,19 @@
 vérification est déléguée à des outils d'analyse statique de code source
 (*linters*) selon le type de fichier :
 
-- CSS : [CSSLint](//github.com/CSSLint/csslint) ;
-- HTML : [html5-lint](//github.com/mozilla/html5-lint),
-  [HTMLHint](//github.com/yaniswang/HTMLHint) et
-  [htmllint](//github.com/htmllint/htmllint) ;
-- JavaScript : [ESLint](//github.com/eslint/eslint),
-  [JSCS](//github.com/jscs-dev/node-jscs) et
-  [JSHint](//github.com/jshint/jshint) ;
-- JSON : [JSON-Lint](//github.com/codenothing/jsonlint) et
-  [JSONLint](//github.com/zaach/jsonlint) ;
-- Markdown : [MarkdownLint](//github.com/DavidAnson/markdownlint).
+- CSS : [CSSLint](//regseb.github.io/metalint/user/linters/csslint/) ;
+- HTML : [html5-lint](//regseb.github.io/metalint/user/linters/html5-lint/),
+  [HTMLHint](//regseb.github.io/metalint/user/linters/htmlhint/) et
+  [htmllint](//regseb.github.io/metalint/user/linters/htmllint/) ;
+- JavaScript : [ESLint](//regseb.github.io/metalint/user/linters/eslint/),
+  [JSCS](//regseb.github.io/metalint/user/linters/jscs/),
+  [JSHint](//regseb.github.io/metalint/user/linters/jshint/) et
+  [JavaScript Standard
+   Style](//regseb.github.io/metalint/user/linters/standard) ;
+- JSON : [JSON-Lint](//regseb.github.io/metalint/user/linters/json-lint/) et
+  [JSONLint](//regseb.github.io/metalint/user/linters/jsonlint/) ;
+- Markdown :
+  [MarkdownLint](//regseb.github.io/metalint/user/linters/markdownlint/).
 
 ## Installation
 

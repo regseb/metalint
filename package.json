@@ -46,7 +46,8 @@
         "jshint": "^2.9.2",
         "json-lint": "^0.1.0",
         "jsonlint": "^1.6.2",
-        "markdownlint": "^0.1.1"
+        "markdownlint": "^0.1.1",
+        "standard": "^6.0.8"
     },
     "devDependencies": {
         "coveralls": "^2.11.9",
