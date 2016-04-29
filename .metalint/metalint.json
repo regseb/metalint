@@ -1,10 +1,9 @@
 {
-    "patterns": ["**", "!.git/**", "!*_modules/**", "!coverage/**",
-                       "!web/**"],
+    "patterns": ["**", "!.git/**", "!node_modules/**", "!coverage/**"],
     "hidden": true,
     "checkers": [
         {
-            "patterns": ["**/*.js", "!**/*.min.js"],
+            "patterns": "**/*.js",
             "linters": ["jscs", "eslint"]
         }, {
             "patterns": "**/*.md",
