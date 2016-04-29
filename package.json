@@ -37,13 +37,13 @@
         "yargs": "^4.6.0",
 
         "csslint": "^0.10.0",
-        "eslint": "^2.8.0",
+        "eslint": "^2.9.0",
         "html5-lint": "^0.2.5",
         "htmllint": "^0.3.0",
         "htmlhint": "^0.9.12",
-        "jscs": "^3.0.2",
+        "jscs": "^3.0.3",
         "jscs-jsdoc": "^2.0.0",
-        "jshint": "^2.9.1",
+        "jshint": "^2.9.2",
         "json-lint": "^0.1.0",
         "jsonlint": "^1.6.2",
         "markdownlint": "^0.1.1"
