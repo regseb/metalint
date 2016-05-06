@@ -7,6 +7,14 @@
         }
     },
 
+    "globals": {
+        "Promise": true,
+        "require": true,
+        "module": true,
+        "process": true,
+        "__dirname": true
+    },
+
     "rules": {
         "comma-dangle": 2,
         "no-cond-assign": 2,

@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-/* global Promise, require, process, __dirname */
-
 "use strict";
 
 const fs        = require("fs");
