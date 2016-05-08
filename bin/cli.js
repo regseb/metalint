@@ -57,6 +57,31 @@ const argv = yargs.options({
 }).argv;
 
 /**
+ * Fusionner deux objets.
+ *
+ * @param {*} first  Le premier objet.
+ * @param {*} second Le second objet.
+ * @return {*} La fusion des deux objets.
+ */
+const merge = function (first, second) {
+    if ("object" !== typeof first || "object" !== typeof second) {
+        return second;
+    }
+    const third = {};
+    for (const key in first) {
+        third[key] = key in second ? merge(first[key], second[key])
+                                   : first[key];
+    }
+    for (const key in second) {
+        // Si la propriété n'a pas déjà été copiée.
+        if (!(key in third)) {
+            third[key] = second[key];
+        }
+    }
+    return third;
+}; // merge()
+
+/**
  * Normaliser la configuration. La structure de l'objet JSON contenant la
  * configuration est souple pour rendre le fichier moins verbeuse. Cette
  * fonction renseigne les valeurs par défaut pour les propriétes non-présentes.
@@ -199,12 +224,15 @@ const normalize = function (rotten, dir) {
                             throw new Error("linter option is null.");
                         // "linters": { "foolint": ["qux.json", ...] }
                         } else if ("string" === typeof option) {
-                            Object.assign(checkest.linters[linter],
-                                          JSON.parse(fs.readFileSync(
-                                             path.join(dir, option), "utf-8")));
+                            checkest.linters[linter] =
+                                merge(checkest.linters[linter],
+                                      JSON.parse(fs.readFileSync(
+                                                         path.join(dir, option),
+                                                         "utf-8")));
                         // "linters": { "foolint": [{ "qux": ..., ... }, ...]
                         } else if ("object" === typeof option) {
-                            Object.assign(checkest.linters[linter], option);
+                            checkest.linters[linter] =
+                                merge(checkest.linters[linter], option);
                         } else {
                             throw new Error("linter option incorrect type");
                         }
