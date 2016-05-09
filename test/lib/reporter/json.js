@@ -1,5 +1,3 @@
-/* global Promise, require, describe, it */
-
 "use strict";
 
 const streams  = require("memory-streams");
@@ -34,6 +32,44 @@ describe("lib/reporter/json.js", function () {
 
     it("", function () {
         const promise = Promise.resolve({
+            "tools.js": [
+                {
+                    "linter":    "eslint",
+                    "rule":      "no-unused-vars",
+                    "severity":  SEVERITY.ERROR,
+                    "message":   "'superflous' is defined but never used",
+                    "locations": [{ "line": 2, "column": 7 }]
+                }
+            ]
+        });
+        const writer = new streams.WritableStream();
+
+        return reporter(promise, writer, 2).then(function (severity) {
+            assert.equal(SEVERITY.ERROR, severity);
+            assert.equal(
+                "{\n" +
+                "  \"tools.js\": [\n" +
+                "    {\n" +
+                "      \"linter\": \"eslint\",\n" +
+                "      \"rule\": \"no-unused-vars\",\n" +
+                "      \"severity\": 2,\n" +
+                "      \"message\": \"'superflous' is defined but never"
+                                  + " used\",\n" +
+                "      \"locations\": [\n" +
+                "        {\n" +
+                "          \"line\": 2,\n" +
+                "          \"column\": 7\n" +
+                "        }\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}\n",
+                writer.toString());
+        });
+    });
+
+    it("", function () {
+        const promise = Promise.resolve({
             "README.md": [
                 {
                     "linter":    "markdownlint",
@@ -61,7 +97,7 @@ describe("lib/reporter/json.js", function () {
         });
         const writer = new streams.WritableStream();
 
-        return reporter(promise, writer, 2).then(function (severity) {
+        return reporter(promise, writer, 4).then(function (severity) {
             assert.equal(SEVERITY.ERROR, severity);
             assert.equal(
                 "{\n" +
