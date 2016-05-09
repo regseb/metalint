@@ -1,5 +1,3 @@
-/* global Promise, require, describe, it */
-
 "use strict";
 
 const streams  = require("memory-streams");

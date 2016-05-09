@@ -1,10 +1,15 @@
 {
-    "patterns": ["**", "!.git/**", "!node_modules/**", "!coverage/**"],
+    "patterns": ["!.git/**", "!node_modules/**", "!coverage/**", "**"],
     "hidden": true,
+    "verbose": 2,
     "checkers": [
         {
-            "patterns": "**/*.js",
-            "linters": ["jscs", "eslint"]
+            "patterns": ["!test/**", "**/*.js"],
+            "linters": ["eslint", "jscs"]
+        }, {
+            "patterns": "test/**/*.js",
+            "linters": { "eslint": ["eslint.json", "eslint_test.json"],
+                         "jscs": "jscs.json" }
         }, {
             "patterns": "**/*.md",
             "linters": "markdownlint"
