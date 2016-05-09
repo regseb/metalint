@@ -270,7 +270,8 @@ const check = function (files, checkers, root) {
     for (const file of files) {
         const linters = [];
         for (const checker of checkers) {
-            if (glob.match(file, checker.patterns, checker.hidden, root)) {
+            if (glob.match(file, checker.patterns, checker.hidden, root,
+                           process.cwd())) {
                 linters.push({
                     "linters": checker.linters,
                     "level":   checker.level

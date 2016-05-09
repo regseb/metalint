@@ -50,19 +50,19 @@ chaque fichier. Les autres fichiers contiennent les options pour les linters.
 ## Exemple
 
 Dans cet exemple du fichier de configuration `metalint.json`, Metalint vérifie
-les fichiers HTML, CSS et JavaScript ; avec les linters HTMLHint, JSCS, JSHint
-et CSSLint.
+les fichiers JavaScript (non-minifiés), HTML et CSS ; avec les linters ESLint,
+JSCS, HTMLHint et CSSLint.
 
 ```JSON
 {
-    "patterns": ["**", "!*_modules/**"],
+    "patterns": ["!git/**", "!node_modules/**", "**"],
     "checkers": [
         {
+            "patterns": ["!**/*.min.js", "**/*.js"],
+            "linters": ["eslint", "jscs"]
+        }, {
             "patterns": "**/*.html",
             "linters": "htmlhlint"
-        }, {
-            "patterns": ["**/*.js", "!**/*.min.js"],
-            "linters": ["jscs", "jshint"]
         }, {
             "patterns": "**/*.css",
             "linters": "csslint"
@@ -84,7 +84,7 @@ metalint
 [img-coverage]:https://img.shields.io/coveralls/regseb/metalint.svg
 [img-license]:https://img.shields.io/badge/license-EUPL-blue.svg
 
-[link-npm]://npmjs.com/package/metalint "Node Packaged Modules"
+[link-npm]://npmjs.com/package/metalint
 [link-build]://travis-ci.org/regseb/metalint
 [link-dependencies]://david-dm.org/regseb/metalint
 [link-codeclimate]://codeclimate.com/github/regseb/metalint
