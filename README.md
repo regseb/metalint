@@ -17,7 +17,8 @@
 vérification est déléguée à des outils d'analyse statique de code source
 (*linters*) selon le type de fichier :
 
-- CSS : [CSSLint](//regseb.github.io/metalint/user/linters/csslint/) ;
+- CSS : [CSSLint](//regseb.github.io/metalint/user/linters/csslint/) et
+  [stylelint](//regseb.github.io/metalint/user/linters/stylelint/) ;
 - HTML : [html5-lint](//regseb.github.io/metalint/user/linters/html5-lint/),
   [HTMLHint](//regseb.github.io/metalint/user/linters/htmlhint/) et
   [htmllint](//regseb.github.io/metalint/user/linters/htmllint/) ;
