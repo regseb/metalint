@@ -23,6 +23,7 @@ vérification est déléguée à des outils d'analyse statique de code source
   [HTMLHint](//regseb.github.io/metalint/user/linters/htmlhint/) et
   [htmllint](//regseb.github.io/metalint/user/linters/htmllint/) ;
 - JavaScript : [ESLint](//regseb.github.io/metalint/user/linters/eslint/),
+  [Flow](//regseb.github.io/metalint/user/linters/flow-bin/),
   [JSCS](//regseb.github.io/metalint/user/linters/jscs/),
   [JSHint](//regseb.github.io/metalint/user/linters/jshint/) et
   [JavaScript Standard
