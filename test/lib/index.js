@@ -34,7 +34,7 @@ describe("lib/index.js", function () {
                     "rule":      "validateQuoteMarks",
                     "severity":  SEVERITY.ERROR,
                     "message":   "Invalid quote mark found",
-                    "locations": [{ "line": 2, "column": 17 }]
+                    "locations": [{ "line": 2, "column": 10 }]
                 }, {
                     "linter":    "jshint",
                     "rule":      "W033",
