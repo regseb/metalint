@@ -38,7 +38,7 @@
 
         "csslint": "^0.10.0",
         "eslint": "^2.12.0",
-        "flow-bin": "^0.26.0",
+        "flow-bin": "^0.27.0",
         "html5-lint": "^0.2.5",
         "htmllint": "^0.3.0",
         "htmlhint": "^0.9.13",
