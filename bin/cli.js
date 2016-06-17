@@ -174,4 +174,8 @@ config.reporter(results, config.output,
         }
         process.exit(exit);
     });
+}).catch(function (exc) {
+    process.stderr.write("metalint: " + exc.message + "\n");
+    process.stderr.write(exc.stack + "\n");
+    process.exit(12);
 });
