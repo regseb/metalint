@@ -1,6 +1,6 @@
 {
     "name": "metalint",
-    "version": "0.5.5",
+    "version": "0.5.6",
     "description": "Un linter pour les gouverner tous.",
     "keywords": ["metalint", "linter", "lint", "checker"],
     "homepage": "https://regseb.github.io/metalint/",

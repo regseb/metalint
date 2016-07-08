@@ -64,7 +64,7 @@ describe("lib/index.js", function () {
                     "linter":    "markdownlint",
                     "rule":      "MD002",
                     "severity":  SEVERITY.ERROR,
-                    "message":   "First header should be a h1 header",
+                    "message":   "First header should be a top level header",
                     "locations": [{ "line": 1 }]
                 }, {
                     "linter":    "markdownlint",
