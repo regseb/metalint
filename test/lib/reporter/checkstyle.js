@@ -33,8 +33,8 @@ describe("lib/reporter/checkstyle.js", function () {
             assert.equal(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<checkstyle version=\"6.8\">\n" +
-                "  <file name=\"un.md\">\n" +
-                "  </file>\n" +
+                " <file name=\"un.md\">\n" +
+                " </file>\n" +
                 "</checkstyle>\n",
                 writer.toString());
         });
