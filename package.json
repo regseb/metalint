@@ -1,6 +1,6 @@
 {
     "name": "metalint",
-    "version": "0.5.6",
+    "version": "0.6.0",
     "description": "Un linter pour les gouverner tous.",
     "keywords": ["metalint", "linter", "lint", "checker"],
     "homepage": "https://regseb.github.io/metalint/",
@@ -17,9 +17,6 @@
     "bin": {
         "metalint": "bin/cli.js"
     },
-    "directories": {
-        "doc": "doc"
-    },
     "repository": {
         "type": "git",
         "url": "http://github.com/regseb/metalint.git"
@@ -34,14 +31,15 @@
         "colors": "^1.1.2",
         "glob": "^7.0.5",
         "minimatch": "^3.0.2",
-        "yargs": "^4.8.1",
-
+        "yargs": "^4.8.1"
+    },
+    "devDependencies": {
         "csslint": "^1.0.2",
         "eslint": "^3.1.1",
         "flow-bin": "^0.29.0",
         "html5-lint": "^0.2.5",
-        "htmllint": "^0.4.0",
         "htmlhint": "^0.9.13",
+        "htmllint": "^0.4.0",
         "jscs": "^3.0.7",
         "jscs-jsdoc": "^2.0.0",
         "jshint": "^2.9.2",
@@ -49,9 +47,8 @@
         "jsonlint": "^1.6.2",
         "markdownlint": "^0.2.0",
         "standard": "^7.1.2",
-        "stylelint": "^7.0.3"
-    },
-    "devDependencies": {
+        "stylelint": "^7.0.3",
+
         "coveralls": "^2.11.11",
         "istanbul": "^0.4.4",
         "memory-streams": "^0.1.0",
