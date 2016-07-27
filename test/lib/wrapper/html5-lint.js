@@ -9,7 +9,7 @@ describe("lib/wrapper/html5-lint.js", function () {
         const source =
             "<!DOCTYPE html>\n" +
             "<title>Exemple</title>\n";
-        const options = {};
+        const options = { "service": "https://validator.w3.org/nu/" };
         const level = SEVERITY.INFO;
 
         return wrapper(source, options, level).then(function (notices) {
@@ -21,7 +21,7 @@ describe("lib/wrapper/html5-lint.js", function () {
         const source =
             "<title>Le titre</title>\n" +
             "<img border=\"0\" src=\"logo.svg\" alt=\"Logo\" />\n";
-        const options = {};
+        const options = { "service": "https://validator.w3.org/nu/" };
         const level = SEVERITY.ERROR;
 
         return wrapper(source, options, level).then(function (notices) {
@@ -31,7 +31,7 @@ describe("lib/wrapper/html5-lint.js", function () {
                     "rule":      null,
                     "severity":  SEVERITY.ERROR,
                     "message":   "Start tag seen without seeing a doctype" +
-                                 " first. Expected “<!DOCTYPE html>”.",
+                                 " first. Expected e.g. “<!DOCTYPE html>”.",
                     "locations": [{ "line": 1, "column": 7 }]
                 }
             ]);
