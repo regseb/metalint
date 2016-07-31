@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * Ne pas écrire les résultats ; retourner seulement la sévérité la plus élévée.
+ * Écrire les résultats avec des phrases en français.
  *
  * @param {Promise.<Object>} promise Une promesse retournant la liste des
  *                                   notifications regroupées par fichier.
@@ -25,19 +25,19 @@ const reporter = function (promise, writer) {
                     severity = notice.severity;
                 }
 
-                writer.write("Le linter " + notice.linter + " a trouvé");
+                writer.write("Le linter " + notice.linter + " a trouvé ");
                 if (null === notice.rule) {
-                    writer.write(" un problème");
+                    writer.write("un problème ");
                 } else {
-                    writer.write(" que la règle " + notice.rule + " n'est pas" +
-                                 " respectée");
+                    writer.write("que la règle " + notice.rule +
+                                 " n'est pas respectée ");
                 }
                 if (0 === notice.locations.length) {
-                    writer.write(" dans le fichier ");
+                    writer.write("dans le fichier ");
                 } else {
-                    writer.write(" à la ligne " +
-                                 notice.locations[0].line.toString() + " du" +
-                                 " fichier ");
+                    writer.write("à la ligne " +
+                                 notice.locations[0].line.toString() +
+                                 " du fichier ");
                 }
                 writer.write(file + " : " + notice.message + "\n");
             }

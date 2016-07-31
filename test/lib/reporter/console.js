@@ -8,7 +8,7 @@ const reporter = require("../../../lib/reporter/console.js");
 describe("lib/reporter/console.js", function () {
     it("", function () {
         const promise = Promise.resolve({
-            "README.md": null,
+            "README.md":    null,
             "package.json": []
         });
         const writer = new streams.WritableStream();
@@ -21,7 +21,7 @@ describe("lib/reporter/console.js", function () {
 
     it("", function () {
         const promise = Promise.resolve({
-            "README.md": null,
+            "README.md":    null,
             "package.json": []
         });
         const writer = new streams.WritableStream();
@@ -35,7 +35,7 @@ describe("lib/reporter/console.js", function () {
 
     it("", function () {
         const promise = Promise.resolve({
-            "README.md": null,
+            "README.md":    null,
             "package.json": []
         });
         const writer = new streams.WritableStream();

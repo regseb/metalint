@@ -17,9 +17,11 @@ describe("lib/wrapper/stylelint.js", function () {
 
     it("", function () {
         const source = "p { font-size: .5em }";
-        const options = { "rules": {
-            "number-leading-zero": ["always", { "severity": "warning" }]
-        } };
+        const options = {
+            "rules": {
+                "number-leading-zero": ["always", { "severity": "warning" }]
+            }
+        };
         const level = SEVERITY.WARN;
 
         return wrapper(source, options, level).then(function (notices) {
@@ -40,10 +42,12 @@ describe("lib/wrapper/stylelint.js", function () {
             "label::after {\n" +
             "    content: ' : ';\n" +
             "}\n";
-        const options = { "rules": {
-            "string-quotes": "double",
-            "indentation": [2, { "severity": "warning" }]
-        } };
+        const options = {
+            "rules": {
+                "string-quotes": "double",
+                "indentation":   [2, { "severity": "warning" }]
+            }
+        };
         const level = SEVERITY.ERROR;
 
         return wrapper(source, options, level).then(function (notices) {

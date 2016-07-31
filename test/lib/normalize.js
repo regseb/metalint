@@ -7,6 +7,15 @@ const SEVERITY  = require("../../lib/severity.js");
 const console   = require("../../lib/reporter/console.js");
 const csv       = require("../../lib/reporter/csv.js");
 
+const runfail = function (rotten) {
+    try {
+        normalize(rotten, null);
+        assert.fail();
+    } catch (_) {
+        // Ne rien faire.
+    }
+}; // runfail()
+
 describe("lib/normalize.js", function () {
     it("", function () {
         const rotten = { "checkers": [{ "linters": { "eslint": {} } }] };
@@ -22,9 +31,9 @@ describe("lib/normalize.js", function () {
             "checkers": [
                 {
                     "patterns": ["**"],
-                    "hidden": false,
-                    "level": SEVERITY.INFO,
-                    "linters": {
+                    "hidden":   false,
+                    "level":    SEVERITY.INFO,
+                    "linters":  {
                         "eslint": {}
                     }
                 }
@@ -42,15 +51,15 @@ describe("lib/normalize.js", function () {
             "output":   null,
             "checkers": [
                 {
-                    "hidden":   false,
-                    "level":    "INFO",
-                    "linters":  "markdownlint"
+                    "hidden":  false,
+                    "level":   "INFO",
+                    "linters": "markdownlint"
                 }, {
                     "patterns": ["!**.min.js", "**"],
-                    "linters": {
+                    "linters":  {
                         "eslint": [
                             "eslint.json",
-                            { "rules":  { "curly": 1, "no-var": 2 } }
+                            { "rules": { "curly": 1, "no-var": 2 } }
                         ]
                     }
                 }, {
@@ -74,14 +83,14 @@ describe("lib/normalize.js", function () {
                     "patterns": ["**"],
                     "hidden":   false,
                     "level":    SEVERITY.ERROR,
-                    "linters": {
+                    "linters":  {
                         "markdownlint": { "MD035": { "style": "---" } }
                     }
                 }, {
                     "patterns": ["!**.min.js", "**"],
                     "hidden":   true,
                     "level":    SEVERITY.ERROR,
-                    "linters": {
+                    "linters":  {
                         "eslint": {
                             "rules": { "no-empty": 2, "curly": 1, "no-var": 2 }
                         }
@@ -90,7 +99,7 @@ describe("lib/normalize.js", function () {
                     "patterns": ["**"],
                     "hidden":   true,
                     "level":    SEVERITY.ERROR,
-                    "linters": {
+                    "linters":  {
                         "htmlhint": { "tagname-lowercase": true },
                         "htmllint": { "doctype-html5": true }
                     }
@@ -105,18 +114,7 @@ describe("lib/normalize.js", function () {
     });
 
     it("", function () {
-        const runfail = function (rotten) {
-            try {
-                normalize(rotten, null);
-                assert.fail();
-            } catch (_) {
-                // Ne rien faire.
-            }
-        }; // runfail()
-
-        const rotten = {
-            "checkers": [{ "linters": { "jsonlint": [1] } }]
-        };
+        const rotten = { "checkers": [{ "linters": { "jsonlint": [1] } }] };
         runfail(rotten);
 
         rotten.checkers[0].linters.jsonlint[0] = null;

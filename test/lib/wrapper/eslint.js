@@ -15,7 +15,7 @@ describe("lib/wrapper/eslint.js", function () {
             "}\n";
         const options = {
             "rules": {
-                "indent": [1, 4, { "SwitchCase": 1 }],
+                "indent":            [1, 4, { "SwitchCase": 1 }],
                 "no-duplicate-case": 2
             }
         };

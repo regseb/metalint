@@ -81,10 +81,10 @@ const check = function (files, checkers, root) {
                 });
             }
         }
-        if (0 !== linters.length) {
-            results[file] = metalint(fs.readFileSync(file, "utf-8"), linters);
-        } else {
+        if (0 === linters.length) {
             results[file] = Promise.resolve(null);
+        } else {
+            results[file] = metalint(fs.readFileSync(file, "utf-8"), linters);
         }
     }
 

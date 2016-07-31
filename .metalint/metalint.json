@@ -6,11 +6,10 @@
     "checkers": [
         {
             "patterns": ["!test/**", "**/*.js"],
-            "linters": ["eslint", "jscs"]
+            "linters": "eslint"
         }, {
             "patterns": "test/**/*.js",
-            "linters": { "eslint": ["eslint.json", "eslint_test.json"],
-                         "jscs": "jscs.json" }
+            "linters": { "eslint": ["eslint.json", "eslint_test.json"] }
         }, {
             "patterns": "**/*.md",
             "linters": "markdownlint"

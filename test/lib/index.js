@@ -14,8 +14,10 @@ describe("lib/index.js", function () {
             {
                 "linters": {
                     "jshint": null,
-                    "jscs": { "disallowFunctionDeclarations": true,
-                              "validateQuoteMarks": "\"" }
+                    "jscs":   {
+                        "disallowFunctionDeclarations": true,
+                        "validateQuoteMarks":           "\""
+                    }
                 },
                 "level": SEVERITY.ERROR
             }
@@ -51,10 +53,8 @@ describe("lib/index.js", function () {
         const source = "## README\n";
         const checkers = [
             {
-                "linters": {
-                    "markdownlint": null
-                },
-                "level": SEVERITY.INFO
+                "linters": { "markdownlint": null },
+                "level":   SEVERITY.INFO
             }
         ];
 
