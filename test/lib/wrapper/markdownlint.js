@@ -4,26 +4,25 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/markdownlint.js");
 
+const DATA_DIR = "../data/lib/wrapper/markdownlint";
+
 describe("lib/wrapper/markdownlint.js", function () {
     it("", function () {
-        const source =
-            "# Titre\n" +
-            "\n" +
-            "Description.\n";
+        const file    = DATA_DIR + "/README1.md";
         const options = {};
-        const level = SEVERITY.INFO;
+        const level   = SEVERITY.INFO;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source = "# YYYEEEAAAHHH !\n";
+        const file    = DATA_DIR + "/README2.md";
         const options = {};
-        const level = SEVERITY.WARN;
+        const level   = SEVERITY.WARN;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "markdownlint",
@@ -37,11 +36,11 @@ describe("lib/wrapper/markdownlint.js", function () {
     });
 
     it("", function () {
-        const source = "*#*\n";
+        const file    = DATA_DIR + "/README3.md";
         const options = {};
-        const level = SEVERITY.FATAL;
+        const level   = SEVERITY.FATAL;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

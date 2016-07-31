@@ -4,27 +4,29 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/stylelint.js");
 
+const DATA_DIR = "../data/lib/wrapper/stylelint";
+
 describe("lib/wrapper/stylelint.js", function () {
     it("", function () {
-        const source = "a { color: #FF9800; }";
+        const file    = DATA_DIR + "/style1.css";
         const options = { "rules": { "color-hex-case": "upper" } };
-        const level = SEVERITY.INFO;
+        const level   = SEVERITY.INFO;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source = "p { font-size: .5em }";
+        const file    = DATA_DIR + "/style2.css";
         const options = {
             "rules": {
                 "number-leading-zero": ["always", { "severity": "warning" }]
             }
         };
-        const level = SEVERITY.WARN;
+        const level   = SEVERITY.WARN;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "stylelint",
@@ -38,19 +40,16 @@ describe("lib/wrapper/stylelint.js", function () {
     });
 
     it("", function () {
-        const source =
-            "label::after {\n" +
-            "    content: ' : ';\n" +
-            "}\n";
+        const file    = DATA_DIR + "/style3.css";
         const options = {
             "rules": {
                 "string-quotes": "double",
                 "indentation":   [2, { "severity": "warning" }]
             }
         };
-        const level = SEVERITY.ERROR;
+        const level   = SEVERITY.ERROR;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "stylelint",
@@ -64,14 +63,11 @@ describe("lib/wrapper/stylelint.js", function () {
     });
 
     it("", function () {
-        const source =
-            "p {\n" +
-            "    text-align: justify;;\n" +
-            "}\n";
+        const file    = DATA_DIR + "/style4.css";
         const options = { "rules": { "no-extra-semicolons": true } };
-        const level = SEVERITY.FATAL;
+        const level   = SEVERITY.FATAL;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

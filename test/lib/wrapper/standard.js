@@ -4,13 +4,15 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/standard.js");
 
+const DATA_DIR = "../data/lib/wrapper/standard";
+
 describe("lib/wrapper/standard.js", function () {
     it("", function () {
-        const source = "var text = \"Hello World\"\n";
+        const file    = DATA_DIR + "/script.js";
         const options = {};
-        const level = SEVERITY.ERROR;
+        const level   = SEVERITY.ERROR;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "standard",
@@ -30,11 +32,11 @@ describe("lib/wrapper/standard.js", function () {
     });
 
     it("", function () {
-        const source = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        const file    = DATA_DIR + "/data.xml";
         const options = {};
-        const level = SEVERITY.FATAL;
+        const level   = SEVERITY.FATAL;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

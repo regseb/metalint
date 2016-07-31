@@ -4,23 +4,25 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/jshint.js");
 
+const DATA_DIR = "../data/lib/wrapper/jshint";
+
 describe("lib/wrapper/jshint.js", function () {
     it("", function () {
-        const source = "const results = [];";
+        const file    = DATA_DIR + "/script1.js";
         const options = { "esnext": true };
-        const level = SEVERITY.ERROR;
+        const level   = SEVERITY.ERROR;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source = "if (1 == \"1\") console.log(\"Equal !\");\n";
+        const file    = DATA_DIR + "/script2.js";
         const options = { "eqeqeq": true };
-        const level = SEVERITY.ERROR;
+        const level   = SEVERITY.ERROR;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jshint",
@@ -34,28 +36,21 @@ describe("lib/wrapper/jshint.js", function () {
     });
 
     it("", function () {
-        const source =
-            "var maybe = \"I'm a string.\";\n" +
-            "if (typeof maybe == \"fuction\") {\n" +
-            "    console.log(\"It's a function.\");\n" +
-            "}\n";
+        const file    = DATA_DIR + "/script3.js";
         const options = { "notypeof": false };
-        const level = SEVERITY.FATAL;
+        const level   = SEVERITY.FATAL;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source =
-            "function add(a, b) { return a + b; }\n" +
-            "function sub(a, b) { return a - b; }\n";
-        const options = { "maxerr":    1,
-                          "maxparams": 1 };
-        const level = SEVERITY.INFO;
+        const file    = DATA_DIR + "/script4.js";
+        const options = { "maxerr": 1, "maxparams": 1 };
+        const level   = SEVERITY.INFO;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jshint",

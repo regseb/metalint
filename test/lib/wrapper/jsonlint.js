@@ -4,23 +4,25 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/jsonlint.js");
 
+const DATA_DIR = "../data/lib/wrapper/jsonlint";
+
 describe("lib/wrapper/jsonlint.js", function () {
     it("", function () {
-        const source = "{ \"min\": 0, \"max\": 365 }\n";
+        const file    = DATA_DIR + "/data1.json";
         const options = {};
-        const level = SEVERITY.INFO;
+        const level   = SEVERITY.INFO;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source = "{ \"min\": 0, \"max\": Infinity }\n";
+        const file    = DATA_DIR + "/data2.json";
         const options = {};
-        const level = SEVERITY.WARN;
+        const level   = SEVERITY.WARN;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jsonlint",
@@ -35,11 +37,11 @@ describe("lib/wrapper/jsonlint.js", function () {
     });
 
     it("", function () {
-        const source = "Hello world !\n";
+        const file    = DATA_DIR + "/test.txt";
         const options = {};
-        const level = SEVERITY.FATAL;
+        const level   = SEVERITY.FATAL;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

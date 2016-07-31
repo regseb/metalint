@@ -4,25 +4,25 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/htmlhint.js");
 
+const DATA_DIR = "../data/lib/wrapper/htmlhint";
+
 describe("lib/wrapper/htmlhint.js", function () {
     it("", function () {
-        const source =
-            "<!DOCTYPE html>\n" +
-            "<title>Exemple</title>\n";
+        const file    = DATA_DIR + "/index1.html";
         const options = null;
-        const level = SEVERITY.INFO;
+        const level   = SEVERITY.INFO;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source = "<title>Exemple</title>\n";
+        const file    = DATA_DIR + "/index2.html";
         const options = {};
-        const level = SEVERITY.WARN;
+        const level   = SEVERITY.WARN;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "htmlhint",
@@ -36,28 +36,21 @@ describe("lib/wrapper/htmlhint.js", function () {
     });
 
     it("", function () {
-        const source =
-            "<head>\n" +
-            "  <script type=\"text/javascript\" src=\"test.js\"></script>\n" +
-            "</head>\n";
+        const file    = DATA_DIR + "/index3.html";
         const options = { "head-script-disabled": true };
-        const level = SEVERITY.ERROR;
+        const level   = SEVERITY.ERROR;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source =
-            "\\documentclass{article}\n" +
-            "\\begin{document}\n" +
-            "Je suis en \\LaTeX !\n" +
-            "\\end{document}\n";
+        const file    = DATA_DIR + "/index.tex";
         const options = {};
-        const level = SEVERITY.FATAL;
+        const level   = SEVERITY.FATAL;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

@@ -4,16 +4,15 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/jscs.js");
 
+const DATA_DIR = "../data/lib/wrapper/jscs";
+
 describe("lib/wrapper/jscs.js", function () {
     it("", function () {
-        const source =
-            "const query =\n" +
-            "    \"SELECT *\\\n" +
-            "      FROM DUAL\";\n";
+        const file    = DATA_DIR + "/script1.js";
         const options = { "disallowMultipleLineStrings": true };
-        const level = SEVERITY.ERROR;
+        const level   = SEVERITY.ERROR;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jscs",
@@ -27,21 +26,21 @@ describe("lib/wrapper/jscs.js", function () {
     });
 
     it("", function () {
-        const source = "var metalint = require(\"metalint\");";
+        const file    = DATA_DIR + "/script2.js";
         const options = { "disallowKeywords": ["var"] };
-        const level = SEVERITY.FATAL;
+        const level   = SEVERITY.FATAL;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source = "I'm a **Markdown** text !";
+        const file    = DATA_DIR + "/README.md";
         const options = { "disallowSemicolons": true };
-        const level = SEVERITY.INFO;
+        const level   = SEVERITY.INFO;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jscs",

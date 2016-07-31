@@ -4,25 +4,25 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/htmllint.js");
 
+const DATA_DIR = "../data/lib/wrapper/htmllint";
+
 describe("lib/wrapper/htmllint.js", function () {
     it("", function () {
-        const source =
-            "<!DOCTYPE html>\n" +
-            "<title>Exemple</title>\n";
+        const file    = DATA_DIR + "/index1.html";
         const options = {};
-        const level = SEVERITY.INFO;
+        const level   = SEVERITY.INFO;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source = "<input type='hidden' name=\"id\" />\n";
+        const file    = DATA_DIR + "/index2.html";
         const options = {};
-        const level = SEVERITY.WARN;
+        const level   = SEVERITY.WARN;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "htmllint",
@@ -36,11 +36,11 @@ describe("lib/wrapper/htmllint.js", function () {
     });
 
     it("", function () {
-        const source = "<img src=\"logo.svg\" />\n";
+        const file    = DATA_DIR + "/index3.html";
         const options = {};
-        const level = SEVERITY.FATAL;
+        const level   = SEVERITY.FATAL;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

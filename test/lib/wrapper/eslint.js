@@ -4,24 +4,20 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/eslint.js");
 
+const DATA_DIR = "../data/lib/wrapper/eslint";
+
 describe("lib/wrapper/eslint.js", function () {
     it("", function () {
-        const source =
-            "var number = 1;\n" +
-            "switch (number) {\n" +
-            "    case 1: break;\n" +
-            "   case 2: break;\n" +
-            "    case 2: break;\n" +
-            "}\n";
+        const file    = DATA_DIR + "/script1.js";
         const options = {
             "rules": {
                 "indent":            [1, 4, { "SwitchCase": 1 }],
                 "no-duplicate-case": 2
             }
         };
-        const level = SEVERITY.WARN;
+        const level   = SEVERITY.WARN;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "eslint",
@@ -42,21 +38,21 @@ describe("lib/wrapper/eslint.js", function () {
     });
 
     it("", function () {
-        const source = "var x = 2 << 9;\n";
+        const file    = DATA_DIR + "/script2.js";
         const options = { "rules": { "no-bitwise": 1 } };
-        const level = SEVERITY.ERROR;
+        const level   = SEVERITY.ERROR;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source = "var i = ;\n";
+        const file    = DATA_DIR + "/script3.js";
         const options = { };
-        const level = SEVERITY.INFO;
+        const level   = SEVERITY.INFO;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "eslint",
@@ -70,14 +66,11 @@ describe("lib/wrapper/eslint.js", function () {
     });
 
     it("", function () {
-        const source =
-            "int main(int argc, char* argv[]) {\n" +
-            "    return 0;\n" +
-            "}\n";
+        const file    = DATA_DIR + "/script4.js";
         const options = { };
-        const level = SEVERITY.OFF;
+        const level   = SEVERITY.OFF;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

@@ -4,27 +4,25 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/html5-lint.js");
 
+const DATA_DIR = "../data/lib/wrapper/html5-lint";
+
 describe("lib/wrapper/html5-lint.js", function () {
     it("", function () {
-        const source =
-            "<!DOCTYPE html>\n" +
-            "<title>Exemple</title>\n";
+        const file    = DATA_DIR + "/index1.html";
         const options = { "service": "https://validator.w3.org/nu/" };
-        const level = SEVERITY.INFO;
+        const level   = SEVERITY.INFO;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source =
-            "<title>Le titre</title>\n" +
-            "<img border=\"0\" src=\"logo.svg\" alt=\"Logo\" />\n";
+        const file    = DATA_DIR + "/index2.html";
         const options = { "service": "https://validator.w3.org/nu/" };
-        const level = SEVERITY.ERROR;
+        const level   = SEVERITY.ERROR;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "html5-lint",
@@ -39,13 +37,11 @@ describe("lib/wrapper/html5-lint.js", function () {
     });
 
     it("", function () {
-        const source =
-            "<!DOCTYPE html>\n" +
-            "<title>Exemple</title>\n";
+        const file    = DATA_DIR + "/index3.html";
         const options = { "service": "https://validator.undefined" };
-        const level = SEVERITY.ERROR;
+        const level   = SEVERITY.ERROR;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "html5-lint",
@@ -60,15 +56,11 @@ describe("lib/wrapper/html5-lint.js", function () {
     });
 
     it("", function () {
-        const source =
-            "\\documentclass{article}\n" +
-            "\\begin{document}\n" +
-            "Je suis en \\LaTeX !\n" +
-            "\\end{document}\n";
+        const file    = DATA_DIR + "/index.tex";
         const options = {};
-        const level = SEVERITY.OFF;
+        const level   = SEVERITY.OFF;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

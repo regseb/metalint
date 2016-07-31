@@ -4,12 +4,11 @@ const assert   = require("assert");
 const SEVERITY = require("../../lib/severity.js");
 const metalint = require("../../lib/index.js");
 
+const DATA_DIR = "../data/lib/index";
+
 describe("lib/index.js", function () {
     it("", function () {
-        const source =
-            "function hello() {\n" +
-            "    alert('Hello World!')\n" +
-            "}\n";
+        const file     = DATA_DIR + "/script.js";
         const checkers = [
             {
                 "linters": {
@@ -23,7 +22,7 @@ describe("lib/index.js", function () {
             }
         ];
 
-        return metalint(source, checkers).then(function (notices) {
+        return metalint(file, checkers).then(function (notices) {
             const expected = [
                 {
                     "linter":    "jscs",
@@ -50,7 +49,7 @@ describe("lib/index.js", function () {
     });
 
     it("", function () {
-        const source = "## README\n";
+        const file     = DATA_DIR + "/README.md";
         const checkers = [
             {
                 "linters": { "markdownlint": null },
@@ -58,7 +57,7 @@ describe("lib/index.js", function () {
             }
         ];
 
-        return metalint(source, checkers).then(function (notices) {
+        return metalint(file, checkers).then(function (notices) {
             const expected = [
                 {
                     "linter":    "markdownlint",

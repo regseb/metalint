@@ -4,23 +4,25 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
 const wrapper  = require("../../../lib/wrapper/csslint.js");
 
+const DATA_DIR = "../data/lib/wrapper/csslint";
+
 describe("lib/wrapper/csslint.js", function () {
     it("", function () {
-        const source = "aside { float: right; }";
+        const file    = DATA_DIR + "/style1.css";
         const options = { "floats": true };
-        const level = SEVERITY.INFO;
+        const level   = SEVERITY.INFO;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("", function () {
-        const source = "a { }";
+        const file    = DATA_DIR + "/style2.css";
         const options = { "empty-rules": true };
-        const level = SEVERITY.WARN;
+        const level   = SEVERITY.WARN;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "csslint",
@@ -34,14 +36,11 @@ describe("lib/wrapper/csslint.js", function () {
     });
 
     it("", function () {
-        const source =
-            "#aside {\n" +
-            "    background-color: #ff9800 !important;\n" +
-            "}\n";
+        const file    = DATA_DIR + "/style3.css";
         const options = { "ids": 2, "important": 1 };
-        const level = SEVERITY.ERROR;
+        const level   = SEVERITY.ERROR;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "csslint",
@@ -55,14 +54,11 @@ describe("lib/wrapper/csslint.js", function () {
     });
 
     it("", function () {
-        const source =
-            "button {\n" +
-            "    border: 0px;\n" +
-            "}\n";
+        const file    = DATA_DIR + "/style4.css";
         const options = { "zero-units": 2 };
-        const level = SEVERITY.FATAL;
+        const level   = SEVERITY.FATAL;
 
-        return wrapper(source, options, level).then(function (notices) {
+        return wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

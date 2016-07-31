@@ -23,8 +23,8 @@
     },
     "scripts": {
         "lint": "bin/cli.js",
-        "test": "mocha",
-        "cover": "istanbul cover _mocha",
+        "test": "mocha test/lib/",
+        "cover": "istanbul cover _mocha -- test/lib/",
         "coveralls": "npm run cover -- --report lcovonly && cat coverage/lcov.info | coveralls"
     },
     "dependencies": {
