@@ -129,7 +129,7 @@ describe("lib/normalize.js", function () {
         rotten.checkers[0].linters = null;
         runfail(rotten);
 
-        delete rotten.checkers[0].linters;
+        Reflect.deleteProperty(rotten.checkers[0], "linters");
         runfail(rotten);
 
         rotten.checkers.length = 0;
