@@ -1,6 +1,6 @@
 {
     "name": "metalint",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "description": "Un linter pour les gouverner tous.",
     "keywords": ["metalint", "linter", "lint", "checker"],
     "homepage": "https://regseb.github.io/metalint/",
@@ -42,7 +42,6 @@
         "csslint": "^1.0.2",
         "eslint": "^3.5.0",
         "flow-bin": "^0.32.0",
-        "html5-lint": "^0.2.5",
         "htmlhint": "^0.9.13",
         "htmllint": "^0.4.0",
         "jscs": "^3.0.7",

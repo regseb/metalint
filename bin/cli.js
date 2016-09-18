@@ -111,9 +111,8 @@ if (argv.version) {
                                               "utf-8"));
     process.stdout.write(manifest.name + " " + manifest.version + "\n\n");
 
-    for (const linter of ["csslint", "eslint", "html5-lint", "htmlhint",
-                          "htmllint", "jscs", "jshint", "json-lint", "jsonlint",
-                          "markdownlint"]) {
+    for (const linter of ["csslint", "eslint", "htmlhint", "htmllint", "jscs",
+                          "jshint", "json-lint", "jsonlint", "markdownlint"]) {
         manifest = JSON.parse(fs.readFileSync(path.join(__dirname,
                                                         "/../node_modules/" +
                                                         linter +
