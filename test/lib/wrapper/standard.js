@@ -18,7 +18,7 @@ describe("lib/wrapper/standard.js", function () {
                     "linter":    "standard",
                     "rule":      "no-unused-vars",
                     "severity":  SEVERITY.ERROR,
-                    "message":   "'text' is defined but never used",
+                    "message":   "'text' is defined but never used.",
                     "locations": [{ "line": 1, "column": 5 }]
                 }, {
                     "linter":    "standard",
