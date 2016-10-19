@@ -46,7 +46,7 @@ describe("lib/reporter/unix.js", function () {
                     "linter":    "jslint",
                     "rule":      "1",
                     "severity":  SEVERITY.WARN,
-                    "message":   "Tout l'été,",
+                    "message":   "Tout l’été,",
                     "locations": [{ "line": 1, "column": 2 }]
                 }, {
                     "linter":    "jslint",
@@ -64,7 +64,7 @@ describe("lib/reporter/unix.js", function () {
             assert.strictEqual(writer.toString(),
                 "un.html::: La cigale ayant chanté (htmllint)\n" +
                 "\n" +
-                "deux.js:1:2: Tout l'été, (jslint.1)\n" +
+                "deux.js:1:2: Tout l’été, (jslint.1)\n" +
                 "deux.js:3:: Se trouva fort dépourvue (jslint.2)\n");
         });
     });

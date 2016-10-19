@@ -23,8 +23,8 @@ describe("lib/wrapper/eslint.js", function () {
                     "linter":    "eslint",
                     "rule":      "indent",
                     "severity":  SEVERITY.WARN,
-                    "message":   "Expected indentation of 4 space" +
-                                 " characters but found 3.",
+                    "message":   "Expected indentation of 4 spaces but found" +
+                                 " 3.",
                     "locations": [{ "line": 4, "column": 4 }]
                 }, {
                     "linter":    "eslint",

@@ -63,7 +63,7 @@ const argv = yargs.options({
  * @param {Array.<string>} files    La liste des fichiers.
  * @param {Array.<Object>} checkers La liste des vérifications faites sur les
  *                                  fichiers.
- * @param {string}         root     L'adresse du répertoire où se trouve le
+ * @param {string}         root     L’adresse du répertoire où se trouve le
  *                                  dossier <code>.metalint/</code>.
  * @return {Object} Les listes des notifications (regroupées par fichier)
  *                  retournées par les linters.

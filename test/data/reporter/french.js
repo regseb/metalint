@@ -13,7 +13,7 @@ const reporter = function (promise, writer) {
     return promise.then(function (results) {
         let severity = null;
         for (const file in results) {
-            // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans
+            // Si le fichier n’a pas été vérifié (car il ne rentrait pas dans
             // les critères des checkers).
             if (null === results[file]) {
                 continue;
@@ -30,7 +30,7 @@ const reporter = function (promise, writer) {
                     writer.write("un problème ");
                 } else {
                     writer.write("que la règle " + notice.rule +
-                                 " n'est pas respectée ");
+                                 " n’est pas respectée ");
                 }
                 if (0 === notice.locations.length) {
                     writer.write("dans le fichier ");

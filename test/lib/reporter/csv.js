@@ -54,7 +54,7 @@ describe("lib/reporter/csv.js", function () {
                     "linter":    "htmllint",
                     "rule":      "2",
                     "severity":  SEVERITY.INFO,
-                    "message":   "Qu'il soupçonnait dans le corps d'un Lion,",
+                    "message":   "Qu’il soupçonnait dans le corps d’un Lion,",
                     "locations": [{ "line": 3 }]
                 }
             ]
@@ -69,7 +69,7 @@ describe("lib/reporter/csv.js", function () {
                     ",pylint\r\n" +
                 "\"deux.xhtml\",1,2,\"Venant de perdre un chien de bonne" +
                                    " race\",xmllint\r\n" +
-                "\"deux.xhtml\",3,,\"Qu'il soupçonnait dans le corps d'un" +
+                "\"deux.xhtml\",3,,\"Qu’il soupçonnait dans le corps d’un" +
                                    " Lion,\",htmllint\r\n");
         });
     });

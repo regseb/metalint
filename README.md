@@ -13,9 +13,9 @@
 
 ## Description
 
-**Metalint** est un outil pour vérifier tous les fichiers de votre projet. La
-vérification est déléguée à des outils d'analyse statique de code source
-(*linters*) selon le type de fichier :
+**Metalint** est un outil pour analyser tous les fichiers de votre projet.
+L’analyse est déléguée à des linters (outils d’analyse statique de code source)
+selon le type de fichier :
 
 - CSS : [CSSLint](//regseb.github.io/metalint/user/linters/csslint/) et
   [stylelint](//regseb.github.io/metalint/user/linters/stylelint/) ;
@@ -50,9 +50,9 @@ chaque fichier. Les autres fichiers contiennent les options pour les linters.
 
 ## Exemple
 
-Dans cet exemple du fichier de configuration `metalint.json`, Metalint vérifie
-les fichiers JavaScript (non-minifiés), HTML et CSS ; avec les linters ESLint,
-JSCS, HTMLHint et CSSLint.
+Dans cet exemple du fichier de configuration `metalint.json`, Metalint analyse
+les fichiers JavaScript (non-minifiés), HTML et CSS ; avec respectivement les
+linters ESLint, HTMLHint et stylelint.
 
 ```JSON
 {
@@ -60,13 +60,13 @@ JSCS, HTMLHint et CSSLint.
     "checkers": [
         {
             "patterns": ["!**/*.min.js", "**/*.js"],
-            "linters": ["eslint", "jscs"]
+            "linters": "eslint"
         }, {
             "patterns": "**/*.html",
-            "linters": "htmlhlint"
+            "linters": "htmlhint"
         }, {
             "patterns": "**/*.css",
-            "linters": "csslint"
+            "linters": "stylelint"
         }
     ]
 }

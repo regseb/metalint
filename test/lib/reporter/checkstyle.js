@@ -62,14 +62,14 @@ describe("lib/reporter/checkstyle.js", function () {
                     "linter":    "jslint",
                     "rule":      "2",
                     "severity":  SEVERITY.FATAL,
-                    "message":   "Elle qui n'était pas grosse en tout comme" +
+                    "message":   "Elle qui n’était pas grosse en tout comme" +
                                  " un œuf,",
                     "locations": [{ "line": 3 }]
                 }, {
                     "linter":    "jslint",
                     "rule":      "3",
                     "severity":  SEVERITY.INFO,
-                    "message":   "Envieuse s'étend, et s'enfle et se" +
+                    "message":   "Envieuse s’étend, et s’enfle et se" +
                                  " travaille,",
                     "locations": [{ "line": 4 }, { "line": 5 }]
                 }
@@ -92,12 +92,12 @@ describe("lib/reporter/checkstyle.js", function () {
                           " message=\"Qui lui sembla de belle taille.\"" +
                           " source=\"jslint.1\" />\n" +
                 "    <error line=\"3\" severity=\"error\"" +
-                          " message=\"Elle qui n&apos;était pas grosse en" +
-                                   " tout comme un œuf,\"" +
+                          " message=\"Elle qui n’était pas grosse en tout" +
+                                   " comme un œuf,\"" +
                           " source=\"jslint.2\" />\n" +
                 "    <error line=\"4\" severity=\"info\"" +
-                          " message=\"Envieuse s&apos;étend, et s&apos;enfle" +
-                                   " et se travaille,\"" +
+                          " message=\"Envieuse s’étend, et s’enfle et se" +
+                                   " travaille,\"" +
                           " source=\"jslint.3\" />\n" +
                 "  </file>\n" +
                 "</checkstyle>\n",

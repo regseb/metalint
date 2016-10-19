@@ -33,7 +33,7 @@ describe("lib/wrapper/stylelint.js", function () {
                     "rule":      "number-leading-zero",
                     "severity":  SEVERITY.WARN,
                     "message":   "Expected a leading zero",
-                    "locations": [{ "line": 1, "column": 15 }]
+                    "locations": [{ "line": 1, "column": 16 }]
                 }
             ]);
         });
