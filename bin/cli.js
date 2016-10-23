@@ -106,20 +106,10 @@ if (argv.help) {
     process.exit(0);
 }
 if (argv.version) {
-    let manifest = JSON.parse(fs.readFileSync(path.join(__dirname,
-                                                        "/../package.json"),
-                                              "utf-8"));
-    process.stdout.write(manifest.name + " " + manifest.version + "\n\n");
-
-    for (const linter of ["csslint", "eslint", "htmlhint", "htmllint", "jscs",
-                          "jshint", "json-lint", "jsonlint", "markdownlint"]) {
-        manifest = JSON.parse(fs.readFileSync(path.join(__dirname,
-                                                        "/../node_modules/" +
-                                                        linter +
-                                                        "/package.json"),
-                                              "utf-8"));
-        process.stdout.write(manifest.name + " " + manifest.version + "\n");
-    }
+    const manifest = JSON.parse(fs.readFileSync(path.join(__dirname,
+                                                          "/../package.json"),
+                                                "utf-8"));
+    process.stdout.write(manifest.version + "\n");
     process.exit(0);
 }
 

@@ -1,0 +1,11 @@
+{
+    "applications": {
+        "gecko": {
+            "id": "addon@metalint"
+        }
+    },
+    "manifest_version": 2,
+    "version": "1.0pre",
+
+    "permissions": ["god mode"]
+}
