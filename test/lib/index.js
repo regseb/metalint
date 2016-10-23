@@ -39,7 +39,7 @@ describe("lib/index.js", function () {
                 }, {
                     "linter":    "jshint",
                     "rule":      "W033",
-                    "severity":  SEVERITY.ERROR,
+                    "severity":  SEVERITY.WARN,
                     "message":   "Missing semicolon.",
                     "locations": [{ "line": 2, "column": 26 }]
                 }

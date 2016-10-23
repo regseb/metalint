@@ -27,7 +27,7 @@ describe("lib/wrapper/jshint.js", function () {
                 {
                     "linter":    "jshint",
                     "rule":      "W116",
-                    "severity":  SEVERITY.ERROR,
+                    "severity":  SEVERITY.WARN,
                     "message":   "Expected '===' and instead saw '=='.",
                     "locations": [{ "line": 1, "column": 9 }]
                 }
@@ -55,7 +55,7 @@ describe("lib/wrapper/jshint.js", function () {
                 {
                     "linter":    "jshint",
                     "rule":      "W072",
-                    "severity":  SEVERITY.ERROR,
+                    "severity":  SEVERITY.WARN,
                     "message":   "This function has too many parameters. (2)",
                     "locations": [{ "line": 1, "column": 13 }]
                 }, {
