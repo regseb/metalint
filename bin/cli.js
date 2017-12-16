@@ -99,7 +99,7 @@ const check = function (files, checkers, root) {
         }
         return obj;
     });
-}; // check()
+};
 
 if (argv.help) {
     process.stdout.write(fs.readFileSync(path.join(__dirname, "/help.txt")));
