@@ -61,7 +61,7 @@ describe("lib/wrapper/eslint.js", function () {
                     "severity":  SEVERITY.WARN,
                     "message":   "Expected indentation of 4 spaces but found" +
                                  " 3.",
-                    "locations": [{ "line": 4, "column": 4 }]
+                    "locations": [{ "line": 4, "column": 1 }]
                 }, {
                     "linter":    "eslint",
                     "rule":      "no-duplicate-case",

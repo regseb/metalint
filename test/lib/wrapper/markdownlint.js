@@ -35,6 +35,25 @@ describe("lib/wrapper/markdownlint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/README1.md";
+        const options = null;
+        const level   = SEVERITY.INFO;
+
+        return linter.wrapper(file, options, level).then(function (notices) {
+            assert.deepStrictEqual(notices, [
+                {
+                    "linter":    "markdownlint",
+                    "rule":      "MD029/ol-prefix",
+                    "severity":  SEVERITY.ERROR,
+                    "message":   "Ordered list item prefix [Expected: 2;" +
+                                 " Actual: 3; Style: 1/2/3]",
+                    "locations": [{ "line": 4 }]
+                }
+            ]);
+        });
+    });
+
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/README2.md";
         const options = {};
         const level   = SEVERITY.INFO;
 
@@ -52,9 +71,10 @@ describe("lib/wrapper/markdownlint.js", function () {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "markdownlint",
-                    "rule":      "MD026",
+                    "rule":      "MD026/no-trailing-punctuation",
                     "severity":  SEVERITY.ERROR,
-                    "message":   "Trailing punctuation in header",
+                    "message":   "Trailing punctuation in header" +
+                                 " [Punctuation: '!']",
                     "locations": [{ "line": 1 }]
                 }
             ]);
