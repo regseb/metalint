@@ -9,7 +9,7 @@
 
 > *Un linter pour les gouverner tous.*
 
-[Site Internet](//regseb.github.io/metalint/)
+[Site Internet](https://regseb.github.io/metalint/)
 
 ## Description
 
@@ -18,26 +18,27 @@ L’analyse est déléguée à des linters (outils d’analyse statique de code 
 selon le type de fichier :
 
 - Add-on de Firefox :
-  [Add-ons Linter](//regseb.github.io/metalint/user/linters/addons-linter/) ;
-- CSS : [CSSLint](//regseb.github.io/metalint/user/linters/csslint/) et
-  [stylelint](//regseb.github.io/metalint/user/linters/stylelint/) ;
-- HTML : [HTMLHint](//regseb.github.io/metalint/user/linters/htmlhint/) et
-  [htmllint](//regseb.github.io/metalint/user/linters/htmllint/) ;
-- JavaScript : [ESLint](//regseb.github.io/metalint/user/linters/eslint/),
-  [Flow](//regseb.github.io/metalint/user/linters/flow-bin/),
-  [JSCS](//regseb.github.io/metalint/user/linters/jscs/),
-  [JSHint](//regseb.github.io/metalint/user/linters/jshint/) et
+  [Add-ons
+   Linter](https://regseb.github.io/metalint/user/linters/addons-linter/) ;
+- CSS : [CSSLint](https://regseb.github.io/metalint/user/linters/csslint/),
+  [stylelint](https://regseb.github.io/metalint/user/linters/stylelint/) ;
+- HTML : [HTMLHint](https://regseb.github.io/metalint/user/linters/htmlhint/) et
+  [htmllint](https://regseb.github.io/metalint/user/linters/htmllint/) ;
+- JavaScript : [ESLint](https://regseb.github.io/metalint/user/linters/eslint/),
+  [Flow](https://regseb.github.io/metalint/user/linters/flow-bin/),
+  [JSCS](https://regseb.github.io/metalint/user/linters/jscs/),
+  [JSHint](https://regseb.github.io/metalint/user/linters/jshint/) et
   [JavaScript Standard
-   Style](//regseb.github.io/metalint/user/linters/standard) ;
-- JSON : [JSON-Lint](//regseb.github.io/metalint/user/linters/json-lint/) et
-  [JSONLint](//regseb.github.io/metalint/user/linters/jsonlint/) ;
+   Style](https://regseb.github.io/metalint/user/linters/standard) ;
+- JSON : [JSON-Lint](https://regseb.github.io/metalint/user/linters/json-lint/)
+  et [JSONLint](https://regseb.github.io/metalint/user/linters/jsonlint/) ;
 - Markdown :
-  [MarkdownLint](//regseb.github.io/metalint/user/linters/markdownlint/).
+  [MarkdownLint](https://regseb.github.io/metalint/user/linters/markdownlint/) ;
 
 ## Installation
 
 Vous pouvez installer Metalint en utilisant
-[npm](//www.npmjs.com/package/metalint) :
+[npm](https://www.npmjs.com/package/metalint) :
 
 ```shell
 npm install -g metalint
@@ -87,10 +88,10 @@ metalint
 [img-coverage]:https://img.shields.io/coveralls/regseb/metalint.svg
 [img-license]:https://img.shields.io/badge/license-EUPL-blue.svg
 
-[link-npm]://npmjs.com/package/metalint
-[link-build]://travis-ci.org/regseb/metalint
-[link-dependencies]://david-dm.org/regseb/metalint
-[link-codeclimate]://codeclimate.com/github/regseb/metalint
-[link-coverage]://coveralls.io/github/regseb/metalint
-[link-license]://joinup.ec.europa.eu/software/page/eupl/licence-eupl
-               "Licence Publique de l’Union européenne"
+[link-npm]:https://npmjs.com/package/metalint
+[link-build]:https://travis-ci.org/regseb/metalint
+[link-dependencies]:https://david-dm.org/regseb/metalint
+[link-codeclimate]:https://codeclimate.com/github/regseb/metalint
+[link-coverage]:https://coveralls.io/github/regseb/metalint
+[link-license]:https://joinup.ec.europa.eu/page/eupl-text-11-12
+               "Licence publique de l’Union européenne"
