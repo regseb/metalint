@@ -15,7 +15,7 @@
 
 **Metalint** est un outil pour analyser tous les fichiers de votre projet.
 L’analyse est déléguée à des linters (outils d’analyse statique de code source)
-selon le type de fichier :
+ou des utilitaires selon le type de fichier :
 
 - Add-on de Firefox :
   [Add-ons
@@ -34,6 +34,8 @@ selon le type de fichier :
   et [JSONLint](https://regseb.github.io/metalint/user/linters/jsonlint/) ;
 - Markdown :
   [MarkdownLint](https://regseb.github.io/metalint/user/linters/markdownlint/) ;
+- `package.json` (npm) :
+  [David DM](https://regseb.github.io/metalint/user/linters/david/).
 
 ## Installation
 
@@ -41,7 +43,7 @@ Vous pouvez installer Metalint en utilisant
 [npm](https://www.npmjs.com/package/metalint) :
 
 ```shell
-npm install -g metalint
+npm install metalint --save-dev
 ```
 
 ## Configuration

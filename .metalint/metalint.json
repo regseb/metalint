@@ -16,6 +16,9 @@
         }, {
             "patterns": "**/*.json",
             "linters": { "jsonlint": { "comments": false } }
+        }, {
+            "patterns": "package.json",
+            "linters": ["david"]
         }
     ]
 }

@@ -34,15 +34,12 @@
         "yargs": "^6.3.0"
     },
     "devDependencies": {
-        "coveralls": "^2.11.14",
-        "istanbul": "^0.4.5",
-        "memory-streams": "^0.1.0",
-        "mocha": "^3.1.2",
-
-        "addons-linter": "^0.15.6",
-        "csslint": "^1.0.3",
-        "eslint": "^3.8.1",
-        "flow-bin": "^0.33.0",
+        "addons-linter": "^0.40.0",
+        "coveralls": "^3.0.0",
+        "csslint": "^1.0.5",
+        "david": "^11.0.0",
+        "eslint": "^4.13.1",
+        "flow-bin": "^0.61.0",
         "htmlhint": "^0.9.13",
         "htmllint": "^0.4.0",
         "jscs": "^3.0.7",

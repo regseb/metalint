@@ -1,0 +1,12 @@
+{
+    "dependencies": {
+        "wiloquery": "0.5.1",
+        "npm": "1.0.0"
+    },
+    "devDependencies": {
+        "npx": "~0.0.1"
+    },
+    "optionalDependencies": {
+        "metalint-with-typo": "1.0.0"
+    }
+}
