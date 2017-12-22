@@ -21,6 +21,7 @@ ou des utilitaires selon le type de fichier :
   [Add-ons
    Linter](https://regseb.github.io/metalint/user/linters/addons-linter/) ;
 - CSS : [CSSLint](https://regseb.github.io/metalint/user/linters/csslint/),
+  [doiuse](https://regseb.github.io/metalint/user/linters/doiuse/) et
   [stylelint](https://regseb.github.io/metalint/user/linters/stylelint/) ;
 - HTML : [HTMLHint](https://regseb.github.io/metalint/user/linters/htmlhint/) et
   [htmllint](https://regseb.github.io/metalint/user/linters/htmllint/) ;

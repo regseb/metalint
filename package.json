@@ -38,6 +38,7 @@
         "coveralls": "^3.0.0",
         "csslint": "^1.0.5",
         "david": "^11.0.0",
+        "doiuse": "^4.0.0",
         "eslint": "^4.13.1",
         "flow-bin": "^0.61.0",
         "htmlhint": "^0.9.13",
