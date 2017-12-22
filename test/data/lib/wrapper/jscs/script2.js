@@ -1,1 +1,3 @@
-var metalint = require("metalint");
+const query =
+    "SELECT *\
+     FROM DUAL";

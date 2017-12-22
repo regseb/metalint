@@ -1,3 +1,1 @@
-label::after {
-    content: ' : ';
-}
+p { font-size: .5em }

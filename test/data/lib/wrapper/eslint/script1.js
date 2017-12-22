@@ -1,6 +1,3 @@
-var number = 1;
-switch (number) {
-    case 1: break;
-   case 2: break;
-    case 2: break;
+for (var i = 0; i < 10; --i) {
+    console.log(i);
 }

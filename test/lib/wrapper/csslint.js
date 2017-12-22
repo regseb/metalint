@@ -2,27 +2,63 @@
 
 const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
-const wrapper  = require("../../../lib/wrapper/csslint.js");
+const linter   = require("../../../lib/wrapper/csslint.js");
 
 const DATA_DIR = "../data/lib/wrapper/csslint";
 
 describe("lib/wrapper/csslint.js", function () {
-    it("", function () {
-        const file    = DATA_DIR + "/style1.css";
-        const options = { "floats": true };
-        const level   = SEVERITY.INFO;
+    it("configure()", function () {
+        const cwd = process.cwd();
 
-        return wrapper(file, options, level).then(function (notices) {
+        process.chdir(DATA_DIR + "/configure1/");
+        const checker = linter.configure();
+        process.chdir(cwd);
+
+        assert.deepStrictEqual(checker, {
+            "patterns": "**/*.css",
+            "linters":  { "csslint": null }
+        });
+    });
+
+    it("configure()", function () {
+        const cwd = process.cwd();
+
+        process.chdir(DATA_DIR + "/configure2/");
+        const checker = linter.configure();
+        process.chdir(cwd);
+
+        assert.deepStrictEqual(checker, {
+            "patterns": "**/*.css",
+            "linters":  { "csslint": "../.csslintrc" }
+        });
+    });
+
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/style1.css";
+        const options = null;
+        const level   = SEVERITY.FATAL;
+
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
-    it("", function () {
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/style2.css";
+        const options = { "floats": true };
+        const level   = SEVERITY.INFO;
+
+        return linter.wrapper(file, options, level).then(function (notices) {
+            assert.deepStrictEqual(notices, []);
+        });
+    });
+
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/style3.css";
         const options = { "empty-rules": true };
         const level   = SEVERITY.WARN;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "csslint",
@@ -35,12 +71,12 @@ describe("lib/wrapper/csslint.js", function () {
         });
     });
 
-    it("", function () {
-        const file    = DATA_DIR + "/style3.css";
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/style4.css";
         const options = { "ids": 2, "important": 1 };
         const level   = SEVERITY.ERROR;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "csslint",
@@ -53,12 +89,12 @@ describe("lib/wrapper/csslint.js", function () {
         });
     });
 
-    it("", function () {
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/style4.css";
         const options = { "zero-units": 2 };
         const level   = SEVERITY.FATAL;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

@@ -1,0 +1,1 @@
+var metalint = require("metalint");

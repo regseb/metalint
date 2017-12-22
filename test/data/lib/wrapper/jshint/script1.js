@@ -1,1 +1,1 @@
-const results = [];
+eval("evil");

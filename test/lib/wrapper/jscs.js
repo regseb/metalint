@@ -2,17 +2,53 @@
 
 const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
-const wrapper  = require("../../../lib/wrapper/jscs.js");
+const linter   = require("../../../lib/wrapper/jscs.js");
 
 const DATA_DIR = "../data/lib/wrapper/jscs";
 
 describe("lib/wrapper/jscs.js", function () {
-    it("", function () {
+    it("configure()", function () {
+        const cwd = process.cwd();
+
+        process.chdir(DATA_DIR + "/configure1/");
+        const checker = linter.configure();
+        process.chdir(cwd);
+
+        assert.deepStrictEqual(checker, {
+            "patterns": "**/*.js",
+            "linters":  { "jscs": {} }
+        });
+    });
+
+    it("configure()", function () {
+        const cwd = process.cwd();
+
+        process.chdir(DATA_DIR + "/configure2/");
+        const checker = linter.configure();
+        process.chdir(cwd);
+
+        assert.deepStrictEqual(checker, {
+            "patterns": "**/*.js",
+            "linters":  { "jscs": "../.jscsrc" }
+        });
+    });
+
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/script1.js";
+        const options = {};
+        const level   = SEVERITY.ERROR;
+
+        return linter.wrapper(file, options, level).then(function (notices) {
+            assert.deepStrictEqual(notices, []);
+        });
+    });
+
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/script2.js";
         const options = { "disallowMultipleLineStrings": true };
         const level   = SEVERITY.ERROR;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jscs",
@@ -25,22 +61,22 @@ describe("lib/wrapper/jscs.js", function () {
         });
     });
 
-    it("", function () {
-        const file    = DATA_DIR + "/script2.js";
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/script3.js";
         const options = { "disallowKeywords": ["var"] };
         const level   = SEVERITY.FATAL;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
-    it("", function () {
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/README.md";
         const options = { "disallowSemicolons": true };
         const level   = SEVERITY.INFO;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jscs",

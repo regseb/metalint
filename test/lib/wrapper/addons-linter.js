@@ -2,27 +2,35 @@
 
 const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
-const wrapper  = require("../../../lib/wrapper/addons-linter.js");
+const linter   = require("../../../lib/wrapper/addons-linter.js");
 
 const DATA_DIR = "../data/lib/wrapper/addons-linter";
 
 describe("lib/wrapper/addons-linter.js", function () {
-    it("", function () {
+    it("configure()", function () {
+        const checker = linter.configure();
+        assert.deepStrictEqual(checker, {
+            "patterns": "**/*.xpi",
+            "linters":  { "addons-linter": null }
+        });
+    });
+
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/addon.xpi";
         const options = null;
         const level   = SEVERITY.INFO;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
-    it("", function () {
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/addon/";
         const options = null;
         const level   = SEVERITY.WARN;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "addons-linter",
@@ -49,12 +57,12 @@ describe("lib/wrapper/addons-linter.js", function () {
         });
     });
 
-    it("", function () {
-        const file    = DATA_DIR + "/addon.xpi";
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/addon/";
         const options = null;
         const level   = SEVERITY.FATAL;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

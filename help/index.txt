@@ -1,0 +1,24 @@
+Utilisation : metalint [OPTION]... [FICHIER]...
+Analyser les FICHIERs (du répertoire actuel par défaut) avec des linters.
+
+Les arguments obligatoires pour les options longues le sont aussi pour les
+options courtes.
+  -c, --config=CONFIG        spécifier l’emplacement du fichier de configuration
+  -h, --hidden               analyser aussi les fichiers / répertoires cachés
+  -l, --level=NIVEAU         définir le niveau de sévérité global
+  -o, --output=SORTIE        spécifier le fichier de sortie où seront écrit les
+                               résultats
+  -p, --patterns=PATRONS     spécifier les patrons pour filtrer les fichiers qui
+                               seront analysés
+  -r, --reporter=RAPPORTEUR  définir le rapporteur utilisé pour afficher les
+                               résultats
+  -v, --verbose              augmenter le niveau de verbosité
+      --help     afficher l’aide et quitter
+      --version  afficher des informations de version et quitter
+
+L'argument NIVEAU peut avoir comme valeur : off, fatal, error, warn ou info.
+
+L'argument RAPPORTEUR peut avoir comme valeur : checkstyle, console, csv, json,
+none ou unix.
+
+Documentation complète à : <https://regseb.github.io/metalint/>

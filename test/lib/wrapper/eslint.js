@@ -2,13 +2,49 @@
 
 const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
-const wrapper  = require("../../../lib/wrapper/eslint.js");
+const linter   = require("../../../lib/wrapper/eslint.js");
 
 const DATA_DIR = "../data/lib/wrapper/eslint";
 
 describe("lib/wrapper/eslint.js", function () {
-    it("", function () {
+    it("configure()", function () {
+        const cwd = process.cwd();
+
+        process.chdir(DATA_DIR + "/configure1/");
+        const checker = linter.configure();
+        process.chdir(cwd);
+
+        assert.deepStrictEqual(checker, {
+            "patterns": "**/*.js",
+            "linters":  { "eslint": null }
+        });
+    });
+
+    it("configure()", function () {
+        const cwd = process.cwd();
+
+        process.chdir(DATA_DIR + "/configure2/");
+        const checker = linter.configure();
+        process.chdir(cwd);
+
+        assert.deepStrictEqual(checker, {
+            "patterns": "**/*.js",
+            "linters":  { "eslint": "../.eslintrc" }
+        });
+    });
+
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/script1.js";
+        const options = null;
+        const level   = SEVERITY.INFO;
+
+        return linter.wrapper(file, options, level).then(function (notices) {
+            assert.deepStrictEqual(notices, []);
+        });
+    });
+
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/script2.js";
         const options = {
             "rules": {
                 "indent":            [1, 4, { "SwitchCase": 1 }],
@@ -17,7 +53,7 @@ describe("lib/wrapper/eslint.js", function () {
         };
         const level   = SEVERITY.WARN;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "eslint",
@@ -37,22 +73,22 @@ describe("lib/wrapper/eslint.js", function () {
         });
     });
 
-    it("", function () {
-        const file    = DATA_DIR + "/script2.js";
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/script3.js";
         const options = { "rules": { "no-bitwise": 1 } };
         const level   = SEVERITY.ERROR;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
-    it("", function () {
-        const file    = DATA_DIR + "/script3.js";
-        const options = { };
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/script4.js";
+        const options = {};
         const level   = SEVERITY.INFO;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "eslint",
@@ -65,12 +101,12 @@ describe("lib/wrapper/eslint.js", function () {
         });
     });
 
-    it("", function () {
-        const file    = DATA_DIR + "/script4.js";
-        const options = { };
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/script5.js";
+        const options = {};
         const level   = SEVERITY.OFF;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

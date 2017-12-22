@@ -2,17 +2,25 @@
 
 const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
-const wrapper  = require("../../../lib/wrapper/standard.js");
+const linter   = require("../../../lib/wrapper/standard.js");
 
 const DATA_DIR = "../data/lib/wrapper/standard";
 
 describe("lib/wrapper/standard.js", function () {
-    it("", function () {
+    it("configure()", function () {
+        const checker = linter.configure();
+        assert.deepStrictEqual(checker, {
+            "patterns": "**/*.js",
+            "linters":  { "standard": null }
+        });
+    });
+
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/script.js";
-        const options = {};
+        const options = null;
         const level   = SEVERITY.ERROR;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "standard",
@@ -32,12 +40,12 @@ describe("lib/wrapper/standard.js", function () {
         });
     });
 
-    it("", function () {
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/data.xml";
-        const options = {};
+        const options = null;
         const level   = SEVERITY.FATAL;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

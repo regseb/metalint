@@ -2,23 +2,59 @@
 
 const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity.js");
-const wrapper  = require("../../../lib/wrapper/stylelint.js");
+const linter   = require("../../../lib/wrapper/stylelint.js");
 
 const DATA_DIR = "../data/lib/wrapper/stylelint";
 
 describe("lib/wrapper/stylelint.js", function () {
-    it("", function () {
+    it("configure()", function () {
+        const cwd = process.cwd();
+
+        process.chdir(DATA_DIR + "/configure1/");
+        const checker = linter.configure();
+        process.chdir(cwd);
+
+        assert.deepStrictEqual(checker, {
+            "patterns": "**/*.css",
+            "linters":  { "stylelint": { "rules": {} } }
+        });
+    });
+
+    it("configure()", function () {
+        const cwd = process.cwd();
+
+        process.chdir(DATA_DIR + "/configure2/");
+        const checker = linter.configure();
+        process.chdir(cwd);
+
+        assert.deepStrictEqual(checker, {
+            "patterns": "**/*.css",
+            "linters":  { "stylelint": "../.stylelintrc" }
+        });
+    });
+
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/style1.css";
-        const options = { "rules": { "color-hex-case": "upper" } };
+        const options = { "rules": {} };
         const level   = SEVERITY.INFO;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
-    it("", function () {
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/style2.css";
+        const options = { "rules": { "color-hex-case": "upper" } };
+        const level   = SEVERITY.INFO;
+
+        return linter.wrapper(file, options, level).then(function (notices) {
+            assert.deepStrictEqual(notices, []);
+        });
+    });
+
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/style3.css";
         const options = {
             "rules": {
                 "number-leading-zero": ["always", { "severity": "warning" }]
@@ -26,7 +62,7 @@ describe("lib/wrapper/stylelint.js", function () {
         };
         const level   = SEVERITY.WARN;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "stylelint",
@@ -39,8 +75,8 @@ describe("lib/wrapper/stylelint.js", function () {
         });
     });
 
-    it("", function () {
-        const file    = DATA_DIR + "/style3.css";
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/style4.css";
         const options = {
             "rules": {
                 "string-quotes": "double",
@@ -49,7 +85,7 @@ describe("lib/wrapper/stylelint.js", function () {
         };
         const level   = SEVERITY.ERROR;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "stylelint",
@@ -62,12 +98,12 @@ describe("lib/wrapper/stylelint.js", function () {
         });
     });
 
-    it("", function () {
-        const file    = DATA_DIR + "/style4.css";
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/style5.css";
         const options = { "rules": { "no-extra-semicolons": true } };
         const level   = SEVERITY.FATAL;
 
-        return wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

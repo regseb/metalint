@@ -1,3 +1,1 @@
-const query =
-    "SELECT *\
-     FROM DUAL";
+const obj = {foo: "bar",  "quz" :"baz"  }
