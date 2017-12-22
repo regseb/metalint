@@ -45,14 +45,14 @@ describe("lib/normalize.js", function () {
         const rotten = {
             "patterns": "**.js",
             "hidden":   true,
-            "level":    "ERROR",
-            "reporter": "csv",
+            "level":    "Error",
+            "reporter": "CSV",
             "verbose":  2,
             "output":   null,
             "checkers": [
                 {
                     "hidden":  false,
-                    "level":   "INFO",
+                    "level":   "info",
                     "linters": "markdownlint"
                 }, {
                     "patterns": ["!**.min.js", "**"],
