@@ -17,11 +17,6 @@ const argv = yargs.options({
         "requiresArg": true,
         "type":        "string"
     },
-    "h": {
-        "alias":   "hidden",
-        "default": undefined,
-        "type":    "boolean"
-    },
     "l": {
         "alias":       "level",
         "requiresArg": true,
@@ -65,16 +60,17 @@ const argv = yargs.options({
  *                                  fichiers.
  * @param {string}         root     L’adresse du répertoire où se trouve le
  *                                  dossier <code>.metalint/</code>.
- * @return {Object} Les listes des notifications (regroupées par fichier)
- *                  retournées par les linters.
+ * @param {Object}         reporter Le rapporteur utilisé pour afficher les
+ *                                  résultats.
+ * @return {Promise.<number>} La sévérité la plus élévée des résultats.
  */
-const check = function (files, checkers, root) {
+const check = function (files, checkers, root, reporter) {
     const results = {};
     for (const file of files) {
+        const directory = fs.lstatSync(file).isDirectory();
         const linters = [];
         for (const checker of checkers) {
-            if (glob.match(file, checker.patterns, checker.hidden, root,
-                           process.cwd())) {
+            if (glob.test(file, checker.patterns, root, directory)) {
                 linters.push({
                     "linters": checker.linters,
                     "level":   checker.level
@@ -88,16 +84,24 @@ const check = function (files, checkers, root) {
         }
     }
 
-    return Promise.all(Object.keys(results).map(function (file) {
-        return results[file].then(function (notices) {
-            return { file, notices };
-        });
-    })).then(function (raws) {
-        const obj = {};
-        for (const raw of raws) {
-            obj[raw.file] = raw.notices;
+    return new Promise(function (resolve) {
+        for (const file of Object.keys(results)) {
+            results[file].then(function (notices) {
+                results[file] = notices;
+                for (const file2 of Object.keys(results)) {
+                    if (null === results[file2] ||
+                            Array.isArray(results[file2])) {
+                        reporter.notify(file2, results[file2]);
+                        delete results[file2];
+                    } else {
+                        break;
+                    }
+                }
+                if (0 === results.length) {
+                    resolve(reporter.finalize());
+                }
+            });
         }
-        return obj;
     });
 };
 
@@ -129,27 +133,28 @@ while (!fs.existsSync(path.join(root, argv.config))) {
 let config = JSON.parse(fs.readFileSync(path.join(root, argv.config), "utf-8"));
 // Surcharger les données du fichier de configuration par les paramètres de la
 // ligne de commande.
-for (const key of ["hidden", "level", "output", "patterns", "reporter",
-                   "verbose"]) {
+for (const key of ["level", "output", "patterns", "reporter", "verbose"]) {
     if (undefined !== argv[key]) {
-        config[key] = argv[key];
+        if ("output" === key || "reporter" === key) {
+            config[key] = path.join(process.cwd(), argv[key]);
+        } else {
+            config[key] = argv[key];
+        }
     }
 }
 try {
-    config = normalize(config, path.dirname(path.join(root, argv.config)));
+    config = normalize(config, root,
+                       path.dirname(path.join(root, argv.config)));
 } catch (exc) {
     process.stderr.write("metalint: " + exc.message);
     process.exit(11);
 }
 
-const files = glob.walk(0 === argv._.length ? [null]
-                                            : argv._,
-                        config.patterns, config.hidden, root);
-const results = check(files, config.checkers, root);
+const files = glob.walk(argv._, config.patterns, root);
 
-// Afficher les résultats.
-config.reporter(results, config.output,
-                         config.verbose).then(function (severity) {
+check(files, config.checkers, root,
+      new config.Reporter(config.output, config.verbose)).then(
+                                                           function (severity) {
     // Attendre que tous les textes soient écrits avant de retourner le status.
     config.output.write("", function () {
         let exit;

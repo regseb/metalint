@@ -1,8 +1,8 @@
 "use strict";
 
 const assert   = require("assert");
-const SEVERITY = require("../../../lib/severity.js");
-const linter   = require("../../../lib/wrapper/stylelint.js");
+const SEVERITY = require("../../../lib/severity");
+const linter   = require("../../../lib/wrapper/stylelint");
 
 const DATA_DIR = "../data/lib/wrapper/stylelint";
 
@@ -105,6 +105,24 @@ describe("lib/wrapper/stylelint.js", function () {
 
         return linter.wrapper(file, options, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
+        });
+    });
+
+    it("wrapper()", function () {
+        const file    = DATA_DIR + "/node_modules/style.css";
+        const options = { "rules": { "unit-no-unknown": true } };
+        const level   = SEVERITY.INFO;
+
+        return linter.wrapper(file, options, level).then(function (notices) {
+            assert.deepStrictEqual(notices, [
+                {
+                    "linter":    "stylelint",
+                    "rule":      "unit-no-unknown",
+                    "severity":  SEVERITY.ERROR,
+                    "message":   "Unexpected unknown unit \"el\"",
+                    "locations": [{ "line": 2, "column": 12 }]
+                }
+            ]);
         });
     });
 });

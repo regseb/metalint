@@ -1,8 +1,8 @@
 "use strict";
 
 const assert   = require("assert");
-const SEVERITY = require("../../../lib/severity.js");
-const linter   = require("../../../lib/wrapper/markdownlint.js");
+const SEVERITY = require("../../../lib/severity");
+const linter   = require("../../../lib/wrapper/markdownlint");
 
 const DATA_DIR = "../data/lib/wrapper/markdownlint";
 

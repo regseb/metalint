@@ -62,7 +62,7 @@ linters ESLint, HTMLHint et stylelint.
 
 ```JSON
 {
-    "patterns": ["!git/**", "!node_modules/**", "**"],
+    "patterns": ["!git/", "!node_modules/", "**"],
     "checkers": [
         {
             "patterns": ["!**/*.min.js", "**/*.js"],

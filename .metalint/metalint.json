@@ -1,12 +1,11 @@
 {
     "patterns": [
-        "!.git/**", "!node_modules/**", "!coverage/**", "!test/data/**", "**"
+        "!.git/", "!.nyc_output/", "!node_modules/", "!test/data/", "**"
     ],
-    "hidden": true,
     "verbose": 2,
     "checkers": [
         {
-            "patterns": ["!test/**", "**/*.js"],
+            "patterns": ["!test/", "**/*.js"],
             "linters": "eslint"
         }, {
             "patterns": "test/**/*.js",

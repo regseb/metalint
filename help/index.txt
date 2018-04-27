@@ -1,10 +1,9 @@
 Utilisation : metalint [OPTION]... [FICHIER]...
-Analyser les FICHIERs (du répertoire actuel par défaut) avec des linters.
+Analyser les FICHIERs (ou le répertoire courant par défaut) avec des linters.
 
 Les arguments obligatoires pour les options longues le sont aussi pour les
 options courtes.
   -c, --config=CONFIG        spécifier l’emplacement du fichier de configuration
-  -h, --hidden               analyser aussi les fichiers / répertoires cachés
   -l, --level=NIVEAU         définir le niveau de sévérité global
   -o, --output=SORTIE        spécifier le fichier de sortie où seront écrit les
                                résultats

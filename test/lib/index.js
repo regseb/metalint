@@ -1,8 +1,8 @@
 "use strict";
 
 const assert   = require("assert");
-const SEVERITY = require("../../lib/severity.js");
-const metalint = require("../../lib/index.js");
+const SEVERITY = require("../../lib/severity");
+const metalint = require("../../lib/index");
 
 const DATA_DIR = "../data/lib/index";
 

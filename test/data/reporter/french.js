@@ -1,50 +1,56 @@
 "use strict";
 
+const None = require("../../../lib/reporter/none");
+
 /**
- * Écrire les résultats avec des phrases en français.
- *
- * @param {Promise.<Object>} promise Une promesse retournant la liste des
- *                                   notifications regroupées par fichier.
- * @param {Object}           writer  Le flux où écrire les résultats.
- * @return {Promise.<number>} Une promesse retournant la sévérité la plus élévée
- *                            des résultats.
+ * Le rapporteur qui écrit les résultats avec des phrases en français.
  */
-const reporter = function (promise, writer) {
-    return promise.then(function (results) {
-        let severity = null;
-        for (const file in results) {
-            // Si le fichier n’a pas été vérifié (car il ne rentrait pas dans
-            // les critères des checkers).
-            if (null === results[file]) {
-                continue;
-            }
+const Reporter = class extends None {
 
-            for (const notice of results[file]) {
-                // Déterminer la sévérité la plus élévée des résultats.
-                if (null === severity || severity > notice.severity) {
-                    severity = notice.severity;
-                }
+    /**
+     * Crée un rapporteur.
+     *
+     * @param {Object} writer  Le flux où écrire les résultats.
+     * @param {number} verbose Le niveau de verbosité.
+     */
+    constructor(writer, verbose) {
+        super(writer, verbose);
+    }
 
-                writer.write("Le linter " + notice.linter + " a trouvé ");
-                if (null === notice.rule) {
-                    writer.write("un problème ");
-                } else {
-                    writer.write("que la règle " + notice.rule +
-                                 " n’est pas respectée ");
-                }
-                if (0 === notice.locations.length) {
-                    writer.write("dans le fichier ");
-                } else {
-                    writer.write("à la ligne " +
-                                 notice.locations[0].line.toString() +
-                                 " du fichier ");
-                }
-                writer.write(file + " : " + notice.message + "\n");
-            }
+    /**
+     * Affiche les éventuelles notifications d'un fichier.
+     *
+     * @param {string}         file    Le fichier analysé.
+     * @param {Array.<Object>} notices La liste des notifications ou
+     *                                 <code>null</code>.
+     */
+    notify(file, notices) {
+        super.notify(file, notices);
+
+        // Si le fichier n’a pas été vérifié (car il ne rentrait pas dans
+        // les critères des checkers).
+        if (null === notices) {
+            return;
         }
 
-        return severity;
-    });
-}; // reporter()
+        for (const notice of notices) {
+            this.writer.write("Le linter " + notice.linter + " a trouvé ");
+            if (null === notice.rule) {
+                this.writer.write("un problème ");
+            } else {
+                this.writer.write("que la règle " + notice.rule +
+                                  " n’est pas respectée ");
+            }
+            if (0 === notice.locations.length) {
+                this.writer.write("dans le fichier ");
+            } else {
+                this.writer.write("à la ligne " +
+                                  notice.locations[0].line.toString() +
+                                  " du fichier ");
+            }
+            this.writer.write(file + " : " + notice.message + "\n");
+        }
+    }
+};
 
-module.exports = reporter;
+module.exports = Reporter;

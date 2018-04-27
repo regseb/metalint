@@ -2,36 +2,28 @@
 
 const assert    = require("assert");
 const path      = require("path");
-const normalize = require("../../lib/normalize.js");
-const SEVERITY  = require("../../lib/severity.js");
-const console   = require("../../lib/reporter/console.js");
-const csv       = require("../../lib/reporter/csv.js");
-
-const runfail = function (rotten) {
-    try {
-        normalize(rotten, null);
-        assert.fail();
-    } catch (_) {
-        // Ne rien faire.
-    }
-}; // runfail()
+const normalize = require("../../lib/normalize");
+const SEVERITY  = require("../../lib/severity");
+const console   = require("../../lib/reporter/console");
+const csv       = require("../../lib/reporter/csv");
+const french    = require("../data/reporter/french");
 
 describe("lib/normalize.js", function () {
     it("", function () {
         const rotten = { "checkers": [{ "linters": { "eslint": {} } }] };
-        const standard = normalize(rotten,
-                                   path.join(__dirname, "../data/.metalint"));
+        const root = path.join(__dirname, "../data/");
+        const dir  = path.join(root, ".metalint");
+        const standard = normalize(rotten, root, dir);
+
         assert.deepStrictEqual(standard, {
             "patterns": ["**"],
-            "hidden":   false,
             "level":    SEVERITY.INFO,
-            "reporter": console,
+            "Reporter": console,
             "verbose":  0,
             "output":   process.stdout,
             "checkers": [
                 {
                     "patterns": ["**"],
-                    "hidden":   false,
                     "level":    SEVERITY.INFO,
                     "linters":  {
                         "eslint": {}
@@ -44,14 +36,12 @@ describe("lib/normalize.js", function () {
     it("", function () {
         const rotten = {
             "patterns": "**.js",
-            "hidden":   true,
             "level":    "Error",
             "reporter": "CSV",
             "verbose":  2,
             "output":   null,
             "checkers": [
                 {
-                    "hidden":  false,
                     "level":   "info",
                     "linters": "markdownlint"
                 }, {
@@ -69,26 +59,25 @@ describe("lib/normalize.js", function () {
                 }
             ]
         };
-        const standard = normalize(rotten,
-                                   path.join(__dirname, "../data/.metalint"));
-        assert.deepEqual(standard, {
+        const root = path.join(__dirname, "../data/");
+        const dir  = path.join(root, ".metalint");
+        const standard = normalize(rotten, root, dir);
+
+        assert.deepStrictEqual(standard, {
             "patterns": ["**.js"],
-            "hidden":   true,
             "level":    SEVERITY.ERROR,
-            "reporter": csv,
+            "Reporter": csv,
             "verbose":  2,
             "output":   process.stdout,
             "checkers": [
                 {
                     "patterns": ["**"],
-                    "hidden":   false,
                     "level":    SEVERITY.ERROR,
                     "linters":  {
                         "markdownlint": { "MD035": { "style": "---" } }
                     }
                 }, {
                     "patterns": ["!**.min.js", "**"],
-                    "hidden":   true,
                     "level":    SEVERITY.ERROR,
                     "linters":  {
                         "eslint": {
@@ -97,7 +86,6 @@ describe("lib/normalize.js", function () {
                     }
                 }, {
                     "patterns": ["**"],
-                    "hidden":   true,
                     "level":    SEVERITY.ERROR,
                     "linters":  {
                         "htmlhint": { "tagname-lowercase": true },
@@ -105,7 +93,6 @@ describe("lib/normalize.js", function () {
                     }
                 }, {
                     "patterns": ["**"],
-                    "hidden":   true,
                     "level":    SEVERITY.ERROR,
                     "linters":  { "csslint": { "empty-rules": true } }
                 }
@@ -114,49 +101,139 @@ describe("lib/normalize.js", function () {
     });
 
     it("", function () {
+        const rotten = {
+            "checkers": [
+                {
+                    "linters": "jsonlint"
+                }
+            ]
+        };
+        const root = path.join(__dirname, "../data/");
+        const dir  = path.join(root, ".metalint");
+        assert.throws(() => normalize(rotten, root, dir), {
+            "name":    "Error",
+            "message": path.join(__dirname, "../data/.metalint/jsonlint.json") +
+                       ": Parse error on line 1:\n" +
+                       "<xml></xml>\n" +
+                       "^\n" +
+                       "Expecting 'STRING', 'NUMBER', 'NULL', 'TRUE'," +
+                       " 'FALSE', '{', '[', got 'undefined'"
+        });
+    });
+
+    it("", function () {
+        const rotten = {
+            "reporter": "reporter/french",
+            "checkers": [{ "linters": { "eslint": {} } }]
+        };
+        const root = path.join(__dirname, "../data/");
+        const standard = normalize(rotten, root, null);
+        assert.deepStrictEqual(standard, {
+            "patterns": ["**"],
+            "level":    SEVERITY.INFO,
+            "Reporter": french,
+            "verbose":  0,
+            "output":   process.stdout,
+            "checkers": [
+                {
+                    "patterns": ["**"],
+                    "level":    SEVERITY.INFO,
+                    "linters":  {
+                        "eslint": {}
+                    }
+                }
+            ]
+        });
+    });
+
+    it("", function () {
         const rotten = { "checkers": [{ "linters": { "jsonlint": [1] } }] };
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "linter option incorrect type."
+        });
 
         rotten.checkers[0].linters.jsonlint[0] = null;
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "linter option is null."
+        });
 
         rotten.checkers[0].linters.jsonlint = 1;
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "linter incorrect type."
+        });
 
         rotten.checkers[0].linters = 1;
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "'checkers[].linters' incorrect type."
+        });
 
         rotten.checkers[0].linters = null;
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "'checkers[].linters' is null."
+        });
 
         Reflect.deleteProperty(rotten.checkers[0], "linters");
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "'checkers[].linters' is undefined."
+        });
 
         rotten.checkers.length = 0;
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "'checkers' is empty."
+        });
 
         rotten.checkers = 1;
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "'checkers' is not an array."
+        });
 
         rotten.output = 1;
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "'output' incorrect type."
+        });
 
         rotten.verbose = "Blablabla";
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "property 'verbose' is incorrect type (only number is" +
+                       " accepted)."
+        });
 
         rotten.reporter = 1;
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "property 'reporter' is incorrect type (only string is" +
+                       " accepted)."
+        });
 
         rotten.level = "APOCALYPSE";
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "value of property 'level' is unknown (possibles" +
+                       " values : 'off', 'fatal', 'error', 'warn' and 'info')."
+        });
 
         rotten.level = 1;
-        runfail(rotten);
-
-        rotten.hidden = 1;
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "property 'level' is incorrect type (only string is" +
+                       " accepted)."
+        });
 
         rotten.patterns = 1;
-        runfail(rotten);
+        assert.throws(() => normalize(rotten, null, null), {
+            "name":    "Error",
+            "message": "property 'patterns' is incorrect type (string and" +
+                       " array are accepted)."
+        });
     });
 });

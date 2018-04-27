@@ -2,18 +2,12 @@
 
 "use strict";
 
-const fs     = require("fs");
-const path   = require("path");
-const mkdirp = require("mkdirp");
-const log    = require("npmlog");
-const yargs  = require("yargs");
+const fs    = require("fs");
+const path  = require("path");
+const log   = require("npmlog");
+const yargs = require("yargs");
 
 const argv = yargs.options({
-    "h": {
-        "alias":   "hidden",
-        "default": undefined,
-        "type":    "boolean"
-    },
     "l": {
         "alias":       "level",
         "requiresArg": true,
@@ -52,16 +46,15 @@ if (fs.existsSync(".metalint/metalint.json")) {
 }
 
 // Créer le répertoire de la configuration.
-mkdirp.sync(".metalint");
+fs.mkdirSync(".metalint");
 
 // Initialiser les données de la configuration.
 const config = {
-    "patterns": ["!node_modules/**", "**"],
+    "patterns": ["!.git/", "!node_modules/", "**"],
     "checkers": []
 };
 // Surcharger la configuration par les paramètres de la ligne de commande.
-for (const key of ["hidden", "level", "output", "patterns", "reporter",
-                   "verbose"]) {
+for (const key of ["level", "output", "patterns", "reporter", "verbose"]) {
     if (undefined !== argv[key]) {
         config[key] = argv[key];
     }

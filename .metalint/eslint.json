@@ -7,14 +7,9 @@
         }
     },
 
-    "globals": {
-        "Promise": true,
-        "Set": true,
-        "Reflect": true,
-        "require": true,
-        "module": true,
-        "process": true,
-        "__dirname": true
+    "env": {
+        "node": true,
+        "es6": true
     },
 
     "rules": {
@@ -33,7 +28,7 @@
         "no-empty": 2,
         "no-ex-assign": 2,
         "no-extra-boolean-cast": 2,
-        "no-extra-parens": [2, { "nestedBinaryExpressions": false }],
+        "no-extra-parens": 2,
         "no-extra-semi": 2,
         "no-func-assign": 2,
         "no-inner-declarations": [2, "both"],
@@ -161,7 +156,9 @@
         "block-spacing": 2,
         "brace-style": 2,
         "camelcase": 2,
-        "capitalized-comments": [2, { "ignoreConsecutiveComments": true }],
+        "capitalized-comments": [
+            2, "always", { "ignoreConsecutiveComments": true }
+        ],
         "comma-dangle": 2,
         "comma-spacing": 2,
         "comma-style": 2,
