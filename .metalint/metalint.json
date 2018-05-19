@@ -1,8 +1,11 @@
 {
     "patterns": [
-        "!.git/", "!.nyc_output/", "!node_modules/", "!test/data/", "**"
+        "!.git/", "!.nyc_output/", "!coverage/", "!node_modules/",
+        "!test/data/", "**"
     ],
-    "verbose": 2,
+    "results": {
+        "options": { "verbose": 2 }
+    },
     "checkers": [
         {
             "patterns": ["!test/", "**/*.js"],
@@ -15,10 +18,10 @@
             "linters": "markdownlint"
         }, {
             "patterns": "**/*.json",
-            "linters": { "jsonlint": { "comments": false } }
+            "linters": { "jsonlint": null }
         }, {
             "patterns": "package.json",
-            "linters": ["david"]
+            "linters": "david"
         }
     ]
 }

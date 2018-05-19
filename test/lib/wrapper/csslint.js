@@ -35,30 +35,30 @@ describe("lib/wrapper/csslint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style1.css";
-        const options = null;
         const level   = SEVERITY.FATAL;
+        const options = null;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style2.css";
-        const options = { "floats": true };
         const level   = SEVERITY.INFO;
+        const options = { "floats": true };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style3.css";
-        const options = { "empty-rules": true };
         const level   = SEVERITY.WARN;
+        const options = { "empty-rules": true };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "csslint",
@@ -73,10 +73,10 @@ describe("lib/wrapper/csslint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style4.css";
-        const options = { "ids": 2, "important": 1 };
         const level   = SEVERITY.ERROR;
+        const options = { "ids": 2, "important": 1 };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "csslint",
@@ -91,10 +91,10 @@ describe("lib/wrapper/csslint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style4.css";
-        const options = { "zero-units": 2 };
         const level   = SEVERITY.FATAL;
+        const options = { "zero-units": 2 };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

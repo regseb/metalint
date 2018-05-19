@@ -7,14 +7,16 @@ const path  = require("path");
 const log   = require("npmlog");
 const yargs = require("yargs");
 
+// TODO Ajouter l'option --help qui affiche l'aide.
+// TODO Ajouter l'option --version qui affiche le numéro de version.
+// TODO Ajouter l'option -r / --reporter pour pré-remplir le nom du rapporteur.
+// TODO Ajouter l'option -o / --output pour pré-remplir le fichier de sortie du
+//      rapporteur.
+// TODO Ajouter l'option --linter pour installer un linter et ajouter une
+//      configuration par défaut.
 const argv = yargs.options({
     "l": {
         "alias":       "level",
-        "requiresArg": true,
-        "type":        "string"
-    },
-    "o": {
-        "alias":       "output",
         "requiresArg": true,
         "type":        "string"
     },
@@ -22,16 +24,6 @@ const argv = yargs.options({
         "alias":       "patterns",
         "requiresArg": true,
         "type":        "array"
-    },
-    "r": {
-        "alias":       "reporter",
-        "requiresArg": true,
-        "type":        "string"
-    },
-    "v": {
-        "alias":   "verbose",
-        "default": undefined,
-        "type":    "count"
     }
 }).help(false).version(false).parse();
 
@@ -54,7 +46,7 @@ const config = {
     "checkers": []
 };
 // Surcharger la configuration par les paramètres de la ligne de commande.
-for (const key of ["level", "output", "patterns", "reporter", "verbose"]) {
+for (const key of ["level", "patterns"]) {
     if (undefined !== argv[key]) {
         config[key] = argv[key];
     }

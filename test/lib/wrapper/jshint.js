@@ -35,10 +35,10 @@ describe("lib/wrapper/jshint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script1.js";
-        const options = null;
         const level   = SEVERITY.ERROR;
+        const options = null;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jshint",
@@ -53,20 +53,20 @@ describe("lib/wrapper/jshint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script2.js";
-        const options = { "esnext": true };
         const level   = SEVERITY.ERROR;
+        const options = { "esnext": true };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script3.js";
-        const options = { "eqeqeq": true };
         const level   = SEVERITY.ERROR;
+        const options = { "eqeqeq": true };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jshint",
@@ -81,20 +81,20 @@ describe("lib/wrapper/jshint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script4.js";
-        const options = { "notypeof": false };
         const level   = SEVERITY.FATAL;
+        const options = { "notypeof": false };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script5.js";
-        const options = { "maxerr": 1, "maxparams": 1 };
         const level   = SEVERITY.INFO;
+        const options = { "maxerr": 1, "maxparams": 1 };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jshint",

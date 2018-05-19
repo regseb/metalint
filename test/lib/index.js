@@ -61,9 +61,9 @@ describe("lib/index.js", function () {
             const expected = [
                 {
                     "linter":    "markdownlint",
-                    "rule":      "MD002/first-header-h1",
+                    "rule":      "MD002/first-heading-h1/first-header-h1",
                     "severity":  SEVERITY.ERROR,
-                    "message":   "First header should be a top level header" +
+                    "message":   "First heading should be a top level heading" +
                                  " [Expected: h1; Actual: h2]",
                     "locations": [{ "line": 1 }]
                 }, {
@@ -71,7 +71,7 @@ describe("lib/index.js", function () {
                     "rule":      "MD041/first-line-h1",
                     "severity":  SEVERITY.ERROR,
                     "message":   "First line in file should be a top level" +
-                                 " header [Context: \"## README\"]",
+                                 " heading [Context: \"## README\"]",
                     "locations": [{ "line": 1 }]
                 }
             ];

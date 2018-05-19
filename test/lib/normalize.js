@@ -4,9 +4,9 @@ const assert    = require("assert");
 const path      = require("path");
 const normalize = require("../../lib/normalize");
 const SEVERITY  = require("../../lib/severity");
-const console   = require("../../lib/reporter/console");
-const csv       = require("../../lib/reporter/csv");
-const french    = require("../data/reporter/french");
+const Console   = require("../../lib/reporter/console");
+const Csv       = require("../../lib/reporter/csv");
+const French    = require("../data/reporter/french");
 
 describe("lib/normalize.js", function () {
     it("", function () {
@@ -16,12 +16,12 @@ describe("lib/normalize.js", function () {
         const standard = normalize(rotten, root, dir);
 
         assert.deepStrictEqual(standard, {
-            "patterns": ["**"],
-            "level":    SEVERITY.INFO,
-            "Reporter": console,
-            "verbose":  0,
-            "output":   process.stdout,
-            "checkers": [
+            "patterns":  ["**"],
+            "level":     SEVERITY.INFO,
+            "reporters": [
+                new Console(SEVERITY.INFO, process.stdout, {})
+            ],
+            "checkers":  [
                 {
                     "patterns": ["**"],
                     "level":    SEVERITY.INFO,
@@ -35,12 +35,13 @@ describe("lib/normalize.js", function () {
 
     it("", function () {
         const rotten = {
-            "patterns": "**.js",
-            "level":    "Error",
-            "reporter": "CSV",
-            "verbose":  2,
-            "output":   null,
-            "checkers": [
+            "patterns":  "**.js",
+            "level":     "Error",
+            "reporters": {
+                "name":   "CSV",
+                "output": null
+            },
+            "checkers":  [
                 {
                     "level":   "info",
                     "linters": "markdownlint"
@@ -64,12 +65,12 @@ describe("lib/normalize.js", function () {
         const standard = normalize(rotten, root, dir);
 
         assert.deepStrictEqual(standard, {
-            "patterns": ["**.js"],
-            "level":    SEVERITY.ERROR,
-            "Reporter": csv,
-            "verbose":  2,
-            "output":   process.stdout,
-            "checkers": [
+            "patterns":  ["**.js"],
+            "level":     SEVERITY.ERROR,
+            "reporters": [
+                new Csv(SEVERITY.ERROR, process.stdout)
+            ],
+            "checkers":  [
                 {
                     "patterns": ["**"],
                     "level":    SEVERITY.ERROR,
@@ -123,18 +124,20 @@ describe("lib/normalize.js", function () {
 
     it("", function () {
         const rotten = {
-            "reporter": "reporter/french",
-            "checkers": [{ "linters": { "eslint": {} } }]
+            "reporters": {
+                "name": "reporter/french"
+            },
+            "checkers":  [{ "linters": { "eslint": {} } }]
         };
         const root = path.join(__dirname, "../data/");
         const standard = normalize(rotten, root, null);
         assert.deepStrictEqual(standard, {
-            "patterns": ["**"],
-            "level":    SEVERITY.INFO,
-            "Reporter": french,
-            "verbose":  0,
-            "output":   process.stdout,
-            "checkers": [
+            "patterns":  ["**"],
+            "level":     SEVERITY.INFO,
+            "reporters": [
+                new French(SEVERITY.INFO, process.stdout)
+            ],
+            "checkers":  [
                 {
                     "patterns": ["**"],
                     "level":    SEVERITY.INFO,
@@ -195,24 +198,10 @@ describe("lib/normalize.js", function () {
             "message": "'checkers' is not an array."
         });
 
-        rotten.output = 1;
+        rotten.reporters = 1;
         assert.throws(() => normalize(rotten, null, null), {
             "name":    "Error",
-            "message": "'output' incorrect type."
-        });
-
-        rotten.verbose = "Blablabla";
-        assert.throws(() => normalize(rotten, null, null), {
-            "name":    "Error",
-            "message": "property 'verbose' is incorrect type (only number is" +
-                       " accepted)."
-        });
-
-        rotten.reporter = 1;
-        assert.throws(() => normalize(rotten, null, null), {
-            "name":    "Error",
-            "message": "property 'reporter' is incorrect type (only string is" +
-                       " accepted)."
+            "message": "'reporters' incorrect type."
         });
 
         rotten.level = "APOCALYPSE";

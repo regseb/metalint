@@ -9,11 +9,10 @@ describe("lib/reporter/checkstyle.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.INFO, writer, {});
         reporter.notify("un.json", null);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, null);
         assert.strictEqual(writer.toString(),
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
             "<checkstyle version=\"6.8\">" +
@@ -23,11 +22,23 @@ describe("lib/reporter/checkstyle.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 1);
-        reporter.notify("un.md", []);
-        const severity = reporter.finalize();
+        const reporter = new Reporter(SEVERITY.INFO, writer, { "indent": 0 });
+        reporter.notify("un.txt", null);
+        reporter.finalize();
 
-        assert.strictEqual(severity, null);
+        assert.strictEqual(writer.toString(),
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<checkstyle version=\"6.8\">\n" +
+            "</checkstyle>\n");
+    });
+
+    it("", function () {
+        const writer = new streams.WritableStream();
+
+        const reporter = new Reporter(SEVERITY.ERROR, writer, { "indent": 1 });
+        reporter.notify("un.md", []);
+        reporter.finalize();
+
         assert.strictEqual(writer.toString(),
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<checkstyle version=\"6.8\">\n" +
@@ -39,7 +50,7 @@ describe("lib/reporter/checkstyle.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 2);
+        const reporter = new Reporter(SEVERITY.INFO, writer, { "indent": 2 });
         reporter.notify("un.html", [
             {
                 "linter":    "htmllint",
@@ -72,9 +83,8 @@ describe("lib/reporter/checkstyle.js", function () {
                 "locations": [{ "line": 4 }, { "line": 5 }]
             }
         ]);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, SEVERITY.FATAL);
         assert.strictEqual(writer.toString(),
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<checkstyle version=\"6.8\">\n" +

@@ -17,10 +17,10 @@ describe("lib/wrapper/doiuse.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style1.css";
-        const options = {};
         const level   = SEVERITY.INFO;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "doiuse",
@@ -36,10 +36,10 @@ describe("lib/wrapper/doiuse.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style2.css";
-        const options = { "browser": "ie >= 9, > 1%, last 2 versions" };
         const level   = SEVERITY.INFO;
+        const options = { "browser": "ie >= 9, > 1%, last 2 versions" };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "doiuse",
@@ -55,10 +55,10 @@ describe("lib/wrapper/doiuse.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style3.css";
-        const options = {};
         const level   = SEVERITY.FATAL;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

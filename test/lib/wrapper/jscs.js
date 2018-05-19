@@ -35,20 +35,20 @@ describe("lib/wrapper/jscs.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script1.js";
-        const options = {};
         const level   = SEVERITY.ERROR;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script2.js";
-        const options = { "disallowMultipleLineStrings": true };
         const level   = SEVERITY.ERROR;
+        const options = { "disallowMultipleLineStrings": true };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jscs",
@@ -63,20 +63,20 @@ describe("lib/wrapper/jscs.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script3.js";
-        const options = { "disallowKeywords": ["var"] };
         const level   = SEVERITY.FATAL;
+        const options = { "disallowKeywords": ["var"] };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/README.md";
-        const options = { "disallowSemicolons": true };
         const level   = SEVERITY.INFO;
+        const options = { "disallowSemicolons": true };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jscs",

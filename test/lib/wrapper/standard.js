@@ -16,11 +16,10 @@ describe("lib/wrapper/standard.js", function () {
     });
 
     it("wrapper()", function () {
-        const file    = DATA_DIR + "/script.js";
-        const options = null;
-        const level   = SEVERITY.ERROR;
+        const file  = DATA_DIR + "/script.js";
+        const level = SEVERITY.ERROR;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "standard",
@@ -41,11 +40,10 @@ describe("lib/wrapper/standard.js", function () {
     });
 
     it("wrapper()", function () {
-        const file    = DATA_DIR + "/data.xml";
-        const options = null;
-        const level   = SEVERITY.FATAL;
+        const file  = DATA_DIR + "/data.xml";
+        const level = SEVERITY.FATAL;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

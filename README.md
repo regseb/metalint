@@ -3,7 +3,6 @@
 [![NPM][img-npm]][link-npm]
 [![Build][img-build]][link-build]
 [![Dependencies][img-dependencies]][link-dependencies]
-[![Code Climate][img-codeclimate]][link-codeclimate]
 [![Coverage][img-coverage]][link-coverage]
 [![License][img-license]][link-license]
 
@@ -87,14 +86,12 @@ metalint
 [img-npm]:https://img.shields.io/npm/v/metalint.svg
 [img-build]:https://img.shields.io/travis/regseb/metalint.svg
 [img-dependencies]:https://img.shields.io/david/regseb/metalint.svg
-[img-codeclimate]:https://img.shields.io/codeclimate/github/regseb/metalint.svg
 [img-coverage]:https://img.shields.io/coveralls/regseb/metalint.svg
 [img-license]:https://img.shields.io/badge/license-EUPL-blue.svg
 
-[link-npm]:https://npmjs.com/package/metalint
+[link-npm]:https://www.npmjs.com/package/metalint
 [link-build]:https://travis-ci.org/regseb/metalint
 [link-dependencies]:https://david-dm.org/regseb/metalint
-[link-codeclimate]:https://codeclimate.com/github/regseb/metalint
 [link-coverage]:https://coveralls.io/github/regseb/metalint
-[link-license]:https://joinup.ec.europa.eu/page/eupl-text-11-12
+[link-license]:https://joinup.ec.europa.eu/collection/eupl/eupl-text-11-12
                "Licence publique de l’Union européenne"

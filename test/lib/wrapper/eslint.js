@@ -35,25 +35,25 @@ describe("lib/wrapper/eslint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script1.js";
-        const options = null;
         const level   = SEVERITY.INFO;
+        const options = null;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script2.js";
+        const level   = SEVERITY.WARN;
         const options = {
             "rules": {
                 "indent":            [1, 4, { "SwitchCase": 1 }],
                 "no-duplicate-case": 2
             }
         };
-        const level   = SEVERITY.WARN;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "eslint",
@@ -75,20 +75,20 @@ describe("lib/wrapper/eslint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script3.js";
-        const options = { "rules": { "no-bitwise": 1 } };
         const level   = SEVERITY.ERROR;
+        const options = { "rules": { "no-bitwise": 1 } };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script4.js";
-        const options = {};
         const level   = SEVERITY.INFO;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "eslint",
@@ -103,10 +103,10 @@ describe("lib/wrapper/eslint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script5.js";
-        const options = {};
         const level   = SEVERITY.OFF;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

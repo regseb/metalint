@@ -35,10 +35,10 @@ describe("lib/wrapper/markdownlint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/README1.md";
-        const options = null;
         const level   = SEVERITY.INFO;
+        const options = null;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "markdownlint",
@@ -54,26 +54,26 @@ describe("lib/wrapper/markdownlint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/README2.md";
-        const options = {};
         const level   = SEVERITY.INFO;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/README3.md";
-        const options = {};
         const level   = SEVERITY.WARN;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "markdownlint",
                     "rule":      "MD026/no-trailing-punctuation",
                     "severity":  SEVERITY.ERROR,
-                    "message":   "Trailing punctuation in header" +
+                    "message":   "Trailing punctuation in heading" +
                                  " [Punctuation: '!']",
                     "locations": [{ "line": 1 }]
                 }
@@ -83,10 +83,10 @@ describe("lib/wrapper/markdownlint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/README4.md";
-        const options = {};
         const level   = SEVERITY.FATAL;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

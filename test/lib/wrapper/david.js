@@ -17,10 +17,10 @@ describe("lib/wrapper/david.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/package1.json";
-        const options = {};
         const level   = SEVERITY.INFO;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.strictEqual(notices.length, 1);
             assert.strictEqual(notices[0].linter, "david");
             assert.strictEqual(notices[0].rule, null);
@@ -34,14 +34,14 @@ describe("lib/wrapper/david.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/package1.json";
+        const level   = SEVERITY.INFO;
         const options = {
             "dev":      false,
             "optional": true,
             "peer":     true
         };
-        const level   = SEVERITY.INFO;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.strictEqual(notices.length, 2);
 
             assert.strictEqual(notices[0].linter, "david");
@@ -65,14 +65,14 @@ describe("lib/wrapper/david.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/package1.json";
+        const level   = SEVERITY.INFO;
         const options = {
             "dev":      true,
             "optional": false,
             "peer":     false
         };
-        const level   = SEVERITY.INFO;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.strictEqual(notices.length, 2);
 
             assert.strictEqual(notices[0].linter, "david");
@@ -95,14 +95,14 @@ describe("lib/wrapper/david.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/package1.json";
+        const level   = SEVERITY.INFO;
         const options = {
             "dev":      true,
             "optional": false,
             "peer":     true
         };
-        const level   = SEVERITY.INFO;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.strictEqual(notices.length, 2);
 
             assert.strictEqual(notices[0].linter, "david");
@@ -125,10 +125,10 @@ describe("lib/wrapper/david.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/package1.json";
-        const options = {};
         const level   = SEVERITY.OFF;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

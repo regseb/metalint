@@ -1,20 +1,20 @@
 "use strict";
 
-const None = require("../../../lib/reporter/none");
-
 /**
  * Le rapporteur qui écrit les résultats avec des phrases en français.
  */
-const Reporter = class extends None {
+const Reporter = class {
 
     /**
      * Crée un rapporteur.
      *
-     * @param {Object} writer  Le flux où écrire les résultats.
-     * @param {number} verbose Le niveau de verbosité.
+     * @param {number} level  Le niveau de sévérité minimum des notifications
+     *                        affichées.
+     * @param {Object} writer Le flux où écrire les résultats.
      */
-    constructor(writer, verbose) {
-        super(writer, verbose);
+    constructor(level, writer) {
+        this.level  = level;
+        this.writer = writer;
     }
 
     /**
@@ -25,8 +25,6 @@ const Reporter = class extends None {
      *                                 <code>null</code>.
      */
     notify(file, notices) {
-        super.notify(file, notices);
-
         // Si le fichier n’a pas été vérifié (car il ne rentrait pas dans
         // les critères des checkers).
         if (null === notices) {
@@ -50,6 +48,13 @@ const Reporter = class extends None {
             }
             this.writer.write(file + " : " + notice.message + "\n");
         }
+    }
+
+    /**
+     * Finalise l'affichage.
+     */
+    finalize() {
+        // Ne rien faire.
     }
 };
 

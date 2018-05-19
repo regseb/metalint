@@ -9,29 +9,29 @@ describe("lib/reporter/csv.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.FATAL, writer);
         reporter.notify("Main.java", null);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, null);
-        assert.strictEqual(writer.toString(), "file,line,column,message\r\n");
+        assert.strictEqual(writer.toString(),
+            "file,line,column,message,linter,rule\r\n");
     });
 
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.ERROR, writer);
         reporter.notify("todo.sh", []);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, null);
-        assert.strictEqual(writer.toString(), "file,line,column,message\r\n");
+        assert.strictEqual(writer.toString(),
+            "file,line,column,message,linter,rule\r\n");
     });
 
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 1);
+        const reporter = new Reporter(SEVERITY.INFO, writer);
         reporter.notify("un.py", [
             {
                 "linter":    "pylint",
@@ -56,23 +56,22 @@ describe("lib/reporter/csv.js", function () {
                 "locations": [{ "line": 3 }]
             }
         ]);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, SEVERITY.ERROR);
         assert.strictEqual(writer.toString(),
-            "file,line,column,message,linter\r\n" +
+            "file,line,column,message,linter,rule\r\n" +
             "\"un.py\",,,\"Un fanfaron, amateur de la chasse,\"" +
-                ",pylint\r\n" +
+                ",pylint,\r\n" +
             "\"deux.xhtml\",1,2,\"Venant de perdre un chien de bonne" +
-                                " race\",xmllint\r\n" +
+                                " race\",xmllint,\"1\"\r\n" +
             "\"deux.xhtml\",3,,\"Qu’il soupçonnait dans le corps d’un" +
-                               " Lion,\",htmllint\r\n");
+                               " Lion,\",htmllint,\"2\"\r\n");
     });
 
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 2);
+        const reporter = new Reporter(SEVERITY.INFO, writer);
         reporter.notify("un.css", [
             {
                 "linter":    "csslint",
@@ -88,9 +87,8 @@ describe("lib/reporter/csv.js", function () {
                 "locations": []
             }
         ]);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, SEVERITY.WARN);
         assert.strictEqual(writer.toString(),
             "file,line,column,message,linter,rule\r\n" +
             "\"un.css\",,,\"Vit un berger. « Enseigne-moi, de grâce,\"," +
@@ -102,7 +100,7 @@ describe("lib/reporter/csv.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.INFO, writer);
         reporter.notify("un.yml", [
             {
                 "linter":    "ymllint",
@@ -112,11 +110,11 @@ describe("lib/reporter/csv.js", function () {
                 "locations": []
             }
         ]);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, SEVERITY.FATAL);
         assert.strictEqual(writer.toString(),
-            "file,line,column,message\r\n" +
-            "\"un.yml\",,,\"De mon voleur, lui dit-il, la maison,\"\r\n");
+            "file,line,column,message,linter,rule\r\n" +
+            "\"un.yml\",,,\"De mon voleur, lui dit-il, la maison,\",ymllint," +
+                "\r\n");
     });
 });

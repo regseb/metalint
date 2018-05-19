@@ -16,11 +16,10 @@ describe("lib/wrapper/jsonlint.js", function () {
     });
 
     it("wrapper()", function () {
-        const file    = DATA_DIR + "/data1.json";
-        const options = null;
-        const level   = SEVERITY.INFO;
+        const file  = DATA_DIR + "/data1.json";
+        const level = SEVERITY.INFO;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jsonlint",
@@ -35,21 +34,19 @@ describe("lib/wrapper/jsonlint.js", function () {
     });
 
     it("wrapper()", function () {
-        const file    = DATA_DIR + "/data2.json";
-        const options = {};
-        const level   = SEVERITY.INFO;
+        const file  = DATA_DIR + "/data2.json";
+        const level = SEVERITY.INFO;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
-        const file    = DATA_DIR + "/data3.json";
-        const options = {};
-        const level   = SEVERITY.WARN;
+        const file  = DATA_DIR + "/data3.json";
+        const level = SEVERITY.WARN;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "jsonlint",
@@ -64,11 +61,10 @@ describe("lib/wrapper/jsonlint.js", function () {
     });
 
     it("wrapper()", function () {
-        const file    = DATA_DIR + "/test.txt";
-        const options = {};
-        const level   = SEVERITY.FATAL;
+        const file  = DATA_DIR + "/test.txt";
+        const level = SEVERITY.FATAL;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

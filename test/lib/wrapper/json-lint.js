@@ -17,10 +17,10 @@ describe("lib/wrapper/json-lint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/data1.json";
-        const options = null;
         const level   = SEVERITY.INFO;
+        const options = null;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "json-lint",
@@ -36,20 +36,20 @@ describe("lib/wrapper/json-lint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/data2.json";
-        const options = { "comment": true };
         const level   = SEVERITY.INFO;
+        const options = { "comment": true };
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/data3.json";
-        const options = {};
         const level   = SEVERITY.WARN;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "json-lint",
@@ -65,10 +65,10 @@ describe("lib/wrapper/json-lint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/data.raw";
-        const options = {};
         const level   = SEVERITY.FATAL;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

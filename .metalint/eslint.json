@@ -47,7 +47,7 @@
         "valid-jsdoc": [2, {
             "prefer": {
                 "returns": "return",
-                "class":   "constructor"
+                "class": "constructor"
             },
             "requireReturn": false
         }],
@@ -62,7 +62,7 @@
         "curly": 2,
         "default-case": 0,
         "dot-location": [2, "property"],
-        "dot-notation": [2, { "allowPattern": "_" }],
+        "dot-notation": [2, { "allowKeywords": true, "allowPattern": "_" }],
         "eqeqeq": 2,
         "guard-for-in": 0,
         "no-alert": 2,
@@ -134,7 +134,10 @@
         "no-shadow": 2,
         "no-undef": 2,
         "no-undefined": 0,
-        "no-unused-vars": 2,
+        "no-unused-vars": [2, {
+            "args": "all", "argsIgnorePattern": "^_",
+            "caughtErrors": "all", "caughtErrorsIgnorePattern": "^_"
+        }],
         "no-use-before-define": 2,
 
         "callback-return": 0,
@@ -203,7 +206,7 @@
         "no-multi-assign": 2,
         "no-multiple-empty-lines": 2,
         "no-negated-condition": 2,
-        "no-nested-ternary": 2,
+        "no-nested-ternary": 0,
         "no-new-object": 2,
         "no-plusplus": 0,
         "no-restricted-syntax": [2,
@@ -238,7 +241,7 @@
         "quotes": 2,
         "require-jsdoc": [2, {
             "require": {
-                "FunctionDeclaration": false,
+                "FunctionDeclaration": true,
                 "MethodDefinition": true,
                 "ClassDeclaration": true
             }

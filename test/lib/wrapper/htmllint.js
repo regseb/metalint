@@ -35,10 +35,10 @@ describe("lib/wrapper/htmllint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/index1.html";
-        const options = null;
         const level   = SEVERITY.INFO;
+        const options = null;
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "htmllint",
@@ -53,20 +53,20 @@ describe("lib/wrapper/htmllint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/index2.html";
-        const options = {};
         const level   = SEVERITY.INFO;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/index3.html";
-        const options = {};
         const level   = SEVERITY.WARN;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "linter":    "htmllint",
@@ -81,10 +81,10 @@ describe("lib/wrapper/htmllint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/index4.html";
-        const options = {};
         const level   = SEVERITY.FATAL;
+        const options = {};
 
-        return linter.wrapper(file, options, level).then(function (notices) {
+        return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });

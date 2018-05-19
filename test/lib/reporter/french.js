@@ -9,29 +9,27 @@ describe("test/data/reporter/french.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.WARN, writer);
         reporter.notify("script.js", null);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, null);
         assert.strictEqual(writer.toString(), "");
     });
 
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.ERROR, writer);
         reporter.notify("stylelint.json", []);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, null);
         assert.strictEqual(writer.toString(), "");
     });
 
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.INFO, writer);
         reporter.notify("un.html", [
             {
                 "linter":    "htmlhint",
@@ -56,9 +54,8 @@ describe("test/data/reporter/french.js", function () {
                 "locations": [{ "line": 3 }]
             }
         ]);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, SEVERITY.ERROR);
         assert.strictEqual(writer.toString(),
             "Le linter htmlhint a trouvé un problème dans le fichier" +
             " un.html : Doctype must be declared first.\n" +

@@ -9,29 +9,27 @@ describe("lib/reporter/unix.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.FATAL, writer);
         reporter.notify("script.js", null);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, null);
         assert.strictEqual(writer.toString(), "");
     });
 
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.WARN, writer);
         reporter.notify("stylelint.json", []);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, null);
         assert.strictEqual(writer.toString(), "");
     });
 
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 2);
+        const reporter = new Reporter(SEVERITY.INFO, writer);
         reporter.notify("un.html", [
             {
                 "linter":    "htmllint",
@@ -56,9 +54,8 @@ describe("lib/reporter/unix.js", function () {
                 "locations": [{ "line": 3 }]
             }
         ]);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, SEVERITY.ERROR);
         assert.strictEqual(writer.toString(),
             "un.html::: La cigale ayant chanté (htmllint)\n" +
             "\n" +
@@ -69,7 +66,7 @@ describe("lib/reporter/unix.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.ERROR, writer);
         reporter.notify("un.css", [
             {
                 "linter":    "csslint",
@@ -79,10 +76,9 @@ describe("lib/reporter/unix.js", function () {
                 "locations": []
             }
         ]);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, SEVERITY.FATAL);
         assert.strictEqual(writer.toString(),
-            "un.css::: Quand la bise fut venue.\n");
+            "un.css::: Quand la bise fut venue. (csslint.3)\n");
     });
 });

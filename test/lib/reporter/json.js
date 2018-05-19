@@ -9,31 +9,35 @@ describe("lib/reporter/json.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.WARN, writer, {});
         reporter.notify("index.html", null);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, null);
         assert.strictEqual(writer.toString(), "{\"index.html\":null}\n");
     });
 
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 0);
+        const reporter = new Reporter(SEVERITY.INFO, writer, { "indent": 0 });
         reporter.notify("index.html", []);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, null);
         assert.strictEqual(writer.toString(), "{\"index.html\":[]}\n");
     });
 
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 2);
+        const reporter = new Reporter(SEVERITY.ERROR, writer, { "indent": 2 });
         reporter.notify("tools.js", [
             {
+                "linter":    "eslint",
+                "rule":      "complexity",
+                "severity":  SEVERITY.WARN,
+                "message":   "Method 'eval' has a complexity of 666.",
+                "locations": [{ "line": 1, "column": 4 }]
+            }, {
                 "linter":    "eslint",
                 "rule":      "no-unused-vars",
                 "severity":  SEVERITY.ERROR,
@@ -41,9 +45,8 @@ describe("lib/reporter/json.js", function () {
                 "locations": [{ "line": 2, "column": 7 }]
             }
         ]);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, SEVERITY.ERROR);
         assert.strictEqual(writer.toString(),
             "{\n" +
             "  \"tools.js\": [\n" +
@@ -67,7 +70,7 @@ describe("lib/reporter/json.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(writer, 4);
+        const reporter = new Reporter(SEVERITY.WARN, writer, { "indent": 4 });
         reporter.notify("README.md", [
             {
                 "linter":    "markdownlint",
@@ -92,9 +95,8 @@ describe("lib/reporter/json.js", function () {
                 "locations": [{ "line": 12, "column": 2 }]
             }
         ]);
-        const severity = reporter.finalize();
+        reporter.finalize();
 
-        assert.strictEqual(severity, SEVERITY.ERROR);
         assert.strictEqual(writer.toString(),
             "{\n" +
             "    \"README.md\": [\n" +

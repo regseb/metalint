@@ -10,6 +10,14 @@ const normalize = require("../lib/normalize");
 const metalint  = require("../lib/index");
 const SEVERITY  = require("../lib/severity");
 
+// TODO Ajouter l'option -r / --reporter pour surcharger le nom du premier
+//      rapporteur et désactiver les autres.
+// TODO Ajouter l'option -o / --output pour surcharger le fichier de sortie du
+//      premier rapporteur et désactiver les autres.
+// TODO Ajouter l'option --fix (et dans la configuration) pour corriger
+//      certaines erreurs.
+// TODO Ajouter une option (et dans la configuration) pour analyser seulement
+//      les modifications (git status).
 const argv = yargs.options({
     "c": {
         "alias":       "config",
@@ -22,25 +30,10 @@ const argv = yargs.options({
         "requiresArg": true,
         "type":        "string"
     },
-    "o": {
-        "alias":       "output",
-        "requiresArg": true,
-        "type":        "string"
-    },
     "p": {
         "alias":       "patterns",
         "requiresArg": true,
         "type":        "array"
-    },
-    "r": {
-        "alias":       "reporter",
-        "requiresArg": true,
-        "type":        "string"
-    },
-    "v": {
-        "alias":   "verbose",
-        "default": undefined,
-        "type":    "count"
     },
     "help": {
         "alias": "help",
@@ -64,7 +57,7 @@ const argv = yargs.options({
  *                                  résultats.
  * @return {Promise.<number>} La sévérité la plus élévée des résultats.
  */
-const check = function (files, checkers, root, reporter) {
+const check = function (files, checkers, root) {
     const results = {};
     for (const file of files) {
         const directory = fs.lstatSync(file).isDirectory();
@@ -83,25 +76,42 @@ const check = function (files, checkers, root, reporter) {
             results[file] = metalint(file, linters);
         }
     }
+    return results;
+};
 
+const print = function (results, reporters) {
+    let severity = null;
     return new Promise(function (resolve) {
-        for (const file of Object.keys(results)) {
+        Object.keys(results).forEach(function (file) {
             results[file].then(function (notices) {
+                if (null !== notices) {
+                    for (const notice of notices) {
+                        // Déterminer la sévérité la plus élévée des résultats.
+                        if (null === severity || severity > notice.severity) {
+                            severity = notice.severity;
+                        }
+                    }
+                }
                 results[file] = notices;
-                for (const file2 of Object.keys(results)) {
+                for (const file2 in results) {
                     if (null === results[file2] ||
                             Array.isArray(results[file2])) {
-                        reporter.notify(file2, results[file2]);
+                        for (const reporter of reporters) {
+                            reporter.notify(file2, results[file2]);
+                        }
                         delete results[file2];
                     } else {
                         break;
                     }
                 }
                 if (0 === results.length) {
-                    resolve(reporter.finalize());
+                    for (const reporter of reporters) {
+                        reporter.finalize();
+                    }
+                    resolve(severity);
                 }
             });
-        }
+        });
     });
 };
 
@@ -133,13 +143,9 @@ while (!fs.existsSync(path.join(root, argv.config))) {
 let config = JSON.parse(fs.readFileSync(path.join(root, argv.config), "utf-8"));
 // Surcharger les données du fichier de configuration par les paramètres de la
 // ligne de commande.
-for (const key of ["level", "output", "patterns", "reporter", "verbose"]) {
+for (const key of ["level", "patterns"]) {
     if (undefined !== argv[key]) {
-        if ("output" === key || "reporter" === key) {
-            config[key] = path.join(process.cwd(), argv[key]);
-        } else {
-            config[key] = argv[key];
-        }
+        config[key] = argv[key];
     }
 }
 try {
@@ -152,9 +158,9 @@ try {
 
 const files = glob.walk(argv._, config.patterns, root);
 
-check(files, config.checkers, root,
-      new config.Reporter(config.output, config.verbose)).then(
-                                                           function (severity) {
+const results = check(files, config.checkers, root);
+
+print(results, config.reporters).then(function (severity) {
     // Attendre que tous les textes soient écrits avant de retourner le status.
     config.output.write("", function () {
         let exit;
