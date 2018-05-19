@@ -1,26 +1,23 @@
 {
     "patterns": [
-        "!.git/", "!.nyc_output/", "!coverage/", "!node_modules/",
-        "!test/data/", "**"
+        "!/.git/", "!/.nyc_output/", "!/coverage/", "!/node_modules/",
+        "!/test/data/", "**"
     ],
-    "results": {
-        "options": { "verbose": 2 }
-    },
     "checkers": [
         {
-            "patterns": ["!test/", "**/*.js"],
+            "patterns": ["!/test/", "*.js"],
             "linters": "eslint"
         }, {
-            "patterns": "test/**/*.js",
+            "patterns": "/test/**/*.js",
             "linters": { "eslint": ["eslint.json", "eslint_test.json"] }
         }, {
-            "patterns": "**/*.md",
+            "patterns": "*.md",
             "linters": "markdownlint"
         }, {
-            "patterns": "**/*.json",
+            "patterns": "*.json",
             "linters": { "jsonlint": null }
         }, {
-            "patterns": "package.json",
+            "patterns": "/package.json",
             "linters": "david"
         }
     ]

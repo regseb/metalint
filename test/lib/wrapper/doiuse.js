@@ -10,7 +10,7 @@ describe("lib/wrapper/doiuse.js", function () {
     it("configure()", function () {
         const checker = linter.configure();
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.css",
+            "patterns": "*.css",
             "linters":  { "doiuse": {} }
         });
     });

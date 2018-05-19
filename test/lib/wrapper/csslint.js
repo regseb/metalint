@@ -15,7 +15,7 @@ describe("lib/wrapper/csslint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.css",
+            "patterns": "*.css",
             "linters":  { "csslint": null }
         });
     });
@@ -28,7 +28,7 @@ describe("lib/wrapper/csslint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.css",
+            "patterns": "*.css",
             "linters":  { "csslint": "../.csslintrc" }
         });
     });

@@ -10,7 +10,7 @@ describe("lib/wrapper/addons-linter.js", function () {
     it("configure()", function () {
         const checker = linter.configure();
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.xpi",
+            "patterns": "*.xpi",
             "linters":  { "addons-linter": null }
         });
     });

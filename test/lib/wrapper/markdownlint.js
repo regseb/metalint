@@ -15,7 +15,7 @@ describe("lib/wrapper/markdownlint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.md",
+            "patterns": "*.md",
             "linters":  { "markdownlint": null }
         });
     });
@@ -28,7 +28,7 @@ describe("lib/wrapper/markdownlint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.md",
+            "patterns": "*.md",
             "linters":  { "markdownlint": "../.markdownlintrc" }
         });
     });

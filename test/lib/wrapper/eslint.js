@@ -15,7 +15,7 @@ describe("lib/wrapper/eslint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.js",
+            "patterns": "*.js",
             "linters":  { "eslint": null }
         });
     });
@@ -28,7 +28,7 @@ describe("lib/wrapper/eslint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.js",
+            "patterns": "*.js",
             "linters":  { "eslint": "../.eslintrc" }
         });
     });

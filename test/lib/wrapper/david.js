@@ -10,7 +10,7 @@ describe("lib/wrapper/david.js", function () {
     it("configure()", function () {
         const checker = linter.configure();
         assert.deepStrictEqual(checker, {
-            "patterns": "package.json",
+            "patterns": "/package.json",
             "linters":  { "david": {} }
         });
     });

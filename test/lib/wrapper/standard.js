@@ -10,7 +10,7 @@ describe("lib/wrapper/standard.js", function () {
     it("configure()", function () {
         const checker = linter.configure();
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.js",
+            "patterns": "*.js",
             "linters":  { "standard": null }
         });
     });

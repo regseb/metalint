@@ -61,16 +61,16 @@ linters ESLint, HTMLHint et stylelint.
 
 ```JSON
 {
-    "patterns": ["!git/", "!node_modules/", "**"],
+    "patterns": ["!/.git/", "!/node_modules/", "**"],
     "checkers": [
         {
-            "patterns": ["!**/*.min.js", "**/*.js"],
+            "patterns": ["!*.min.js", "*.js"],
             "linters": "eslint"
         }, {
-            "patterns": "**/*.html",
+            "patterns": "*.html",
             "linters": "htmlhint"
         }, {
-            "patterns": "**/*.css",
+            "patterns": "*.css",
             "linters": "stylelint"
         }
     ]

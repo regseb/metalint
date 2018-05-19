@@ -10,7 +10,7 @@ describe("lib/wrapper/json-lint.js", function () {
     it("configure()", function () {
         const checker = linter.configure();
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.json",
+            "patterns": "*.json",
             "linters":  { "json-lint": null }
         });
     });

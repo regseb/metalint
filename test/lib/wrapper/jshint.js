@@ -15,7 +15,7 @@ describe("lib/wrapper/jshint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.js",
+            "patterns": "*.js",
             "linters":  { "jshint": null }
         });
     });
@@ -28,7 +28,7 @@ describe("lib/wrapper/jshint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.js",
+            "patterns": "*.js",
             "linters":  { "jshint": "../.jshintrc" }
         });
     });

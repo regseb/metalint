@@ -15,7 +15,7 @@ describe("lib/wrapper/stylelint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.css",
+            "patterns": "*.css",
             "linters":  { "stylelint": { "rules": {} } }
         });
     });
@@ -28,7 +28,7 @@ describe("lib/wrapper/stylelint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.css",
+            "patterns": "*.css",
             "linters":  { "stylelint": "../.stylelintrc" }
         });
     });

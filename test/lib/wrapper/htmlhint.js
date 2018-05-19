@@ -15,7 +15,7 @@ describe("lib/wrapper/htmlhint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.html",
+            "patterns": "*.html",
             "linters":  { "htmlhint": null }
         });
     });
@@ -28,7 +28,7 @@ describe("lib/wrapper/htmlhint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.html",
+            "patterns": "*.html",
             "linters":  { "htmlhint": "../.htmlhintrc" }
         });
     });

@@ -15,7 +15,7 @@ describe("lib/wrapper/jscs.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.js",
+            "patterns": "*.js",
             "linters":  { "jscs": {} }
         });
     });
@@ -28,7 +28,7 @@ describe("lib/wrapper/jscs.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "**/*.js",
+            "patterns": "*.js",
             "linters":  { "jscs": "../.jscsrc" }
         });
     });
