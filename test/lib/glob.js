@@ -45,11 +45,23 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, false);
     });
 
-    it("test([\"**/*.md\"])", function () {
+    it("test([\"/**/*.md\"])", function () {
         const patterns = ["/**/*.md"];
         let matched = glob.test("src/README.md", patterns, __dirname, false);
         assert.strictEqual(matched, true);
         matched = glob.test("README.md", patterns, __dirname, false);
+        assert.strictEqual(matched, true);
+        matched = glob.test("README.txt", patterns, __dirname, false);
+        assert.strictEqual(matched, false);
+    });
+
+    it("test([\"/*/*.md\"])", function () {
+        const patterns = ["/*/*.md"];
+        let matched = glob.test("src/README.md", patterns, __dirname, false);
+        assert.strictEqual(matched, true);
+        matched = glob.test("README.md", patterns, __dirname, false);
+        assert.strictEqual(matched, false);
+        matched = glob.test("src/README.txt", patterns, __dirname, false);
         assert.strictEqual(matched, false);
     });
 

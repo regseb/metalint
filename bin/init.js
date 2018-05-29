@@ -42,7 +42,7 @@ fs.mkdirSync(".metalint");
 
 // Initialiser les données de la configuration.
 const config = {
-    "patterns": ["!.git/", "!node_modules/", "**"],
+    "patterns": ["!/.git/", "!/node_modules/", "**"],
     "checkers": []
 };
 // Surcharger la configuration par les paramètres de la ligne de commande.
