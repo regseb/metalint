@@ -51,10 +51,38 @@
         "use-isnan": 2,
         "valid-jsdoc": [2, {
             "prefer": {
-                "returns": "return",
-                "class": "constructor"
+                "virtual": "abstract",
+                "extends": "augments",
+                "constructor": "class",
+                "const": "constant",
+                "defaultvalue": "default",
+                "desc": "description",
+                "host": "external",
+                "fileoverview": "file",
+                "overview": "file",
+                "emits": "fires",
+                "func": "function",
+                "method": "function",
+                "var": "member",
+                "arg": "param",
+                "argument": "param",
+                "prop": "property",
+                "return": "returns",
+                "exception": "throws",
+                "yield": "yields",
+                "linkcode": "link",
+                "linkplain":" link"
             },
-            "requireReturn": false
+            "preferType": {
+                "array": "Array",
+                "object": "Object",
+                "function": "Function"
+            },
+            "requireReturn": false,
+            "requireReturnType": true,
+            "requireParamDescription": true,
+            "requireReturnDescription": true,
+            "requireParamType": true
         }],
         "valid-typeof": 2,
 
@@ -251,8 +279,8 @@
         "require-jsdoc": [2, {
             "require": {
                 "FunctionDeclaration": true,
-                "MethodDefinition": true,
-                "ClassDeclaration": true
+                "ClassDeclaration": true,
+                "MethodDefinition": true
             }
         }],
         "semi": 2,

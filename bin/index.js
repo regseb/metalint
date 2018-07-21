@@ -55,7 +55,7 @@ const argv = yargs.options({
  *                                  dossier <code>.metalint/</code>.
  * @param {Object}         reporter Le rapporteur utilisé pour afficher les
  *                                  résultats.
- * @return {Promise.<number>} La sévérité la plus élévée des résultats.
+ * @returns {Promise.<number>} La sévérité la plus élévée des résultats.
  */
 const check = function (files, checkers, root) {
     const results = {};

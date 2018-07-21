@@ -30,7 +30,9 @@
         "lint": "bin/cli.js",
         "test": "nyc mocha test/lib/",
         "coverage": "nyc report --reporter=text-lcov | coveralls",
-        "coverage:html": "nyc report --reporter=html"
+        "coverage:html": "nyc report --reporter=html",
+        "docs": "jsdoc -r -d docs/ lib/",
+        "clean": "rm -rf .nyc_output/ coverage/ docs/ node_modules/"
     },
     "dependencies": {
         "colors": "^1.3.2",
