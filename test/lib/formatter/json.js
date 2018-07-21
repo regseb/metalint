@@ -1,15 +1,15 @@
 "use strict";
 
-const assert   = require("assert");
-const streams  = require("memory-streams");
-const SEVERITY = require("../../../lib/severity");
-const Reporter = require("../../../lib/reporter/json");
+const assert    = require("assert");
+const streams   = require("memory-streams");
+const SEVERITY  = require("../../../lib/severity");
+const Formatter = require("../../../lib/formatter/json");
 
-describe("lib/reporter/json.js", function () {
+describe("lib/formatter/json.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.WARN, writer, {});
+        const reporter = new Formatter(SEVERITY.WARN, writer, {});
         reporter.notify("index.html", null);
         reporter.finalize();
 
@@ -19,7 +19,7 @@ describe("lib/reporter/json.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.INFO, writer, { "indent": 0 });
+        const reporter = new Formatter(SEVERITY.INFO, writer, { "indent": 0 });
         reporter.notify("index.html", []);
         reporter.finalize();
 
@@ -29,7 +29,7 @@ describe("lib/reporter/json.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.ERROR, writer, { "indent": 2 });
+        const reporter = new Formatter(SEVERITY.ERROR, writer, { "indent": 2 });
         reporter.notify("tools.js", [
             {
                 "linter":    "eslint",
@@ -70,7 +70,7 @@ describe("lib/reporter/json.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.WARN, writer, { "indent": 4 });
+        const reporter = new Formatter(SEVERITY.WARN, writer, { "indent": 4 });
         reporter.notify("README.md", [
             {
                 "linter":    "markdownlint",

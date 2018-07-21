@@ -144,10 +144,10 @@ describe("lib/glob.js", function () {
         files = glob.walk([], ["**/glob.js"], __dirname);
         assert.deepStrictEqual(files, ["glob.js"]);
 
-        files = glob.walk(["reporter"], ["**/console.js"], __dirname);
-        assert.deepStrictEqual(files, ["reporter/console.js"]);
+        files = glob.walk(["formatter"], ["**/console.js"], __dirname);
+        assert.deepStrictEqual(files, ["formatter/console.js"]);
 
-        files = glob.walk(["reporter/csv.js"], ["**/json.js"], __dirname);
+        files = glob.walk(["formatter/csv.js"], ["**/json.js"], __dirname);
         assert.deepStrictEqual(files, []);
 
         files = glob.walk(["wrapper/eslint.js"], ["!wrapper"], __dirname);

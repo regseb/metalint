@@ -1,15 +1,15 @@
 "use strict";
 
-const assert   = require("assert");
-const streams  = require("memory-streams");
-const SEVERITY = require("../../../lib/severity");
-const Reporter = require("../../../lib/reporter/csv");
+const assert    = require("assert");
+const streams   = require("memory-streams");
+const SEVERITY  = require("../../../lib/severity");
+const Formatter = require("../../../lib/formatter/csv");
 
-describe("lib/reporter/csv.js", function () {
+describe("lib/formatter/csv.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.FATAL, writer);
+        const reporter = new Formatter(SEVERITY.FATAL, writer);
         reporter.notify("Main.java", null);
         reporter.finalize();
 
@@ -20,7 +20,7 @@ describe("lib/reporter/csv.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.ERROR, writer);
+        const reporter = new Formatter(SEVERITY.ERROR, writer);
         reporter.notify("todo.sh", []);
         reporter.finalize();
 
@@ -31,7 +31,7 @@ describe("lib/reporter/csv.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.INFO, writer);
+        const reporter = new Formatter(SEVERITY.INFO, writer);
         reporter.notify("un.py", [
             {
                 "linter":    "pylint",
@@ -71,7 +71,7 @@ describe("lib/reporter/csv.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.INFO, writer);
+        const reporter = new Formatter(SEVERITY.INFO, writer);
         reporter.notify("un.css", [
             {
                 "linter":    "csslint",
@@ -100,7 +100,7 @@ describe("lib/reporter/csv.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.INFO, writer);
+        const reporter = new Formatter(SEVERITY.INFO, writer);
         reporter.notify("un.yml", [
             {
                 "linter":    "ymllint",

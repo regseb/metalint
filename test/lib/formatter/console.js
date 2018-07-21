@@ -1,15 +1,15 @@
 "use strict";
 
-const assert   = require("assert");
-const streams  = require("memory-streams");
-const SEVERITY = require("../../../lib/severity");
-const Reporter = require("../../../lib/reporter/console");
+const assert    = require("assert");
+const streams   = require("memory-streams");
+const SEVERITY  = require("../../../lib/severity");
+const Formatter = require("../../../lib/formatter/console");
 
-describe("lib/reporter/console.js", function () {
+describe("lib/formatter/console.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.WARN, writer, {});
+        const reporter = new Formatter(SEVERITY.WARN, writer, {});
         reporter.notify("README.md",    null);
         reporter.notify("package.json", []);
         reporter.finalize();
@@ -20,8 +20,8 @@ describe("lib/reporter/console.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.FATAL, writer,
-                                      { "showZeroNotice": true });
+        const reporter = new Formatter(SEVERITY.FATAL, writer,
+                                       { "showZeroNotice": true });
         reporter.notify("README.md",    null);
         reporter.notify("package.json", []);
         reporter.finalize();
@@ -32,9 +32,9 @@ describe("lib/reporter/console.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.INFO, writer,
-                                      { "showZeroNotice": true,
-                                        "showNoChecked":  true });
+        const reporter = new Formatter(SEVERITY.INFO, writer,
+                                       { "showZeroNotice": true,
+                                         "showNoChecked":  true });
         reporter.notify("README.md",    null);
         reporter.notify("package.json", []);
         reporter.finalize();

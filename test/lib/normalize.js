@@ -4,9 +4,9 @@ const assert    = require("assert");
 const path      = require("path");
 const normalize = require("../../lib/normalize");
 const SEVERITY  = require("../../lib/severity");
-const Console   = require("../../lib/reporter/console");
-const Csv       = require("../../lib/reporter/csv");
-const French    = require("../data/reporter/french");
+const Console   = require("../../lib/formatter/console");
+const Csv       = require("../../lib/formatter/csv");
+const French    = require("../data/formatter/french");
 
 describe("lib/normalize.js", function () {
     it("", function () {
@@ -38,8 +38,8 @@ describe("lib/normalize.js", function () {
             "patterns":  "**.js",
             "level":     "Error",
             "reporters": {
-                "name":   "CSV",
-                "output": null
+                "formatter": "CSV",
+                "output":    null
             },
             "checkers":  [
                 {
@@ -125,7 +125,7 @@ describe("lib/normalize.js", function () {
     it("", function () {
         const rotten = {
             "reporters": {
-                "name": "reporter/french"
+                "formatter": "formatter/french"
             },
             "checkers":  [{ "linters": { "eslint": {} } }]
         };

@@ -1,15 +1,15 @@
 "use strict";
 
-const assert   = require("assert");
-const streams  = require("memory-streams");
-const SEVERITY = require("../../../lib/severity");
-const Reporter = require("../../../lib/reporter/checkstyle");
+const assert    = require("assert");
+const streams   = require("memory-streams");
+const SEVERITY  = require("../../../lib/severity");
+const Formatter = require("../../../lib/formatter/checkstyle");
 
-describe("lib/reporter/checkstyle.js", function () {
+describe("lib/formatter/checkstyle.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.INFO, writer, {});
+        const reporter = new Formatter(SEVERITY.INFO, writer, {});
         reporter.notify("un.json", null);
         reporter.finalize();
 
@@ -22,7 +22,7 @@ describe("lib/reporter/checkstyle.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.INFO, writer, { "indent": 0 });
+        const reporter = new Formatter(SEVERITY.INFO, writer, { "indent": 0 });
         reporter.notify("un.txt", null);
         reporter.finalize();
 
@@ -35,7 +35,7 @@ describe("lib/reporter/checkstyle.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.ERROR, writer, { "indent": 1 });
+        const reporter = new Formatter(SEVERITY.ERROR, writer, { "indent": 1 });
         reporter.notify("un.md", []);
         reporter.finalize();
 
@@ -50,7 +50,7 @@ describe("lib/reporter/checkstyle.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.INFO, writer, { "indent": 2 });
+        const reporter = new Formatter(SEVERITY.INFO, writer, { "indent": 2 });
         reporter.notify("un.html", [
             {
                 "linter":    "htmllint",

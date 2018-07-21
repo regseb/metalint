@@ -10,9 +10,9 @@ const normalize = require("../lib/normalize");
 const metalint  = require("../lib/index");
 const SEVERITY  = require("../lib/severity");
 
-// TODO Ajouter l'option -r / --reporter pour surcharger le nom du premier
+// TODO Ajouter l'option --formatter pour surcharger le formateur du premier
 //      rapporteur et désactiver les autres.
-// TODO Ajouter l'option -o / --output pour surcharger le fichier de sortie du
+// TODO Ajouter l'option --output pour surcharger le fichier de sortie du
 //      premier rapporteur et désactiver les autres.
 // TODO Ajouter l'option --fix (et dans la configuration) pour corriger
 //      certaines erreurs.
@@ -48,70 +48,31 @@ const argv = yargs.options({
 /**
  * Vérifie (en appelant des linters) une liste de fichiers.
  *
- * @param {Array.<string>} files    La liste des fichiers.
- * @param {Array.<Object>} checkers La liste des vérifications faites sur les
- *                                  fichiers.
- * @param {string}         root     L’adresse du répertoire où se trouve le
- *                                  dossier <code>.metalint/</code>.
- * @param {Object}         reporter Le rapporteur utilisé pour afficher les
- *                                  résultats.
+ * @param {Array.<string>} files     La liste des fichiers.
+ * @param {Array.<Object>} checkers  La liste des vérifications faites sur les
+ *                                   fichiers.
+ * @param {string}         root      L’adresse du répertoire où se trouve le
+ *                                   dossier <code>.metalint/</code>.
+ * @param {Object}         reporters La liste des rapporteurs utilisés pour
+ *                                   afficher les résultats.
  * @returns {Promise.<number>} La sévérité la plus élévée des résultats.
  */
-const check = function (files, checkers, root) {
-    const results = {};
-    for (const file of files) {
-        const directory = fs.lstatSync(file).isDirectory();
-        const linters = [];
-        for (const checker of checkers) {
-            if (glob.test(file, checker.patterns, root, directory)) {
-                linters.push({
-                    "linters": checker.linters,
-                    "level":   checker.level
-                });
-            }
+const check = function (files, checkers, root, reporters) {
+    return metalint(files, checkers, root, function (file, notices) {
+        for (const reporter of reporters) {
+            reporter.notify(file, notices);
         }
-        if (0 === linters.length) {
-            results[file] = Promise.resolve(null);
-        } else {
-            results[file] = metalint(file, linters);
+    }).then(function (severity) {
+        const sweepers = [];
+        for (const reporter of reporters) {
+            reporter.finalize(severity);
+            // Attendre que les textes soient écrits.
+            sweepers.push(new Promise(function (resolve) {
+                reporter.writer.write("", resolve);
+            }));
         }
-    }
-    return results;
-};
-
-const print = function (results, reporters) {
-    let severity = null;
-    return new Promise(function (resolve) {
-        Object.keys(results).forEach(function (file) {
-            results[file].then(function (notices) {
-                if (null !== notices) {
-                    for (const notice of notices) {
-                        // Déterminer la sévérité la plus élévée des résultats.
-                        if (null === severity || severity > notice.severity) {
-                            severity = notice.severity;
-                        }
-                    }
-                }
-                results[file] = notices;
-                for (const file2 in results) {
-                    if (null === results[file2] ||
-                            Array.isArray(results[file2])) {
-                        for (const reporter of reporters) {
-                            reporter.notify(file2, results[file2]);
-                        }
-                        delete results[file2];
-                    } else {
-                        break;
-                    }
-                }
-                if (0 === results.length) {
-                    for (const reporter of reporters) {
-                        reporter.finalize();
-                    }
-                    resolve(severity);
-                }
-            });
-        });
+        // Attendre tous les rapporteurs.
+        return Promise.all(sweepers).then(() => severity);
     });
 };
 
@@ -158,23 +119,14 @@ try {
 
 const files = glob.walk(argv._, config.patterns, root);
 
-const results = check(files, config.checkers, root);
-
-print(results, config.reporters).then(function (severity) {
-    // Attendre que tous les textes soient écrits avant de retourner le status.
-    config.output.write("", function () {
-        let exit;
-        if (null === severity) {
-            exit = 0;
-        } else {
-            switch (severity) {
-                case SEVERITY.FATAL: exit = 2; break;
-                case SEVERITY.ERROR: exit = 1; break;
-                default:             exit = 0;
-            }
-        }
-        process.exit(exit);
-    });
+check(files, config.checkers, root, config.reporters).then(function (severity) {
+    let code;
+    switch (severity) {
+        case SEVERITY.FATAL: code = 2; break;
+        case SEVERITY.ERROR: code = 1; break;
+        default:             code = 0;
+    }
+    process.exit(code);
 }).catch(function (exc) {
     process.stderr.write("metalint: " + exc.message + "\n");
     process.stderr.write(exc.stack + "\n");

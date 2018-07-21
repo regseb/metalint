@@ -1,15 +1,15 @@
 "use strict";
 
-const assert   = require("assert");
-const streams  = require("memory-streams");
-const SEVERITY = require("../../../lib/severity");
-const Reporter = require("../../../lib/reporter/unix");
+const assert    = require("assert");
+const streams   = require("memory-streams");
+const SEVERITY  = require("../../../lib/severity");
+const Formatter = require("../../../lib/formatter/unix");
 
-describe("lib/reporter/unix.js", function () {
+describe("lib/formatter/unix.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.FATAL, writer);
+        const reporter = new Formatter(SEVERITY.FATAL, writer);
         reporter.notify("script.js", null);
         reporter.finalize();
 
@@ -19,7 +19,7 @@ describe("lib/reporter/unix.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.WARN, writer);
+        const reporter = new Formatter(SEVERITY.WARN, writer);
         reporter.notify("stylelint.json", []);
         reporter.finalize();
 
@@ -29,7 +29,7 @@ describe("lib/reporter/unix.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.INFO, writer);
+        const reporter = new Formatter(SEVERITY.INFO, writer);
         reporter.notify("un.html", [
             {
                 "linter":    "htmllint",
@@ -66,7 +66,7 @@ describe("lib/reporter/unix.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Reporter(SEVERITY.ERROR, writer);
+        const reporter = new Formatter(SEVERITY.ERROR, writer);
         reporter.notify("un.css", [
             {
                 "linter":    "csslint",
