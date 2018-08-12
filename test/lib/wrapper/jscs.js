@@ -4,7 +4,7 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity");
 const linter   = require("../../../lib/wrapper/jscs");
 
-const DATA_DIR = "../data/lib/wrapper/jscs";
+const DATA_DIR = "test/data/lib/wrapper/jscs";
 
 describe("lib/wrapper/jscs.js", function () {
     it("configure()", function () {

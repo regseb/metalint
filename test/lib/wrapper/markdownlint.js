@@ -4,7 +4,7 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity");
 const linter   = require("../../../lib/wrapper/markdownlint");
 
-const DATA_DIR = "../data/lib/wrapper/markdownlint";
+const DATA_DIR = "test/data/lib/wrapper/markdownlint";
 
 describe("lib/wrapper/markdownlint.js", function () {
     it("configure()", function () {

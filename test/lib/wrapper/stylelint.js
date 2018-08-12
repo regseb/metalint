@@ -4,7 +4,7 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity");
 const linter   = require("../../../lib/wrapper/stylelint");
 
-const DATA_DIR = "../data/lib/wrapper/stylelint";
+const DATA_DIR = "test/data/lib/wrapper/stylelint";
 
 describe("lib/wrapper/stylelint.js", function () {
     it("configure()", function () {

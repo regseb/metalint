@@ -4,7 +4,7 @@ const assert   = require("assert");
 const SEVERITY = require("../../lib/severity");
 const metalint = require("../../lib/index");
 
-const DATA_DIR = "../data/lib/index";
+const DATA_DIR = "test/data/lib/index";
 
 describe("lib/index.js", function () {
     it("", function () {
@@ -80,33 +80,49 @@ describe("lib/index.js", function () {
     });
 
     it("", function () {
-        const file     = DATA_DIR + "/README.md";
+        const files    = [DATA_DIR + "/README.md"];
         const checkers = [
             {
-                "linters": { "markdownlint": null },
-                "level":   SEVERITY.INFO
+                "patterns": ["**"],
+                "linters":  { "markdownlint": null },
+                "level":    SEVERITY.INFO
             }
         ];
 
-        return metalint(file, checkers).then(function (notices) {
-            const expected = [
-                {
-                    "linter":    "markdownlint",
-                    "rule":      "MD002/first-heading-h1/first-header-h1",
-                    "severity":  SEVERITY.ERROR,
-                    "message":   "First heading should be a top level heading" +
-                                 " [Expected: h1; Actual: h2]",
-                    "locations": [{ "line": 1 }]
-                }, {
-                    "linter":    "markdownlint",
-                    "rule":      "MD041/first-line-h1",
-                    "severity":  SEVERITY.ERROR,
-                    "message":   "First line in file should be a top level" +
-                                 " heading [Context: \"## README\"]",
-                    "locations": [{ "line": 1 }]
-                }
-            ];
-            assert.deepStrictEqual(notices, expected);
+        let count = 0;
+        return metalint(files, checkers, DATA_DIR, function (file, notices) {
+            const expected = {};
+            switch (count) {
+                case 0:
+                    expected.file = DATA_DIR + "/README.md";
+                    expected.notices = [
+                        {
+                            "linter":    "markdownlint",
+                            "rule":      "MD002/first-heading-h1" +
+                                                             "/first-header-h1",
+                            "severity":  SEVERITY.ERROR,
+                            "message":   "First heading should be a top level" +
+                                          " heading [Expected: h1; Actual: h2]",
+                            "locations": [{ "line": 1 }]
+                        }, {
+                            "linter":    "markdownlint",
+                            "rule":      "MD041/first-line-h1",
+                            "severity":  SEVERITY.ERROR,
+                            "message":   "First line in file should be a top" +
+                                                    " level heading [Context:" +
+                                                              " \"## README\"]",
+                            "locations": [{ "line": 1 }]
+                        }
+                    ];
+                    break;
+                default:
+                    assert.fail();
+            }
+            ++count;
+            assert.strictEqual(file, expected.file);
+            assert.deepStrictEqual(notices, expected.notices);
+        }).then(function (severity) {
+            assert.strictEqual(severity, SEVERITY.ERROR);
         });
     });
 });

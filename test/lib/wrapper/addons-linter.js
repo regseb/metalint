@@ -4,7 +4,7 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity");
 const linter   = require("../../../lib/wrapper/addons-linter");
 
-const DATA_DIR = "../data/lib/wrapper/addons-linter";
+const DATA_DIR = "test/data/lib/wrapper/addons-linter";
 
 describe("lib/wrapper/addons-linter.js", function () {
     it("configure()", function () {

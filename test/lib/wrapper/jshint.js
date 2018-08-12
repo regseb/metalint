@@ -4,7 +4,7 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity");
 const linter   = require("../../../lib/wrapper/jshint");
 
-const DATA_DIR = "../data/lib/wrapper/jshint";
+const DATA_DIR = "test/data/lib/wrapper/jshint";
 
 describe("lib/wrapper/jshint.js", function () {
     it("configure()", function () {

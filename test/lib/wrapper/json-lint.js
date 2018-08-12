@@ -4,7 +4,7 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity");
 const linter   = require("../../../lib/wrapper/json-lint");
 
-const DATA_DIR = "../data/lib/wrapper/json-lint";
+const DATA_DIR = "test/data/lib/wrapper/json-lint";
 
 describe("lib/wrapper/json-lint.js", function () {
     it("configure()", function () {

@@ -4,7 +4,7 @@ const assert   = require("assert");
 const SEVERITY = require("../../../lib/severity");
 const linter   = require("../../../lib/wrapper/david");
 
-const DATA_DIR = "../data/lib/wrapper/david";
+const DATA_DIR = "test/data/lib/wrapper/david";
 
 describe("lib/wrapper/david.js", function () {
     it("configure()", function () {
@@ -56,8 +56,7 @@ describe("lib/wrapper/david.js", function () {
                 "linter":    "david",
                 "rule":      null,
                 "severity":  SEVERITY.FATAL,
-                "message":   "Registry returned 404 for GET on" +
-                             " https://registry.npmjs.org/metalint-with-typo",
+                "message":   "Not found : metalint-with-typo",
                 "locations": []
             });
         });
