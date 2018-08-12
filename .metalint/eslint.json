@@ -1,10 +1,6 @@
 {
     "parserOptions": {
-        "ecmaVersion": 7,
-        "ecmaFeatures": {
-            "blockBindings": true,
-            "forOf": true
-        }
+        "ecmaVersion": 2018
     },
 
     "env": {
@@ -14,6 +10,8 @@
 
     "rules": {
         "for-direction": 2,
+        "getter-return": 2,
+        "no-async-promise-executor": 2,
         "no-await-in-loop": 2,
         "no-compare-neg-zero": 2,
         "no-cond-assign": 2,
@@ -33,7 +31,13 @@
         "no-func-assign": 2,
         "no-inner-declarations": [2, "both"],
         "no-invalid-regexp": 2,
-        "no-irregular-whitespace": 2,
+        "no-irregular-whitespace": [2, {
+            "skipStrings": false,
+            "skipComments": false,
+            "skipRegExps": false,
+            "skipTemplates": false
+        }],
+        "no-misleading-character-class": 2,
         "no-obj-calls": 2,
         "no-prototype-builtins": 2,
         "no-regex-spaces": 2,
@@ -43,6 +47,7 @@
         "no-unreachable": 2,
         "no-unsafe-finally": 2,
         "no-unsafe-negation": 2,
+        "require-atomic-updates": 2,
         "use-isnan": 2,
         "valid-jsdoc": [2, {
             "prefer": {
@@ -65,6 +70,7 @@
         "dot-notation": [2, { "allowKeywords": true, "allowPattern": "_" }],
         "eqeqeq": 2,
         "guard-for-in": 0,
+        "max-classes-per-file": 2,
         "no-alert": 2,
         "no-caller": 2,
         "no-case-declarations": 2,
@@ -119,6 +125,7 @@
         "prefer-promise-reject-errors": 2,
         "radix": 2,
         "require-await": 2,
+        "require-unicode-regexp": 2,
         "vars-on-top": 0,
         "wrap-iife": 0,
         "yoda": [2, "always"],
@@ -126,7 +133,6 @@
         "strict": [2, "global"],
 
         "init-declarations": 0,
-        "no-catch-shadow": 2,
         "no-delete-var": 2,
         "no-label-var": 0,
         "no-restricted-globals": 0,
@@ -169,7 +175,7 @@
         "consistent-this": 2,
         "eol-last": 2,
         "func-call-spacing": [2, "never"],
-        "func-name-matching": 2,
+        "func-name-matching": [2, { "considerPropertyDescriptor": true }],
         "func-names": 0,
         "func-style": 2,
         "id-blacklist": 0,
@@ -187,6 +193,9 @@
         "max-depth": [1, { "max": 5 }],
         "max-len": 1,
         "max-lines": [1, { "skipBlankLines": true, "skipComments": true }],
+        "max-lines-per-function": [1,
+            { "max": 100, "skipBlankLines": true, "skipComments": true }
+        ],
         "max-nested-callbacks": 1,
         "max-params": [1, { "max": 5 }],
         "max-statements": [1, { "max": 30 }],
@@ -197,7 +206,7 @@
         "new-parens": 2,
         "newline-per-chained-call": 0,
         "no-array-constructor": 2,
-        "no-bitwise": 2,
+        "no-bitwise": 0,
         "no-continue": 0,
         "no-inline-comments": 0,
         "no-lonely-if": 2,
@@ -223,7 +232,7 @@
         "no-unneeded-ternary": 2,
         "no-whitespace-before-property": 2,
         "nonblock-statement-body-position": 2,
-        "object-curly-newline": [2, { "consistent": true }],
+        "object-curly-newline": 2,
         "object-curly-spacing": [2, "always"],
         "object-property-newline": [2, {
             "allowAllPropertiesOnSameLine": true
@@ -232,11 +241,11 @@
         "one-var": [2, "never"],
         "operator-assignment": 2,
         "operator-linebreak": 2,
-        "padded-blocks": [2, { "blocks": "never",
-                               "switches": "never" }],
+        "padded-blocks": [2, { "blocks": "never", "switches": "never" }],
         "padding-line-between-statements": [2,
             { "blankLine": "always", "prev": "directive", "next": "*" }
         ],
+        "prefer-object-spread": 0,
         "quote-props": 2,
         "quotes": 2,
         "require-jsdoc": [2, {
