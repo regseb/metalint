@@ -35,7 +35,8 @@ ou des utilitaires selon le type de fichier :
 - Markdown :
   [MarkdownLint](https://regseb.github.io/metalint/user/linters/markdownlint/) ;
 - `package.json` (npm) :
-  [David DM](https://regseb.github.io/metalint/user/linters/david/).
+  [David DM](https://regseb.github.io/metalint/user/linters/david/) ;
+- YAML : [YAML Lint](https://regseb.github.io/metalint/user/linters/yaml-lint).
 
 ## Installation
 
