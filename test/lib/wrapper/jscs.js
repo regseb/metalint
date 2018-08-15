@@ -51,11 +51,11 @@ describe("lib/wrapper/jscs.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "jscs",
                     "rule":      "disallowMultipleLineStrings",
-                    "severity":  SEVERITY.ERROR,
                     "message":   "Multiline strings are disallowed.",
-                    "locations": [{ "line": 2, "column": 4 }]
+                    "locations": [{ "line": 2, "column": 5 }]
                 }
             ]);
         });
@@ -79,11 +79,11 @@ describe("lib/wrapper/jscs.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "jscs",
                     "rule":      "parseError",
-                    "severity":  SEVERITY.ERROR,
                     "message":   "Unterminated string constant (1:1)",
-                    "locations": [{ "line": 1, "column": 1 }]
+                    "locations": [{ "line": 1, "column": 2 }]
                 }
             ]);
         });

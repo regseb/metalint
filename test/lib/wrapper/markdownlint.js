@@ -41,9 +41,9 @@ describe("lib/wrapper/markdownlint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "markdownlint",
                     "rule":      "MD029/ol-prefix",
-                    "severity":  SEVERITY.ERROR,
                     "message":   "Ordered list item prefix [Expected: 2;" +
                                  " Actual: 3; Style: 1/2/3]",
                     "locations": [{ "line": 4 }]
@@ -70,9 +70,9 @@ describe("lib/wrapper/markdownlint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "markdownlint",
                     "rule":      "MD026/no-trailing-punctuation",
-                    "severity":  SEVERITY.ERROR,
                     "message":   "Trailing punctuation in heading" +
                                  " [Punctuation: '!']",
                     "locations": [{ "line": 1 }]

@@ -41,9 +41,9 @@ describe("lib/wrapper/htmllint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "htmllint",
                     "rule":      "attr-name-style",
-                    "severity":  SEVERITY.ERROR,
                     "message":   "E002",
                     "locations": [{ "line": 2, "column": 8 }]
                 }
@@ -69,9 +69,9 @@ describe("lib/wrapper/htmllint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "htmllint",
                     "rule":      "attr-quote-style",
-                    "severity":  SEVERITY.ERROR,
                     "message":   "E005",
                     "locations": [{ "line": 1, "column": 13 }]
                 }

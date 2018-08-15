@@ -22,16 +22,16 @@ describe("lib/wrapper/standard.js", function () {
         return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "standard",
                     "rule":      "no-unused-vars",
-                    "severity":  SEVERITY.ERROR,
                     "message":   "'text' is assigned a value but never" +
                                  " used.",
                     "locations": [{ "line": 1, "column": 5 }]
                 }, {
+                    "file":      file,
                     "linter":    "standard",
                     "rule":      "quotes",
-                    "severity":  SEVERITY.ERROR,
                     "message":   "Strings must use singlequote.",
                     "locations": [{ "line": 1, "column": 12 }]
                 }

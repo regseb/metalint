@@ -65,6 +65,7 @@ describe("lib/wrapper/stylelint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "stylelint",
                     "rule":      "number-leading-zero",
                     "severity":  SEVERITY.WARN,
@@ -88,6 +89,7 @@ describe("lib/wrapper/stylelint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "stylelint",
                     "rule":      "string-quotes",
                     "severity":  SEVERITY.ERROR,
@@ -116,6 +118,7 @@ describe("lib/wrapper/stylelint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "stylelint",
                     "rule":      "unit-no-unknown",
                     "severity":  SEVERITY.ERROR,

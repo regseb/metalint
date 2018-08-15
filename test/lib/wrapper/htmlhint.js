@@ -51,6 +51,7 @@ describe("lib/wrapper/htmlhint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "htmlhint",
                     "rule":      "doctype-first",
                     "severity":  SEVERITY.ERROR,

@@ -33,7 +33,7 @@ ou des utilitaires selon le type de fichier :
   [JavaScript Standard
    Style](https://regseb.github.io/metalint/user/linters/standard) ;
 - JSON : [JSON-Lint](https://regseb.github.io/metalint/user/linters/json-lint/)
-  et [JSONLint](https://regseb.github.io/metalint/user/linters/jsonlint/) ;
+  et [JSON Lint](https://regseb.github.io/metalint/user/linters/jsonlint/) ;
 - Markdown :
   [MarkdownLint](https://regseb.github.io/metalint/user/linters/markdownlint/) ;
 - `package.json` (npm) :

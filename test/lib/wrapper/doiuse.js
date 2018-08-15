@@ -23,9 +23,9 @@ describe("lib/wrapper/doiuse.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "doiuse",
                     "rule":      "border-radius",
-                    "severity":  SEVERITY.ERROR,
                     "message":   "CSS3 Border-radius (rounded corners) not" +
                                  " supported by: Opera Mini (all)",
                     "locations": [{ "line": 2, "column": 1 }]
@@ -42,9 +42,9 @@ describe("lib/wrapper/doiuse.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "doiuse",
                     "rule":      "background-img-opts",
-                    "severity":  SEVERITY.ERROR,
                     "message":   "CSS3 Background-image options only" +
                                  " partially supported by: Opera Mini (all)",
                     "locations": [{ "line": 2, "column": 1 }]

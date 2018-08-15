@@ -51,12 +51,14 @@ describe("lib/wrapper/lesshint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "lesshint",
                     "rule":      "propertyOrdering",
                     "severity":  SEVERITY.WARN,
                     "message":   "Property ordering is not alphabetized",
                     "locations": [{ "line": 3, "column": 5 }]
                 }, {
+                    "file":      file,
                     "linter":    "lesshint",
                     "rule":      "urlQuotes",
                     "severity":  SEVERITY.ERROR,
@@ -75,6 +77,7 @@ describe("lib/wrapper/lesshint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "lesshint",
                     "rule":      "parseError",
                     "severity":  SEVERITY.FATAL,

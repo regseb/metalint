@@ -41,9 +41,8 @@ describe("lib/wrapper/yaml-lint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "yaml-lint",
-                    "rule":      null,
-                    "severity":  SEVERITY.ERROR,
                     "message":   "incomplete explicit mapping pair; a key" +
                                  " node is missed; or followed by a" +
                                  " non-tabulated empty line",

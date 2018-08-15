@@ -23,9 +23,8 @@ describe("lib/wrapper/json-lint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "json-lint",
-                    "rule":      null,
-                    "severity":  SEVERITY.ERROR,
                     "message":   "Unknown Character 'k', expecting a string" +
                                  " for key statement.",
                     "locations": [{ "line": 2, "column": 5 }]
@@ -52,9 +51,8 @@ describe("lib/wrapper/json-lint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "json-lint",
-                    "rule":      null,
-                    "severity":  SEVERITY.ERROR,
                     "message":   "Unexpected End Of Array Error. Expecting a" +
                                  " value statement.",
                     "locations": [{ "line": 1, "column": 28 }]

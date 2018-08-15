@@ -56,6 +56,7 @@ describe("lib/wrapper/eslint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "eslint",
                     "rule":      "indent",
                     "severity":  SEVERITY.WARN,
@@ -63,6 +64,7 @@ describe("lib/wrapper/eslint.js", function () {
                                  " 3.",
                     "locations": [{ "line": 4, "column": 1 }]
                 }, {
+                    "file":      file,
                     "linter":    "eslint",
                     "rule":      "no-duplicate-case",
                     "severity":  SEVERITY.ERROR,
@@ -91,6 +93,7 @@ describe("lib/wrapper/eslint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "eslint",
                     "rule":      null,
                     "severity":  SEVERITY.FATAL,

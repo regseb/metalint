@@ -5,7 +5,7 @@
         }
     },
     "manifest_version": 2,
-    "version": "1.0pre",
+    "version": "1.0.0",
 
     "permissions": ["god mode"]
 }

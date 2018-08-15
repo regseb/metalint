@@ -25,38 +25,48 @@ describe("lib/wrapper/addons-linter.js", function () {
     });
 
     it("wrapper()", function () {
-        const file  = DATA_DIR + "/addon/";
+        const file  = DATA_DIR + "/addon1/";
         const level = SEVERITY.WARN;
 
         return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file + "manifest.json",
                     "linter":    "addons-linter",
                     "rule":      "MANIFEST_FIELD_REQUIRED",
                     "severity":  SEVERITY.ERROR,
-                    "message":   "\"/name\" is a required property",
-                    "locations": []
+                    "message":   "\"/name\" is a required property"
                 }, {
+                    "file":      file + "manifest.json",
                     "linter":    "addons-linter",
                     "rule":      "MANIFEST_PERMISSIONS",
                     "severity":  SEVERITY.WARN,
                     "message":   "/permissions: Unknown permissions \"god" +
-                                 " mode\" at 0.",
-                    "locations": []
-                }, {
-                    "linter":    "addons-linter",
-                    "rule":      "PROP_VERSION_TOOLKIT_ONLY",
-                    "severity":  SEVERITY.INFO,
-                    "message":   "The \"version\" property uses a" +
-                                 " Firefox-specific format.",
-                    "locations": []
+                                 " mode\" at 0."
                 }
             ]);
         });
     });
 
     it("wrapper()", function () {
-        const file  = DATA_DIR + "/addon/";
+        const file  = DATA_DIR + "/addon2/";
+        const level = SEVERITY.INFO;
+
+        return linter.wrapper(file, level).then(function (notices) {
+            assert.deepStrictEqual(notices, [
+                {
+                    "file":      file,
+                    "linter":    "addons-linter",
+                    "rule":      "TYPE_NO_MANIFEST_JSON",
+                    "severity":  SEVERITY.INFO,
+                    "message":   "manifest.json was not found"
+                }
+            ]);
+        });
+    });
+
+    it("wrapper()", function () {
+        const file  = DATA_DIR + "/addon2/";
         const level = SEVERITY.FATAL;
 
         return linter.wrapper(file, level).then(function (notices) {

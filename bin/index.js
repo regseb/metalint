@@ -58,11 +58,24 @@ const argv = yargs.options({
  * @returns {Promise.<number>} La sévérité la plus élévée des résultats.
  */
 const check = function (files, checkers, root, reporters) {
-    return metalint(files, checkers, root, function (file, notices) {
-        for (const reporter of reporters) {
-            reporter.notify(file, notices);
+    return metalint(files, checkers, root).then(function (results) {
+        let severity = null;
+        for (const [file, notices] of Object.entries(results)) {
+            // Déterminer la sévérité la plus élévée des résultats.
+            if (null !== notices) {
+                for (const notice of notices) {
+                    if (null === severity || severity > notice.severity) {
+                        severity = notice.severity;
+                    }
+                }
+            }
+
+            // Afficher les notifications avec chaque rapporteur.
+            for (const reporter of reporters) {
+                reporter.notify(file, notices);
+            }
         }
-    }).then(function (severity) {
+
         const sweepers = [];
         for (const reporter of reporters) {
             reporter.finalize(severity);

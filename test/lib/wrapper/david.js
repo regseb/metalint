@@ -22,13 +22,14 @@ describe("lib/wrapper/david.js", function () {
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.strictEqual(notices.length, 1);
+            assert.strictEqual(notices[0].file, file);
             assert.strictEqual(notices[0].linter, "david");
-            assert.strictEqual(notices[0].rule, null);
+            assert.ok(!("rule" in notices[0]));
             assert.strictEqual(notices[0].severity, SEVERITY.ERROR);
             assert.ok(notices[0].message.startsWith("New stable version "));
             assert.ok(notices[0].message.endsWith(" is released to" +
                                                   " dependencies 'npm'."));
-            assert.deepStrictEqual(notices[0].locations, []);
+            assert.ok(!("locations" in notices[0]));
         });
     });
 
@@ -44,20 +45,20 @@ describe("lib/wrapper/david.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.strictEqual(notices.length, 2);
 
+            assert.strictEqual(notices[0].file, file);
             assert.strictEqual(notices[0].linter, "david");
-            assert.strictEqual(notices[0].rule, null);
+            assert.ok(!("rule" in notices[0]));
             assert.strictEqual(notices[0].severity, SEVERITY.ERROR);
             assert.ok(notices[0].message.startsWith("New stable version "));
             assert.ok(notices[0].message.endsWith(" is released to" +
                                                   " dependencies 'npm'."));
-            assert.deepStrictEqual(notices[0].locations, []);
+            assert.ok(!("locations" in notices[0]));
 
             assert.deepStrictEqual(notices[1], {
-                "linter":    "david",
-                "rule":      null,
-                "severity":  SEVERITY.FATAL,
-                "message":   "Not found : metalint-with-typo",
-                "locations": []
+                "file":     file,
+                "linter":   "david",
+                "severity": SEVERITY.FATAL,
+                "message":  "Not found : metalint-with-typo"
             });
         });
     });
@@ -74,21 +75,23 @@ describe("lib/wrapper/david.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.strictEqual(notices.length, 2);
 
+            assert.strictEqual(notices[0].file, file);
             assert.strictEqual(notices[0].linter, "david");
-            assert.strictEqual(notices[0].rule, null);
+            assert.ok(!("rule" in notices[0]));
             assert.strictEqual(notices[0].severity, SEVERITY.ERROR);
             assert.ok(notices[0].message.startsWith("New stable version "));
             assert.ok(notices[0].message.endsWith(" is released to" +
                                                   " dependencies 'npm'."));
-            assert.deepStrictEqual(notices[0].locations, []);
+            assert.ok(!("locations" in notices[0]));
 
+            assert.strictEqual(notices[1].file, file);
             assert.strictEqual(notices[1].linter, "david");
-            assert.strictEqual(notices[1].rule, null);
+            assert.ok(!("rule" in notices[1]));
             assert.strictEqual(notices[1].severity, SEVERITY.ERROR);
             assert.ok(notices[1].message.startsWith("New stable version "));
             assert.ok(notices[1].message.endsWith(" is released to" +
                                                   " devDependencies 'npx'."));
-            assert.deepStrictEqual(notices[1].locations, []);
+            assert.ok(!("locations" in notices[1]));
         });
     });
 
@@ -104,21 +107,23 @@ describe("lib/wrapper/david.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.strictEqual(notices.length, 2);
 
+            assert.strictEqual(notices[0].file, file);
             assert.strictEqual(notices[0].linter, "david");
-            assert.strictEqual(notices[0].rule, null);
+            assert.ok(!("rule" in notices[0]));
             assert.strictEqual(notices[0].severity, SEVERITY.ERROR);
             assert.ok(notices[0].message.startsWith("New stable version "));
             assert.ok(notices[0].message.endsWith(" is released to" +
                                                   " dependencies 'npm'."));
-            assert.deepStrictEqual(notices[0].locations, []);
+            assert.ok(!("locations" in notices[0]));
 
+            assert.strictEqual(notices[1].file, file);
             assert.strictEqual(notices[1].linter, "david");
-            assert.strictEqual(notices[1].rule, null);
+            assert.ok(!("rule" in notices[1]));
             assert.strictEqual(notices[1].severity, SEVERITY.ERROR);
             assert.ok(notices[1].message.startsWith("New stable version "));
             assert.ok(notices[1].message.endsWith(" is released to" +
                                                   " devDependencies 'npx'."));
-            assert.deepStrictEqual(notices[1].locations, []);
+            assert.ok(!("locations" in notices[1]));
         });
     });
 

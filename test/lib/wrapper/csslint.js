@@ -61,6 +61,7 @@ describe("lib/wrapper/csslint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "csslint",
                     "rule":      "empty-rules",
                     "severity":  SEVERITY.WARN,
@@ -79,6 +80,7 @@ describe("lib/wrapper/csslint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "csslint",
                     "rule":      "ids",
                     "severity":  SEVERITY.ERROR,

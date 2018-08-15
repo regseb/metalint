@@ -35,12 +35,13 @@ describe("lib/wrapper/jshint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script1.js";
-        const level   = SEVERITY.ERROR;
+        const level   = SEVERITY.WARN;
         const options = null;
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "jshint",
                     "rule":      "W061",
                     "severity":  SEVERITY.WARN,
@@ -63,12 +64,13 @@ describe("lib/wrapper/jshint.js", function () {
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script3.js";
-        const level   = SEVERITY.ERROR;
+        const level   = SEVERITY.WARN;
         const options = { "eqeqeq": true };
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "jshint",
                     "rule":      "W116",
                     "severity":  SEVERITY.WARN,
@@ -97,12 +99,14 @@ describe("lib/wrapper/jshint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "jshint",
                     "rule":      "W072",
                     "severity":  SEVERITY.WARN,
                     "message":   "This function has too many parameters. (2)",
                     "locations": [{ "line": 1, "column": 13 }]
                 }, {
+                    "file":      file,
                     "linter":    "jshint",
                     "rule":      "E043",
                     "severity":  SEVERITY.ERROR,

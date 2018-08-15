@@ -22,9 +22,8 @@ describe("lib/wrapper/jsonlint.js", function () {
         return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "jsonlint",
-                    "rule":      null,
-                    "severity":  SEVERITY.ERROR,
                     "message":   "Expecting 'EOF', '}', ',', ']', got" +
                                  " 'STRING'",
                     "locations": [{ "line": 3 }]
@@ -49,9 +48,8 @@ describe("lib/wrapper/jsonlint.js", function () {
         return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
+                    "file":      file,
                     "linter":    "jsonlint",
-                    "rule":      null,
-                    "severity":  SEVERITY.ERROR,
                     "message":   "Expecting 'STRING', 'NUMBER', 'NULL'," +
                                  " 'TRUE', 'FALSE', '{', '[', got 'undefined'",
                     "locations": [{ "line": 2 }]

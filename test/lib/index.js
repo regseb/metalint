@@ -16,66 +16,51 @@ describe("lib/index.js", function () {
             {
                 "patterns": ["*.js"],
                 "linters":  {
-                    "jshint": null,
-                    "jscs":   {
+                    "./wrapper/jshint.js": null,
+                    "./wrapper/jscs.js":   {
                         "disallowFunctionDeclarations": true,
                         "validateQuoteMarks":           "\""
                     }
                 },
-                "level":    SEVERITY.ERROR
+                "level":    SEVERITY.WARN
             }, {
                 "patterns": ["*.html"],
                 "linters":  {
-                    "htmlhint": { "tagname-lowercase": true }
+                    "./wrapper/htmlhint.js": { "tagname-lowercase": true }
                 },
                 "level":    SEVERITY.FATAL
             }
         ];
 
-        let count = 0;
-        return metalint(files, checkers, DATA_DIR, function (file, notices) {
-            const expected = {};
-            switch (count) {
-                case 0:
-                    expected.file = DATA_DIR + "/index.html";
-                    expected.notices = [];
-                    break;
-                case 1:
-                    expected.file = DATA_DIR + "/README.md";
-                    expected.notices = null;
-                    break;
-                case 2:
-                    expected.file = DATA_DIR + "/script.js";
-                    expected.notices = [
-                        {
-                            "linter":    "jscs",
-                            "rule":      "disallowFunctionDeclarations",
-                            "severity":  SEVERITY.ERROR,
-                            "message":   "Illegal function declaration",
-                            "locations": [{ "line": 1, "column": 0 }]
-                        }, {
-                            "linter":    "jscs",
-                            "rule":      "validateQuoteMarks",
-                            "severity":  SEVERITY.ERROR,
-                            "message":   "Invalid quote mark found",
-                            "locations": [{ "line": 2, "column": 10 }]
-                        }, {
-                            "linter":    "jshint",
-                            "rule":      "W033",
-                            "severity":  SEVERITY.WARN,
-                            "message":   "Missing semicolon.",
-                            "locations": [{ "line": 2, "column": 26 }]
-                        }
-                    ];
-                    break;
-                default:
-                    assert.fail();
-            }
-            ++count;
-            assert.strictEqual(file, expected.file);
-            assert.deepStrictEqual(notices, expected.notices);
-        }).then(function (severity) {
-            assert.strictEqual(severity, SEVERITY.ERROR);
+        return metalint(files, checkers, DATA_DIR).then(function (results) {
+            assert.deepStrictEqual(results, {
+                [DATA_DIR + "/index.html"]: [],
+                [DATA_DIR + "/README.md"]:  null,
+                [DATA_DIR + "/script.js"]:  [
+                    {
+                        "file":      DATA_DIR + "/script.js",
+                        "linter":    "jscs",
+                        "rule":      "disallowFunctionDeclarations",
+                        "severity":  SEVERITY.ERROR,
+                        "message":   "Illegal function declaration",
+                        "locations": [{ "line": 1, "column": 1 }]
+                    }, {
+                        "file":      DATA_DIR + "/script.js",
+                        "linter":    "jscs",
+                        "rule":      "validateQuoteMarks",
+                        "severity":  SEVERITY.ERROR,
+                        "message":   "Invalid quote mark found",
+                        "locations": [{ "line": 2, "column": 11 }]
+                    }, {
+                        "file":      DATA_DIR + "/script.js",
+                        "linter":    "jshint",
+                        "rule":      "W033",
+                        "severity":  SEVERITY.WARN,
+                        "message":   "Missing semicolon.",
+                        "locations": [{ "line": 2, "column": 26 }]
+                    }
+                ]
+            });
         });
     });
 
@@ -84,45 +69,33 @@ describe("lib/index.js", function () {
         const checkers = [
             {
                 "patterns": ["**"],
-                "linters":  { "markdownlint": null },
+                "linters":  { "./wrapper/markdownlint.js": null },
                 "level":    SEVERITY.INFO
             }
         ];
 
-        let count = 0;
-        return metalint(files, checkers, DATA_DIR, function (file, notices) {
-            const expected = {};
-            switch (count) {
-                case 0:
-                    expected.file = DATA_DIR + "/README.md";
-                    expected.notices = [
-                        {
-                            "linter":    "markdownlint",
-                            "rule":      "MD002/first-heading-h1" +
-                                                             "/first-header-h1",
-                            "severity":  SEVERITY.ERROR,
-                            "message":   "First heading should be a top level" +
+        return metalint(files, checkers, DATA_DIR).then(function (results) {
+            assert.deepStrictEqual(results, {
+                [DATA_DIR + "/README.md"]: [
+                    {
+                        "file":      DATA_DIR + "/README.md",
+                        "linter":    "markdownlint",
+                        "rule":      "MD002/first-heading-h1/first-header-h1",
+                        "severity":  SEVERITY.ERROR,
+                        "message":   "First heading should be a top level" +
                                           " heading [Expected: h1; Actual: h2]",
-                            "locations": [{ "line": 1 }]
-                        }, {
-                            "linter":    "markdownlint",
-                            "rule":      "MD041/first-line-h1",
-                            "severity":  SEVERITY.ERROR,
-                            "message":   "First line in file should be a top" +
-                                                    " level heading [Context:" +
-                                                              " \"## README\"]",
-                            "locations": [{ "line": 1 }]
-                        }
-                    ];
-                    break;
-                default:
-                    assert.fail();
-            }
-            ++count;
-            assert.strictEqual(file, expected.file);
-            assert.deepStrictEqual(notices, expected.notices);
-        }).then(function (severity) {
-            assert.strictEqual(severity, SEVERITY.ERROR);
+                        "locations": [{ "line": 1 }]
+                    }, {
+                        "file":      DATA_DIR + "/README.md",
+                        "linter":    "markdownlint",
+                        "rule":      "MD041/first-line-h1",
+                        "severity":  SEVERITY.ERROR,
+                        "message":   "First line in file should be a top" +
+                                      " level heading [Context: \"## README\"]",
+                        "locations": [{ "line": 1 }]
+                    }
+                ]
+            });
         });
     });
 });
