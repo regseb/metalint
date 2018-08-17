@@ -19,10 +19,11 @@ ou des utilitaires selon le type de fichier :
 - Add-on de Firefox :
   [Add-ons
    Linter](https://regseb.github.io/metalint/user/linters/addons-linter/) ;
-- CSS / Less :
+- CSS (SCSS, Sass, Less) :
   [CSSLint](https://regseb.github.io/metalint/user/linters/csslint/),
   [doiuse](https://regseb.github.io/metalint/user/linters/doiuse/),
-  [lesshint](https://regseb.github.io/metalint/user/linters/lesshint/) et
+  [lesshint](https://regseb.github.io/metalint/user/linters/lesshint/),
+  [Purgecss](https://regseb.github.io/metalint/user/linters/purgecss/) et
   [stylelint](https://regseb.github.io/metalint/user/linters/stylelint/) ;
 - HTML : [HTMLHint](https://regseb.github.io/metalint/user/linters/htmlhint/) et
   [htmllint](https://regseb.github.io/metalint/user/linters/htmllint/) ;
