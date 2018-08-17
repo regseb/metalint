@@ -5,7 +5,7 @@ const path      = require("path");
 const normalize = require("../../lib/normalize");
 const SEVERITY  = require("../../lib/severity");
 const Console   = require("../../lib/formatter/console");
-const Csv       = require("../../lib/formatter/csv");
+const Unix      = require("../../lib/formatter/unix");
 const French    = require("../data/formatter/french");
 
 describe("lib/normalize.js", function () {
@@ -26,7 +26,7 @@ describe("lib/normalize.js", function () {
                     "patterns": ["**"],
                     "level":    SEVERITY.INFO,
                     "linters":  {
-                        "eslint": {}
+                        "./wrapper/eslint.js": {}
                     }
                 }
             ]
@@ -38,7 +38,7 @@ describe("lib/normalize.js", function () {
             "patterns":  "**.js",
             "level":     "Error",
             "reporters": {
-                "formatter": "CSV",
+                "formatter": "unix",
                 "output":    null
             },
             "checkers":  [
@@ -67,21 +67,21 @@ describe("lib/normalize.js", function () {
         assert.deepStrictEqual(standard, {
             "patterns":  ["**.js"],
             "level":     SEVERITY.ERROR,
-            "reporters": [
-                new Csv(SEVERITY.ERROR, process.stdout)
-            ],
+            "reporters": [new Unix(SEVERITY.ERROR, process.stdout)],
             "checkers":  [
                 {
                     "patterns": ["**"],
                     "level":    SEVERITY.ERROR,
                     "linters":  {
-                        "markdownlint": { "MD035": { "style": "---" } }
+                        "./wrapper/markdownlint.js": {
+                            "MD035": { "style": "---" }
+                        }
                     }
                 }, {
                     "patterns": ["!**.min.js", "**"],
                     "level":    SEVERITY.ERROR,
                     "linters":  {
-                        "eslint": {
+                        "./wrapper/eslint.js": {
                             "rules": { "no-empty": 2, "curly": 1, "no-var": 2 }
                         }
                     }
@@ -89,13 +89,15 @@ describe("lib/normalize.js", function () {
                     "patterns": ["**"],
                     "level":    SEVERITY.ERROR,
                     "linters":  {
-                        "htmlhint": { "tagname-lowercase": true },
-                        "htmllint": { "doctype-html5": true }
+                        "./wrapper/htmlhint.js": { "tagname-lowercase": true },
+                        "./wrapper/htmllint.js": { "doctype-html5": true }
                     }
                 }, {
                     "patterns": ["**"],
                     "level":    SEVERITY.ERROR,
-                    "linters":  { "csslint": { "empty-rules": true } }
+                    "linters":  {
+                        "./wrapper/csslint.js": { "empty-rules": true }
+                    }
                 }
             ]
         });
@@ -125,7 +127,7 @@ describe("lib/normalize.js", function () {
     it("", function () {
         const rotten = {
             "reporters": {
-                "formatter": "formatter/french"
+                "formatter": "./formatter/french"
             },
             "checkers":  [{ "linters": { "eslint": {} } }]
         };
@@ -142,7 +144,7 @@ describe("lib/normalize.js", function () {
                     "patterns": ["**"],
                     "level":    SEVERITY.INFO,
                     "linters":  {
-                        "eslint": {}
+                        "./wrapper/eslint.js": {}
                     }
                 }
             ]
