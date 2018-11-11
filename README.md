@@ -19,6 +19,8 @@ ou des utilitaires selon le type de fichier :
 - Add-on de Firefox (WebExtension) :
   [Add-ons
    Linter](https://regseb.github.io/metalint/user/linters/addons-linter/) ;
+- CoffeeScript :
+  [CoffeeLint](https://regseb.github.io/metalint/user/linters/coffeelint) ;
 - CSS (SCSS, Sass, Less) :
   [CSSLint](https://regseb.github.io/metalint/user/linters/csslint/),
   [doiuse](https://regseb.github.io/metalint/user/linters/doiuse/),
