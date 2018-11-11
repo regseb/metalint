@@ -1,6 +1,9 @@
 {
+
+    "plugins": ["promise"],
+
     "parserOptions": {
-        "ecmaVersion": 2018
+        "ecmaVersion": 2019
     },
 
     "env": {
@@ -330,6 +333,19 @@
         "sort-imports": 0,
         "symbol-description": 2,
         "template-curly-spacing": 2,
-        "yield-star-spacing": 2
+        "yield-star-spacing": 2,
+
+        "promise/always-return": 0,
+        "promise/no-return-wrap": 2,
+        "promise/param-names": 2,
+        "promise/catch-or-return": 2,
+        "promise/no-native": 0,
+        "promise/no-nesting": 0,
+        "promise/no-promise-in-callback": 2,
+        "promise/no-callback-in-promise": 2,
+        "promise/avoid-new": 0,
+        "promise/no-new-statics": 2,
+        "promise/no-return-in-finally": 2,
+        "promise/valid-params": 2
     }
 }
