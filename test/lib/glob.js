@@ -4,13 +4,14 @@ const assert = require("assert");
 const glob   = require("../../lib/glob");
 
 describe("lib/glob.js", function () {
-    const cwd = process.cwd();
+    let cwd;
 
-    beforeEach(function () {
+    before(function () {
+        cwd = process.cwd();
         process.chdir(__dirname);
     });
 
-    afterEach(function () {
+    after(function () {
         process.chdir(cwd);
     });
 

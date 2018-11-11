@@ -55,7 +55,7 @@ describe("lib/wrapper/lesshint.js", function () {
                     "linter":    "lesshint",
                     "rule":      "propertyOrdering",
                     "severity":  SEVERITY.WARN,
-                    "message":   "Property ordering is not alphabetized",
+                    "message":   "\"color\" should be before \"width\"",
                     "locations": [{ "line": 3, "column": 5 }]
                 }, {
                     "file":      file,
