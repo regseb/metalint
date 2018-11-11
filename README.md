@@ -41,6 +41,7 @@ ou des utilitaires selon le type de fichier :
   [MarkdownLint](https://regseb.github.io/metalint/user/linters/markdownlint/) ;
 - `package.json` (npm) :
   [David DM](https://regseb.github.io/metalint/user/linters/david/) ;
+- TypeScript : [TSLint](https://regseb.github.io/metalint/user/linters/tslint) ;
 - YAML : [YAML Lint](https://regseb.github.io/metalint/user/linters/yaml-lint).
 
 ## Installation
