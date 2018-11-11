@@ -16,7 +16,7 @@
 L’analyse est déléguée à des linters (outils d’analyse statique de code source)
 ou des utilitaires selon le type de fichier :
 
-- Add-on de Firefox :
+- Add-on de Firefox (WebExtension) :
   [Add-ons
    Linter](https://regseb.github.io/metalint/user/linters/addons-linter/) ;
 - CSS (SCSS, Sass, Less) :
