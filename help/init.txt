@@ -1,9 +1,8 @@
-Utilisation : metalint [OPTION]... [FICHIER]...
-Analyser les FICHIERs (ou le répertoire courant par défaut) avec des linters.
+Utilisation : metalint init [OPTION]...
+Initialiser la configuration Metalint du projet.
 
 Les arguments obligatoires pour les options longues le sont aussi pour les
 options courtes.
-  -c, --config=CONFIG        spécifier l’emplacement du fichier de configuration
   -f, --formatter=FORMATTER  définir le formateur utilisé pour afficher les
                                résultats
   -l, --level=NIVEAU         définir le niveau de sévérité global
@@ -12,7 +11,6 @@ options courtes.
   -p, --patterns=PATRONS     spécifier les patrons pour filtrer les fichiers qui
                                seront analysés
       --help     afficher l’aide et quitter
-      --version  afficher des informations de version et quitter
 
 L'argument NIVEAU peut avoir comme valeur : off, fatal, error, warn ou info.
 

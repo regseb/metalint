@@ -10,14 +10,6 @@ const normalize = require("../lib/normalize");
 const metalint  = require("../lib/index");
 const SEVERITY  = require("../lib/severity");
 
-// TODO Ajouter l'option --formatter pour surcharger le formateur du premier
-//      rapporteur et désactiver les autres.
-// TODO Ajouter l'option --output pour surcharger le fichier de sortie du
-//      premier rapporteur et désactiver les autres.
-// TODO Ajouter l'option --fix (et dans la configuration) pour corriger
-//      certaines erreurs.
-// TODO Ajouter une option (et dans la configuration) pour analyser seulement
-//      les modifications (git status).
 const argv = yargs.options({
     "c": {
         "alias":       "config",
@@ -25,8 +17,18 @@ const argv = yargs.options({
         "requiresArg": true,
         "type":        "string"
     },
+    "f": {
+        "alias":       "formatter",
+        "requiresArg": true,
+        "type":        "string"
+    },
     "l": {
         "alias":       "level",
+        "requiresArg": true,
+        "type":        "string"
+    },
+    "o": {
+        "alias":       "output",
         "requiresArg": true,
         "type":        "string"
     },
@@ -76,14 +78,13 @@ const check = function (files, checkers, root, reporters) {
             }
         }
 
-        const sweepers = [];
-        for (const reporter of reporters) {
+        const sweepers = reporters.map(function (reporter) {
             reporter.finalize(severity);
             // Attendre que les textes soient écrits.
-            sweepers.push(new Promise(function (resolve) {
+            return new Promise(function (resolve) {
                 reporter.writer.write("", resolve);
-            }));
-        }
+            });
+        });
         // Attendre tous les rapporteurs.
         return Promise.all(sweepers).then(() => severity);
     });
@@ -115,16 +116,10 @@ while (!fs.existsSync(path.join(root, argv.config))) {
 }
 
 let config = JSON.parse(fs.readFileSync(path.join(root, argv.config), "utf-8"));
-// Surcharger les données du fichier de configuration par les paramètres de la
-// ligne de commande.
-for (const key of ["level", "patterns"]) {
-    if (undefined !== argv[key]) {
-        config[key] = argv[key];
-    }
-}
 try {
     config = normalize(config, root,
-                       path.dirname(path.join(root, argv.config)));
+                       path.dirname(path.join(root, argv.config)),
+                       argv);
 } catch (exc) {
     process.stderr.write("metalint: " + exc.message);
     process.exit(11);

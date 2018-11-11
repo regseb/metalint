@@ -7,17 +7,19 @@ const path  = require("path");
 const log   = require("npmlog");
 const yargs = require("yargs");
 
-// TODO Ajouter l'option --help qui affiche l'aide.
-// TODO Ajouter l'option --version qui affiche le numéro de version.
-// TODO Ajouter l'option --formatter pour pré-remplir le formateur du
-//      rapporteur.
-// TODO Ajouter l'option --output pour pré-remplir le fichier de sortie du
-//      rapporteur.
-// TODO Ajouter l'option --linter pour installer un linter et ajouter une
-//      configuration par défaut.
 const argv = yargs.options({
+    "f": {
+        "alias":       "formatter",
+        "requiresArg": true,
+        "type":        "string"
+    },
     "l": {
         "alias":       "level",
+        "requiresArg": true,
+        "type":        "string"
+    },
+    "o": {
+        "alias":       "output",
         "requiresArg": true,
         "type":        "string"
     },
@@ -25,8 +27,18 @@ const argv = yargs.options({
         "alias":       "patterns",
         "requiresArg": true,
         "type":        "array"
+    },
+    "help": {
+        "alias": "help",
+        "type":  "boolean"
     }
 }).help(false).version(false).parse();
+
+if (argv.help) {
+    process.stdout.write(fs.readFileSync(path.join(__dirname,
+                                                   "/../help/init.txt")));
+    process.exit(0);
+}
 
 if (!fs.existsSync("package.json")) {
     log.error("metalint", "package.json non-trouvé.");
@@ -51,6 +63,16 @@ for (const key of ["level", "patterns"]) {
     if (undefined !== argv[key]) {
         config[key] = argv[key];
     }
+}
+if ("formatter" in argv || "output" in argv) {
+    const reporter = {};
+    if ("formatter" in argv) {
+        reporter.formatter = argv.formatter;
+    }
+    if ("output" in argv) {
+        reporter.output = argv.output;
+    }
+    config.reporter = reporter;
 }
 
 // Ajouter la configuration des linters.
