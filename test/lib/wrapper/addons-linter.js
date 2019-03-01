@@ -58,7 +58,7 @@ describe("lib/wrapper/addons-linter.js", function () {
                     "file":      file,
                     "linter":    "addons-linter",
                     "rule":      "TYPE_NO_MANIFEST_JSON",
-                    "severity":  SEVERITY.INFO,
+                    "severity":  SEVERITY.ERROR,
                     "message":   "manifest.json was not found"
                 }
             ]);

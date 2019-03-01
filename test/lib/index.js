@@ -81,16 +81,8 @@ describe("lib/index.js", function () {
                         {
                             "file":      DATA_DIR + "/README.md",
                             "linter":    "markdownlint",
-                            "rule":      "MD002/first-heading-h1/" +
-                                                              "first-header-h1",
-                            "severity":  SEVERITY.ERROR,
-                            "message":   "First heading should be a top level" +
-                                         " heading [Expected: h1; Actual: h2]",
-                            "locations": [{ "line": 1 }]
-                        }, {
-                            "file":      DATA_DIR + "/README.md",
-                            "linter":    "markdownlint",
-                            "rule":      "MD041/first-line-h1",
+                            "rule":      "MD041/first-line-heading" +
+                                                               "/first-line-h1",
                             "severity":  SEVERITY.ERROR,
                             "message":   "First line in file should be a top" +
                                          " level heading [Context:" +

@@ -1,6 +1,5 @@
 {
-
-    "plugins": ["promise"],
+    "plugins": ["filenames", "jsdoc", "promise"],
 
     "parserOptions": {
         "ecmaVersion": 2019
@@ -52,41 +51,6 @@
         "no-unsafe-negation": 2,
         "require-atomic-updates": 2,
         "use-isnan": 2,
-        "valid-jsdoc": [2, {
-            "prefer": {
-                "virtual": "abstract",
-                "extends": "augments",
-                "constructor": "class",
-                "const": "constant",
-                "defaultvalue": "default",
-                "desc": "description",
-                "host": "external",
-                "fileoverview": "file",
-                "overview": "file",
-                "emits": "fires",
-                "func": "function",
-                "method": "function",
-                "var": "member",
-                "arg": "param",
-                "argument": "param",
-                "prop": "property",
-                "return": "returns",
-                "exception": "throws",
-                "yield": "yields",
-                "linkcode": "link",
-                "linkplain":" link"
-            },
-            "preferType": {
-                "array": "Array",
-                "object": "Object",
-                "function": "Function"
-            },
-            "requireReturn": false,
-            "requireReturnType": true,
-            "requireParamDescription": true,
-            "requireReturnDescription": true,
-            "requireParamType": true
-        }],
         "valid-typeof": 2,
 
         "accessor-pairs": 2,
@@ -147,12 +111,14 @@
         "no-unused-expressions": 2,
         "no-unused-labels": 0,
         "no-useless-call": 2,
+        "no-useless-catch": 2,
         "no-useless-concat": 2,
         "no-useless-escape": 2,
         "no-useless-return": 2,
         "no-void": 2,
         "no-warning-comments": 1,
         "no-with": 2,
+        "prefer-named-capture-group": 0,
         "prefer-promise-reject-errors": 2,
         "radix": 2,
         "require-await": 2,
@@ -278,22 +244,17 @@
         ],
         "prefer-object-spread": 0,
         "quote-props": 2,
-        "quotes": 2,
-        "require-jsdoc": [2, {
-            "require": {
-                "FunctionDeclaration": true,
-                "ClassDeclaration": true,
-                "MethodDefinition": true
-            }
-        }],
+        "quotes": [2, "double", { "allowTemplateLiterals": true }],
         "semi": 2,
         "semi-spacing": 2,
         "semi-style": [2, "last"],
         "sort-keys": 0,
         "sort-vars": 0,
         "space-before-blocks": 2,
-        "space-before-function-paren": [2, { "anonymous": "always",
-                                             "named": "never" }],
+        "space-before-function-paren": [2, {
+            "anonymous": "always",
+            "named": "never"
+        }],
         "space-in-parens": 2,
         "space-infix-ops": 2,
         "space-unary-ops": 2,
@@ -335,10 +296,41 @@
         "template-curly-spacing": 2,
         "yield-star-spacing": 2,
 
-        "promise/always-return": 0,
+        "filenames/match-regex": [2, "^[a-z-]+$"],
+        "filenames/match-exported": 0,
+        "filenames/no-index": 0,
+
+        "jsdoc/check-alignment": 2,
+        "jsdoc/check-examples": 2,
+        "jsdoc/check-indentation": 0,
+        "jsdoc/check-param-names": 2,
+        "jsdoc/check-syntax": 2,
+        "jsdoc/check-tag-names": 2,
+        "jsdoc/check-types": 2,
+        "jsdoc/implements-on-classes": 2,
+        "jsdoc/match-description": [2, { "matchDescription": "[A-ZÉ].*" }],
+        "jsdoc/newline-after-description": 2,
+        "jsdoc/no-types": 0,
+        "jsdoc/no-undefined-types": 2,
+        "jsdoc/require-description": 0,
+        "jsdoc/require-description-complete-sentence": 2,
+        "jsdoc/require-example": 0,
+        "jsdoc/require-hyphen-before-param-description": 0,
+        "jsdoc/require-jsdoc": 2,
+        "jsdoc/require-param": 2,
+        "jsdoc/require-param-description": 2,
+        "jsdoc/require-param-name": 2,
+        "jsdoc/require-param-type": 2,
+        "jsdoc/require-returns": 0,
+        "jsdoc/require-returns-check": 2,
+        "jsdoc/require-returns-description": 2,
+        "jsdoc/require-returns-type": 2,
+        "jsdoc/valid-types": 2,
+
+        "promise/catch-or-return": 2,
         "promise/no-return-wrap": 2,
         "promise/param-names": 2,
-        "promise/catch-or-return": 2,
+        "promise/always-return": 0,
         "promise/no-native": 0,
         "promise/no-nesting": 0,
         "promise/no-promise-in-callback": 2,
@@ -346,6 +338,36 @@
         "promise/avoid-new": 0,
         "promise/no-new-statics": 2,
         "promise/no-return-in-finally": 2,
-        "promise/valid-params": 2
+        "promise/valid-params": 2,
+        "promise/prefer-await-to-then": 0,
+        "promise/prefer-await-to-callbacks": 0
+    },
+
+    "settings": {
+        "jsdoc": {
+            "tagNamePreference": {
+                "virtual": "abstract",
+                "extends": "augments",
+                "constructor": "class",
+                "const": "constant",
+                "defaultvalue": "default",
+                "desc": "description",
+                "host": "external",
+                "fileoverview": "file",
+                "overview": "file",
+                "emits": "fires",
+                "func": "function",
+                "method": "function",
+                "var": "member",
+                "arg": "param",
+                "argument": "param",
+                "prop": "property",
+                "return": "returns",
+                "exception": "throws",
+                "yield": "yields",
+                "linkcode": "link",
+                "linkplain":" link"
+            }
+        }
     }
 }

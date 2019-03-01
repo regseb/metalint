@@ -51,11 +51,11 @@ const argv = yargs.options({
  * Vérifie (en appelant des linters) une liste de fichiers.
  *
  * @param {Array.<string>} files     La liste des fichiers.
- * @param {Array.<Object>} checkers  La liste des vérifications faites sur les
+ * @param {Array.<object>} checkers  La liste des vérifications faites sur les
  *                                   fichiers.
  * @param {string}         root      L’adresse du répertoire où se trouve le
  *                                   dossier <code>.metalint/</code>.
- * @param {Object}         reporters La liste des rapporteurs utilisés pour
+ * @param {object}         reporters La liste des rapporteurs utilisés pour
  *                                   afficher les résultats.
  * @returns {Promise.<number>} La sévérité la plus élévée des résultats.
  */
