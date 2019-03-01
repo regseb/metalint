@@ -105,6 +105,48 @@ describe("lib/wrapper/eslint.js", function () {
     });
 
     it("wrapper()", function () {
+        const file    = DATA_DIR + "/index.js";
+        const level   = SEVERITY.INFO;
+        const options = {
+            "plugins": ["filenames", "jsdoc", "mocha"],
+            "rules":   {
+                "filenames/no-index":          2,
+                "jsdoc/check-types":           2,
+                "jsdoc/check-syntax":           2,
+                "mocha/prefer-arrow-callback": 2
+            }
+        };
+
+        return linter.wrapper(file, level, options).then(function (notices) {
+            assert.deepStrictEqual(notices, [
+                {
+                    "file":      file,
+                    "linter":    "eslint",
+                    "rule":      "filenames/no-index",
+                    "severity":  SEVERITY.ERROR,
+                    "message":   "'index.js' files are not allowed.",
+                    "locations": [{ "line": 3, "column": 1 }]
+                }, {
+                    "file":      file,
+                    "linter":    "eslint",
+                    "rule":      "mocha/prefer-arrow-callback",
+                    "severity":  SEVERITY.ERROR,
+                    "message":   "Unexpected function expression.",
+                    "locations": [{ "line": 3, "column": 5 }]
+                }, {
+                    "file":      file,
+                    "linter":    "eslint",
+                    "rule":      "jsdoc/check-types",
+                    "severity":  SEVERITY.ERROR,
+                    "message":   `Invalid JSDoc @returns type "Object";` +
+                                 ` prefer: "object".`,
+                    "locations": [{ "line": 8 }]
+                }
+            ]);
+        });
+    });
+
+    it("wrapper()", function () {
         const file    = DATA_DIR + "/script5.js";
         const level   = SEVERITY.OFF;
         const options = {};
