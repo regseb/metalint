@@ -28,7 +28,7 @@
         "no-empty": 2,
         "no-ex-assign": 2,
         "no-extra-boolean-cast": 2,
-        "no-extra-parens": 2,
+        "no-extra-parens": [2, "all", { "enforceForArrowConditionals": false }],
         "no-extra-semi": 2,
         "no-func-assign": 2,
         "no-inner-declarations": [2, "both"],
@@ -57,7 +57,7 @@
         "array-callback-return": 2,
         "block-scoped-var": 2,
         "class-methods-use-this": 0,
-        "complexity": 1,
+        "complexity": [1, { "max": 50 }],
         "consistent-return": 2,
         "curly": 2,
         "default-case": 0,
@@ -97,7 +97,7 @@
         "no-new": 2,
         "no-octal-escape": 2,
         "no-octal": 2,
-        "no-param-reassign": 2,
+        "no-param-reassign": [2, { "props": true }],
         "no-proto": 2,
         "no-redeclare": 2,
         "no-return-assign": 2,
@@ -162,9 +162,9 @@
         "block-spacing": 2,
         "brace-style": 2,
         "camelcase": 2,
-        "capitalized-comments": [
-            2, "always", { "ignoreConsecutiveComments": true }
-        ],
+        "capitalized-comments": [2, "always", {
+            "ignoreConsecutiveComments": true
+        }],
         "comma-dangle": 2,
         "comma-spacing": 2,
         "comma-style": 2,
@@ -175,6 +175,7 @@
         "func-name-matching": [2, { "considerPropertyDescriptor": true }],
         "func-names": 0,
         "func-style": 2,
+        "function-paren-newline": [2, "consistent"],
         "id-blacklist": 0,
         "id-length": 0,
         "id-match": 0,
@@ -189,13 +190,15 @@
         "lines-between-class-members": 2,
         "max-depth": [1, { "max": 5 }],
         "max-len": 1,
-        "max-lines": [1, { "skipBlankLines": true, "skipComments": true }],
-        "max-lines-per-function": [1,
-            { "max": 100, "skipBlankLines": true, "skipComments": true }
-        ],
+        "max-lines": [1, {
+            "max": 1000, "skipBlankLines": true, "skipComments": true
+        }],
+        "max-lines-per-function": [1, {
+            "max": 100, "skipBlankLines": true, "skipComments": true
+        }],
         "max-nested-callbacks": 1,
         "max-params": [1, { "max": 5 }],
-        "max-statements": [1, { "max": 30 }],
+        "max-statements": [1, { "max": 50 }],
         "max-statements-per-line": [2, { "max": 2 }],
         "multiline-comment-style": [2, "separate-lines"],
         "multiline-ternary": 0,
@@ -239,9 +242,9 @@
         "operator-assignment": 2,
         "operator-linebreak": 2,
         "padded-blocks": [2, { "blocks": "never", "switches": "never" }],
-        "padding-line-between-statements": [2,
-            { "blankLine": "always", "prev": "directive", "next": "*" }
-        ],
+        "padding-line-between-statements": [2, {
+            "blankLine": "always", "prev": "directive", "next": "*"
+        }],
         "prefer-object-spread": 0,
         "quote-props": 2,
         "quotes": [2, "double", { "allowTemplateLiterals": true }],

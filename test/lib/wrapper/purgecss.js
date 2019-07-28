@@ -26,8 +26,8 @@ describe("lib/wrapper/purgecss.js", function () {
         };
 
         process.chdir(DATA_DIR);
-        return linter.wrapper(file, level, options, DATA_DIR).then(
-                                                            function (notices) {
+        return linter.wrapper(file, level, options, DATA_DIR)
+                     .then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "file":     file,
@@ -57,8 +57,8 @@ describe("lib/wrapper/purgecss.js", function () {
         };
 
         process.chdir(DATA_DIR);
-        return linter.wrapper(file, level, options, DATA_DIR).then(
-                                                            function (notices) {
+        return linter.wrapper(file, level, options, DATA_DIR)
+                     .then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "file":     file,
@@ -77,8 +77,8 @@ describe("lib/wrapper/purgecss.js", function () {
         const level   = SEVERITY.FATAL;
         const options = { "content": [] };
 
-        return linter.wrapper(file, level, options, DATA_DIR).then(
-                                                            function (notices) {
+        return linter.wrapper(file, level, options, DATA_DIR)
+                     .then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
                     "file":     file,
@@ -95,8 +95,8 @@ describe("lib/wrapper/purgecss.js", function () {
         const level   = SEVERITY.OFF;
         const options = null;
 
-        return linter.wrapper(file, level, options, DATA_DIR).then(
-                                                            function (notices) {
+        return linter.wrapper(file, level, options, DATA_DIR)
+                     .then(function (notices) {
             assert.deepStrictEqual(notices, []);
         });
     });
