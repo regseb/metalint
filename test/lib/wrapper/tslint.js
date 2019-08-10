@@ -61,27 +61,24 @@ describe("lib/wrapper/tslint.js", function () {
                     "rule":      "no-consecutive-blank-lines",
                     "severity":  SEVERITY.ERROR,
                     "message":   "Consecutive blank lines are forbidden",
-                    "locations": [{ "line": 3, "column": 1 }]
+                    "locations": [{
+                        "line":      3,
+                        "column":    1,
+                        "lineEnd":   4,
+                        "columnEnd": 1
+                    }]
                 }, {
                     "file":      file,
                     "linter":    "tslint",
                     "rule":      "no-console",
                     "severity":  SEVERITY.WARN,
                     "message":   "Calls to 'console.log' are not allowed.",
-                    "locations": [
-                        { "line": 1, "column":  1 },
-                        { "line": 1, "column":  2 },
-                        { "line": 1, "column":  3 },
-                        { "line": 1, "column":  4 },
-                        { "line": 1, "column":  5 },
-                        { "line": 1, "column":  6 },
-                        { "line": 1, "column":  7 },
-                        { "line": 1, "column":  8 },
-                        { "line": 1, "column":  9 },
-                        { "line": 1, "column": 10 },
-                        { "line": 1, "column": 11 },
-                        { "line": 1, "column": 12 }
-                    ]
+                    "locations": [{
+                        "line":      1,
+                        "column":    1,
+                        "lineEnd":   1,
+                        "columnEnd": 12
+                    }]
                 }
             ]);
         });
