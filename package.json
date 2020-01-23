@@ -1,6 +1,6 @@
 {
     "name": "metalint",
-    "version": "0.8.4",
+    "version": "0.8.5",
     "description": "Un linter pour les gouverner tous.",
     "keywords": [
         "checker",
