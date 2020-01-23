@@ -185,7 +185,7 @@ describe("lib/normalize.js", function () {
         const dir  = path.join(root, ".metalint");
 
         assert.throws(() => normalize(rotten, root, dir, {}), {
-            "name":    "Error",
+            "name":    "TypeError",
             "message": "property 'formatter' is incorrect type (only string" +
                        " is accepted)."
         });
@@ -234,7 +234,7 @@ describe("lib/normalize.js", function () {
         const dir  = path.join(root, ".metalint");
 
         assert.throws(() => normalize(rotten, root, dir, {}), {
-            "name":    "Error",
+            "name":    "TypeError",
             "message": "property 'output' is incorrect type (only string is" +
                        " accepted)."
         });
@@ -253,8 +253,9 @@ describe("lib/normalize.js", function () {
             "patterns":  ["**"],
             "level":     SEVERITY.INFO,
             "reporters": [
-                new Console(SEVERITY.INFO, process.stdout,
-                            { "showZeroNotice": true })
+                new Console(SEVERITY.INFO, process.stdout, {
+                    "showZeroNotice": true
+                })
             ],
             "checkers":  [
                 {
@@ -274,7 +275,7 @@ describe("lib/normalize.js", function () {
         const dir  = path.join(root, ".metalint");
 
         assert.throws(() => normalize(rotten, root, dir, {}), {
-            "name":    "Error",
+            "name":    "TypeError",
             "message": "property 'options' is incorrect type (only object is" +
                        " accepted)."
         });
@@ -581,7 +582,7 @@ describe("lib/normalize.js", function () {
     it("", function () {
         const rotten = { "checkers": [{ "linters": { "jsonlint": [1] } }] };
         assert.throws(() => normalize(rotten, null, null, {}), {
-            "name":    "Error",
+            "name":    "TypeError",
             "message": "linter option incorrect type."
         });
 
@@ -593,13 +594,13 @@ describe("lib/normalize.js", function () {
 
         rotten.checkers[0].linters.jsonlint = 1;
         assert.throws(() => normalize(rotten, null, null, {}), {
-            "name":    "Error",
+            "name":    "TypeError",
             "message": "linter incorrect type."
         });
 
         rotten.checkers[0].linters = 1;
         assert.throws(() => normalize(rotten, null, null, {}), {
-            "name":    "Error",
+            "name":    "TypeError",
             "message": "'checkers[].linters' incorrect type."
         });
 
@@ -623,13 +624,13 @@ describe("lib/normalize.js", function () {
 
         rotten.checkers = 1;
         assert.throws(() => normalize(rotten, null, null, {}), {
-            "name":    "Error",
+            "name":    "TypeError",
             "message": "'checkers' is not an array."
         });
 
         rotten.reporters = 1;
         assert.throws(() => normalize(rotten, null, null, {}), {
-            "name":    "Error",
+            "name":    "TypeError",
             "message": "'reporters' incorrect type."
         });
 
@@ -642,14 +643,14 @@ describe("lib/normalize.js", function () {
 
         rotten.level = 1;
         assert.throws(() => normalize(rotten, null, null, {}), {
-            "name":    "Error",
+            "name":    "TypeError",
             "message": "property 'level' is incorrect type (only string is" +
                        " accepted)."
         });
 
         rotten.patterns = 1;
         assert.throws(() => normalize(rotten, null, null, {}), {
-            "name":    "Error",
+            "name":    "TypeError",
             "message": "property 'patterns' is incorrect type (string and" +
                        " array are accepted)."
         });

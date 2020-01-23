@@ -6,6 +6,7 @@
     },
 
     "rules": {
+        "func-names": 0,
         "max-lines": 0,
         "max-lines-per-function": 0,
 

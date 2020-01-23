@@ -59,10 +59,10 @@ describe("test/data/formatter/french.js", function () {
         assert.strictEqual(writer.toString(),
             "Le linter htmlhint a trouvé un problème dans le fichier" +
             " un.html : Doctype must be declared first.\n" +
-            "Le linter markdownlint a trouvé que la règle MD012 n’est pas" +
+            "Le linter markdownlint a trouvé que la règle MD012 n'est pas" +
             " respectée dans le fichier deux.md : Multiple consecutive blank" +
             " lines\n" +
-            "Le linter markdownlint a trouvé que la règle MD010 n’est pas" +
+            "Le linter markdownlint a trouvé que la règle MD010 n'est pas" +
             " respectée à la ligne 3 du fichier deux.md : Hard tabs\n");
     });
 });

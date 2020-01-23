@@ -10,7 +10,7 @@ options courtes.
                                résultats
   -p, --patterns=PATRONS     spécifier les patrons pour filtrer les fichiers qui
                                seront analysés
-      --help     afficher l’aide et quitter
+      --help     afficher l'aide et quitter
 
 L'argument NIVEAU peut avoir comme valeur : off, fatal, error, warn ou info.
 

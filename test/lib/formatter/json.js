@@ -13,7 +13,7 @@ describe("lib/formatter/json.js", function () {
         reporter.notify("index.html", null);
         reporter.finalize();
 
-        assert.strictEqual(writer.toString(), "{\"index.html\":null}\n");
+        assert.strictEqual(writer.toString(), `{"index.html":null}\n`);
     });
 
     it("", function () {
@@ -23,7 +23,7 @@ describe("lib/formatter/json.js", function () {
         reporter.notify("index.html", []);
         reporter.finalize();
 
-        assert.strictEqual(writer.toString(), "{\"index.html\":[]}\n");
+        assert.strictEqual(writer.toString(), `{"index.html":[]}\n`);
     });
 
     it("", function () {
@@ -49,17 +49,16 @@ describe("lib/formatter/json.js", function () {
 
         assert.strictEqual(writer.toString(),
             "{\n" +
-            "  \"tools.js\": [\n" +
+            `  "tools.js": [\n` +
             "    {\n" +
-            "      \"linter\": \"eslint\",\n" +
-            "      \"rule\": \"no-unused-vars\",\n" +
-            "      \"severity\": 2,\n" +
-            "      \"message\": \"'superflous' is defined but never" +
-                                " used\",\n" +
-            "      \"locations\": [\n" +
+            `      "linter": "eslint",\n` +
+            `      "rule": "no-unused-vars",\n` +
+            `      "severity": 2,\n` +
+            `      "message": "'superflous' is defined but never used",\n` +
+            `      "locations": [\n` +
             "        {\n" +
-            "          \"line\": 2,\n" +
-            "          \"column\": 7\n" +
+            `          "line": 2,\n` +
+            `          "column": 7\n` +
             "        }\n" +
             "      ]\n" +
             "    }\n" +
@@ -91,7 +90,7 @@ describe("lib/formatter/json.js", function () {
                 "linter":    "jshint",
                 "rule":      "E007",
                 "severity":  SEVERITY.ERROR,
-                "message":   "Missing \"use strict\" statement.",
+                "message":   `Missing "use strict" statement.`,
                 "locations": [{ "line": 12, "column": 2 }]
             }
         ]);
@@ -99,43 +98,41 @@ describe("lib/formatter/json.js", function () {
 
         assert.strictEqual(writer.toString(),
             "{\n" +
-            "    \"README.md\": [\n" +
+            `    "README.md": [\n` +
             "        {\n" +
-            "            \"linter\": \"markdownlint\",\n" +
-            "            \"rule\": \"MD002\",\n" +
-            "            \"severity\": 2,\n" +
-            "            \"message\": \"First header should be a h1" +
-                                      " header.\",\n" +
-            "            \"locations\": [\n" +
+            `            "linter": "markdownlint",\n` +
+            `            "rule": "MD002",\n` +
+            `            "severity": 2,\n` +
+            `            "message": "First header should be a h1 header.",\n` +
+            `            "locations": [\n` +
             "                {\n" +
-            "                    \"line\": 1\n" +
+            `                    "line": 1\n` +
             "                }\n" +
             "            ]\n" +
             "        }\n" +
             "    ],\n" +
-            "    \"script.js\": [\n" +
+            `    "script.js": [\n` +
             "        {\n" +
-            "            \"linter\": \"jscs\",\n" +
-            "            \"rule\": null,\n" +
-            "            \"severity\": 2,\n" +
-            "            \"message\": \"Illegal keyword: with.\",\n" +
-            "            \"locations\": [\n" +
+            `            "linter": "jscs",\n` +
+            `            "rule": null,\n` +
+            `            "severity": 2,\n` +
+            `            "message": "Illegal keyword: with.",\n` +
+            `            "locations": [\n` +
             "                {\n" +
-            "                    \"line\": 47,\n" +
-            "                    \"column\": 8\n" +
+            `                    "line": 47,\n` +
+            `                    "column": 8\n` +
             "                }\n" +
             "            ]\n" +
             "        },\n" +
             "        {\n" +
-            "            \"linter\": \"jshint\",\n" +
-            "            \"rule\": \"E007\",\n" +
-            "            \"severity\": 2,\n" +
-            "            \"message\": \"Missing \\\"use strict\\\"" +
-                                      " statement.\",\n" +
-            "            \"locations\": [\n" +
+            `            "linter": "jshint",\n` +
+            `            "rule": "E007",\n` +
+            `            "severity": 2,\n` +
+            `            "message": "Missing \\"use strict\\" statement.",\n` +
+            `            "locations": [\n` +
             "                {\n" +
-            "                    \"line\": 12,\n" +
-            "                    \"column\": 2\n" +
+            `                    "line": 12,\n` +
+            `                    "column": 2\n` +
             "                }\n" +
             "            ]\n" +
             "        }\n" +

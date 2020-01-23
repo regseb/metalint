@@ -20,7 +20,7 @@ describe("lib/index.js", function () {
                         "./wrapper/jshint.js": null,
                         "./wrapper/jscs.js":   {
                             "disallowFunctionDeclarations": true,
-                            "validateQuoteMarks":           "\""
+                            "validateQuoteMarks":           `"`
                         }
                     },
                     "level":    SEVERITY.WARN
@@ -86,7 +86,7 @@ describe("lib/index.js", function () {
                             "severity":  SEVERITY.ERROR,
                             "message":   "First line in file should be a top" +
                                          " level heading [Context:" +
-                                         " \"## README\"]",
+                                         ` "## README"]`,
                             "locations": [{ "line": 1 }]
                         }
                     ]
@@ -94,7 +94,7 @@ describe("lib/index.js", function () {
             });
         });
 
-        it("should add default \"rule\" and \"severity\"", function () {
+        it(`should add default "rule" and "severity"`, function () {
             const files    = [DATA_DIR + "/config.json"];
             const checkers = [
                 {
@@ -122,7 +122,7 @@ describe("lib/index.js", function () {
             });
         });
 
-        it("should add default \"locations\"", function () {
+        it(`should add default "locations"`, function () {
             const cwd = process.cwd();
 
             const files    = ["style.css"];

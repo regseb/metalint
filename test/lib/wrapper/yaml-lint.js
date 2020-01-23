@@ -67,7 +67,7 @@ describe("lib/wrapper/yaml-lint.js", function () {
         const level   = SEVERITY.FATAL;
         const options = null;
 
-        return linter.wrapper(file, level, options).then(function (notices) {
+        return linter.wrapper(file, level, options).then((notices) => {
             assert.deepStrictEqual(notices, []);
         });
     });

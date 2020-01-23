@@ -58,7 +58,11 @@ describe("lib/wrapper/david.js", function () {
                 "file":     file,
                 "linter":   "david",
                 "severity": SEVERITY.FATAL,
-                "message":  "Not found : metalint-with-typo"
+                "message":  "'metalint-with-typo' is not in the npm" +
+                            " registry.\nYou should bug the author to publish" +
+                            " it\n(or use the name yourself!)\n\nNote that" +
+                            " you can also install from a\ntarball, folder," +
+                            " http url, or git url."
             });
         });
     });

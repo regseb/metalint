@@ -86,7 +86,8 @@ for (const dependency in pkg.devDependencies) {
         if ("object" === checker.linters[dependency]) {
             fs.writeFileSync(".metalint/" + dependency + ".json",
                              JSON.stringify(checker.linters[dependency],
-                                            null, 4) + "\n");
+                                            null,
+                                            4) + "\n");
             checker.linters = dependency;
         }
         config.checkers.push(checker);

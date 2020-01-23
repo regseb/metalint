@@ -35,14 +35,14 @@ describe("lib/wrapper/addons-linter.js", function () {
                     "linter":    "addons-linter",
                     "rule":      "MANIFEST_FIELD_REQUIRED",
                     "severity":  SEVERITY.ERROR,
-                    "message":   "\"/name\" is a required property"
+                    "message":   `"/name" is a required property`
                 }, {
                     "file":      file + "manifest.json",
                     "linter":    "addons-linter",
                     "rule":      "MANIFEST_PERMISSIONS",
                     "severity":  SEVERITY.WARN,
-                    "message":   "/permissions: Unknown permissions \"god" +
-                                 " mode\" at 0."
+                    "message":   `/permissions: Unknown permissions "god` +
+                                 ` mode" at 0.`
                 }
             ]);
         });

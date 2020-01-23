@@ -52,7 +52,7 @@ describe("lib/formatter/csv.js", function () {
                 "linter":    "htmllint",
                 "rule":      "2",
                 "severity":  SEVERITY.INFO,
-                "message":   "Qu’il soupçonnait dans le corps d’un Lion,",
+                "message":   "Qu'il soupçonnait dans le corps d'un Lion,",
                 "locations": [{ "line": 3 }]
             }
         ]);
@@ -60,12 +60,11 @@ describe("lib/formatter/csv.js", function () {
 
         assert.strictEqual(writer.toString(),
             "file,line,column,message,linter,rule\r\n" +
-            "\"un.py\",,,\"Un fanfaron, amateur de la chasse,\"" +
-                ",pylint,\r\n" +
-            "\"deux.xhtml\",1,2,\"Venant de perdre un chien de bonne" +
-                                " race\",xmllint,\"1\"\r\n" +
-            "\"deux.xhtml\",3,,\"Qu’il soupçonnait dans le corps d’un" +
-                               " Lion,\",htmllint,\"2\"\r\n");
+            `"un.py",,,"Un fanfaron, amateur de la chasse,",pylint,\r\n` +
+            `"deux.xhtml",1,2,"Venant de perdre un chien de bonne race",` +
+                                                             `xmllint,"1"\r\n` +
+            `"deux.xhtml",3,,"Qu'il soupçonnait dans le corps d'un Lion,",` +
+                                                            `htmllint,"2"\r\n`);
     });
 
     it("", function () {
@@ -91,10 +90,9 @@ describe("lib/formatter/csv.js", function () {
 
         assert.strictEqual(writer.toString(),
             "file,line,column,message,linter,rule\r\n" +
-            "\"un.css\",,,\"Vit un berger. « Enseigne-moi, de grâce,\"," +
-                "csslint,\"3\"\r\n" +
-            "\"un.css\",,,\"De mon voleur, lui dit-il, la maison,\"," +
-                "csslint,\r\n");
+            `"un.css",,,"Vit un berger. « Enseigne-moi, de grâce,",csslint,` +
+                                                                     `"3"\r\n` +
+            `"un.css",,,"De mon voleur, lui dit-il, la maison,",csslint,\r\n`);
     });
 
     it("", function () {
@@ -114,7 +112,6 @@ describe("lib/formatter/csv.js", function () {
 
         assert.strictEqual(writer.toString(),
             "file,line,column,message,linter,rule\r\n" +
-            "\"un.yml\",,,\"De mon voleur, lui dit-il, la maison,\",ymllint," +
-                "\r\n");
+            `"un.yml",,,"De mon voleur, lui dit-il, la maison,",ymllint,\r\n`);
     });
 });

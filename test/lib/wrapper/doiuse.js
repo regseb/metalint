@@ -46,7 +46,8 @@ describe("lib/wrapper/doiuse.js", function () {
                     "linter":    "doiuse",
                     "rule":      "background-img-opts",
                     "message":   "CSS3 Background-image options only" +
-                                 " partially supported by: Opera Mini (all)",
+                                 " partially supported by: Safari (5.1)," +
+                                 " Opera Mini (all)",
                     "locations": [{ "line": 2, "column": 1 }]
                 }
             ]);

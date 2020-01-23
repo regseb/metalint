@@ -21,7 +21,7 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, false);
     });
 
-    it("test([\"**\"])̀", function () {
+    it(`test(["**"])̀`, function () {
         const patterns = ["**"];
         let matched = glob.test("lib/index.min.js", patterns, __dirname, false);
         assert.strictEqual(matched, true);
@@ -29,7 +29,7 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, true);
     });
 
-    it("test([\"**/*.js\"])", function () {
+    it(`test(["**/*.js"])`, function () {
         const patterns = ["**/*.js"];
         let matched = glob.test("lib/index.min.js", patterns, __dirname, false);
         assert.strictEqual(matched, true);
@@ -43,7 +43,7 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, false);
     });
 
-    it("test([\"!**/*~\", \"**\"])", function () {
+    it(`test(["!**/*~", "**"])̀`, function () {
         const patterns = ["!**/*~", "**"];
         let matched = glob.test("lib/index.min.js", patterns, __dirname, false);
         assert.strictEqual(matched, true);
@@ -55,7 +55,7 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, false);
     });
 
-    it("test([\"/**/*.md\"])", function () {
+    it(`test(["/**/*.md"])`, function () {
         const patterns = ["/**/*.md"];
         let matched = glob.test("src/README.md", patterns, __dirname, false);
         assert.strictEqual(matched, true);
@@ -65,7 +65,7 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, false);
     });
 
-    it("test([\"/*/*.md\"])", function () {
+    it(`test(["/*/*.md"])`, function () {
         const patterns = ["/*/*.md"];
         let matched = glob.test("src/README.md", patterns, __dirname, false);
         assert.strictEqual(matched, true);
@@ -75,7 +75,7 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, false);
     });
 
-    it("test([\"lib/**\"])", function () {
+    it(`test(["lib/**"])`, function () {
         const patterns = ["lib/**"];
         let matched = glob.test("lib", patterns, __dirname, true);
         assert.strictEqual(matched, true);
@@ -87,7 +87,7 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, false);
     });
 
-    it("test([\"foo?bar\"])", function () {
+    it(`test(["foo?bar"])`, function () {
         const patterns = ["foo?bar"];
         let matched = glob.test("foo.bar", patterns, __dirname, false);
         assert.strictEqual(matched, true);
@@ -95,7 +95,7 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, false);
     });
 
-    it("test([\"script[123].js\"])", function () {
+    it(`test(["script[123].js"])`, function () {
         const patterns = ["script[123].js"];
         let matched = glob.test("script1.js", patterns, __dirname, false);
         assert.strictEqual(matched, true);
@@ -109,7 +109,7 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, false);
     });
 
-    it("test([\"!node/\", \"**\"])", function () {
+    it(`test(["!node/", "**"])`, function () {
         const patterns = ["!node/", "**"];
         let matched = glob.test("bower/jquery.js", patterns, __dirname, false);
         assert.strictEqual(matched, true);
@@ -119,7 +119,7 @@ describe("lib/glob.js", function () {
         assert.strictEqual(matched, false);
     });
 
-    it("test([\"folder/\"])", function () {
+    it(`test(["folder/"])`, function () {
         const patterns = ["folder/"];
         let matched = glob.test("folder/", patterns, __dirname, true);
         assert.strictEqual(matched, true);

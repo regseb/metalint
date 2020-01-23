@@ -53,41 +53,41 @@ const argv = yargs.options({
  * @param {Array.<string>} files     La liste des fichiers.
  * @param {Array.<object>} checkers  La liste des vérifications faites sur les
  *                                   fichiers.
- * @param {string}         root      L’adresse du répertoire où se trouve le
+ * @param {string}         root      L'adresse du répertoire où se trouve le
  *                                   dossier <code>.metalint/</code>.
  * @param {object}         reporters La liste des rapporteurs utilisés pour
  *                                   afficher les résultats.
  * @returns {Promise.<number>} La sévérité la plus élévée des résultats.
  */
-const check = function (files, checkers, root, reporters) {
-    return metalint(files, checkers, root).then(function (results) {
-        let severity = null;
-        for (const [file, notices] of Object.entries(results)) {
-            // Déterminer la sévérité la plus élévée des résultats.
-            if (null !== notices) {
-                for (const notice of notices) {
-                    if (null === severity || severity > notice.severity) {
-                        severity = notice.severity;
-                    }
+const check = async function (files, checkers, root, reporters) {
+    const results = await metalint(files, checkers, root);
+    let severity = null;
+    for (const [file, notices] of Object.entries(results)) {
+        // Déterminer la sévérité la plus élévée des résultats.
+        if (null !== notices) {
+            for (const notice of notices) {
+                if (null === severity || severity > notice.severity) {
+                    severity = notice.severity;
                 }
-            }
-
-            // Afficher les notifications avec chaque rapporteur.
-            for (const reporter of reporters) {
-                reporter.notify(file, notices);
             }
         }
 
-        const sweepers = reporters.map(function (reporter) {
-            reporter.finalize(severity);
-            // Attendre que les textes soient écrits.
-            return new Promise(function (resolve) {
-                reporter.writer.write("", resolve);
-            });
+        // Afficher les notifications avec chaque rapporteur.
+        for (const reporter of reporters) {
+            reporter.notify(file, notices);
+        }
+    }
+
+    const sweepers = reporters.map((reporter) => {
+        reporter.finalize(severity);
+        // Attendre que les textes soient écrits.
+        return new Promise((resolve) => {
+            reporter.writer.write("", resolve);
         });
-        // Attendre tous les rapporteurs.
-        return Promise.all(sweepers).then(() => severity);
     });
+    // Attendre tous les rapporteurs.
+    await Promise.all(sweepers);
+    return severity;
 };
 
 if (argv.help) {
@@ -104,8 +104,8 @@ if (argv.version) {
 }
 
 let root = process.cwd();
-// Rechercher le fichier de configuration dans le répertoire courant, puis les
-// parents.
+// Rechercher le fichier de configuration dans le répertoire courant, puis dans
+// les parents.
 while (!fs.existsSync(path.join(root, argv.config))) {
     // Si on est remonté à la racine.
     if (path.join(root, "..") === root) {
@@ -117,17 +117,18 @@ while (!fs.existsSync(path.join(root, argv.config))) {
 
 let config = JSON.parse(fs.readFileSync(path.join(root, argv.config), "utf-8"));
 try {
-    config = normalize(config, root,
+    config = normalize(config,
+                       root,
                        path.dirname(path.join(root, argv.config)),
                        argv);
-} catch (exc) {
-    process.stderr.write("metalint: " + exc.message);
+} catch (err) {
+    process.stderr.write("metalint: " + err.message);
     process.exit(11);
 }
 
 const files = glob.walk(argv._, config.patterns, root);
 
-check(files, config.checkers, root, config.reporters).then(function (severity) {
+check(files, config.checkers, root, config.reporters).then((severity) => {
     let code;
     switch (severity) {
         case SEVERITY.FATAL: code = 2; break;
@@ -135,8 +136,8 @@ check(files, config.checkers, root, config.reporters).then(function (severity) {
         default:             code = 0;
     }
     process.exit(code);
-}).catch(function (exc) {
-    process.stderr.write("metalint: " + exc.message + "\n");
-    process.stderr.write(exc.stack + "\n");
+}).catch((err) => {
+    process.stderr.write("metalint: " + err.message + "\n");
+    process.stderr.write(err.stack + "\n");
     process.exit(12);
 });

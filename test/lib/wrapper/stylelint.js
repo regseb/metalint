@@ -122,7 +122,7 @@ describe("lib/wrapper/stylelint.js", function () {
                     "linter":    "stylelint",
                     "rule":      "unit-no-unknown",
                     "severity":  SEVERITY.ERROR,
-                    "message":   "Unexpected unknown unit \"el\"",
+                    "message":   `Unexpected unknown unit "el"`,
                     "locations": [{ "line": 2, "column": 12 }]
                 }
             ]);

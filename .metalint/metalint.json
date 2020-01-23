@@ -11,7 +11,7 @@
             "patterns": "/test/**/*.js",
             "linters": { "eslint": ["eslint.json", "eslint_test.json"] }
         }, {
-            "patterns": "*.md",
+            "patterns": ["!/CHANGELOG.md", "*.md"],
             "linters": "markdownlint"
         }, {
             "patterns": "*.json",

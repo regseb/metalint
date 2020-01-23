@@ -13,7 +13,7 @@
 ## Description
 
 **Metalint** est un outil pour analyser tous les fichiers de votre projet.
-L’analyse est déléguée à des linters (outils d’analyse statique de code source)
+L'analyse est déléguée à des linters (outils d'analyse statique de code source)
 ou des utilitaires selon le type de fichier :
 
 - Add-on de Firefox (WebExtension) :
@@ -25,7 +25,7 @@ ou des utilitaires selon le type de fichier :
   [CSSLint](https://regseb.github.io/metalint/user/linters/csslint/),
   [doiuse](https://regseb.github.io/metalint/user/linters/doiuse/),
   [lesshint](https://regseb.github.io/metalint/user/linters/lesshint/),
-  [Purgecss](https://regseb.github.io/metalint/user/linters/purgecss/) et
+  [PurgeCSS](https://regseb.github.io/metalint/user/linters/purgecss/) et
   [stylelint](https://regseb.github.io/metalint/user/linters/stylelint/) ;
 - HTML : [HTMLHint](https://regseb.github.io/metalint/user/linters/htmlhint/) et
   [htmllint](https://regseb.github.io/metalint/user/linters/htmllint/) ;
@@ -103,4 +103,4 @@ metalint
 [link-dependencies]:https://david-dm.org/regseb/metalint
 [link-coverage]:https://coveralls.io/github/regseb/metalint
 [link-license]:https://joinup.ec.europa.eu/collection/eupl/eupl-text-11-12
-               "Licence publique de l’Union européenne"
+               "Licence publique de l'Union européenne"

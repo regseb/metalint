@@ -25,7 +25,7 @@ const Reporter = class {
      *                                 <code>null</code>.
      */
     notify(file, notices) {
-        // Si le fichier n’a pas été vérifié (car il ne rentrait pas dans
+        // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans
         // les critères des checkers).
         if (null === notices) {
             return;
@@ -37,7 +37,7 @@ const Reporter = class {
                 this.writer.write("un problème ");
             } else {
                 this.writer.write("que la règle " + notice.rule +
-                                  " n’est pas respectée ");
+                                  " n'est pas respectée ");
             }
             if (0 === notice.locations.length) {
                 this.writer.write("dans le fichier ");
