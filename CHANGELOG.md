@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.6](https://github.com/regseb/metalint/compare/v0.8.5...v0.8.6) (2020-04-12)
+
+
+### Features
+
+* Ajouter le support de JSON Lint (mod). ([201ae31](https://github.com/regseb/metalint/commit/201ae31ab436e8223b964b3017a4c838bfd378e0))
+
+
+### Bug Fixes
+
+* Autoriser la valeur null pour la configuration de Stylelint. ([758d38f](https://github.com/regseb/metalint/commit/758d38fbdcc96386bb4f9bf938d01117931b40e8))
+
 ### [0.8.5](https://github.com/regseb/metalint/compare/v0.8.4...v0.8.5) (2020-01-23)
 
 
