@@ -14,7 +14,7 @@
         "for-direction": 2,
         "getter-return": 2,
         "no-async-promise-executor": 2,
-        "no-await-in-loop": 0,
+        "no-await-in-loop": 2,
         "no-compare-neg-zero": 2,
         "no-cond-assign": 2,
         "no-console": 2,
@@ -106,10 +106,7 @@
         "no-new": 2,
         "no-octal-escape": 2,
         "no-octal": 2,
-        "no-param-reassign": [2, {
-            "props": true,
-            "ignorePropertyModificationsFor": ["input"]
-        }],
+        "no-param-reassign": [2, { "props": true }],
         "no-proto": 2,
         "no-redeclare": 2,
         "no-return-assign": 2,
@@ -284,7 +281,7 @@
         "unicode-bom": 2,
         "wrap-regex": 2,
 
-        "arrow-body-style": 0,
+        "arrow-body-style": 2,
         "arrow-parens": 2,
         "arrow-spacing": 2,
         "constructor-super": 2,
@@ -391,7 +388,7 @@
         "jsdoc/require-returns-type": 2,
         "jsdoc/valid-types": 2,
 
-        "promise/catch-or-return": 0,
+        "promise/catch-or-return": 2,
         "promise/no-return-wrap": 2,
         "promise/param-names": 2,
         "promise/always-return": 0,
