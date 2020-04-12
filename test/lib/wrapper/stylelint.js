@@ -16,7 +16,7 @@ describe("lib/wrapper/stylelint.js", function () {
 
         assert.deepStrictEqual(checker, {
             "patterns": "*.css",
-            "linters":  { "stylelint": { "rules": {} } }
+            "linters":  { "stylelint": null }
         });
     });
 
@@ -36,7 +36,7 @@ describe("lib/wrapper/stylelint.js", function () {
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style1.css";
         const level   = SEVERITY.INFO;
-        const options = { "rules": {} };
+        const options = null;
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
