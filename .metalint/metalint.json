@@ -15,7 +15,7 @@
             "linters": "markdownlint"
         }, {
             "patterns": "*.json",
-            "linters": { "jsonlint": null }
+            "linters": { "jsonlint-mod": null }
         }, {
             "patterns": "*.yml",
             "linters": { "yaml-lint": null }

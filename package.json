@@ -38,7 +38,7 @@
     },
     "dependencies": {
         "colors": "^1.4.0",
-        "jsonlint": "^1.6.3",
+        "jsonlint-mod": "^1.7.5",
         "npmlog": "^4.1.2",
         "yargs": "^15.3.1"
     },
@@ -61,6 +61,7 @@
         "jsdoc": "^3.6.4",
         "jshint": "^2.11.0",
         "json-lint": "^0.1.0",
+        "jsonlint": "^1.6.3",
         "lesshint": "^6.3.7",
         "markdownlint": "^0.20.0",
         "memory-streams": "^0.1.3",

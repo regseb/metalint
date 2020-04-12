@@ -35,8 +35,10 @@ ou des utilitaires selon le type de fichier :
   [JSHint](https://regseb.github.io/metalint/user/linters/jshint/) et
   [JavaScript Standard
    Style](https://regseb.github.io/metalint/user/linters/standard/) ;
-- JSON : [JSON-Lint](https://regseb.github.io/metalint/user/linters/json-lint/)
-  et [JSON Lint](https://regseb.github.io/metalint/user/linters/jsonlint/) ;
+- JSON : [JSON-Lint](https://regseb.github.io/metalint/user/linters/json-lint/),
+  [JSON Lint](https://regseb.github.io/metalint/user/linters/jsonlint/) et
+  [JSON Lint
+   (mod)](https://regseb.github.io/metalint/user/linters/jsonlint-mod/) ;
 - Markdown :
   [MarkdownLint](https://regseb.github.io/metalint/user/linters/markdownlint/) ;
 - *package.json* (npm) :
