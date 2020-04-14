@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.7](https://github.com/regseb/metalint/compare/v0.8.6...v0.8.7) (2020-04-14)
+
+
+### Bug Fixes
+
+* Corriger la validation du fichier de configuration. ([3a88ca4](https://github.com/regseb/metalint/commit/3a88ca430e626800f940aa0db5235a8a43332d00))
+
 ### [0.8.6](https://github.com/regseb/metalint/compare/v0.8.5...v0.8.6) (2020-04-12)
 
 
