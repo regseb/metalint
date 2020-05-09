@@ -76,11 +76,11 @@ if ("formatter" in argv || "output" in argv) {
 }
 
 // Ajouter la configuration des linters.
-const linters = fs.readdirSync(path.join(__dirname, "../lib/wrapper/"))
-                  .map((linter) => linter.slice(0, -3));
+const linters = new Set(fs.readdirSync(path.join(__dirname, "../lib/wrapper/"))
+                          .map((linter) => linter.slice(0, -3)));
 const pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"));
-for (const dependency in pkg.devDependencies) {
-    if (linters.includes(dependency)) {
+for (const dependency of Object.keys(pkg.devDependencies)) {
+    if (linters.has(dependency)) {
         const { configure } = require("../lib/wrapper/" + dependency);
         const checker = configure();
         if ("object" === checker.linters[dependency]) {
