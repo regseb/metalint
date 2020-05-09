@@ -10,8 +10,8 @@ describe("lib/wrapper/addons-linter.js", function () {
     it("configure()", function () {
         const checker = linter.configure();
         assert.deepStrictEqual(checker, {
-            "patterns": "*.xpi",
-            "linters":  { "addons-linter": null }
+            patterns: "*.xpi",
+            linters:  { "addons-linter": null },
         });
     });
 
@@ -31,19 +31,19 @@ describe("lib/wrapper/addons-linter.js", function () {
         return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file + "manifest.json",
-                    "linter":    "addons-linter",
-                    "rule":      "MANIFEST_FIELD_REQUIRED",
-                    "severity":  SEVERITY.ERROR,
-                    "message":   `"/name" is a required property`
+                    file:      file + "manifest.json",
+                    linter:    "addons-linter",
+                    rule:      "MANIFEST_FIELD_REQUIRED",
+                    severity:  SEVERITY.ERROR,
+                    message:   `"/name" is a required property`,
                 }, {
-                    "file":      file + "manifest.json",
-                    "linter":    "addons-linter",
-                    "rule":      "MANIFEST_PERMISSIONS",
-                    "severity":  SEVERITY.WARN,
-                    "message":   `/permissions: Unknown permissions "god` +
-                                 ` mode" at 0.`
-                }
+                    file:      file + "manifest.json",
+                    linter:    "addons-linter",
+                    rule:      "MANIFEST_PERMISSIONS",
+                    severity:  SEVERITY.WARN,
+                    message:   `/permissions: Unknown permissions "god mode"` +
+                               ` at 0.`,
+                },
             ]);
         });
     });
@@ -55,12 +55,12 @@ describe("lib/wrapper/addons-linter.js", function () {
         return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "addons-linter",
-                    "rule":      "TYPE_NO_MANIFEST_JSON",
-                    "severity":  SEVERITY.ERROR,
-                    "message":   "manifest.json was not found"
-                }
+                    file:      file,
+                    linter:    "addons-linter",
+                    rule:      "TYPE_NO_MANIFEST_JSON",
+                    severity:  SEVERITY.ERROR,
+                    message:   "manifest.json was not found",
+                },
             ]);
         });
     });

@@ -15,8 +15,8 @@ describe("lib/wrapper/jscs.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.js",
-            "linters":  { "jscs": {} }
+            patterns: "*.js",
+            linters:  { jscs: {} },
         });
     });
 
@@ -28,8 +28,8 @@ describe("lib/wrapper/jscs.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.js",
-            "linters":  { "jscs": "../.jscsrc" }
+            patterns: "*.js",
+            linters:  { jscs: "../.jscsrc" },
         });
     });
 
@@ -46,17 +46,17 @@ describe("lib/wrapper/jscs.js", function () {
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script2.js";
         const level   = SEVERITY.ERROR;
-        const options = { "disallowMultipleLineStrings": true };
+        const options = { disallowMultipleLineStrings: true };
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "jscs",
-                    "rule":      "disallowMultipleLineStrings",
-                    "message":   "Multiline strings are disallowed.",
-                    "locations": [{ "line": 2, "column": 5 }]
-                }
+                    file:      file,
+                    linter:    "jscs",
+                    rule:      "disallowMultipleLineStrings",
+                    message:   "Multiline strings are disallowed.",
+                    locations: [{ line: 2, column: 5 }],
+                },
             ]);
         });
     });
@@ -64,7 +64,7 @@ describe("lib/wrapper/jscs.js", function () {
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script3.js";
         const level   = SEVERITY.FATAL;
-        const options = { "disallowKeywords": ["var"] };
+        const options = { disallowKeywords: ["var"] };
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
@@ -74,17 +74,17 @@ describe("lib/wrapper/jscs.js", function () {
     it("wrapper()", function () {
         const file    = DATA_DIR + "/README.md";
         const level   = SEVERITY.INFO;
-        const options = { "disallowSemicolons": true };
+        const options = { disallowSemicolons: true };
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "jscs",
-                    "rule":      "parseError",
-                    "message":   "Unterminated string constant (1:1)",
-                    "locations": [{ "line": 1, "column": 2 }]
-                }
+                    file:      file,
+                    linter:    "jscs",
+                    rule:      "parseError",
+                    message:   "Unterminated string constant (1:1)",
+                    locations: [{ line: 1, column: 2 }],
+                },
             ]);
         });
     });

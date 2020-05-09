@@ -22,7 +22,7 @@ describe("lib/formatter/checkstyle.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Formatter(SEVERITY.INFO, writer, { "indent": 0 });
+        const reporter = new Formatter(SEVERITY.INFO, writer, { indent: 0 });
         reporter.notify("un.txt", null);
         reporter.finalize();
 
@@ -35,7 +35,7 @@ describe("lib/formatter/checkstyle.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Formatter(SEVERITY.ERROR, writer, { "indent": 1 });
+        const reporter = new Formatter(SEVERITY.ERROR, writer, { indent: 1 });
         reporter.notify("un.md", []);
         reporter.finalize();
 
@@ -50,38 +50,36 @@ describe("lib/formatter/checkstyle.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Formatter(SEVERITY.INFO, writer, { "indent": 2 });
+        const reporter = new Formatter(SEVERITY.INFO, writer, { indent: 2 });
         reporter.notify("un.html", [
             {
-                "linter":    "htmllint",
-                "rule":      null,
-                "severity":  SEVERITY.ERROR,
-                "message":   "Une Grenouille vit un Bœuf,",
-                "locations": []
-            }
+                linter:    "htmllint",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
+                message:   "Une Grenouille vit un Bœuf,",
+                locations: [],
+            },
         ]);
         reporter.notify("deux.js", [
             {
-                "linter":    "jslint",
-                "rule":      "1",
-                "severity":  SEVERITY.WARN,
-                "message":   "Qui lui sembla de belle taille.",
-                "locations": [{ "line": 1, "column": 2 }]
+                linter:    "jslint",
+                rule:      "1",
+                severity:  SEVERITY.WARN,
+                message:   "Qui lui sembla de belle taille.",
+                locations: [{ line: 1, column: 2 }],
             }, {
-                "linter":    "jslint",
-                "rule":      "2",
-                "severity":  SEVERITY.FATAL,
-                "message":   "Elle qui n'était pas grosse en tout comme" +
-                             " un œuf,",
-                "locations": [{ "line": 3 }]
+                linter:    "jslint",
+                rule:      "2",
+                severity:  SEVERITY.FATAL,
+                message:   "Elle qui n'était pas grosse en tout comme un œuf,",
+                locations: [{ line: 3 }],
             }, {
-                "linter":    "jslint",
-                "rule":      "3",
-                "severity":  SEVERITY.INFO,
-                "message":   "Envieuse s'étend, et s'enfle et se" +
-                             " travaille,",
-                "locations": [{ "line": 4 }, { "line": 5 }]
-            }
+                linter:    "jslint",
+                rule:      "3",
+                severity:  SEVERITY.INFO,
+                message:   "Envieuse s'étend, et s'enfle et se travaille,",
+                locations: [{ line: 4 }, { line: 5 }],
+            },
         ]);
         reporter.finalize();
 

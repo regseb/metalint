@@ -15,8 +15,8 @@ describe("lib/wrapper/coffeelint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.coffee",
-            "linters":  { "coffeelint": null }
+            patterns: "*.coffee",
+            linters:  { coffeelint: null },
         });
     });
 
@@ -28,8 +28,8 @@ describe("lib/wrapper/coffeelint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.coffee",
-            "linters":  { "coffeelint": "../coffeelint.json" }
+            patterns: "*.coffee",
+            linters:  { coffeelint: "../coffeelint.json" },
         });
     });
 
@@ -46,28 +46,30 @@ describe("lib/wrapper/coffeelint.js", function () {
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script2.coffee";
         const level   = SEVERITY.WARN;
+        /* eslint-disable camelcase */
         const options = {
-            "no_tabs":                 { "level": "error" },
-            "prefer_english_operator": { "level": "warn" }
+            no_tabs:                 { level: "error" },
+            prefer_english_operator: { level: "warn" },
         };
+        /* eslint-enable camelcase */
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "coffeelint",
-                    "rule":      "prefer_english_operator",
-                    "severity":  SEVERITY.WARN,
-                    "message":   "Don't use &&, ||, ==, !=, or !",
-                    "locations": [{ "line": 2 }]
+                    file:      file,
+                    linter:    "coffeelint",
+                    rule:      "prefer_english_operator",
+                    severity:  SEVERITY.WARN,
+                    message:   "Don't use &&, ||, ==, !=, or !",
+                    locations: [{ line: 2 }],
                 }, {
-                    "file":      file,
-                    "linter":    "coffeelint",
-                    "rule":      "no_tabs",
-                    "severity":  SEVERITY.ERROR,
-                    "message":   "Line contains tab indentation",
-                    "locations": [{ "line": 2 }]
-                }
+                    file:      file,
+                    linter:    "coffeelint",
+                    rule:      "no_tabs",
+                    severity:  SEVERITY.ERROR,
+                    message:   "Line contains tab indentation",
+                    locations: [{ line: 2 }],
+                },
             ]);
         });
     });
@@ -75,9 +77,8 @@ describe("lib/wrapper/coffeelint.js", function () {
     it("wrapper()", function () {
         const file    = DATA_DIR + "/script3.coffee";
         const level   = SEVERITY.ERROR;
-        const options = {
-            "prefer_english_operator": { "level": "warn" }
-        };
+        // eslint-disable-next-line camelcase
+        const options = { prefer_english_operator: { level: "warn" } };
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);

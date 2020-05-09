@@ -15,8 +15,8 @@ describe("lib/wrapper/lesshint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.less",
-            "linters":  { "lesshint": null }
+            patterns: "*.less",
+            linters:  { lesshint: null },
         });
     });
 
@@ -28,8 +28,8 @@ describe("lib/wrapper/lesshint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.less",
-            "linters":  { "lesshint": "../.lesshintrc.json" }
+            patterns: "*.less",
+            linters:  { lesshint: "../.lesshintrc.json" },
         });
     });
 
@@ -46,25 +46,25 @@ describe("lib/wrapper/lesshint.js", function () {
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style2.less";
         const level   = SEVERITY.INFO;
-        const options = { "urlQuotes": { "severity": "error" } };
+        const options = { urlQuotes: { severity: "error" } };
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "lesshint",
-                    "rule":      "propertyOrdering",
-                    "severity":  SEVERITY.WARN,
-                    "message":   `"color" should be before "width"`,
-                    "locations": [{ "line": 3, "column": 5 }]
+                    file:      file,
+                    linter:    "lesshint",
+                    rule:      "propertyOrdering",
+                    severity:  SEVERITY.WARN,
+                    message:   `"color" should be before "width"`,
+                    locations: [{ line: 3, column: 5 }],
                 }, {
-                    "file":      file,
-                    "linter":    "lesshint",
-                    "rule":      "urlQuotes",
-                    "severity":  SEVERITY.ERROR,
-                    "message":   "URLs should be enclosed in quotes.",
-                    "locations": [{ "line": 4, "column": 27 }]
-                }
+                    file:      file,
+                    linter:    "lesshint",
+                    rule:      "urlQuotes",
+                    severity:  SEVERITY.ERROR,
+                    message:   "URLs should be enclosed in quotes.",
+                    locations: [{ line: 4, column: 27 }],
+                },
             ]);
         });
     });
@@ -77,13 +77,13 @@ describe("lib/wrapper/lesshint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "lesshint",
-                    "rule":      "parseError",
-                    "severity":  SEVERITY.FATAL,
-                    "message":   "Unclosed block",
-                    "locations": [{ "line": 1, "column": 1 }]
-                }
+                    file:      file,
+                    linter:    "lesshint",
+                    rule:      "parseError",
+                    severity:  SEVERITY.FATAL,
+                    message:   "Unclosed block",
+                    locations: [{ line: 1, column: 1 }],
+                },
             ]);
         });
     });

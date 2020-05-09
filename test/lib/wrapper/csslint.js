@@ -15,8 +15,8 @@ describe("lib/wrapper/csslint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.css",
-            "linters":  { "csslint": null }
+            patterns: "*.css",
+            linters:  { csslint: null },
         });
     });
 
@@ -28,8 +28,8 @@ describe("lib/wrapper/csslint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.css",
-            "linters":  { "csslint": "../.csslintrc" }
+            patterns: "*.css",
+            linters:  { csslint: "../.csslintrc" },
         });
     });
 
@@ -46,7 +46,7 @@ describe("lib/wrapper/csslint.js", function () {
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style2.css";
         const level   = SEVERITY.INFO;
-        const options = { "floats": true };
+        const options = { floats: true };
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, []);
@@ -61,13 +61,13 @@ describe("lib/wrapper/csslint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "csslint",
-                    "rule":      "empty-rules",
-                    "severity":  SEVERITY.WARN,
-                    "message":   "Rule is empty.",
-                    "locations": [{ "line": 1, "column": 1 }]
-                }
+                    file:      file,
+                    linter:    "csslint",
+                    rule:      "empty-rules",
+                    severity:  SEVERITY.WARN,
+                    message:   "Rule is empty.",
+                    locations: [{ line: 1, column: 1 }],
+                },
             ]);
         });
     });
@@ -75,18 +75,18 @@ describe("lib/wrapper/csslint.js", function () {
     it("wrapper()", function () {
         const file    = DATA_DIR + "/style4.css";
         const level   = SEVERITY.ERROR;
-        const options = { "ids": 2, "important": 1 };
+        const options = { ids: 2, important: 1 };
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "csslint",
-                    "rule":      "ids",
-                    "severity":  SEVERITY.ERROR,
-                    "message":   "Don't use IDs in selectors.",
-                    "locations": [{ "line": 1, "column": 1 }]
-                }
+                    file:      file,
+                    linter:    "csslint",
+                    rule:      "ids",
+                    severity:  SEVERITY.ERROR,
+                    message:   "Don't use IDs in selectors.",
+                    locations: [{ line: 1, column: 1 }],
+                },
             ]);
         });
     });

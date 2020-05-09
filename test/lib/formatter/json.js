@@ -19,7 +19,7 @@ describe("lib/formatter/json.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Formatter(SEVERITY.INFO, writer, { "indent": 0 });
+        const reporter = new Formatter(SEVERITY.INFO, writer, { indent: 0 });
         reporter.notify("index.html", []);
         reporter.finalize();
 
@@ -29,21 +29,21 @@ describe("lib/formatter/json.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Formatter(SEVERITY.ERROR, writer, { "indent": 2 });
+        const reporter = new Formatter(SEVERITY.ERROR, writer, { indent: 2 });
         reporter.notify("tools.js", [
             {
-                "linter":    "eslint",
-                "rule":      "complexity",
-                "severity":  SEVERITY.WARN,
-                "message":   "Method 'eval' has a complexity of 666.",
-                "locations": [{ "line": 1, "column": 4 }]
+                linter:    "eslint",
+                rule:      "complexity",
+                severity:  SEVERITY.WARN,
+                message:   "Method 'eval' has a complexity of 666.",
+                locations: [{ line: 1, column: 4 }],
             }, {
-                "linter":    "eslint",
-                "rule":      "no-unused-vars",
-                "severity":  SEVERITY.ERROR,
-                "message":   "'superflous' is defined but never used",
-                "locations": [{ "line": 2, "column": 7 }]
-            }
+                linter:    "eslint",
+                rule:      "no-unused-vars",
+                severity:  SEVERITY.ERROR,
+                message:   "'superflous' is defined but never used",
+                locations: [{ line: 2, column: 7 }],
+            },
         ]);
         reporter.finalize();
 
@@ -69,30 +69,30 @@ describe("lib/formatter/json.js", function () {
     it("", function () {
         const writer = new streams.WritableStream();
 
-        const reporter = new Formatter(SEVERITY.WARN, writer, { "indent": 4 });
+        const reporter = new Formatter(SEVERITY.WARN, writer, { indent: 4 });
         reporter.notify("README.md", [
             {
-                "linter":    "markdownlint",
-                "rule":      "MD002",
-                "severity":  SEVERITY.ERROR,
-                "message":   "First header should be a h1 header.",
-                "locations": [{ "line": 1 }]
-            }
+                linter:    "markdownlint",
+                rule:      "MD002",
+                severity:  SEVERITY.ERROR,
+                message:   "First header should be a h1 header.",
+                locations: [{ line: 1 }],
+            },
         ]);
         reporter.notify("script.js", [
             {
-                "linter":    "jscs",
-                "rule":      null,
-                "severity":  SEVERITY.ERROR,
-                "message":   "Illegal keyword: with.",
-                "locations": [{ "line": 47, "column": 8 }]
+                linter:    "jscs",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
+                message:   "Illegal keyword: with.",
+                locations: [{ line: 47, column: 8 }],
             }, {
-                "linter":    "jshint",
-                "rule":      "E007",
-                "severity":  SEVERITY.ERROR,
-                "message":   `Missing "use strict" statement.`,
-                "locations": [{ "line": 12, "column": 2 }]
-            }
+                linter:    "jshint",
+                rule:      "E007",
+                severity:  SEVERITY.ERROR,
+                message:   `Missing "use strict" statement.`,
+                locations: [{ line: 12, column: 2 }],
+            },
         ]);
         reporter.finalize();
 

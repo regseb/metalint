@@ -34,27 +34,27 @@ describe("lib/formatter/csv.js", function () {
         const reporter = new Formatter(SEVERITY.INFO, writer);
         reporter.notify("un.py", [
             {
-                "linter":    "pylint",
-                "rule":      null,
-                "severity":  SEVERITY.ERROR,
-                "message":   "Un fanfaron, amateur de la chasse,",
-                "locations": []
-            }
+                linter:    "pylint",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
+                message:   "Un fanfaron, amateur de la chasse,",
+                locations: [],
+            },
         ]);
         reporter.notify("deux.xhtml", [
             {
-                "linter":    "xmllint",
-                "rule":      "1",
-                "severity":  SEVERITY.WARN,
-                "message":   "Venant de perdre un chien de bonne race",
-                "locations": [{ "line": 1, "column": 2 }]
+                linter:    "xmllint",
+                rule:      "1",
+                severity:  SEVERITY.WARN,
+                message:   "Venant de perdre un chien de bonne race",
+                locations: [{ line: 1, column: 2 }],
             }, {
-                "linter":    "htmllint",
-                "rule":      "2",
-                "severity":  SEVERITY.INFO,
-                "message":   "Qu'il soupçonnait dans le corps d'un Lion,",
-                "locations": [{ "line": 3 }]
-            }
+                linter:    "htmllint",
+                rule:      "2",
+                severity:  SEVERITY.INFO,
+                message:   "Qu'il soupçonnait dans le corps d'un Lion,",
+                locations: [{ line: 3 }],
+            },
         ]);
         reporter.finalize();
 
@@ -73,18 +73,18 @@ describe("lib/formatter/csv.js", function () {
         const reporter = new Formatter(SEVERITY.INFO, writer);
         reporter.notify("un.css", [
             {
-                "linter":    "csslint",
-                "rule":      "3",
-                "severity":  SEVERITY.WARN,
-                "message":   "Vit un berger. « Enseigne-moi, de grâce,",
-                "locations": []
+                linter:    "csslint",
+                rule:      "3",
+                severity:  SEVERITY.WARN,
+                message:   "Vit un berger. « Enseigne-moi, de grâce,",
+                locations: [],
             }, {
-                "linter":    "csslint",
-                "rule":      null,
-                "severity":  SEVERITY.INFO,
-                "message":   "De mon voleur, lui dit-il, la maison,",
-                "locations": []
-            }
+                linter:    "csslint",
+                rule:      null,
+                severity:  SEVERITY.INFO,
+                message:   "De mon voleur, lui dit-il, la maison,",
+                locations: [],
+            },
         ]);
         reporter.finalize();
 
@@ -101,12 +101,12 @@ describe("lib/formatter/csv.js", function () {
         const reporter = new Formatter(SEVERITY.INFO, writer);
         reporter.notify("un.yml", [
             {
-                "linter":    "ymllint",
-                "rule":      null,
-                "severity":  SEVERITY.FATAL,
-                "message":   "De mon voleur, lui dit-il, la maison,",
-                "locations": []
-            }
+                linter:    "ymllint",
+                rule:      null,
+                severity:  SEVERITY.FATAL,
+                message:   "De mon voleur, lui dit-il, la maison,",
+                locations: [],
+            },
         ]);
         reporter.finalize();
 

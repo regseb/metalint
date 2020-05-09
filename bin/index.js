@@ -11,40 +11,40 @@ const metalint  = require("../lib/index");
 const SEVERITY  = require("../lib/severity");
 
 const argv = yargs.options({
-    "c": {
-        "alias":       "config",
-        "default":     ".metalint/metalint.json",
-        "requiresArg": true,
-        "type":        "string"
+    c: {
+        alias:       "config",
+        default:     ".metalint/metalint.json",
+        requiresArg: true,
+        type:        "string",
     },
-    "f": {
-        "alias":       "formatter",
-        "requiresArg": true,
-        "type":        "string"
+    f: {
+        alias:       "formatter",
+        requiresArg: true,
+        type:        "string",
     },
-    "l": {
-        "alias":       "level",
-        "requiresArg": true,
-        "type":        "string"
+    l: {
+        alias:       "level",
+        requiresArg: true,
+        type:        "string",
     },
-    "o": {
-        "alias":       "output",
-        "requiresArg": true,
-        "type":        "string"
+    o: {
+        alias:       "output",
+        requiresArg: true,
+        type:        "string",
     },
-    "p": {
-        "alias":       "patterns",
-        "requiresArg": true,
-        "type":        "array"
+    p: {
+        alias:       "patterns",
+        requiresArg: true,
+        type:        "array",
     },
-    "help": {
-        "alias": "help",
-        "type":  "boolean"
+    help: {
+        alias: "help",
+        type:  "boolean",
     },
-    "version": {
-        "alias": "version",
-        "type":  "boolean"
-    }
+    version: {
+        alias: "version",
+        type:  "boolean",
+    },
 }).help(false).version(false).parse();
 
 /**

@@ -10,8 +10,8 @@ describe("lib/wrapper/jsonlint.js", function () {
     it("configure()", function () {
         const checker = linter.configure();
         assert.deepStrictEqual(checker, {
-            "patterns": "*.json",
-            "linters":  { "jsonlint": null }
+            patterns: "*.json",
+            linters:  { jsonlint: null },
         });
     });
 
@@ -22,12 +22,11 @@ describe("lib/wrapper/jsonlint.js", function () {
         return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "jsonlint",
-                    "message":   "Expecting 'EOF', '}', ',', ']', got" +
-                                 " 'STRING'",
-                    "locations": [{ "line": 3 }]
-                }
+                    file:      file,
+                    linter:    "jsonlint",
+                    message:   "Expecting 'EOF', '}', ',', ']', got 'STRING'",
+                    locations: [{ line: 3 }],
+                },
             ]);
         });
     });
@@ -48,12 +47,12 @@ describe("lib/wrapper/jsonlint.js", function () {
         return linter.wrapper(file, level).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "jsonlint",
-                    "message":   "Expecting 'STRING', 'NUMBER', 'NULL'," +
-                                 " 'TRUE', 'FALSE', '{', '[', got 'undefined'",
-                    "locations": [{ "line": 2 }]
-                }
+                    file:      file,
+                    linter:    "jsonlint",
+                    message:   "Expecting 'STRING', 'NUMBER', 'NULL', 'TRUE'," +
+                               " 'FALSE', '{', '[', got 'undefined'",
+                    locations: [{ line: 2 }],
+                },
             ]);
         });
     });

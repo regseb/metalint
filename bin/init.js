@@ -8,30 +8,30 @@ const log   = require("npmlog");
 const yargs = require("yargs");
 
 const argv = yargs.options({
-    "f": {
-        "alias":       "formatter",
-        "requiresArg": true,
-        "type":        "string"
+    f: {
+        alias:       "formatter",
+        requiresArg: true,
+        type:        "string",
     },
-    "l": {
-        "alias":       "level",
-        "requiresArg": true,
-        "type":        "string"
+    l: {
+        alias:       "level",
+        requiresArg: true,
+        type:        "string",
     },
-    "o": {
-        "alias":       "output",
-        "requiresArg": true,
-        "type":        "string"
+    o: {
+        alias:       "output",
+        requiresArg: true,
+        type:        "string",
     },
-    "p": {
-        "alias":       "patterns",
-        "requiresArg": true,
-        "type":        "array"
+    p: {
+        alias:       "patterns",
+        requiresArg: true,
+        type:        "array",
     },
-    "help": {
-        "alias": "help",
-        "type":  "boolean"
-    }
+    help: {
+        alias: "help",
+        type:  "boolean",
+    },
 }).help(false).version(false).parse();
 
 if (argv.help) {
@@ -55,8 +55,8 @@ fs.mkdirSync(".metalint");
 
 // Initialiser les données de la configuration.
 const config = {
-    "patterns": ["!/.git/", "!/node_modules/", "**"],
-    "checkers": []
+    patterns: ["!/.git/", "!/node_modules/", "**"],
+    checkers: [],
 };
 // Surcharger la configuration par les paramètres de la ligne de commande.
 for (const key of ["level", "patterns"]) {

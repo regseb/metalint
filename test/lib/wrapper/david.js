@@ -10,8 +10,8 @@ describe("lib/wrapper/david.js", function () {
     it("configure()", function () {
         const checker = linter.configure();
         assert.deepStrictEqual(checker, {
-            "patterns": "/package.json",
-            "linters":  { "david": {} }
+            patterns: "/package.json",
+            linters:  { david: {} },
         });
     });
 
@@ -37,9 +37,9 @@ describe("lib/wrapper/david.js", function () {
         const file    = DATA_DIR + "/package1.json";
         const level   = SEVERITY.INFO;
         const options = {
-            "dev":      false,
-            "optional": true,
-            "peer":     true
+            dev:      false,
+            optional: true,
+            peer:     true,
         };
 
         return linter.wrapper(file, level, options).then(function (notices) {
@@ -55,14 +55,14 @@ describe("lib/wrapper/david.js", function () {
             assert.ok(!("locations" in notices[0]));
 
             assert.deepStrictEqual(notices[1], {
-                "file":     file,
-                "linter":   "david",
-                "severity": SEVERITY.FATAL,
-                "message":  "'metalint-with-typo' is not in the npm" +
-                            " registry.\nYou should bug the author to publish" +
-                            " it\n(or use the name yourself!)\n\nNote that" +
-                            " you can also install from a\ntarball, folder," +
-                            " http url, or git url."
+                file:     file,
+                linter:   "david",
+                severity: SEVERITY.FATAL,
+                message:  "'metalint-with-typo' is not in the npm" +
+                          " registry.\nYou should bug the author to publish" +
+                          " it\n(or use the name yourself!)\n\nNote that you" +
+                          " can also install from a\ntarball, folder, http" +
+                          " url, or git url.",
             });
         });
     });
@@ -71,9 +71,9 @@ describe("lib/wrapper/david.js", function () {
         const file    = DATA_DIR + "/package1.json";
         const level   = SEVERITY.INFO;
         const options = {
-            "dev":      true,
-            "optional": false,
-            "peer":     false
+            dev:      true,
+            optional: false,
+            peer:     false,
         };
 
         return linter.wrapper(file, level, options).then(function (notices) {
@@ -103,9 +103,9 @@ describe("lib/wrapper/david.js", function () {
         const file    = DATA_DIR + "/package1.json";
         const level   = SEVERITY.INFO;
         const options = {
-            "dev":      true,
-            "optional": false,
-            "peer":     true
+            dev:      true,
+            optional: false,
+            peer:     true,
         };
 
         return linter.wrapper(file, level, options).then(function (notices) {

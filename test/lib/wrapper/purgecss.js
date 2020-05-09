@@ -11,8 +11,8 @@ describe("lib/wrapper/purgecss.js", function () {
         const checker = linter.configure();
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.css",
-            "linters":  { "purgecss": { "content": ["*.html", "*.js"] } }
+            patterns: "*.css",
+            linters:  { purgecss: { content: ["*.html", "*.js"] } },
         });
     });
 
@@ -22,7 +22,7 @@ describe("lib/wrapper/purgecss.js", function () {
         const file    = "style.css";
         const level   = SEVERITY.INFO;
         const options = {
-            "content": "*.html"
+            content: "*.html",
         };
 
         process.chdir(DATA_DIR);
@@ -30,16 +30,16 @@ describe("lib/wrapper/purgecss.js", function () {
                      .then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":     file,
-                    "linter":   "purgecss",
-                    "severity": SEVERITY.ERROR,
-                    "message":  "'.blue' is never used."
+                    file:     file,
+                    linter:   "purgecss",
+                    severity: SEVERITY.ERROR,
+                    message:  "'.blue' is never used.",
                 }, {
-                    "file":     file,
-                    "linter":   "purgecss",
-                    "severity": SEVERITY.ERROR,
-                    "message":  "'.red' is never used."
-                }
+                    file:     file,
+                    linter:   "purgecss",
+                    severity: SEVERITY.ERROR,
+                    message:  "'.red' is never used.",
+                },
             ]);
 
             process.chdir(cwd);
@@ -52,8 +52,8 @@ describe("lib/wrapper/purgecss.js", function () {
         const file    = "style.css";
         const level   = SEVERITY.INFO;
         const options = {
-            "content":   ["*.html", "*.js"],
-            "whitelist": ["red"]
+            content:   ["*.html", "*.js"],
+            whitelist: ["red"],
         };
 
         process.chdir(DATA_DIR);
@@ -61,11 +61,11 @@ describe("lib/wrapper/purgecss.js", function () {
                      .then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":     file,
-                    "linter":   "purgecss",
-                    "severity": SEVERITY.ERROR,
-                    "message":  "'.blue' is never used."
-                }
+                    file:     file,
+                    linter:   "purgecss",
+                    severity: SEVERITY.ERROR,
+                    message:  "'.blue' is never used.",
+                },
             ]);
 
             process.chdir(cwd);
@@ -75,17 +75,17 @@ describe("lib/wrapper/purgecss.js", function () {
     it("wrapper()", function () {
         const file    = "style.css";
         const level   = SEVERITY.FATAL;
-        const options = { "content": [] };
+        const options = { content: [] };
 
         return linter.wrapper(file, level, options, DATA_DIR)
                      .then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":     file,
-                    "linter":   "purgecss",
-                    "severity": SEVERITY.FATAL,
-                    "message":  "No content provided."
-                }
+                    file:     file,
+                    linter:   "purgecss",
+                    severity: SEVERITY.FATAL,
+                    message:  "No content provided.",
+                },
             ]);
         });
     });

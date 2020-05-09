@@ -32,27 +32,27 @@ describe("lib/formatter/unix.js", function () {
         const reporter = new Formatter(SEVERITY.INFO, writer);
         reporter.notify("un.html", [
             {
-                "linter":    "htmllint",
-                "rule":      null,
-                "severity":  SEVERITY.ERROR,
-                "message":   "La cigale ayant chanté",
-                "locations": []
-            }
+                linter:    "htmllint",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
+                message:   "La cigale ayant chanté",
+                locations: [],
+            },
         ]);
         reporter.notify("deux.js", [
             {
-                "linter":    "jslint",
-                "rule":      "1",
-                "severity":  SEVERITY.WARN,
-                "message":   "Tout l'été,",
-                "locations": [{ "line": 1, "column": 2 }]
+                linter:    "jslint",
+                rule:      "1",
+                severity:  SEVERITY.WARN,
+                message:   "Tout l'été,",
+                locations: [{ line: 1, column: 2 }],
             }, {
-                "linter":    "jslint",
-                "rule":      "2",
-                "severity":  SEVERITY.INFO,
-                "message":   "Se trouva fort dépourvue",
-                "locations": [{ "line": 3 }]
-            }
+                linter:    "jslint",
+                rule:      "2",
+                severity:  SEVERITY.INFO,
+                message:   "Se trouva fort dépourvue",
+                locations: [{ line: 3 }],
+            },
         ]);
         reporter.finalize();
 
@@ -69,12 +69,12 @@ describe("lib/formatter/unix.js", function () {
         const reporter = new Formatter(SEVERITY.ERROR, writer);
         reporter.notify("un.css", [
             {
-                "linter":    "csslint",
-                "rule":      "3",
-                "severity":  SEVERITY.FATAL,
-                "message":   "Quand la bise fut venue.",
-                "locations": []
-            }
+                linter:    "csslint",
+                rule:      "3",
+                severity:  SEVERITY.FATAL,
+                message:   "Quand la bise fut venue.",
+                locations: [],
+            },
         ]);
         reporter.finalize();
 

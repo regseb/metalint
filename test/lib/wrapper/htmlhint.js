@@ -15,8 +15,8 @@ describe("lib/wrapper/htmlhint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.html",
-            "linters":  { "htmlhint": null }
+            patterns: "*.html",
+            linters:  { htmlhint: null },
         });
     });
 
@@ -28,8 +28,8 @@ describe("lib/wrapper/htmlhint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": "*.html",
-            "linters":  { "htmlhint": "../.htmlhintrc" }
+            patterns: "*.html",
+            linters:  { htmlhint: "../.htmlhintrc" },
         });
     });
 
@@ -51,13 +51,13 @@ describe("lib/wrapper/htmlhint.js", function () {
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "htmlhint",
-                    "rule":      "doctype-first",
-                    "severity":  SEVERITY.ERROR,
-                    "message":   "Doctype must be declared first.",
-                    "locations": [{ "line": 1, "column": 1 }]
-                }
+                    file:      file,
+                    linter:    "htmlhint",
+                    rule:      "doctype-first",
+                    severity:  SEVERITY.ERROR,
+                    message:   "Doctype must be declared first.",
+                    locations: [{ line: 1, column: 1 }],
+                },
             ]);
         });
     });

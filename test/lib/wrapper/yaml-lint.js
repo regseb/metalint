@@ -15,8 +15,8 @@ describe("lib/wrapper/yaml-lint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": ["*.yaml", "*.yml"],
-            "linters":  { "yaml-lint": null }
+            patterns: ["*.yaml", "*.yml"],
+            linters:  { "yaml-lint": null },
         });
     });
 
@@ -28,26 +28,26 @@ describe("lib/wrapper/yaml-lint.js", function () {
         process.chdir(cwd);
 
         assert.deepStrictEqual(checker, {
-            "patterns": ["*.yaml", "*.yml"],
-            "linters":  { "yaml-lint": "../.yaml-lint.json" }
+            patterns: ["*.yaml", "*.yml"],
+            linters:  { "yaml-lint": "../.yaml-lint.json" },
         });
     });
 
     it("wrapper()", function () {
         const file    = DATA_DIR + "/data1.yaml";
         const level   = SEVERITY.INFO;
-        const options = { "schema": "FAILSAFE_SCHEMA" };
+        const options = { schema: "FAILSAFE_SCHEMA" };
 
         return linter.wrapper(file, level, options).then(function (notices) {
             assert.deepStrictEqual(notices, [
                 {
-                    "file":      file,
-                    "linter":    "yaml-lint",
-                    "message":   "incomplete explicit mapping pair; a key" +
-                                 " node is missed; or followed by a" +
-                                 " non-tabulated empty line",
-                    "locations": [{ "line": 1, "column": 1 }]
-                }
+                    file:      file,
+                    linter:    "yaml-lint",
+                    message:   "incomplete explicit mapping pair; a key node" +
+                               " is missed; or followed by a non-tabulated" +
+                               " empty line",
+                    locations: [{ line: 1, column: 1 }],
+                },
             ]);
         });
     });

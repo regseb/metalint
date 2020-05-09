@@ -32,27 +32,27 @@ describe("test/data/formatter/french.js", function () {
         const reporter = new Formatter(SEVERITY.INFO, writer);
         reporter.notify("un.html", [
             {
-                "linter":    "htmlhint",
-                "rule":      null,
-                "severity":  SEVERITY.ERROR,
-                "message":   "Doctype must be declared first.",
-                "locations": []
-            }
+                linter:    "htmlhint",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
+                message:   "Doctype must be declared first.",
+                locations: [],
+            },
         ]);
         reporter.notify("deux.md", [
             {
-                "linter":    "markdownlint",
-                "rule":      "MD012",
-                "severity":  SEVERITY.WARN,
-                "message":   "Multiple consecutive blank lines",
-                "locations": []
+                linter:    "markdownlint",
+                rule:      "MD012",
+                severity:  SEVERITY.WARN,
+                message:   "Multiple consecutive blank lines",
+                locations: [],
             }, {
-                "linter":    "markdownlint",
-                "rule":      "MD010",
-                "severity":  SEVERITY.INFO,
-                "message":   "Hard tabs",
-                "locations": [{ "line": 3 }]
-            }
+                linter:    "markdownlint",
+                rule:      "MD010",
+                severity:  SEVERITY.INFO,
+                message:   "Hard tabs",
+                locations: [{ line: 3 }],
+            },
         ]);
         reporter.finalize();
 

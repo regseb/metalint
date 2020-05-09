@@ -131,18 +131,18 @@ describe("lib/glob.js", function () {
 
     it("test() throws", function () {
         assert.throws(() => glob.test("", ["/**foo"], "", false), {
-            "name":    "Error",
-            "message": "/**foo: '**' not followed by a slash."
+            name:    "Error",
+            message: "/**foo: '**' not followed by a slash.",
         });
 
         assert.throws(() => glob.test("", ["foo**"], "", false), {
-            "name":    "Error",
-            "message": "foo**: '**' not preceded by a slash."
+            name:    "Error",
+            message: "foo**: '**' not preceded by a slash.",
         });
 
         assert.throws(() => glob.test("", ["fo[ou"], "", false), {
-            "name":    "Error",
-            "message": "fo[ou: ']' missing."
+            name:    "Error",
+            message: "fo[ou: ']' missing.",
         });
     });
 

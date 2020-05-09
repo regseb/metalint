@@ -21,7 +21,7 @@ describe("lib/formatter/console.js", function () {
         const writer = new streams.WritableStream();
 
         const reporter = new Formatter(SEVERITY.FATAL, writer, {
-            "showZeroNotice": true
+            showZeroNotice: true,
         });
         reporter.notify("README.md",    null);
         reporter.notify("package.json", []);
@@ -34,8 +34,8 @@ describe("lib/formatter/console.js", function () {
         const writer = new streams.WritableStream();
 
         const reporter = new Formatter(SEVERITY.INFO, writer, {
-            "showZeroNotice": true,
-            "showNoChecked":  true
+            showZeroNotice: true,
+            showNoChecked:  true,
         });
         reporter.notify("README.md",    null);
         reporter.notify("package.json", []);
