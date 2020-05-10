@@ -38,7 +38,7 @@ describe("lib/wrapper/purgecss.js", function () {
                     file:     file,
                     linter:   "purgecss",
                     severity: SEVERITY.ERROR,
-                    message:  "'.red' is never used.",
+                    message:  "'.red .green' is never used.",
                 },
             ]);
 
@@ -53,7 +53,59 @@ describe("lib/wrapper/purgecss.js", function () {
         const level   = SEVERITY.INFO;
         const options = {
             content:   ["*.html", "*.js"],
-            whitelist: ["red"],
+            whitelist: ["blue"],
+        };
+
+        process.chdir(DATA_DIR);
+        return linter.wrapper(file, level, options, DATA_DIR)
+                     .then(function (notices) {
+            assert.deepStrictEqual(notices, [
+                {
+                    file:     file,
+                    linter:   "purgecss",
+                    severity: SEVERITY.ERROR,
+                    message:  "'.red .green' is never used.",
+                },
+            ]);
+
+            process.chdir(cwd);
+        });
+    });
+
+    it("wrapper()", function () {
+        const cwd = process.cwd();
+
+        const file    = "style.css";
+        const level   = SEVERITY.INFO;
+        const options = {
+            content:           ["*.html", "*.js"],
+            whitelistPatterns: ["/^b.*$/u"],
+        };
+
+        process.chdir(DATA_DIR);
+        return linter.wrapper(file, level, options, DATA_DIR)
+                     .then(function (notices) {
+            assert.deepStrictEqual(notices, [
+                {
+                    file:     file,
+                    linter:   "purgecss",
+                    severity: SEVERITY.ERROR,
+                    message:  "'.red .green' is never used.",
+                },
+            ]);
+
+            process.chdir(cwd);
+        });
+    });
+
+    it("wrapper()", function () {
+        const cwd = process.cwd();
+
+        const file    = "style.css";
+        const level   = SEVERITY.INFO;
+        const options = {
+            content:                   ["*.html", "*.js"],
+            whitelistPatternsChildren: ["/^r/u"],
         };
 
         process.chdir(DATA_DIR);
