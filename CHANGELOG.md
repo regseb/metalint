@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.8](https://github.com/regseb/metalint/compare/v0.8.7...v0.8.8) (2020-05-11)
+
+
+### Features
+
+* Gérer l'option whitelistPatterns de PurgeCSS. ([b1bec7f](https://github.com/regseb/metalint/commit/b1bec7fe670aec5ef2b47c2f104e02e0d1fa46ac))
+
 ### [0.8.7](https://github.com/regseb/metalint/compare/v0.8.6...v0.8.7) (2020-04-14)
 
 
