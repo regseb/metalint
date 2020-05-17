@@ -1,6 +1,6 @@
 {
     "name": "metalint",
-    "version": "0.8.8",
+    "version": "0.8.9",
     "description": "Un linter pour les gouverner tous.",
     "keywords": [
         "checker",
@@ -22,10 +22,7 @@
     ],
     "main": "lib/index",
     "bin": "bin/cli.js",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/regseb/metalint.git"
-    },
+    "repository": "regseb/metalint",
     "funding": "https://www.paypal.me/sebastienregne",
     "scripts": {
         "lint": "bin/cli.js",
