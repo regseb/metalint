@@ -33,27 +33,25 @@ describe("lib/wrapper/stylelint.js", function () {
         });
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/style1.css";
         const level   = SEVERITY.INFO;
         const options = null;
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/style2.css";
         const level   = SEVERITY.INFO;
         const options = { rules: { "color-hex-case": "upper" } };
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/style3.css";
         const level   = SEVERITY.WARN;
         const options = {
@@ -62,21 +60,20 @@ describe("lib/wrapper/stylelint.js", function () {
             },
         };
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "stylelint",
-                    rule:      "number-leading-zero",
-                    severity:  SEVERITY.WARN,
-                    message:   "Expected a leading zero",
-                    locations: [{ line: 1, column: 16 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "stylelint",
+                rule:      "number-leading-zero",
+                severity:  SEVERITY.WARN,
+                message:   "Expected a leading zero",
+                locations: [{ line: 1, column: 16 }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/style4.css";
         const level   = SEVERITY.ERROR;
         const options = {
@@ -86,46 +83,43 @@ describe("lib/wrapper/stylelint.js", function () {
             },
         };
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "stylelint",
-                    rule:      "string-quotes",
-                    severity:  SEVERITY.ERROR,
-                    message:   "Expected double quotes",
-                    locations: [{ line: 2, column: 14 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "stylelint",
+                rule:      "string-quotes",
+                severity:  SEVERITY.ERROR,
+                message:   "Expected double quotes",
+                locations: [{ line: 2, column: 14 }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/style5.css";
         const level   = SEVERITY.FATAL;
         const options = { rules: { "no-extra-semicolons": true } };
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/node_modules/style.css";
         const level   = SEVERITY.INFO;
         const options = { rules: { "unit-no-unknown": true } };
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "stylelint",
-                    rule:      "unit-no-unknown",
-                    severity:  SEVERITY.ERROR,
-                    message:   `Unexpected unknown unit "el"`,
-                    locations: [{ line: 2, column: 12 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "stylelint",
+                rule:      "unit-no-unknown",
+                severity:  SEVERITY.ERROR,
+                message:   `Unexpected unknown unit "el"`,
+                locations: [{ line: 2, column: 12 }],
+            },
+        ]);
     });
 });

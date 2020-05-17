@@ -15,62 +15,57 @@ describe("lib/wrapper/addons-linter.js", function () {
         });
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file  = DATA_DIR + "/addon.xpi";
         const level = SEVERITY.INFO;
 
-        return linter.wrapper(file, level).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level);
+        assert.deepStrictEqual(notices, []);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file  = DATA_DIR + "/addon1/";
         const level = SEVERITY.WARN;
 
-        return linter.wrapper(file, level).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file + "manifest.json",
-                    linter:    "addons-linter",
-                    rule:      "MANIFEST_FIELD_REQUIRED",
-                    severity:  SEVERITY.ERROR,
-                    message:   `"/name" is a required property`,
-                }, {
-                    file:      file + "manifest.json",
-                    linter:    "addons-linter",
-                    rule:      "MANIFEST_PERMISSIONS",
-                    severity:  SEVERITY.WARN,
-                    message:   `/permissions: Unknown permissions "god mode"` +
-                               ` at 0.`,
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level);
+        assert.deepStrictEqual(notices, [
+            {
+                file:      file + "manifest.json",
+                linter:    "addons-linter",
+                rule:      "MANIFEST_FIELD_REQUIRED",
+                severity:  SEVERITY.ERROR,
+                message:   `"/name" is a required property`,
+            }, {
+                file:      file + "manifest.json",
+                linter:    "addons-linter",
+                rule:      "MANIFEST_PERMISSIONS",
+                severity:  SEVERITY.WARN,
+                message:   `/permissions: Unknown permissions "god mode" at 0.`,
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file  = DATA_DIR + "/addon2/";
         const level = SEVERITY.INFO;
 
-        return linter.wrapper(file, level).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "addons-linter",
-                    rule:      "TYPE_NO_MANIFEST_JSON",
-                    severity:  SEVERITY.ERROR,
-                    message:   "manifest.json was not found",
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "addons-linter",
+                rule:      "TYPE_NO_MANIFEST_JSON",
+                severity:  SEVERITY.ERROR,
+                message:   "manifest.json was not found",
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file  = DATA_DIR + "/addon2/";
         const level = SEVERITY.FATAL;
 
-        return linter.wrapper(file, level).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level);
+        assert.deepStrictEqual(notices, []);
     });
 });

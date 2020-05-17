@@ -15,54 +15,50 @@ describe("lib/wrapper/jsonlint.js", function () {
         });
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file  = DATA_DIR + "/data1.json";
         const level = SEVERITY.INFO;
 
-        return linter.wrapper(file, level).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "jsonlint",
-                    message:   "Expecting 'EOF', '}', ',', ']', got 'STRING'",
-                    locations: [{ line: 3 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "jsonlint",
+                message:   "Expecting 'EOF', '}', ',', ']', got 'STRING'",
+                locations: [{ line: 3 }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file  = DATA_DIR + "/data2.json";
         const level = SEVERITY.INFO;
 
-        return linter.wrapper(file, level).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level);
+        assert.deepStrictEqual(notices, []);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file  = DATA_DIR + "/data3.json";
         const level = SEVERITY.WARN;
 
-        return linter.wrapper(file, level).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "jsonlint",
-                    message:   "Expecting 'STRING', 'NUMBER', 'NULL', 'TRUE'," +
-                               " 'FALSE', '{', '[', got 'undefined'",
-                    locations: [{ line: 2 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "jsonlint",
+                message:   "Expecting 'STRING', 'NUMBER', 'NULL', 'TRUE'," +
+                           " 'FALSE', '{', '[', got 'undefined'",
+                locations: [{ line: 2 }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file  = DATA_DIR + "/test.txt";
         const level = SEVERITY.FATAL;
 
-        return linter.wrapper(file, level).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level);
+        assert.deepStrictEqual(notices, []);
     });
 });

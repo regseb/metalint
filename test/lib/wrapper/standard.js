@@ -15,35 +15,33 @@ describe("lib/wrapper/standard.js", function () {
         });
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file  = DATA_DIR + "/script.js";
         const level = SEVERITY.ERROR;
 
-        return linter.wrapper(file, level).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "standard",
-                    rule:      "no-unused-vars",
-                    message:   "'text' is assigned a value but never used.",
-                    locations: [{ line: 1, column: 5 }],
-                }, {
-                    file:      file,
-                    linter:    "standard",
-                    rule:      "quotes",
-                    message:   "Strings must use singlequote.",
-                    locations: [{ line: 1, column: 12 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "standard",
+                rule:      "no-unused-vars",
+                message:   "'text' is assigned a value but never used.",
+                locations: [{ line: 1, column: 5 }],
+            }, {
+                file,
+                linter:    "standard",
+                rule:      "quotes",
+                message:   "Strings must use singlequote.",
+                locations: [{ line: 1, column: 12 }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file  = DATA_DIR + "/data.xml";
         const level = SEVERITY.FATAL;
 
-        return linter.wrapper(file, level).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level);
+        assert.deepStrictEqual(notices, []);
     });
 });

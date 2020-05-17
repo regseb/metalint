@@ -33,61 +33,57 @@ describe("lib/wrapper/markdownlint.js", function () {
         });
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/README1.md";
         const level   = SEVERITY.INFO;
         const options = null;
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "markdownlint",
-                    rule:      "MD029/ol-prefix",
-                    message:   "Ordered list item prefix [Expected: 2;" +
-                               " Actual: 3; Style: 1/2/3]",
-                    locations: [{ line: 4 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "markdownlint",
+                rule:      "MD029/ol-prefix",
+                message:   "Ordered list item prefix [Expected: 2; Actual: 3;" +
+                           " Style: 1/2/3]",
+                locations: [{ line: 4 }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/README2.md";
         const level   = SEVERITY.INFO;
         const options = {};
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/README3.md";
         const level   = SEVERITY.WARN;
         const options = {};
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "markdownlint",
-                    rule:      "MD026/no-trailing-punctuation",
-                    message:   "Trailing punctuation in heading [Punctuation:" +
-                               " '!']",
-                    locations: [{ line: 1 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "markdownlint",
+                rule:      "MD026/no-trailing-punctuation",
+                message:   "Trailing punctuation in heading [Punctuation:" +
+                           " '!']",
+                locations: [{ line: 1 }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/README4.md";
         const level   = SEVERITY.FATAL;
         const options = {};
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 });

@@ -16,7 +16,7 @@ describe("lib/wrapper/purgecss.js", function () {
         });
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const cwd = process.cwd();
 
         const file    = "style.css";
@@ -26,27 +26,25 @@ describe("lib/wrapper/purgecss.js", function () {
         };
 
         process.chdir(DATA_DIR);
-        return linter.wrapper(file, level, options, DATA_DIR)
-                     .then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:     file,
-                    linter:   "purgecss",
-                    severity: SEVERITY.ERROR,
-                    message:  "'.blue' is never used.",
-                }, {
-                    file:     file,
-                    linter:   "purgecss",
-                    severity: SEVERITY.ERROR,
-                    message:  "'.red .green' is never used.",
-                },
-            ]);
+        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:   "purgecss",
+                severity: SEVERITY.ERROR,
+                message:  "'.blue' is never used.",
+            }, {
+                file,
+                linter:   "purgecss",
+                severity: SEVERITY.ERROR,
+                message:  "'.red .green' is never used.",
+            },
+        ]);
 
-            process.chdir(cwd);
-        });
+        process.chdir(cwd);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const cwd = process.cwd();
 
         const file    = "style.css";
@@ -57,22 +55,20 @@ describe("lib/wrapper/purgecss.js", function () {
         };
 
         process.chdir(DATA_DIR);
-        return linter.wrapper(file, level, options, DATA_DIR)
-                     .then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:     file,
-                    linter:   "purgecss",
-                    severity: SEVERITY.ERROR,
-                    message:  "'.red .green' is never used.",
-                },
-            ]);
+        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:   "purgecss",
+                severity: SEVERITY.ERROR,
+                message:  "'.red .green' is never used.",
+            },
+        ]);
 
-            process.chdir(cwd);
-        });
+        process.chdir(cwd);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const cwd = process.cwd();
 
         const file    = "style.css";
@@ -83,22 +79,20 @@ describe("lib/wrapper/purgecss.js", function () {
         };
 
         process.chdir(DATA_DIR);
-        return linter.wrapper(file, level, options, DATA_DIR)
-                     .then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:     file,
-                    linter:   "purgecss",
-                    severity: SEVERITY.ERROR,
-                    message:  "'.red .green' is never used.",
-                },
-            ]);
+        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:   "purgecss",
+                severity: SEVERITY.ERROR,
+                message:  "'.red .green' is never used.",
+            },
+        ]);
 
-            process.chdir(cwd);
-        });
+        process.chdir(cwd);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const cwd = process.cwd();
 
         const file    = "style.css";
@@ -109,47 +103,41 @@ describe("lib/wrapper/purgecss.js", function () {
         };
 
         process.chdir(DATA_DIR);
-        return linter.wrapper(file, level, options, DATA_DIR)
-                     .then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:     file,
-                    linter:   "purgecss",
-                    severity: SEVERITY.ERROR,
-                    message:  "'.blue' is never used.",
-                },
-            ]);
+        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:   "purgecss",
+                severity: SEVERITY.ERROR,
+                message:  "'.blue' is never used.",
+            },
+        ]);
 
-            process.chdir(cwd);
-        });
+        process.chdir(cwd);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = "style.css";
         const level   = SEVERITY.FATAL;
         const options = { content: [] };
 
-        return linter.wrapper(file, level, options, DATA_DIR)
-                     .then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:     file,
-                    linter:   "purgecss",
-                    severity: SEVERITY.FATAL,
-                    message:  "No content provided.",
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:   "purgecss",
+                severity: SEVERITY.FATAL,
+                message:  "No content provided.",
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = "style.css";
         const level   = SEVERITY.OFF;
         const options = null;
 
-        return linter.wrapper(file, level, options, DATA_DIR)
-                     .then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        assert.deepStrictEqual(notices, []);
     });
 });

@@ -33,42 +33,39 @@ describe("lib/wrapper/yaml-lint.js", function () {
         });
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/data1.yaml";
         const level   = SEVERITY.INFO;
         const options = { schema: "FAILSAFE_SCHEMA" };
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "yaml-lint",
-                    message:   "incomplete explicit mapping pair; a key node" +
-                               " is missed; or followed by a non-tabulated" +
-                               " empty line",
-                    locations: [{ line: 1, column: 1 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "yaml-lint",
+                message:   "incomplete explicit mapping pair; a key node" +
+                           " is missed; or followed by a non-tabulated" +
+                           " empty line",
+                locations: [{ line: 1, column: 1 }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/data2.yml";
         const level   = SEVERITY.ERROR;
         const options = null;
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/data3.yml";
         const level   = SEVERITY.FATAL;
         const options = null;
 
-        return linter.wrapper(file, level, options).then((notices) => {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 });

@@ -8,9 +8,10 @@ const DATA_DIR = "test/data/lib/index";
 
 describe("lib/index.js", function () {
     describe("metalint()", function () {
-        it("", function () {
+        it("", async function () {
             const files    = [
-                DATA_DIR + "/index.html", DATA_DIR + "/README.md",
+                DATA_DIR + "/index.html",
+                DATA_DIR + "/README.md",
                 DATA_DIR + "/script.js",
             ];
             const checkers = [
@@ -33,39 +34,38 @@ describe("lib/index.js", function () {
                 },
             ];
 
-            return metalint(files, checkers, DATA_DIR).then(function (results) {
-                assert.deepStrictEqual(results, {
-                    [DATA_DIR + "/index.html"]: [],
-                    [DATA_DIR + "/README.md"]:  null,
-                    [DATA_DIR + "/script.js"]:  [
-                        {
-                            file:      DATA_DIR + "/script.js",
-                            linter:    "jscs",
-                            rule:      "disallowFunctionDeclarations",
-                            severity:  SEVERITY.ERROR,
-                            message:   "Illegal function declaration",
-                            locations: [{ line: 1, column: 1 }],
-                        }, {
-                            file:      DATA_DIR + "/script.js",
-                            linter:    "jscs",
-                            rule:      "validateQuoteMarks",
-                            severity:  SEVERITY.ERROR,
-                            message:   "Invalid quote mark found",
-                            locations: [{ line: 2, column: 11 }],
-                        }, {
-                            file:      DATA_DIR + "/script.js",
-                            linter:    "jshint",
-                            rule:      "W033",
-                            severity:  SEVERITY.WARN,
-                            message:   "Missing semicolon.",
-                            locations: [{ line: 2, column: 26 }],
-                        },
-                    ],
-                });
+            const results = await metalint(files, checkers, DATA_DIR);
+            assert.deepStrictEqual(results, {
+                [DATA_DIR + "/index.html"]: [],
+                [DATA_DIR + "/README.md"]:  null,
+                [DATA_DIR + "/script.js"]:  [
+                    {
+                        file:      DATA_DIR + "/script.js",
+                        linter:    "jscs",
+                        rule:      "disallowFunctionDeclarations",
+                        severity:  SEVERITY.ERROR,
+                        message:   "Illegal function declaration",
+                        locations: [{ line: 1, column: 1 }],
+                    }, {
+                        file:      DATA_DIR + "/script.js",
+                        linter:    "jscs",
+                        rule:      "validateQuoteMarks",
+                        severity:  SEVERITY.ERROR,
+                        message:   "Invalid quote mark found",
+                        locations: [{ line: 2, column: 11 }],
+                    }, {
+                        file:      DATA_DIR + "/script.js",
+                        linter:    "jshint",
+                        rule:      "W033",
+                        severity:  SEVERITY.WARN,
+                        message:   "Missing semicolon.",
+                        locations: [{ line: 2, column: 26 }],
+                    },
+                ],
             });
         });
 
-        it("", function () {
+        it("", async function () {
             const files    = [DATA_DIR + "/README.md"];
             const checkers = [
                 {
@@ -75,25 +75,24 @@ describe("lib/index.js", function () {
                 },
             ];
 
-            return metalint(files, checkers, DATA_DIR).then(function (results) {
-                assert.deepStrictEqual(results, {
-                    [DATA_DIR + "/README.md"]: [
-                        {
-                            file:      DATA_DIR + "/README.md",
-                            linter:    "markdownlint",
-                            rule:      "MD041/first-line-heading" +
-                                                               "/first-line-h1",
-                            severity:  SEVERITY.ERROR,
-                            message:   "First line in file should be a top" +
-                                       ` level heading [Context: "## README"]`,
-                            locations: [{ line: 1 }],
-                        },
-                    ],
-                });
+            const results = await metalint(files, checkers, DATA_DIR);
+            assert.deepStrictEqual(results, {
+                [DATA_DIR + "/README.md"]: [
+                    {
+                        file:      DATA_DIR + "/README.md",
+                        linter:    "markdownlint",
+                        rule:      "MD041/first-line-heading" +
+                                                           "/first-line-h1",
+                        severity:  SEVERITY.ERROR,
+                        message:   "First line in file should be a top" +
+                                   ` level heading [Context: "## README"]`,
+                        locations: [{ line: 1 }],
+                    },
+                ],
             });
         });
 
-        it(`should add default "rule" and "severity"`, function () {
+        it(`should add default "rule" and "severity"`, async function () {
             const files    = [DATA_DIR + "/config.json"];
             const checkers = [
                 {
@@ -103,25 +102,24 @@ describe("lib/index.js", function () {
                 },
             ];
 
-            return metalint(files, checkers, DATA_DIR).then(function (results) {
-                assert.deepStrictEqual(results, {
-                    [DATA_DIR + "/config.json"]: [
-                        {
-                            file:      DATA_DIR + "/config.json",
-                            linter:    "json-lint",
-                            rule:      null,
-                            severity:  SEVERITY.ERROR,
-                            message:   "Unknown character 'Y', expecting" +
-                                       " opening block '{' or '[', or maybe a" +
-                                       " comment",
-                            locations: [{ line: 1, column: 1 }],
-                        },
-                    ],
-                });
+            const results = await metalint(files, checkers, DATA_DIR);
+            assert.deepStrictEqual(results, {
+                [DATA_DIR + "/config.json"]: [
+                    {
+                        file:      DATA_DIR + "/config.json",
+                        linter:    "json-lint",
+                        rule:      null,
+                        severity:  SEVERITY.ERROR,
+                        message:   "Unknown character 'Y', expecting" +
+                                   " opening block '{' or '[', or maybe a" +
+                                   " comment",
+                        locations: [{ line: 1, column: 1 }],
+                    },
+                ],
             });
         });
 
-        it(`should add default "locations"`, function () {
+        it(`should add default "locations"`, async function () {
             const cwd = process.cwd();
 
             const files    = ["style.css"];
@@ -136,24 +134,23 @@ describe("lib/index.js", function () {
             ];
 
             process.chdir(DATA_DIR);
-            return metalint(files, checkers, DATA_DIR).then(function (results) {
-                assert.deepStrictEqual(results, {
-                    "style.css": [
-                        {
-                            file:      "style.css",
-                            linter:    "purgecss",
-                            rule:      null,
-                            severity:  SEVERITY.ERROR,
-                            message:   "'.black' is never used.",
-                            locations: [],
-                        },
-                    ],
-                });
-                process.chdir(cwd);
+            const results = await metalint(files, checkers, DATA_DIR);
+            assert.deepStrictEqual(results, {
+                "style.css": [
+                    {
+                        file:      "style.css",
+                        linter:    "purgecss",
+                        rule:      null,
+                        severity:  SEVERITY.ERROR,
+                        message:   "'.black' is never used.",
+                        locations: [],
+                    },
+                ],
             });
+            process.chdir(cwd);
         });
 
-        it("should support sub-files", function () {
+        it("should support sub-files", async function () {
             const files    = [DATA_DIR + "/group/"];
             const checkers = [
                 {
@@ -163,27 +160,26 @@ describe("lib/index.js", function () {
                 },
             ];
 
-            return metalint(files, checkers, DATA_DIR).then(function (results) {
-                assert.deepStrictEqual(results, {
-                    [DATA_DIR + "/group/"]:              [],
-                    [DATA_DIR + "/group/manifest.json"]: [
-                        {
-                            file:      DATA_DIR + "/group/manifest.json",
-                            linter:    "addons-linter",
-                            rule:      "JSON_INVALID",
-                            severity:  SEVERITY.ERROR,
-                            message:   "Your JSON is not valid.",
-                            locations: [],
-                        }, {
-                            file:      DATA_DIR + "/group/manifest.json",
-                            linter:    "addons-linter",
-                            rule:      "JSON_INVALID",
-                            severity:  SEVERITY.ERROR,
-                            message:   "Your JSON is not valid.",
-                            locations: [],
-                        },
-                    ],
-                });
+            const results = await metalint(files, checkers, DATA_DIR);
+            assert.deepStrictEqual(results, {
+                [DATA_DIR + "/group/"]:              [],
+                [DATA_DIR + "/group/manifest.json"]: [
+                    {
+                        file:      DATA_DIR + "/group/manifest.json",
+                        linter:    "addons-linter",
+                        rule:      "JSON_INVALID",
+                        severity:  SEVERITY.ERROR,
+                        message:   "Your JSON is not valid.",
+                        locations: [],
+                    }, {
+                        file:      DATA_DIR + "/group/manifest.json",
+                        linter:    "addons-linter",
+                        rule:      "JSON_INVALID",
+                        severity:  SEVERITY.ERROR,
+                        message:   "Your JSON is not valid.",
+                        locations: [],
+                    },
+                ],
             });
         });
     });

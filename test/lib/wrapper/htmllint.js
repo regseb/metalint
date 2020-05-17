@@ -33,59 +33,55 @@ describe("lib/wrapper/htmllint.js", function () {
         });
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/index1.html";
         const level   = SEVERITY.INFO;
         const options = null;
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "htmllint",
-                    rule:      "attr-name-style",
-                    message:   "E002",
-                    locations: [{ line: 2, column: 8 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "htmllint",
+                rule:      "attr-name-style",
+                message:   "E002",
+                locations: [{ line: 2, column: 8 }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/index2.html";
         const level   = SEVERITY.INFO;
         const options = {};
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/index3.html";
         const level   = SEVERITY.WARN;
         const options = {};
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "htmllint",
-                    rule:      "attr-quote-style",
-                    message:   "E005",
-                    locations: [{ line: 1, column: 13 }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "htmllint",
+                rule:      "attr-quote-style",
+                message:   "E005",
+                locations: [{ line: 1, column: 13 }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/index4.html";
         const level   = SEVERITY.FATAL;
         const options = {};
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 });

@@ -33,17 +33,16 @@ describe("lib/wrapper/tslint.js", function () {
         });
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/script1.ts";
         const level   = SEVERITY.INFO;
         const options = {};
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/script2.ts";
         const level   = SEVERITY.WARN;
         const options = {
@@ -53,56 +52,53 @@ describe("lib/wrapper/tslint.js", function () {
             },
         };
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, [
-                {
-                    file:      file,
-                    linter:    "tslint",
-                    rule:      "no-consecutive-blank-lines",
-                    severity:  SEVERITY.ERROR,
-                    message:   "Consecutive blank lines are forbidden",
-                    locations: [{
-                        line:      3,
-                        column:    1,
-                        lineEnd:   4,
-                        columnEnd: 1,
-                    }],
-                }, {
-                    file:      file,
-                    linter:    "tslint",
-                    rule:      "no-console",
-                    severity:  SEVERITY.WARN,
-                    message:   "Calls to 'console.log' are not allowed.",
-                    locations: [{
-                        line:      1,
-                        column:    1,
-                        lineEnd:   1,
-                        columnEnd: 12,
-                    }],
-                },
-            ]);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, [
+            {
+                file,
+                linter:    "tslint",
+                rule:      "no-consecutive-blank-lines",
+                severity:  SEVERITY.ERROR,
+                message:   "Consecutive blank lines are forbidden",
+                locations: [{
+                    line:      3,
+                    column:    1,
+                    lineEnd:   4,
+                    columnEnd: 1,
+                }],
+            }, {
+                file,
+                linter:    "tslint",
+                rule:      "no-console",
+                severity:  SEVERITY.WARN,
+                message:   "Calls to 'console.log' are not allowed.",
+                locations: [{
+                    line:      1,
+                    column:    1,
+                    lineEnd:   1,
+                    columnEnd: 12,
+                }],
+            },
+        ]);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/script3.ts";
         const level   = SEVERITY.ERROR;
         const options = {
             rules: { "no-bitwise": { severity: "warning" } },
         };
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 
-    it("wrapper()", function () {
+    it("wrapper()", async function () {
         const file    = DATA_DIR + "/script4.ts";
         const level   = SEVERITY.FATAL;
         const options = {};
 
-        return linter.wrapper(file, level, options).then(function (notices) {
-            assert.deepStrictEqual(notices, []);
-        });
+        const notices = await linter.wrapper(file, level, options);
+        assert.deepStrictEqual(notices, []);
     });
 });
