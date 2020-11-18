@@ -37,7 +37,7 @@
         "colors": "^1.4.0",
         "jsonlint-mod": "^1.7.5",
         "npmlog": "^4.1.2",
-        "yargs": "^15.3.1"
+        "yargs": "^16.0.0"
     },
     "devDependencies": {
         "addons-linter": "^1.24.0",
