@@ -1,9 +1,7 @@
-"use strict";
-
-const assert    = require("assert");
-const streams   = require("memory-streams");
-const SEVERITY  = require("../../../lib/severity");
-const Formatter = require("../../../lib/formatter/csv");
+import assert from "assert";
+import streams from "memory-streams";
+import { SEVERITY } from "../../../lib/severity.js";
+import { Formatter } from "../../../lib/formatter/csv.js";
 
 describe("lib/formatter/csv.js", function () {
     it("", function () {
@@ -11,7 +9,6 @@ describe("lib/formatter/csv.js", function () {
 
         const reporter = new Formatter(SEVERITY.FATAL, writer);
         reporter.notify("Main.java", null);
-        reporter.finalize();
 
         assert.strictEqual(writer.toString(),
             "file,line,column,message,linter,rule\r\n");
@@ -22,7 +19,6 @@ describe("lib/formatter/csv.js", function () {
 
         const reporter = new Formatter(SEVERITY.ERROR, writer);
         reporter.notify("todo.sh", []);
-        reporter.finalize();
 
         assert.strictEqual(writer.toString(),
             "file,line,column,message,linter,rule\r\n");
@@ -56,7 +52,6 @@ describe("lib/formatter/csv.js", function () {
                 locations: [{ line: 3 }],
             },
         ]);
-        reporter.finalize();
 
         assert.strictEqual(writer.toString(),
             "file,line,column,message,linter,rule\r\n" +
@@ -86,7 +81,6 @@ describe("lib/formatter/csv.js", function () {
                 locations: [],
             },
         ]);
-        reporter.finalize();
 
         assert.strictEqual(writer.toString(),
             "file,line,column,message,linter,rule\r\n" +
@@ -108,7 +102,6 @@ describe("lib/formatter/csv.js", function () {
                 locations: [],
             },
         ]);
-        reporter.finalize();
 
         assert.strictEqual(writer.toString(),
             "file,line,column,message,linter,rule\r\n" +

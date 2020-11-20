@@ -1,8 +1,6 @@
-"use strict";
-
-const assert   = require("assert");
-const SEVERITY = require("../../lib/severity");
-const metalint = require("../../lib/index");
+import assert from "assert";
+import { SEVERITY } from "../../lib/severity.js";
+import { metalint } from "../../lib/index.js";
 
 const DATA_DIR = "test/data/lib/index";
 
@@ -19,9 +17,11 @@ describe("lib/index.js", function () {
                     patterns: ["*.js"],
                     linters:  {
                         "./wrapper/jshint.js": null,
-                        "./wrapper/jscs.js":   {
-                            disallowFunctionDeclarations: true,
-                            validateQuoteMarks:           `"`,
+                        "./wrapper/eslint.js":   {
+                            rules: {
+                                "no-alert": 2,
+                                quotes:     2,
+                            },
                         },
                     },
                     level:    SEVERITY.WARN,
@@ -41,17 +41,17 @@ describe("lib/index.js", function () {
                 [DATA_DIR + "/script.js"]:  [
                     {
                         file:      DATA_DIR + "/script.js",
-                        linter:    "jscs",
-                        rule:      "disallowFunctionDeclarations",
+                        linter:    "eslint",
+                        rule:      "no-alert",
                         severity:  SEVERITY.ERROR,
-                        message:   "Illegal function declaration",
-                        locations: [{ line: 1, column: 1 }],
+                        message:   "Unexpected alert.",
+                        locations: [{ line: 2, column: 5 }],
                     }, {
                         file:      DATA_DIR + "/script.js",
-                        linter:    "jscs",
-                        rule:      "validateQuoteMarks",
+                        linter:    "eslint",
+                        rule:      "quotes",
                         severity:  SEVERITY.ERROR,
-                        message:   "Invalid quote mark found",
+                        message:   "Strings must use doublequote.",
                         locations: [{ line: 2, column: 11 }],
                     }, {
                         file:      DATA_DIR + "/script.js",
@@ -162,16 +162,18 @@ describe("lib/index.js", function () {
 
             const results = await metalint(files, checkers, DATA_DIR);
             assert.deepStrictEqual(results, {
-                [DATA_DIR + "/group/"]:              [],
-                [DATA_DIR + "/group/manifest.json"]: [
+                [DATA_DIR + "/group/"]:              [
                     {
-                        file:      DATA_DIR + "/group/manifest.json",
+                        file:      DATA_DIR + "/group/",
                         linter:    "addons-linter",
                         rule:      "JSON_INVALID",
                         severity:  SEVERITY.ERROR,
                         message:   "Your JSON is not valid.",
                         locations: [],
-                    }, {
+                    },
+                ],
+                [DATA_DIR + "/group/manifest.json"]: [
+                    {
                         file:      DATA_DIR + "/group/manifest.json",
                         linter:    "addons-linter",
                         rule:      "JSON_INVALID",

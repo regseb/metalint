@@ -1,9 +1,7 @@
-"use strict";
-
-const assert    = require("assert");
-const streams   = require("memory-streams");
-const SEVERITY  = require("../../../lib/severity");
-const Formatter = require("../../../lib/formatter/json");
+import assert from "assert";
+import streams from "memory-streams";
+import { SEVERITY } from "../../../lib/severity.js";
+import { Formatter } from "../../../lib/formatter/json.js";
 
 describe("lib/formatter/json.js", function () {
     it("", function () {
@@ -81,10 +79,10 @@ describe("lib/formatter/json.js", function () {
         ]);
         reporter.notify("script.js", [
             {
-                linter:    "jscs",
+                linter:    "eslint",
                 rule:      null,
                 severity:  SEVERITY.ERROR,
-                message:   "Illegal keyword: with.",
+                message:   "foo",
                 locations: [{ line: 47, column: 8 }],
             }, {
                 linter:    "jshint",
@@ -113,10 +111,10 @@ describe("lib/formatter/json.js", function () {
             "    ],\n" +
             `    "script.js": [\n` +
             "        {\n" +
-            `            "linter": "jscs",\n` +
+            `            "linter": "eslint",\n` +
             `            "rule": null,\n` +
             `            "severity": 2,\n` +
-            `            "message": "Illegal keyword: with.",\n` +
+            `            "message": "foo",\n` +
             `            "locations": [\n` +
             "                {\n" +
             `                    "line": 47,\n` +

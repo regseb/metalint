@@ -1,44 +1,16 @@
-"use strict";
-
-const assert   = require("assert");
-const SEVERITY = require("../../../lib/severity");
-const linter   = require("../../../lib/wrapper/stylelint");
+import assert from "assert";
+import { SEVERITY } from "../../../lib/severity.js";
+import { wrapper } from "../../../lib/wrapper/stylelint.js";
 
 const DATA_DIR = "test/data/lib/wrapper/stylelint";
 
 describe("lib/wrapper/stylelint.js", function () {
-    it("configure()", function () {
-        const cwd = process.cwd();
-
-        process.chdir(DATA_DIR + "/configure1/");
-        const checker = linter.configure();
-        process.chdir(cwd);
-
-        assert.deepStrictEqual(checker, {
-            patterns: "*.css",
-            linters:  { stylelint: null },
-        });
-    });
-
-    it("configure()", function () {
-        const cwd = process.cwd();
-
-        process.chdir(DATA_DIR + "/configure2/");
-        const checker = linter.configure();
-        process.chdir(cwd);
-
-        assert.deepStrictEqual(checker, {
-            patterns: "*.css",
-            linters:  { stylelint: "../.stylelintrc" },
-        });
-    });
-
     it("wrapper()", async function () {
         const file    = DATA_DIR + "/style1.css";
         const level   = SEVERITY.INFO;
         const options = null;
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 
@@ -47,7 +19,7 @@ describe("lib/wrapper/stylelint.js", function () {
         const level   = SEVERITY.INFO;
         const options = { rules: { "color-hex-case": "upper" } };
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 
@@ -60,7 +32,7 @@ describe("lib/wrapper/stylelint.js", function () {
             },
         };
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, [
             {
                 file,
@@ -83,7 +55,7 @@ describe("lib/wrapper/stylelint.js", function () {
             },
         };
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, [
             {
                 file,
@@ -101,7 +73,7 @@ describe("lib/wrapper/stylelint.js", function () {
         const level   = SEVERITY.FATAL;
         const options = { rules: { "no-extra-semicolons": true } };
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 
@@ -110,7 +82,7 @@ describe("lib/wrapper/stylelint.js", function () {
         const level   = SEVERITY.INFO;
         const options = { rules: { "unit-no-unknown": true } };
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, [
             {
                 file,

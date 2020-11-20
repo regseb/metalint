@@ -1,44 +1,16 @@
-"use strict";
-
-const assert   = require("assert");
-const SEVERITY = require("../../../lib/severity");
-const linter   = require("../../../lib/wrapper/htmllint");
+import assert from "assert";
+import { SEVERITY } from "../../../lib/severity.js";
+import { wrapper } from "../../../lib/wrapper/htmllint.js";
 
 const DATA_DIR = "test/data/lib/wrapper/htmllint";
 
 describe("lib/wrapper/htmllint.js", function () {
-    it("configure()", function () {
-        const cwd = process.cwd();
-
-        process.chdir(DATA_DIR + "/configure1/");
-        const checker = linter.configure();
-        process.chdir(cwd);
-
-        assert.deepStrictEqual(checker, {
-            patterns: "*.html",
-            linters:  { htmllint: null },
-        });
-    });
-
-    it("configure()", function () {
-        const cwd = process.cwd();
-
-        process.chdir(DATA_DIR + "/configure2/");
-        const checker = linter.configure();
-        process.chdir(cwd);
-
-        assert.deepStrictEqual(checker, {
-            patterns: "*.html",
-            linters:  { htmllint: "../.htmllintrc" },
-        });
-    });
-
     it("wrapper()", async function () {
         const file    = DATA_DIR + "/index1.html";
         const level   = SEVERITY.INFO;
         const options = null;
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, [
             {
                 file,
@@ -55,7 +27,7 @@ describe("lib/wrapper/htmllint.js", function () {
         const level   = SEVERITY.INFO;
         const options = {};
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 
@@ -64,7 +36,7 @@ describe("lib/wrapper/htmllint.js", function () {
         const level   = SEVERITY.WARN;
         const options = {};
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, [
             {
                 file,
@@ -81,7 +53,7 @@ describe("lib/wrapper/htmllint.js", function () {
         const level   = SEVERITY.FATAL;
         const options = {};
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 });

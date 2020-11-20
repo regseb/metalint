@@ -1,9 +1,7 @@
-"use strict";
-
-const assert    = require("assert");
-const streams   = require("memory-streams");
-const SEVERITY  = require("../../../lib/severity");
-const Formatter = require("../../../lib/formatter/checkstyle");
+import assert from "assert";
+import streams from "memory-streams";
+import { SEVERITY } from "../../../lib/severity.js";
+import { Formatter } from "../../../lib/formatter/checkstyle.js";
 
 describe("lib/formatter/checkstyle.js", function () {
     it("", function () {

@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "lib": ["ESNext"],
+        "module": "ESNext",
+        "noEmit": true,
+        "target": "ESNext",
+
+        "strict": true,
+
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+
+        "allowUnreachableCode": false,
+        "noStrictGenericChecks": true
+    },
+    "include": [
+        "bin/", "lib/"
+    ]
+}

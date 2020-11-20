@@ -1,14 +1,14 @@
-{
-    "plugins": ["mocha"],
+export default {
+    plugins: [
+        "filenames", "import", "jsdoc", "mocha", "node", "promise", "unicorn",
+    ],
 
-    "env": {
-        "node": true,
-        "es2020": true,
-        "mocha": true
+    env: {
+        mocha: true,
     },
 
-    "rules": {
-        "complexity": 0,
+    rules: {
+        complexity: 0,
 
         "func-names": 0,
         "max-lines": 0,
@@ -21,8 +21,9 @@
         "mocha/max-top-level-suites": 2,
         "mocha/no-async-describe": 2,
         "mocha/no-exclusive-tests": 2,
+        "mocha/no-exports": 2,
         "mocha/no-global-tests": 2,
-        "mocha/no-hooks": [2, { "allow": ["after", "before"] }],
+        "mocha/no-hooks": [2, { allow: ["after", "before"] }],
         "mocha/no-hooks-for-single-case": 0,
         "mocha/no-identical-title": 0,
         "mocha/no-mocha-arrows": 2,
@@ -37,6 +38,6 @@
         "mocha/no-top-level-hooks": 2,
         "mocha/prefer-arrow-callback": 0,
         "mocha/valid-suite-description": 0,
-        "mocha/valid-test-description": 0
-    }
-}
+        "mocha/valid-test-description": 0,
+    },
+};

@@ -1,19 +1,25 @@
 #!/usr/bin/env node
 
-"use strict";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import yargs from "yargs";
+import { walk } from "../lib/glob.js";
+import { normalize } from "../lib/normalize.js";
+import { metalint } from "../lib/index.js";
+import { SEVERITY } from "../lib/severity.js";
 
-const fs        = require("fs");
-const path      = require("path");
-const yargs     = require("yargs");
-const glob      = require("../lib/glob");
-const normalize = require("../lib/normalize");
-const metalint  = require("../lib/index");
-const SEVERITY  = require("../lib/severity");
+/**
+ * @typedef {import("../lib/types").Checker} Checker
+ * @typedef {import("../lib/types").Formatter} Formatter
+ */
 
-const argv = yargs.options({
+const DIRNAME = path.dirname(fileURLToPath(import.meta.url));
+
+const argv = yargs(process.argv.slice(2)).options({
     c: {
         alias:       "config",
-        default:     ".metalint/metalint.json",
+        default:     ".metalint/metalint.config.js",
         requiresArg: true,
         type:        "string",
     },
@@ -45,23 +51,25 @@ const argv = yargs.options({
         alias: "version",
         type:  "boolean",
     },
-}).help(false).version(false).parse();
+}).help(false).version(false).argv;
 
 /**
  * Vérifie (en appelant des linters) une liste de fichiers.
  *
- * @param {Array.<string>} files     La liste des fichiers.
- * @param {Array.<object>} checkers  La liste des vérifications faites sur les
- *                                   fichiers.
- * @param {string}         root      L'adresse du répertoire où se trouve le
- *                                   dossier <code>.metalint/</code>.
- * @param {object}         reporters La liste des rapporteurs utilisés pour
- *                                   afficher les résultats.
- * @returns {Promise.<number>} La sévérité la plus élévée des résultats.
+ * @param {string[]}    files     La liste des fichiers.
+ * @param {Checker[]}   checkers  La liste des vérifications faites sur les
+ *                                fichiers.
+ * @param {string}      root      L'adresse du répertoire où se trouve le
+ *                                dossier <code>.metalint/</code>.
+ * @param {Formatter[]} reporters La liste des rapporteurs utilisés pour
+ *                                afficher les résultats.
+ * @returns {Promise<?number>} La sévérité la plus élévée des résultats.
  */
 const check = async function (files, checkers, root, reporters) {
-    const results = await metalint(files, checkers, root);
+    /** @type {?number} */
     let severity = null;
+
+    const results = await metalint(files, checkers, root);
     for (const [file, notices] of Object.entries(results)) {
         // Déterminer la sévérité la plus élévée des résultats.
         if (null !== notices) {
@@ -78,25 +86,18 @@ const check = async function (files, checkers, root, reporters) {
         }
     }
 
-    const sweepers = reporters.map((reporter) => {
-        reporter.finalize(severity);
-        // Attendre que les textes soient écrits.
-        return new Promise((resolve) => {
-            reporter.writer.write("", resolve);
-        });
-    });
     // Attendre tous les rapporteurs.
-    await Promise.all(sweepers);
+    await Promise.all(reporters.map((r) => r.finalize(severity)));
     return severity;
 };
 
 if (argv.help) {
-    process.stdout.write(fs.readFileSync(path.join(__dirname,
+    process.stdout.write(fs.readFileSync(path.join(DIRNAME,
                                                    "/../help/index.txt")));
     process.exit(0);
 }
 if (argv.version) {
-    const manifest = JSON.parse(fs.readFileSync(path.join(__dirname,
+    const manifest = JSON.parse(fs.readFileSync(path.join(DIRNAME,
                                                           "/../package.json"),
                                                 "utf-8"));
     process.stdout.write("Metalint " + manifest.version + "\n");
@@ -115,29 +116,31 @@ while (!fs.existsSync(path.join(root, argv.config))) {
     root = path.join(root, "..");
 }
 
-let config = JSON.parse(fs.readFileSync(path.join(root, argv.config), "utf-8"));
-try {
-    config = normalize(config,
-                       root,
-                       path.dirname(path.join(root, argv.config)),
-                       argv);
-} catch (err) {
-    process.stderr.write("metalint: " + err.message);
-    process.exit(11);
-}
+import(path.join(root, argv.config)).then(async ({ default: config }) => {
+    try {
+        const { patterns, checkers, reporters } =
+                await normalize(config,
+                                root,
+                                path.dirname(path.join(root, argv.config)),
+                                argv);
 
-const files = glob.walk(argv._, config.patterns, root);
+        const files = walk(argv._, patterns, root);
 
-check(files, config.checkers, root, config.reporters).then((severity) => {
-    let code;
-    switch (severity) {
-        case SEVERITY.FATAL: code = 2; break;
-        case SEVERITY.ERROR: code = 1; break;
-        default:             code = 0;
+        const severity = await check(files, checkers, root, reporters);
+        let code;
+        switch (severity) {
+            case SEVERITY.FATAL: code = 2; break;
+            case SEVERITY.ERROR: code = 1; break;
+            default:             code = 0;
+        }
+        process.exit(code);
+    } catch (err) {
+        process.stderr.write("metalint: " + err.message + "\n");
+        process.stderr.write(err.stack + "\n");
+        process.exit(11);
     }
-    process.exit(code);
 }).catch((err) => {
     process.stderr.write("metalint: " + err.message + "\n");
     process.stderr.write(err.stack + "\n");
-    process.exit(12);
+    process.exit(13);
 });

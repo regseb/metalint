@@ -1,21 +1,10 @@
-"use strict";
-
-const assert   = require("assert");
-const SEVERITY = require("../../../lib/severity");
-const linter   = require("../../../lib/wrapper/purgecss");
+import assert from "assert";
+import { SEVERITY } from "../../../lib/severity.js";
+import { wrapper } from "../../../lib/wrapper/purgecss.js";
 
 const DATA_DIR = "test/data/lib/wrapper/purgecss";
 
 describe("lib/wrapper/purgecss.js", function () {
-    it("configure()", function () {
-        const checker = linter.configure();
-
-        assert.deepStrictEqual(checker, {
-            patterns: "*.css",
-            linters:  { purgecss: { content: ["*.html", "*.js"] } },
-        });
-    });
-
     it("wrapper()", async function () {
         const cwd = process.cwd();
 
@@ -26,18 +15,22 @@ describe("lib/wrapper/purgecss.js", function () {
         };
 
         process.chdir(DATA_DIR);
-        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        const notices = await wrapper(file, level, options, DATA_DIR);
         assert.deepStrictEqual(notices, [
             {
                 file,
-                linter:   "purgecss",
-                severity: SEVERITY.ERROR,
-                message:  "'.blue' is never used.",
+                linter:    "purgecss",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
+                message:   "'.blue' is never used.",
+                locations: [],
             }, {
                 file,
-                linter:   "purgecss",
-                severity: SEVERITY.ERROR,
-                message:  "'.red .green' is never used.",
+                linter:    "purgecss",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
+                message:   "'.red .green' is never used.",
+                locations: [],
             },
         ]);
 
@@ -51,17 +44,19 @@ describe("lib/wrapper/purgecss.js", function () {
         const level   = SEVERITY.INFO;
         const options = {
             content:   ["*.html", "*.js"],
-            whitelist: ["blue"],
+            safelist: ["blue"],
         };
 
         process.chdir(DATA_DIR);
-        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        const notices = await wrapper(file, level, options, DATA_DIR);
         assert.deepStrictEqual(notices, [
             {
                 file,
-                linter:   "purgecss",
-                severity: SEVERITY.ERROR,
-                message:  "'.red .green' is never used.",
+                linter:    "purgecss",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
+                message:   "'.red .green' is never used.",
+                locations: [],
             },
         ]);
 
@@ -74,18 +69,20 @@ describe("lib/wrapper/purgecss.js", function () {
         const file    = "style.css";
         const level   = SEVERITY.INFO;
         const options = {
-            content:           ["*.html", "*.js"],
-            whitelistPatterns: ["/^b.*$/u"],
+            content:  ["*.html", "*.js"],
+            safelist: [/^b.*$/u],
         };
 
         process.chdir(DATA_DIR);
-        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        const notices = await wrapper(file, level, options, DATA_DIR);
         assert.deepStrictEqual(notices, [
             {
                 file,
-                linter:   "purgecss",
-                severity: SEVERITY.ERROR,
-                message:  "'.red .green' is never used.",
+                linter:    "purgecss",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
+                message:   "'.red .green' is never used.",
+                locations: [],
             },
         ]);
 
@@ -98,18 +95,20 @@ describe("lib/wrapper/purgecss.js", function () {
         const file    = "style.css";
         const level   = SEVERITY.INFO;
         const options = {
-            content:                   ["*.html", "*.js"],
-            whitelistPatternsChildren: ["/^r/u"],
+            content:  ["*.html", "*.js"],
+            safelist: { deep: [/^r/u] },
         };
 
         process.chdir(DATA_DIR);
-        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        const notices = await wrapper(file, level, options, DATA_DIR);
         assert.deepStrictEqual(notices, [
             {
                 file,
-                linter:   "purgecss",
-                severity: SEVERITY.ERROR,
-                message:  "'.blue' is never used.",
+                linter:    "purgecss",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
+                message:   "'.blue' is never used.",
+                locations: [],
             },
         ]);
 
@@ -121,13 +120,15 @@ describe("lib/wrapper/purgecss.js", function () {
         const level   = SEVERITY.FATAL;
         const options = { content: [] };
 
-        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        const notices = await wrapper(file, level, options, DATA_DIR);
         assert.deepStrictEqual(notices, [
             {
                 file,
-                linter:   "purgecss",
-                severity: SEVERITY.FATAL,
-                message:  "No content provided.",
+                linter:    "purgecss",
+                rule:      null,
+                severity:  SEVERITY.FATAL,
+                message:   "No content provided.",
+                locations: [],
             },
         ]);
     });
@@ -137,7 +138,7 @@ describe("lib/wrapper/purgecss.js", function () {
         const level   = SEVERITY.OFF;
         const options = null;
 
-        const notices = await linter.wrapper(file, level, options, DATA_DIR);
+        const notices = await wrapper(file, level, options, DATA_DIR);
         assert.deepStrictEqual(notices, []);
     });
 });

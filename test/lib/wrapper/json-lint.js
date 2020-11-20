@@ -1,30 +1,22 @@
-"use strict";
-
-const assert   = require("assert");
-const SEVERITY = require("../../../lib/severity");
-const linter   = require("../../../lib/wrapper/json-lint");
+import assert from "assert";
+import { SEVERITY } from "../../../lib/severity.js";
+import { wrapper } from "../../../lib/wrapper/json-lint.js";
 
 const DATA_DIR = "test/data/lib/wrapper/json-lint";
 
 describe("lib/wrapper/json-lint.js", function () {
-    it("configure()", function () {
-        const checker = linter.configure();
-        assert.deepStrictEqual(checker, {
-            patterns: "*.json",
-            linters:  { "json-lint": null },
-        });
-    });
-
     it("wrapper()", async function () {
         const file    = DATA_DIR + "/data1.json";
         const level   = SEVERITY.INFO;
         const options = null;
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, [
             {
                 file,
                 linter:    "json-lint",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
                 message:   "Unknown Character 'k', expecting a string for key" +
                            " statement.",
                 locations: [{ line: 2, column: 5 }],
@@ -37,7 +29,7 @@ describe("lib/wrapper/json-lint.js", function () {
         const level   = SEVERITY.INFO;
         const options = { comment: true };
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 
@@ -46,11 +38,13 @@ describe("lib/wrapper/json-lint.js", function () {
         const level   = SEVERITY.WARN;
         const options = {};
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, [
             {
                 file,
                 linter:    "json-lint",
+                rule:      null,
+                severity:  SEVERITY.ERROR,
                 message:   "Unexpected End Of Array Error. Expecting a value" +
                            " statement.",
                 locations: [{ line: 1, column: 28 }],
@@ -63,7 +57,7 @@ describe("lib/wrapper/json-lint.js", function () {
         const level   = SEVERITY.FATAL;
         const options = {};
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 });

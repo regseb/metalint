@@ -1,9 +1,7 @@
-"use strict";
-
 /**
- * Le rapporteur qui écrit les résultats avec des phrases en français.
+ * Le formateur qui écrit les résultats avec des phrases en français.
  */
-const Reporter = class {
+export const Formatter = class {
 
     /**
      * Crée un rapporteur.
@@ -57,5 +55,3 @@ const Reporter = class {
         // Ne rien faire.
     }
 };
-
-module.exports = Reporter;

@@ -31,7 +31,6 @@ ou des utilitaires selon le type de fichier :
   [htmllint](https://regseb.github.io/metalint/user/linters/htmllint/) ;
 - JavaScript : [ESLint](https://regseb.github.io/metalint/user/linters/eslint/),
   [Flow](https://regseb.github.io/metalint/user/linters/flow-bin/),
-  [JSCS](https://regseb.github.io/metalint/user/linters/jscs/),
   [JSHint](https://regseb.github.io/metalint/user/linters/jshint/) et
   [JavaScript Standard
    Style](https://regseb.github.io/metalint/user/linters/standard/) ;
@@ -98,11 +97,10 @@ metalint
 [img-build]:https://img.shields.io/travis/regseb/metalint.svg
 [img-dependencies]:https://img.shields.io/david/regseb/metalint.svg
 [img-coverage]:https://img.shields.io/coveralls/regseb/metalint.svg
-[img-license]:https://img.shields.io/badge/license-EUPL-blue.svg
+[img-license]:https://img.shields.io/badge/license-MIT-blue.svg
 
 [link-version]:https://www.npmjs.com/package/metalint
 [link-build]:https://travis-ci.org/regseb/metalint
 [link-dependencies]:https://david-dm.org/regseb/metalint
 [link-coverage]:https://coveralls.io/github/regseb/metalint
-[link-license]:https://joinup.ec.europa.eu/collection/eupl/eupl-text-11-12
-               "Licence publique de l'Union européenne"
+[link-license]:https://github.com/regseb/metalint/blob/master/LICENSE

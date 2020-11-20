@@ -1,9 +1,7 @@
-"use strict";
-
-const assert    = require("assert");
-const streams   = require("memory-streams");
-const SEVERITY  = require("../../../lib/severity");
-const Formatter = require("../../../lib/formatter/unix");
+import assert from "assert";
+import streams from "memory-streams";
+import { SEVERITY } from "../../../lib/severity.js";
+import { Formatter } from "../../../lib/formatter/unix.js";
 
 describe("lib/formatter/unix.js", function () {
     it("", function () {
@@ -11,7 +9,6 @@ describe("lib/formatter/unix.js", function () {
 
         const reporter = new Formatter(SEVERITY.FATAL, writer);
         reporter.notify("script.js", null);
-        reporter.finalize();
 
         assert.strictEqual(writer.toString(), "");
     });
@@ -21,7 +18,6 @@ describe("lib/formatter/unix.js", function () {
 
         const reporter = new Formatter(SEVERITY.WARN, writer);
         reporter.notify("stylelint.json", []);
-        reporter.finalize();
 
         assert.strictEqual(writer.toString(), "");
     });
@@ -54,7 +50,6 @@ describe("lib/formatter/unix.js", function () {
                 locations: [{ line: 3 }],
             },
         ]);
-        reporter.finalize();
 
         assert.strictEqual(writer.toString(),
             "un.html::: La cigale ayant chanté (htmllint)\n" +
@@ -76,7 +71,6 @@ describe("lib/formatter/unix.js", function () {
                 locations: [],
             },
         ]);
-        reporter.finalize();
 
         assert.strictEqual(writer.toString(),
             "un.css::: Quand la bise fut venue. (csslint.3)\n");

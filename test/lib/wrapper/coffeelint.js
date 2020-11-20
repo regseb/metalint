@@ -1,44 +1,16 @@
-"use strict";
-
-const assert   = require("assert");
-const SEVERITY = require("../../../lib/severity");
-const linter   = require("../../../lib/wrapper/coffeelint");
+import assert from "assert";
+import { SEVERITY } from "../../../lib/severity.js";
+import { wrapper } from "../../../lib/wrapper/coffeelint.js";
 
 const DATA_DIR = "test/data/lib/wrapper/coffeelint";
 
 describe("lib/wrapper/coffeelint.js", function () {
-    it("configure()", function () {
-        const cwd = process.cwd();
-
-        process.chdir(DATA_DIR + "/configure1/");
-        const checker = linter.configure();
-        process.chdir(cwd);
-
-        assert.deepStrictEqual(checker, {
-            patterns: "*.coffee",
-            linters:  { coffeelint: null },
-        });
-    });
-
-    it("configure()", function () {
-        const cwd = process.cwd();
-
-        process.chdir(DATA_DIR + "/configure2/");
-        const checker = linter.configure();
-        process.chdir(cwd);
-
-        assert.deepStrictEqual(checker, {
-            patterns: "*.coffee",
-            linters:  { coffeelint: "../coffeelint.json" },
-        });
-    });
-
     it("wrapper()", async function () {
         const file    = DATA_DIR + "/script1.coffee";
         const level   = SEVERITY.INFO;
         const options = {};
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 
@@ -52,7 +24,7 @@ describe("lib/wrapper/coffeelint.js", function () {
         };
         /* eslint-enable camelcase */
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, [
             {
                 file,
@@ -78,7 +50,7 @@ describe("lib/wrapper/coffeelint.js", function () {
         // eslint-disable-next-line camelcase
         const options = { prefer_english_operator: { level: "warn" } };
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 
@@ -87,7 +59,7 @@ describe("lib/wrapper/coffeelint.js", function () {
         const level   = SEVERITY.FATAL;
         const options = {};
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 });

@@ -1,44 +1,16 @@
-"use strict";
-
-const assert   = require("assert");
-const SEVERITY = require("../../../lib/severity");
-const linter   = require("../../../lib/wrapper/tslint");
+import assert from "assert";
+import { SEVERITY } from "../../../lib/severity.js";
+import { wrapper } from "../../../lib/wrapper/tslint.js";
 
 const DATA_DIR = "test/data/lib/wrapper/tslint";
 
 describe("lib/wrapper/tslint.js", function () {
-    it("configure()", function () {
-        const cwd = process.cwd();
-
-        process.chdir(DATA_DIR + "/configure1/");
-        const checker = linter.configure();
-        process.chdir(cwd);
-
-        assert.deepStrictEqual(checker, {
-            patterns: "*.ts",
-            linters:  { tslint: {} },
-        });
-    });
-
-    it("configure()", function () {
-        const cwd = process.cwd();
-
-        process.chdir(DATA_DIR + "/configure2/");
-        const checker = linter.configure();
-        process.chdir(cwd);
-
-        assert.deepStrictEqual(checker, {
-            patterns: "*.ts",
-            linters:  { tslint: "../tslint.json" },
-        });
-    });
-
     it("wrapper()", async function () {
         const file    = DATA_DIR + "/script1.ts";
         const level   = SEVERITY.INFO;
         const options = {};
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 
@@ -52,7 +24,7 @@ describe("lib/wrapper/tslint.js", function () {
             },
         };
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, [
             {
                 file,
@@ -89,7 +61,7 @@ describe("lib/wrapper/tslint.js", function () {
             rules: { "no-bitwise": { severity: "warning" } },
         };
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 
@@ -98,7 +70,7 @@ describe("lib/wrapper/tslint.js", function () {
         const level   = SEVERITY.FATAL;
         const options = {};
 
-        const notices = await linter.wrapper(file, level, options);
+        const notices = await wrapper(file, level, options);
         assert.deepStrictEqual(notices, []);
     });
 });
