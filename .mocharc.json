@@ -1,4 +1,5 @@
 {
     "recursive": true,
-    "timeout": 0
+    "require": "test/hooks.js",
+    "timeout": 10000
 }

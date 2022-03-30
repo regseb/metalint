@@ -1,14 +1,11 @@
 # Metalint
 
-[![Version][img-version]][link-version]
-[![Build][img-build]][link-build]
-[![Dependencies][img-dependencies]][link-dependencies]
-[![Coverage][img-coverage]][link-coverage]
-[![License][img-license]][link-license]
+[![npm][img-npm]][link-npm]
+[![build][img-build]][link-build]
+[![coverage][img-coverage]][link-coverage]
+[![semver][img-semver]][link-semver]
 
-> *Un linter pour les gouverner tous.*
-
-[Site Internet](https://regseb.github.io/metalint/)
+> _Un linter pour les gouverner tous._
 
 ## Description
 
@@ -16,9 +13,8 @@
 L'analyse est déléguée à des linters (outils d'analyse statique de code source)
 ou des utilitaires selon le type de fichier :
 
-- Add-on de Firefox (WebExtension) :
-  [Add-ons
-   Linter](https://regseb.github.io/metalint/user/linters/addons-linter/) ;
+- WebExtension : [Add-ons
+  Linter](https://regseb.github.io/metalint/user/linters/addons-linter/) ;
 - CoffeeScript :
   [CoffeeLint](https://regseb.github.io/metalint/user/linters/coffeelint/) ;
 - CSS (SCSS, Sass, Less) :
@@ -33,23 +29,18 @@ ou des utilitaires selon le type de fichier :
   [Flow](https://regseb.github.io/metalint/user/linters/flow-bin/),
   [JSHint](https://regseb.github.io/metalint/user/linters/jshint/) et
   [JavaScript Standard
-   Style](https://regseb.github.io/metalint/user/linters/standard/) ;
+  Style](https://regseb.github.io/metalint/user/linters/standard/) ;
 - JSON : [JSON-Lint](https://regseb.github.io/metalint/user/linters/json-lint/),
   [JSON Lint](https://regseb.github.io/metalint/user/linters/jsonlint/) et
   [JSON Lint
-   (mod)](https://regseb.github.io/metalint/user/linters/jsonlint-mod/) ;
+  (mod)](https://regseb.github.io/metalint/user/linters/jsonlint-mod/) ;
 - Markdown :
   [MarkdownLint](https://regseb.github.io/metalint/user/linters/markdownlint/) ;
-- *package.json* (npm) :
-  [David DM](https://regseb.github.io/metalint/user/linters/david/) ;
-- TypeScript :
-  [TSLint](https://regseb.github.io/metalint/user/linters/tslint/) ;
 - YAML : [YAML Lint](https://regseb.github.io/metalint/user/linters/yaml-lint/).
 
 ## Installation
 
-Vous pouvez installer Metalint en utilisant
-[npm](https://www.npmjs.com/package/metalint) :
+Vous pouvez installer Metalint en utilisant [npm][link-npm] :
 
 ```shell
 npm install metalint --save-dev
@@ -59,9 +50,9 @@ npm install metalint --save-dev
 
 Tous les fichiers de configuration sont à regrouper dans le répertoire
 `.metalint/` qui doit être placé à la racine du projet. Le fichier
-`metalint.json` contient un objet JSON indiquant les linters à utiliser pour
-chaque fichier. Les autres fichiers contiennent les options spécifiques pour les
-linters.
+`metalint.config.js` contient un objet JSON indiquant les linters à utiliser
+pour chaque fichier. Les autres fichiers contiennent les options spécifiques
+pour les linters.
 
 ## Exemple
 
@@ -69,22 +60,22 @@ Dans cet exemple du fichier de configuration `metalint.json`, Metalint analyse
 les fichiers JavaScript (non-minifiés), HTML et CSS ; avec respectivement les
 linters ESLint, HTMLHint et stylelint.
 
-```JSON
-{
-    "patterns": ["!/.git/", "!/node_modules/", "**"],
-    "checkers": [
+```JavaScript
+export default {
+    patterns: ["!/.git/", "!/node_modules/", "**"],
+    checkers: [
         {
-            "patterns": ["!*.min.js", "*.js"],
-            "linters": "eslint"
+            patterns: ["!*.min.js", "*.js"],
+            linters: "eslint",
         }, {
-            "patterns": "*.html",
-            "linters": "htmlhint"
+            patterns: "*.html",
+            linters: "htmlhint",
         }, {
-            "patterns": "*.css",
-            "linters": "stylelint"
-        }
-    ]
-}
+            patterns: "*.css",
+            linters: "stylelint",
+        },
+    ],
+};
 ```
 
 ## Usage
@@ -93,14 +84,14 @@ linters ESLint, HTMLHint et stylelint.
 metalint
 ```
 
-[img-version]:https://img.shields.io/npm/v/metalint.svg
-[img-build]:https://img.shields.io/travis/regseb/metalint.svg
-[img-dependencies]:https://img.shields.io/david/regseb/metalint.svg
-[img-coverage]:https://img.shields.io/coveralls/regseb/metalint.svg
-[img-license]:https://img.shields.io/badge/license-MIT-blue.svg
+<!-- Ne pas ajouter les logos car la couleur du logo de npm n'est pas
+     personnalisable. https://github.com/badges/shields/issues/6208 -->
+[img-npm]:https://img.shields.io/npm/dm/metalint?label=npm
+[img-build]:https://img.shields.io/github/workflow/status/regseb/metalint/CI
+[img-coverage]:https://img.shields.io/coveralls/github/regseb/metalint
+[img-semver]:https://img.shields.io/badge/semver-2.0.0-blue
 
-[link-version]:https://www.npmjs.com/package/metalint
-[link-build]:https://travis-ci.org/regseb/metalint
-[link-dependencies]:https://david-dm.org/regseb/metalint
+[link-npm]:https://www.npmjs.com/package/metalint
+[link-build]:https://github.com/regseb/metalint/actions/workflows/ci.yml?query=branch%3Amain
 [link-coverage]:https://coveralls.io/github/regseb/metalint
-[link-license]:https://github.com/regseb/metalint/blob/master/LICENSE
+[link-semver]:https://semver.org/spec/v2.0.0.html "Semantic Versioning 2.0.0"

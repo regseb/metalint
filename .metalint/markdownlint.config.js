@@ -16,7 +16,8 @@ export default {
     "no-multiple-space-closed-atx": true,
     "blanks-around-headings": true,
     "heading-start-left": true,
-    "no-duplicate-heading": true,
+    // eslint-disable-next-line camelcase
+    "no-duplicate-heading": { siblings_only: true },
     "single-title": true,
     "no-trailing-punctuation": true,
     "no-multiple-space-blockquote": true,
@@ -41,4 +42,6 @@ export default {
     "code-block-style": { style: "fenced" },
     "single-trailing-newline": true,
     "code-fence-style": { style: "backtick" },
+    "emphasis-style": { style: "underscore" },
+    "strong-style": { style: "asterisk" },
 };

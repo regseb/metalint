@@ -4,21 +4,39 @@ export default {
         "!/coverage/",
         "!/jsdocs/",
         "!/node_modules/",
-        "!/test/data/",
+        "!/types/",
+        "!*.swp",
         "**",
     ],
     checkers: [
         {
-            patterns: ["/bin/**/*.js", "/lib/**/*.js"],
-            linters: "eslint",
+            patterns: "/src/core/**/*.js",
+            linters: {
+                eslint: ["eslint.config.js", "eslint_node.config.js"],
+            },
+        }, {
+            patterns: ["/src/bin/**/*.js", "/.script/**/*.js"],
+            linters: {
+                eslint: [
+                    "eslint.config.js",
+                    "eslint_node.config.js",
+                    "eslint_nodebin.config.js",
+                ],
+            },
+        }, {
+            patterns: "/test/**/*.js",
+            linters: {
+                eslint: [
+                    "eslint.config.js",
+                    "eslint_node.config.js",
+                    "eslint_test.config.js",
+                ],
+            },
         }, {
             patterns: "/.metalint/**/*.js",
             linters: {
                 eslint: ["eslint.config.js", "eslint_config.config.js"],
             },
-        }, {
-            patterns: "/test/**/*.js",
-            linters: { eslint: ["eslint.config.js", "eslint_test.config.js"] },
         }, {
             patterns: ["!/CHANGELOG.md", "*.md"],
             linters: "markdownlint",
@@ -28,9 +46,6 @@ export default {
         }, {
             patterns: "*.yml",
             linters: { "yaml-lint": null },
-        }, {
-            patterns: "/package.json",
-            linters: "david",
         },
     ],
 };

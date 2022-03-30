@@ -1,0 +1,85 @@
+import assert from "node:assert";
+import mock from "mock-fs";
+import SEVERITY from "../../../src/core/severity.js";
+import { wrapper } from "../../../src/core/wrapper/purgecss.js";
+
+describe("src/core/wrapper/purgecss.js", function () {
+    describe("wrapper()", function () {
+        it("should ignore with OFF level", async function () {
+            const file    = "";
+            const level   = SEVERITY.OFF;
+            const options = null;
+
+            const notices = await wrapper(file, level, options, ".");
+            assert.deepStrictEqual(notices, []);
+        });
+
+        it("should return FATAL notice", async function () {
+            const file    = "foo.css";
+            const level   = SEVERITY.FATAL;
+            const options = { content: [] };
+
+            const notices = await wrapper(file, level, options, ".");
+            assert.deepStrictEqual(notices, [
+                {
+                    file,
+                    linter:    "purgecss",
+                    rule:      null,
+                    severity:  SEVERITY.FATAL,
+                    message:   "No content provided.",
+                    locations: [],
+                },
+            ]);
+        });
+
+        it("should return notices", async function () {
+            mock({
+                "foo.html": `<div class="bar"></div>`,
+                "baz.css":  ".bar { color: blue; }\n" +
+                            ".qux { color: white; }\n" +
+                            ".quux .corge { color: red; }",
+            });
+
+            const file    = "baz.css";
+            const level   = SEVERITY.INFO;
+            const options = {
+                content: "*.html",
+            };
+
+            const notices = await wrapper(file, level, options, ".");
+            assert.deepStrictEqual(notices, [
+                {
+                    file,
+                    linter:    "purgecss",
+                    rule:      null,
+                    severity:  SEVERITY.ERROR,
+                    message:   "'.qux' is never used.",
+                    locations: [],
+                }, {
+                    file,
+                    linter:    "purgecss",
+                    rule:      null,
+                    severity:  SEVERITY.ERROR,
+                    message:   "'.quux .corge' is never used.",
+                    locations: [],
+                },
+            ]);
+        });
+
+        it("should ignore error with FATAL level", async function () {
+            mock({
+                "foo.html": `<div></div>`,
+                "bar.css":  ".baz { margin: 0; }",
+            });
+
+            const file    = "bar.css";
+            const level   = SEVERITY.FATAL;
+            const options = {
+                content: "*.html",
+            };
+
+            const notices = await wrapper(file, level, options, ".");
+            assert.deepStrictEqual(notices, []);
+        });
+    });
+});

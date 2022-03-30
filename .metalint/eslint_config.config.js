@@ -1,40 +1,9 @@
 export default {
-    plugins: ["filenames", "import", "jsdoc", "node", "promise", "unicorn"],
-
     rules: {
+        // Layout & Formatting.
         "key-spacing": 0,
-        "no-restricted-syntax": [
-            2,
-            "ClassDeclaration",
-            "DebuggerStatement",
-            "EmptyStatement",
-            "ForInStatement",
-            "FunctionDeclaration",
-            "LabeledStatement",
-            "SequenceExpression",
-            "TaggedTemplateExpression",
-            "WithStatement",
-            "YieldExpression",
-            "JSXIdentifier",
-            "JSXNamespacedName",
-            "JSXMemberExpression",
-            "JSXEmptyExpression",
-            "JSXExpressionContainer",
-            "JSXElement",
-            "JSXClosingElement",
-            "JSXOpeningElement",
-            "JSXAttribute",
-            "JSXSpreadAttribute",
-            "JSXText",
-            "ExportAllDeclaration",
-            "ExportSpecifier",
-        ],
 
-        "filenames/match-regex": 0,
-
-        "import/no-default-export": 0,
-        "import/no-anonymous-default-export": 0,
-
+        // Plugin eslint-plugin-unicorn.
         "unicorn/filename-case": 0,
     },
 };
