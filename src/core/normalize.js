@@ -14,32 +14,36 @@ import SEVERITY from "./severity.js";
  * @typedef {import("../types").Config} Config
  */
 
-/**
- * Résous un chemin relatif à partir du module.
- *
- * @param {string} specifier Le chemin relatif vers un fichier ou un répertoire.
- * @returns {Promise<string>} Une promesse contenant le chemin absolue vers le
- *                            fichier ou le répertoire.
- * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
- */
-const resolve = function (specifier) {
-    return Promise.resolve(fileURLToPath(new URL(specifier,
-                                                 import.meta.url).href));
-};
+if (undefined === import.meta.resolve) {
+
+    /**
+     * Résous un chemin relatif à partir du module.
+     *
+     * @param {string} specifier Le chemin relatif vers un fichier ou un
+     *                           répertoire.
+     * @returns {Promise<string>} Une promesse contenant le chemin absolue vers
+     *                            le fichier ou le répertoire.
+     * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
+     */
+    import.meta.resolve = (specifier) => {
+        return Promise.resolve(fileURLToPath(new URL(specifier,
+                                                     import.meta.url).href));
+    };
+}
 
 /**
  * La liste des formaters.
  *
  * @constant {Promise<string[]>} FORMATTERS
  */
-const FORMATTERS = await fs.readdir(await resolve("formatter/"));
+const FORMATTERS = await fs.readdir(await import.meta.resolve("formatter/"));
 
 /**
  * La liste des enrobages.
  *
  * @constant {Promise<string[]>} WRAPPERS
  */
-const WRAPPERS = await fs.readdir(await resolve("wrapper/"));
+const WRAPPERS = await fs.readdir(await import.meta.resolve("wrapper/"));
 
 /**
  * Fusionne deux objets.

@@ -14,18 +14,22 @@ import SEVERITY from "../core/severity.js";
  * @typedef {import("../types").Formatter} Formatter
  */
 
-/**
- * Résous un chemin relatif à partir du module.
- *
- * @param {string} specifier Le chemin relatif vers un fichier ou un répertoire.
- * @returns {Promise<string>} Une promesse contenant le chemin absolue vers le
- *                            fichier ou le répertoire.
- * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
- */
-const resolve = function (specifier) {
-    return Promise.resolve(fileURLToPath(new URL(specifier,
-                                                 import.meta.url).href));
-};
+if (undefined === import.meta.resolve) {
+
+    /**
+     * Résous un chemin relatif à partir du module.
+     *
+     * @param {string} specifier Le chemin relatif vers un fichier ou un
+     *                           répertoire.
+     * @returns {Promise<string>} Une promesse contenant le chemin absolue vers
+     *                            le fichier ou le répertoire.
+     * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
+     */
+    import.meta.resolve = (specifier) => {
+        return Promise.resolve(fileURLToPath(new URL(specifier,
+                                                     import.meta.url).href));
+    };
+}
 
 const argv = yargs(process.argv.slice(2)).options({
     c: {
@@ -98,7 +102,9 @@ const check = async function (files, checkers, root, reporters) {
 };
 
 if (argv.help) {
-    process.stdout.write(fs.readFileSync(await resolve("./help.txt")));
+    process.stdout.write(fs.readFileSync(
+        await import.meta.resolve("./help.txt"),
+    ));
     process.exit(0);
 }
 

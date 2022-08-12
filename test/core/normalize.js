@@ -8,18 +8,22 @@ import { Formatter as Console } from "../../src/core/formatter/console.js";
 import { Formatter as Unix } from "../../src/core/formatter/unix.js";
 import { Formatter as French } from "../data/french.js";
 
-/**
- * Résous un chemin relatif à partir du module.
- *
- * @param {string} specifier Le chemin relatif vers un fichier ou un répertoire.
- * @returns {Promise<string>} Une promesse contenant le chemin absolue vers le
- *                            fichier ou le répertoire.
- * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
- */
-const resolve = function (specifier) {
-    return Promise.resolve(fileURLToPath(new URL(specifier,
-                                                 import.meta.url).href));
-};
+if (undefined === import.meta.resolve) {
+
+    /**
+     * Résous un chemin relatif à partir du module.
+     *
+     * @param {string} specifier Le chemin relatif vers un fichier ou un
+     *                           répertoire.
+     * @returns {Promise<string>} Une promesse contenant le chemin absolue vers
+     *                            le fichier ou le répertoire.
+     * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
+     */
+    import.meta.resolve = (specifier) => {
+        return Promise.resolve(fileURLToPath(new URL(specifier,
+                                                     import.meta.url).href));
+    };
+}
 
 describe("src/core/normalize.js", function () {
     describe("merge()", function () {
@@ -521,7 +525,7 @@ describe("src/core/normalize.js", function () {
                 reporters: { formatter: "./french.js" },
                 checkers:  [{ linters: { eslint: {} } }],
             };
-            const root = await resolve("../data/");
+            const root = await import.meta.resolve("../data/");
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);

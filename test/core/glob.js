@@ -4,26 +4,31 @@ import mock from "mock-fs";
 import sinon from "sinon";
 import glob from "../../src/core/glob.js";
 
-/**
- * Résous un chemin relatif à partir du module.
- *
- * @param {string} specifier Le chemin relatif vers un fichier ou un répertoire.
- * @returns {Promise<string>} Une promesse contenant le chemin absolue vers le
- *                            fichier ou le répertoire.
- * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
- */
-const resolve = function (specifier) {
-    return Promise.resolve(fileURLToPath(new URL(specifier,
-                                                 import.meta.url).href));
-};
+if (undefined === import.meta.resolve) {
+
+    /**
+     * Résous un chemin relatif à partir du module.
+     *
+     * @param {string} specifier Le chemin relatif vers un fichier ou un
+     *                           répertoire.
+     * @returns {Promise<string>} Une promesse contenant le chemin absolue vers
+     *                            le fichier ou le répertoire.
+     * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
+     */
+    import.meta.resolve = (specifier) => {
+        return Promise.resolve(fileURLToPath(new URL(specifier,
+                                                     import.meta.url).href));
+    };
+}
 
 describe("src/core/glob.js", function () {
     describe("test()", function () {
         it("test([])", async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = [];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             const matched = glob.test(
                 "src/core/index.js", patterns, root, false,
             );
@@ -33,10 +38,11 @@ describe("src/core/glob.js", function () {
         });
 
         it(`test(["**"])̀`, async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = ["**"];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             let matched = glob.test(
                 "src/core/index.min.js", patterns, root, false,
             );
@@ -48,10 +54,11 @@ describe("src/core/glob.js", function () {
         });
 
         it(`test(["**/*.js"])`, async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = ["**/*.js"];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             let matched = glob.test(
                 "src/core/index.min.js", patterns, root, false,
             );
@@ -71,10 +78,11 @@ describe("src/core/glob.js", function () {
         });
 
         it(`test(["!**/*~", "**"])̀`, async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = ["!**/*~", "**"];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             let matched = glob.test(
                 "src/core/index.min.js", patterns, root, false,
             );
@@ -96,10 +104,11 @@ describe("src/core/glob.js", function () {
         });
 
         it(`test(["/**/*.md"])`, async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = ["/**/*.md"];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             let matched = glob.test("foo/bar.md", patterns, root, false);
             assert.strictEqual(matched, true);
             matched = glob.test("foo.md", patterns, root, false);
@@ -111,10 +120,11 @@ describe("src/core/glob.js", function () {
         });
 
         it(`test(["/*/*.md"])`, async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = ["/*/*.md"];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             let matched = glob.test("foo/bar.md", patterns, root, false);
             assert.strictEqual(matched, true);
             matched = glob.test("foo.md", patterns, root, false);
@@ -126,10 +136,11 @@ describe("src/core/glob.js", function () {
         });
 
         it(`test(["foo/**"])`, async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = ["foo/**"];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             let matched = glob.test("foo", patterns, root, true);
             assert.strictEqual(matched, true);
             matched = glob.test("foo/", patterns, root, true);
@@ -143,10 +154,11 @@ describe("src/core/glob.js", function () {
         });
 
         it(`test(["foo?bar"])`, async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = ["foo?bar"];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             let matched = glob.test("foo.bar", patterns, root, false);
             assert.strictEqual(matched, true);
             matched = glob.test("foo/bar", patterns, root, true);
@@ -156,10 +168,11 @@ describe("src/core/glob.js", function () {
         });
 
         it(`test(["foo[123].js"])`, async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = ["foo[123].js"];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             let matched = glob.test("foo1.js", patterns, root, false);
             assert.strictEqual(matched, true);
             matched = glob.test("foo2.js", patterns, root, false);
@@ -175,10 +188,11 @@ describe("src/core/glob.js", function () {
         });
 
         it(`test(["!foo/", "**"])`, async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = ["!foo/", "**"];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             let matched = glob.test("bar/baz.js", patterns, root, false);
             assert.strictEqual(matched, true);
             matched = glob.test("foo/", patterns, root, true);
@@ -190,10 +204,11 @@ describe("src/core/glob.js", function () {
         });
 
         it(`test(["foo/"])`, async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             const patterns = ["foo/"];
-            const root = await resolve(".");
+            const root = await import.meta.resolve(".");
             let matched = glob.test("foo/", patterns, root, true);
             assert.strictEqual(matched, true);
             matched = glob.test("foo", patterns, root, true);
@@ -205,7 +220,8 @@ describe("src/core/glob.js", function () {
         });
 
         it("test() throws", async function () {
-            const stub = sinon.stub(process, "cwd").returns(await resolve("."));
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
 
             assert.throws(() => glob.test("", ["/**foo"], "", false), {
                 name:    "Error",
