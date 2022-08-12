@@ -5,11 +5,11 @@ import SEVERITY from "../../../src/core/severity.js";
 
 describe("test/data/french.js", function () {
     describe("Formatter", function () {
-        it("should support null notices", async function () {
+        it("should support undefined notices", async function () {
             const writer = new WriteString();
 
             const reporter = new Formatter(SEVERITY.WARN, writer);
-            await reporter.notify("script.js", null);
+            await reporter.notify("script.js", undefined);
             await reporter.finalize();
 
             assert.strictEqual(writer.toString(), "");
@@ -33,7 +33,6 @@ describe("test/data/french.js", function () {
                 {
                     file:      "foo.html",
                     linter:    "htmlhint",
-                    rule:      null,
                     severity:  SEVERITY.ERROR,
                     message:   "Doctype must be declared first.",
                     locations: [],

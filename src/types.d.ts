@@ -8,7 +8,7 @@ export type Location = {
 export type Notice = {
     file:      string,
     linter:    string,
-    rule:      string | null,
+    rule?:     string,
     severity:  number,
     message:   string,
     locations: Location[],

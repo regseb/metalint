@@ -14,13 +14,14 @@ import SEVERITY from "../severity.js";
 /**
  * Vérifie un fichier avec l'utilitaire <strong>PurgeCSS</strong>.
  *
- * @param {string}  file    Le fichier qui sera vérifié.
- * @param {number}  level   Le niveau de sévérité minimum des notifications
- *                          retournées.
- * @param {?Object} options Les options qui seront passées au linter ou
- *                          <code>null</code> pour les options par défaut.
- * @param {string}  root    L'adresse du répertoire où se trouve le dossier
- *                          <code>.metalint/</code>.
+ * @param {string}           file    Le fichier qui sera vérifié.
+ * @param {number}           level   Le niveau de sévérité minimum des
+ *                                   notifications retournées.
+ * @param {Object|undefined} options Les options qui seront passées au linter ou
+ *                                   <code>undefined</code> pour les options par
+ *                                   défaut.
+ * @param {string}           root    L'adresse du répertoire où se trouve le
+ *                                   dossier <code>.metalint/</code>.
  * @returns {Promise<Notice[]>} Une promesse retournant la liste des
  *                              notifications.
  */
@@ -40,7 +41,6 @@ export const wrapper = async function (file, level, options, root) {
         return [{
             file,
             linter:    "purgecss",
-            rule:      null,
             severity:  SEVERITY.FATAL,
             message:   "No content provided.",
             locations: [],
@@ -50,7 +50,6 @@ export const wrapper = async function (file, level, options, root) {
     return results[0].rejected.map((rejected) => ({
         file,
         linter:    "purgecss",
-        rule:      null,
         severity:  SEVERITY.ERROR,
         message:   `'${rejected}' is never used.`,
         locations: [],

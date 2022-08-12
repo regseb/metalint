@@ -5,11 +5,11 @@ import { Formatter } from "../../../src/core/formatter/unix.js";
 
 describe("src/core/formatter/unix.js", function () {
     describe("Formatter", function () {
-        it("should support null notices", async function () {
+        it("should support undefined notices", async function () {
             const writer = new WriteString();
 
             const reporter = new Formatter(SEVERITY.FATAL, writer);
-            await reporter.notify("foo.md", null);
+            await reporter.notify("foo.md", undefined);
             await reporter.finalize();
 
             assert.strictEqual(await writer.toString(), "");
@@ -33,7 +33,6 @@ describe("src/core/formatter/unix.js", function () {
                 {
                     file:      "foo.html",
                     linter:    "htmllint",
-                    rule:      null,
                     severity:  SEVERITY.ERROR,
                     message:   "La cigale ayant chanté",
                     locations: [],

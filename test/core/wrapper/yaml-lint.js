@@ -8,7 +8,7 @@ describe("src/core/wrapper/yaml-lint.js", function () {
         it("should ignore with FATAL level", async function () {
             const file    = "";
             const level   = SEVERITY.FATAL;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);
@@ -19,7 +19,7 @@ describe("src/core/wrapper/yaml-lint.js", function () {
 
             const file    = "foo.yaml";
             const level   = SEVERITY.ERROR;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);
@@ -37,7 +37,6 @@ describe("src/core/wrapper/yaml-lint.js", function () {
                 {
                     file,
                     linter:    "yaml-lint",
-                    rule:      null,
                     severity:  SEVERITY.ERROR,
                     message:   "incomplete explicit mapping pair; a key node" +
                                " is missed; or followed by a non-tabulated" +

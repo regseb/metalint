@@ -57,14 +57,14 @@ export const Formatter = class {
     /**
      * Affiche les éventuelles notifications d'un fichier.
      *
-     * @param {string}      file    Le fichier analysé.
-     * @param {?(Notice[])} notices La liste des notifications ou
-     *                              <code>null</code>.
+     * @param {string}             file    Le fichier analysé.
+     * @param {Notice[]|undefined} notices La liste des notifications ou
+     *                                     <code>undefined</code>.
      */
     notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
         // critères des checkers).
-        if (null === notices) {
+        if (undefined === notices) {
             return;
         }
 
@@ -82,7 +82,7 @@ export const Formatter = class {
 
             this.#writer.write(`,${doublequote(notice.message)}` +
                                `,${notice.linter},`);
-            if (null !== notice.rule) {
+            if (undefined !== notice.rule) {
                 this.#writer.write(doublequote(notice.rule));
             }
             this.#writer.write("\r\n");

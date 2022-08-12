@@ -35,7 +35,6 @@ export const wrapper = async function (file, level) {
         return [{
             file,
             linter:    "jsonlint",
-            rule:      null,
             severity:  SEVERITY.ERROR,
             message:   result[3],
             // Augmenter de un le numéro de la ligne car JSON Lint commence les

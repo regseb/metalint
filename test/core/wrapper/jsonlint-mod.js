@@ -24,7 +24,6 @@ describe("src/core/wrapper/jsonlint-mod.js", function () {
                 {
                     file,
                     linter:    "jsonlint-mod",
-                    rule:      null,
                     severity:  SEVERITY.ERROR,
                     message:   "Expecting 'EOF', '}', ',', ']', got 'STRING'",
                     locations: [{ line: 2 }],

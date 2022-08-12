@@ -13,11 +13,12 @@ import SEVERITY from "../severity.js";
 /**
  * Vérifie un fichier avec le linter <strong>ESLint</strong>.
  *
- * @param {string}  file    Le fichier qui sera vérifié.
- * @param {number}  level   Le niveau de sévérité minimum des notifications
- *                          retournées.
- * @param {?Object} options Les options qui seront passées au linter ou
- *                          <code>null</code> pour les options par défaut.
+ * @param {string}           file    Le fichier qui sera vérifié.
+ * @param {number}           level   Le niveau de sévérité minimum des
+ *                                   notifications retournées.
+ * @param {Object|undefined} options Les options qui seront passées au linter ou
+ *                                   <code>undefined</code> pour les options par
+ *                                   défaut.
  * @returns {Promise<Notice[]>} Une promesse retournant la liste des
  *                              notifications.
  */
@@ -43,20 +44,22 @@ export const wrapper = async function (file, level, options) {
             severity = SEVERITY.ERROR;
         }
 
-        const locations = [];
-        if (Number.isNaN(result.column)) {
-            locations.push({ line: result.line });
-        } else {
-            locations.push({ line: result.line, column: result.column });
-        }
-
         return {
             file,
-            linter:  "eslint",
-            rule:    result.ruleId,
+            linter: "eslint",
+            ...null === result.ruleId ? {}
+                                      : { rule: result.ruleId },
             severity,
-            message: result.message,
-            locations,
+            message:   result.message,
+            locations: [{
+                line:   result.line,
+                column: result.column,
+                ...undefined === result.endLine ? {}
+                                                : { lineEnd: result.endLine },
+                ...undefined === result.endColumn
+                                              ? {}
+                                              : { columnEnd: result.endColumn },
+            }],
         };
     }).filter((n) => level >= n.severity);
 };

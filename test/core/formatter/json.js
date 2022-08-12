@@ -5,11 +5,11 @@ import { Formatter } from "../../../src/core/formatter/json.js";
 
 describe("src/core/formatter/json.js", function () {
     describe("Formatter", function () {
-        it("should support null notices", async function () {
+        it("should support undefined notices", async function () {
             const writer = new WriteString();
 
             const reporter = new Formatter(SEVERITY.WARN, writer, {});
-            await reporter.notify("foo.html", null);
+            await reporter.notify("foo.html", undefined);
             await reporter.finalize();
 
             assert.strictEqual(writer.toString(), `{"foo.html":null}\n`);

@@ -8,7 +8,7 @@ describe("src/core/wrapper/doiuse.js", function () {
         it("should ignore with FATAL level", async function () {
             const file    = "";
             const level   = SEVERITY.FATAL;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);
@@ -22,7 +22,7 @@ describe("src/core/wrapper/doiuse.js", function () {
 
             const file    = "foo.css";
             const level   = SEVERITY.INFO;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, [

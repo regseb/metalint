@@ -55,7 +55,7 @@ export default async function metalint(files, checkers, root) {
 
     const wraps = [];
     for (const file of files) {
-        results[file] = null;
+        results[file] = undefined;
 
         const stat = await fs.lstat(file);
         for (const checker of checkers) {
@@ -75,7 +75,7 @@ export default async function metalint(files, checkers, root) {
     for await (const notices of wraps) {
         for (const notice of notices.flat()) {
             // Regrouper les notifications par fichiers.
-            if (!(notice.file in results) || null === results[notice.file]) {
+            if (undefined === results[notice.file]) {
                 results[notice.file] = [notice];
             } else {
                 results[notice.file].push(notice);
@@ -83,7 +83,7 @@ export default async function metalint(files, checkers, root) {
         }
     }
     // Trier les notifications.
-    Object.values(results).filter((r) => null !== r)
+    Object.values(results).filter((r) => undefined !== r)
                           .forEach((r) => r.sort(compare));
 
     return results;

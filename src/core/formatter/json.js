@@ -37,7 +37,7 @@ export const Formatter = class {
      * Les notifications (regroupées par fichiers) ayant une sévérité supérieure
      * au niveau minimum.
      *
-     * @type {Object<string, ?(Notice[])>}
+     * @type {Object<string, Notice[]|undefined>}
      */
     #results = {};
 
@@ -60,14 +60,12 @@ export const Formatter = class {
     /**
      * Insère les notifications dans un objet JSON.
      *
-     * @param {string}      file    Le fichier analysé.
-     * @param {?(Notice[])} notices La liste des notifications ou
-     *                              <code>null</code>.
+     * @param {string}             file    Le fichier analysé.
+     * @param {Notice[]|undefined} notices La liste des notifications ou
+     *                                     <code>undefined</code>.
      */
     notify(file, notices) {
-        this.#results[file] = null === notices
-                             ? null
-                             : notices.filter((n) => this.#level >= n.severity);
+        this.#results[file] = notices?.filter((n) => this.#level >= n.severity);
     }
 
     /**
@@ -78,7 +76,13 @@ export const Formatter = class {
      */
     finalize() {
         // Afficher l'objet JSON.
-        this.#writer.write(JSON.stringify(this.#results, null, this.#indent));
+        this.#writer.write(JSON.stringify(
+            this.#results,
+            // Remplacer les undefined par null.
+            // eslint-disable-next-line unicorn/no-null
+            (_, v) => v ?? null,
+            this.#indent,
+        ));
         return new Promise((resolve) => {
             this.#writer.write("\n", "utf8", resolve);
         });

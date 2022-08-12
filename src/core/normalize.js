@@ -401,7 +401,11 @@ const linters = async function (rottens, root, dir) {
             } else if (Array.isArray(params)) {
                 standards[wrapper(linter, root)] = {};
                 for (const param of params) {
-                    if (null === param) {
+                    // "linters": { "foolint": [undefined, ...] }
+                    if (undefined === param) {
+                        throw new Error("Linter option is undefined.");
+                    // "linters": { "foolint": [null, ...] }
+                    } else if (null === param) {
                         throw new Error("Linter option is null.");
                     // "linters": { "foolint": ["qux.config.js", ...] }
                     } else if ("string" === typeof param) {
@@ -419,7 +423,8 @@ const linters = async function (rottens, root, dir) {
                 }
             // "linters": { "foolint": { "qux": ..., "corge": ... } }
             // "linters": { "foolint": null }
-            } else if ("object" === typeof params) {
+            // "linters": { "foolint": undefined }
+            } else if ("object" === typeof params || undefined === params) {
                 standards[wrapper(linter, root)] = params;
             } else {
                 throw new TypeError("Linter incorrect type.");

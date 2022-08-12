@@ -74,17 +74,18 @@ const argv = yargs(process.argv.slice(2)).options({
  *                                dossier <code>.metalint/</code>.
  * @param {Formatter[]} reporters La liste des rapporteurs utilisés pour
  *                                afficher les résultats.
- * @returns {Promise<?number>} La sévérité la plus élévée des résultats.
+ * @returns {Promise<number|undefined>} La sévérité la plus élévée des
+ *                                      résultats.
  */
 const check = async function (files, checkers, root, reporters) {
-    let severity = null;
+    let severity;
 
     const results = await metalint(files, checkers, root);
     for (const [file, notices] of Object.entries(results)) {
         // Déterminer la sévérité la plus élévée des résultats.
-        if (null !== notices) {
+        if (undefined !== notices) {
             for (const notice of notices) {
-                if (null === severity || severity > notice.severity) {
+                if (undefined === severity || severity > notice.severity) {
                     severity = notice.severity;
                 }
             }

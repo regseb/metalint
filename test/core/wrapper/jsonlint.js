@@ -24,7 +24,6 @@ describe("src/core/wrapper/jsonlint.js", function () {
                 {
                     file,
                     linter:    "jsonlint",
-                    rule:      null,
                     severity:  SEVERITY.ERROR,
                     message:   "Expecting 'STRING', 'NUMBER', 'NULL', 'TRUE'," +
                                " 'FALSE', '{', '[', got 'undefined'",

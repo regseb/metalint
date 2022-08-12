@@ -14,11 +14,12 @@ import SEVERITY from "../severity.js";
 /**
  * Vérifie un fichier avec le linter <strong>HTMLHint</strong>.
  *
- * @param {string}  file    Le fichier qui sera vérifié.
- * @param {number}  level   Le niveau de sévérité minimum des notifications
- *                          retournées.
- * @param {?Object} options Les options qui seront passées au linter ou
- *                          <code>null</code> pour les options par défaut.
+ * @param {string}           file    Le fichier qui sera vérifié.
+ * @param {number}           level   Le niveau de sévérité minimum des
+ *                                   notifications retournées.
+ * @param {Object|undefined} options Les options qui seront passées au linter ou
+ *                                   <code>undefined</code> pour les options par
+ *                                   défaut.
  * @returns {Promise<Notice[]>} Une promesse retournant la liste des
  *                              notifications.
  */
@@ -28,7 +29,7 @@ export const wrapper = async function (file, level, options) {
     }
 
     const source = await fs.readFile(file, "utf8");
-    return HTMLHint.verify(source, options ?? undefined)
+    return HTMLHint.verify(source, options)
                    .map((result) => ({
         file,
         linter:    "htmlhint",

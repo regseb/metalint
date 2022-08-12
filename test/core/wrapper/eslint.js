@@ -8,7 +8,7 @@ describe("src/core/wrapper/eslint.js", function () {
         it("should ignore with OFF level", async function () {
             const file    = "";
             const level   = SEVERITY.OFF;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);
@@ -19,7 +19,7 @@ describe("src/core/wrapper/eslint.js", function () {
 
             const file    = "foo.js";
             const level   = SEVERITY.INFO;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);
@@ -62,14 +62,24 @@ describe("src/core/wrapper/eslint.js", function () {
                     rule:      "indent",
                     severity:  SEVERITY.WARN,
                     message:   "Expected indentation of 4 spaces but found 3.",
-                    locations: [{ line: 4, column: 1 }],
+                    locations: [{
+                        line:      4,
+                        column:    1,
+                        lineEnd:   4,
+                        columnEnd: 4,
+                    }],
                 }, {
                     file,
                     linter:    "eslint",
                     rule:      "no-duplicate-case",
                     severity:  SEVERITY.ERROR,
                     message:   "Duplicate case label.",
-                    locations: [{ line: 5, column: 5 }],
+                    locations: [{
+                        line:      5,
+                        column:    5,
+                        lineEnd:   5,
+                        columnEnd: 19,
+                    }],
                 },
             ]);
         });
@@ -98,14 +108,13 @@ describe("src/core/wrapper/eslint.js", function () {
 
             const file    = "foo.js";
             const level   = SEVERITY.INFO;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, [
                 {
                     file,
                     linter:    "eslint",
-                    rule:      null,
                     severity:  SEVERITY.FATAL,
                     message:   "Parsing error: Unexpected token ;",
                     locations: [{ line: 1, column: 11 }],
@@ -149,7 +158,12 @@ describe("src/core/wrapper/eslint.js", function () {
                     rule:      "mocha/prefer-arrow-callback",
                     severity:  SEVERITY.ERROR,
                     message:   "Unexpected function expression.",
-                    locations: [{ line: 2, column: 5 }],
+                    locations: [{
+                        line:      2,
+                        column:    5,
+                        lineEnd:   2,
+                        columnEnd: 34,
+                    }],
                 }, {
                     file,
                     linter:    "eslint",
@@ -157,7 +171,12 @@ describe("src/core/wrapper/eslint.js", function () {
                     severity:  SEVERITY.ERROR,
                     message:   `Invalid JSDoc @returns type "Object"; prefer:` +
                                ` "object".`,
-                    locations: [{ line: 7 }],
+                    locations: [{
+                        line:      7,
+                        column:    1,
+                        lineEnd:   7,
+                        columnEnd: 1,
+                    }],
                 },
             ]);
         });

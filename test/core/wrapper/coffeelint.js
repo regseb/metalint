@@ -8,7 +8,7 @@ describe("src/core/wrapper/coffeelint.js", function () {
         it("should ignore with FATAL level", async function () {
             const file    = "";
             const level   = SEVERITY.FATAL;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);
@@ -19,7 +19,7 @@ describe("src/core/wrapper/coffeelint.js", function () {
 
             const file    = "foo.coffee";
             const level   = SEVERITY.INFO;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);

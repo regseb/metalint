@@ -19,7 +19,7 @@ describe("src/core/index.js", function () {
                 {
                     patterns: ["*.js"],
                     linters:  {
-                        "./wrapper/jshint.js": null,
+                        "./wrapper/jshint.js": undefined,
                         "./wrapper/eslint.js":   {
                             rules: {
                                 "no-alert": 2,
@@ -40,7 +40,7 @@ describe("src/core/index.js", function () {
             const results = await metalint(files, checkers, ".");
             assert.deepStrictEqual(results, {
                 "foo.html": [],
-                "bar.md":   null,
+                "bar.md":   undefined,
                 "qux.js":   [
                     {
                         file:      "qux.js",
@@ -78,7 +78,7 @@ describe("src/core/index.js", function () {
             const checkers = [
                 {
                     patterns: ["**"],
-                    linters:  { "./wrapper/json-lint.js": null },
+                    linters:  { "./wrapper/json-lint.js": undefined },
                     level:    SEVERITY.INFO,
                 },
             ];
@@ -89,7 +89,6 @@ describe("src/core/index.js", function () {
                     {
                         file:      "foo.json",
                         linter:    "json-lint",
-                        rule:      null,
                         severity:  SEVERITY.ERROR,
                         message:   "Unknown character 'Y', expecting" +
                                    " opening block '{' or '[', or maybe a" +
@@ -123,7 +122,6 @@ describe("src/core/index.js", function () {
                     {
                         file:      "foo.css",
                         linter:    "purgecss",
-                        rule:      null,
                         severity:  SEVERITY.ERROR,
                         message:   "'.black' is never used.",
                         locations: [],
@@ -142,7 +140,7 @@ describe("src/core/index.js", function () {
             const checkers = [
                 {
                     patterns: ["foo/"],
-                    linters:  { "./wrapper/addons-linter.js": null },
+                    linters:  { "./wrapper/addons-linter.js": undefined },
                     level:    SEVERITY.INFO,
                 },
             ];

@@ -275,7 +275,7 @@ describe("src/core/normalize.js", function () {
         it("options() #1", async function () {
             const rotten = {
                 reporters: { options: { showZeroNotice: true } },
-                checkers:  [{ linters: { markdownlint: null } }],
+                checkers:  [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
@@ -293,7 +293,7 @@ describe("src/core/normalize.js", function () {
                     {
                         patterns: ["**"],
                         level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": null },
+                        linters:  { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -318,7 +318,7 @@ describe("src/core/normalize.js", function () {
     describe("reporters()", function () {
         it("reporters() #1", async function () {
             const rotten = {
-                checkers: [{ linters: { markdownlint: null } }],
+                checkers: [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
@@ -332,7 +332,7 @@ describe("src/core/normalize.js", function () {
                     {
                         patterns: ["**"],
                         level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": null },
+                        linters:  { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -341,7 +341,7 @@ describe("src/core/normalize.js", function () {
         it("reporters() #2", async function () {
             const rotten = {
                 reporters: [],
-                checkers:  [{ linters: { markdownlint: null } }],
+                checkers:  [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
@@ -355,7 +355,7 @@ describe("src/core/normalize.js", function () {
                     {
                         patterns: ["**"],
                         level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": null },
+                        linters:  { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -364,7 +364,7 @@ describe("src/core/normalize.js", function () {
         it("reporters() #3", async function () {
             const rotten = {
                 reporters: {},
-                checkers:  [{ linters: { markdownlint: null } }],
+                checkers:  [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
@@ -378,7 +378,7 @@ describe("src/core/normalize.js", function () {
                     {
                         patterns: ["**"],
                         level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": null },
+                        linters:  { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -387,7 +387,7 @@ describe("src/core/normalize.js", function () {
         it("reporters() #4", async function () {
             const rotten = {
                 reporters: [{}],
-                checkers:  [{ linters: { markdownlint: null } }],
+                checkers:  [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
@@ -401,7 +401,7 @@ describe("src/core/normalize.js", function () {
                     {
                         patterns: ["**"],
                         level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": null },
+                        linters:  { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -409,7 +409,7 @@ describe("src/core/normalize.js", function () {
 
         it("reporters() #5", async function () {
             const rotten = {
-                checkers:  [{ linters: { markdownlint: null } }],
+                checkers:  [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
@@ -423,7 +423,7 @@ describe("src/core/normalize.js", function () {
                     {
                         patterns: ["**"],
                         level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": null },
+                        linters:  { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -432,7 +432,7 @@ describe("src/core/normalize.js", function () {
         it("reporters() #6", async function () {
             const rotten = {
                 reporters: [],
-                checkers:  [{ linters: { markdownlint: null } }],
+                checkers:  [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
@@ -446,7 +446,7 @@ describe("src/core/normalize.js", function () {
                     {
                         patterns: ["**"],
                         level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": null },
+                        linters:  { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -455,7 +455,7 @@ describe("src/core/normalize.js", function () {
         it("reporters() #7", async function () {
             const rotten = {
                 reporters: [{}],
-                checkers:  [{ linters: { markdownlint: null } }],
+                checkers:  [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
@@ -469,7 +469,7 @@ describe("src/core/normalize.js", function () {
                     {
                         patterns: ["**"],
                         level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": null },
+                        linters:  { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -478,7 +478,7 @@ describe("src/core/normalize.js", function () {
         it("reporters() #8", async function () {
             const rotten = {
                 reporters: {},
-                checkers:  [{ linters: { markdownlint: null } }],
+                checkers:  [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
@@ -492,7 +492,7 @@ describe("src/core/normalize.js", function () {
                     {
                         patterns: ["**"],
                         level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": null },
+                        linters:  { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -573,7 +573,7 @@ describe("src/core/normalize.js", function () {
             const rotten = {
                 patterns:  "**.js",
                 level:     "Error",
-                reporters: { formatter: "unix", output: null },
+                reporters: { formatter: "unix", output: undefined },
                 checkers:  [
                     {
                         level:   "info",
@@ -645,6 +645,14 @@ describe("src/core/normalize.js", function () {
                 message: "Linter option incorrect type.",
             });
 
+            rotten.checkers[0].linters.jsonlint[0] = undefined;
+            await assert.rejects(() => normalize(rotten, ".", ".", {}), {
+                name:    "Error",
+                message: "Linter option is undefined.",
+            });
+
+            // Tester que la valeur null est gérée.
+            // eslint-disable-next-line unicorn/no-null
             rotten.checkers[0].linters.jsonlint[0] = null;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
                 name:    "Error",
@@ -663,6 +671,8 @@ describe("src/core/normalize.js", function () {
                 message: "'checkers[].linters' incorrect type.",
             });
 
+            // Tester que la valeur null est gérée.
+            // eslint-disable-next-line unicorn/no-null
             rotten.checkers[0].linters = null;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
                 name:    "Error",

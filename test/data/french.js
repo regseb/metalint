@@ -31,20 +31,20 @@ export const Formatter = class {
     /**
      * Affiche les éventuelles notifications d'un fichier.
      *
-     * @param {string}      file    Le fichier analysé.
-     * @param {?(Notice[])} notices La liste des notifications ou
-     *                              <code>null</code>.
+     * @param {string}             file    Le fichier analysé.
+     * @param {Notice[]|undefined} notices La liste des notifications ou
+     *                                     <code>undefined</code>.
      */
     notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
         // critères des checkers).
-        if (null === notices) {
+        if (undefined === notices) {
             return;
         }
 
         for (const notice of notices.filter((n) => this.#level >= n.severity)) {
             this.#writer.write(`Le linter ${notice.linter} a trouvé `);
-            if (null === notice.rule) {
+            if (undefined === notice.rule) {
                 this.#writer.write("un problème ");
             } else {
                 this.#writer.write(`que la règle ${notice.rule} n'est pas` +

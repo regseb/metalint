@@ -157,12 +157,14 @@ export const Formatter = class {
     /**
      * Affiche les éventuelles notifications d'un fichier.
      *
-     * @param {string}      file    Le fichier analysé.
-     * @param {?(Notice[])} notices La liste des notifications ou
-     *                              <code>null</code>.
+     * @param {string}             file    Le fichier analysé.
+     * @param {Notice[]|undefined} notices La liste des notifications ou
+     *                                     <code>undefined</code>.
      */
     async notify(file, notices) {
-        if (null === notices) {
+        // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
+        // critères des checkers).
+        if (undefined === notices) {
             if (this.#showNoChecked) {
                 print(this.#writer, `${file}: No checked.`, "BOLD");
                 print(this.#writer, "\n\n");
@@ -223,7 +225,7 @@ export const Formatter = class {
 
         // Récupérer le code source du fichier si ce n'est pas un répertoire et
         // s'il existe (il n'est pas dans une archive par exemple).
-        let content = null;
+        let content;
         try {
             const stats = await fs.stat(file);
             if (!stats.isDirectory()) {
@@ -250,12 +252,12 @@ export const Formatter = class {
                     print(this.#writer, "      ");
             }
             print(this.#writer, `: ${notice.message} (${notice.linter}`);
-            if (null !== notice.rule) {
+            if (undefined !== notice.rule) {
                 print(this.#writer, `.${notice.rule}`);
             }
             print(this.#writer, ")\n");
 
-            if (null !== content) {
+            if (undefined !== content) {
                 printCodeSource(notice.locations, content, this.#writer);
             }
 

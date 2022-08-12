@@ -8,7 +8,7 @@ describe("src/core/wrapper/purgecss.js", function () {
         it("should ignore with OFF level", async function () {
             const file    = "";
             const level   = SEVERITY.OFF;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options, ".");
             assert.deepStrictEqual(notices, []);
@@ -24,7 +24,6 @@ describe("src/core/wrapper/purgecss.js", function () {
                 {
                     file,
                     linter:    "purgecss",
-                    rule:      null,
                     severity:  SEVERITY.FATAL,
                     message:   "No content provided.",
                     locations: [],
@@ -51,14 +50,12 @@ describe("src/core/wrapper/purgecss.js", function () {
                 {
                     file,
                     linter:    "purgecss",
-                    rule:      null,
                     severity:  SEVERITY.ERROR,
                     message:   "'.qux' is never used.",
                     locations: [],
                 }, {
                     file,
                     linter:    "purgecss",
-                    rule:      null,
                     severity:  SEVERITY.ERROR,
                     message:   "'.quux .corge' is never used.",
                     locations: [],

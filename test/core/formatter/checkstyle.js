@@ -5,11 +5,11 @@ import { Formatter } from "../../../src/core/formatter/checkstyle.js";
 
 describe("src/core/formatter/checkstyle.js", function () {
     describe("Formatter", function () {
-        it("should support null notices", async function () {
+        it("should support undefined notices", async function () {
             const writer = new WriteString();
 
             const reporter = new Formatter(SEVERITY.INFO, writer, {});
-            await reporter.notify("foo.json", null);
+            await reporter.notify("foo.json", undefined);
             await reporter.finalize();
 
             assert.strictEqual(writer.toString(),
@@ -45,7 +45,6 @@ describe("src/core/formatter/checkstyle.js", function () {
                 {
                     file:      "foo.html",
                     linter:    "htmllint",
-                    rule:      null,
                     severity:  SEVERITY.ERROR,
                     message:   "Une Grenouille vit un Bœuf,",
                     locations: [],

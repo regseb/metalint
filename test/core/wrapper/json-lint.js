@@ -8,7 +8,7 @@ describe("src/core/wrapper/json-lint.js", function () {
         it("should ignore with FATAL level", async function () {
             const file    = "";
             const level   = SEVERITY.FATAL;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);
@@ -19,14 +19,13 @@ describe("src/core/wrapper/json-lint.js", function () {
 
             const file    = "foo.json";
             const level   = SEVERITY.INFO;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, [
                 {
                     file,
                     linter:    "json-lint",
-                    rule:      null,
                     severity:  SEVERITY.ERROR,
                     message:   "Unknown Character 'b', expecting a string for" +
                                " key statement.",
@@ -40,14 +39,13 @@ describe("src/core/wrapper/json-lint.js", function () {
 
             const file    = "foo.json";
             const level   = SEVERITY.WARN;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, [
                 {
                     file,
                     linter:    "json-lint",
-                    rule:      null,
                     severity:  SEVERITY.ERROR,
                     message:   "Unexpected End Of Array Error. Expecting a" +
                                " value statement.",

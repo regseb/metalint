@@ -8,7 +8,7 @@ describe("src/core/wrapper/lesshint.js", function () {
         it("should ignore with OFF level", async function () {
             const file    = "";
             const level   = SEVERITY.OFF;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);
@@ -28,7 +28,7 @@ describe("src/core/wrapper/lesshint.js", function () {
 
             const file    = "foo.less";
             const level   = SEVERITY.INFO;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, [
@@ -104,7 +104,7 @@ describe("src/core/wrapper/lesshint.js", function () {
 
             const file    = "foo.less";
             const level   = SEVERITY.FATAL;
-            const options = null;
+            const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, [

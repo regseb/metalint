@@ -5,11 +5,11 @@ import { Formatter } from "../../../src/core/formatter/csv.js";
 
 describe("src/core/formatter/csv.js", function () {
     describe("Formatter", function () {
-        it("should support null notices", async function () {
+        it("should support undefined notices", async function () {
             const writer = new WriteString();
 
             const reporter = new Formatter(SEVERITY.FATAL, writer);
-            await reporter.notify("Foo.java", null);
+            await reporter.notify("Foo.java", undefined);
             await reporter.finalize();
 
             assert.strictEqual(writer.toString(),
@@ -35,7 +35,7 @@ describe("src/core/formatter/csv.js", function () {
                 {
                     file:      "foo.py",
                     linter:    "pylint",
-                    rule:      null,
+                    rule:      undefined,
                     severity:  SEVERITY.ERROR,
                     message:   "Un fanfaron, amateur de la chasse,",
                     locations: [],

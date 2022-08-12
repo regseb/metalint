@@ -6,23 +6,23 @@ import { Formatter } from "../../../src/core/formatter/console.js";
 
 describe("src/core/formatter/console.js", function () {
     describe("Formatter", function () {
-        it("should support null notices", async function () {
+        it("should support undefined notices", async function () {
             const writer = new WriteString();
 
             const reporter = new Formatter(SEVERITY.WARN, writer, {});
-            await reporter.notify("foo.md", null);
+            await reporter.notify("foo.md", undefined);
             await reporter.finalize();
 
             assert.strictEqual(writer.toString(), "");
         });
 
-        it("should print file with null notices", async function () {
+        it("should print file with undefined notices", async function () {
             const writer = new WriteString();
 
             const reporter = new Formatter(SEVERITY.FATAL, writer, {
                 showNoChecked: true,
             });
-            await reporter.notify("foo.js", null);
+            await reporter.notify("foo.js", undefined);
             await reporter.finalize();
 
             assert.strictEqual(writer.toString(), "foo.js: No checked.\n\n");
