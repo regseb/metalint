@@ -1,8 +1,8 @@
 export type Location = {
     line:       number,
     column?:    number,
-    lineEnd?:   number,
-    columnEnd?: number,
+    endLine?:   number,
+    endColumn?: number,
 };
 
 export type Notice = {

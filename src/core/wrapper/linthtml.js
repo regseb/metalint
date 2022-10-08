@@ -44,8 +44,8 @@ export const wrapper = async function (file, level, options) {
         locations: [{
             line:      result.position.start.line,
             column:    result.position.start.column,
-            lineEnd:   result.position.end.line,
-            columnEnd: result.position.end.column,
+            endLine:   result.position.end.line,
+            endColumn: result.position.end.column,
         }],
     })).filter((n) => level >= n.severity);
 };

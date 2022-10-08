@@ -55,10 +55,10 @@ export const wrapper = async function (file, level, options) {
                 line:   result.line,
                 column: result.column,
                 ...undefined === result.endLine ? {}
-                                                : { lineEnd: result.endLine },
+                                                : { endLine: result.endLine },
                 ...undefined === result.endColumn
                                               ? {}
-                                              : { columnEnd: result.endColumn },
+                                              : { endColumn: result.endColumn },
             }],
         };
     }).filter((n) => level >= n.severity);

@@ -48,8 +48,8 @@ describe("src/core/wrapper/linthtml.js", function () {
                     locations: [{
                         line:      1,
                         column:    6,
-                        lineEnd:   1,
-                        columnEnd: 9,
+                        endLine:   1,
+                        endColumn: 9,
                     }],
                 }, {
                     file,
@@ -60,8 +60,8 @@ describe("src/core/wrapper/linthtml.js", function () {
                     locations: [{
                         line:      1,
                         column:    1,
-                        lineEnd:   1,
-                        columnEnd: 22,
+                        endLine:   1,
+                        endColumn: 22,
                     }],
                 },
             ]);
@@ -90,8 +90,8 @@ describe("src/core/wrapper/linthtml.js", function () {
                     locations: [{
                         line:      1,
                         column:    10,
-                        lineEnd:   1,
-                        columnEnd: 23,
+                        endLine:   1,
+                        endColumn: 23,
                     }],
                 },
             ]);

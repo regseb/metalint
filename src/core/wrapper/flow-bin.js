@@ -69,8 +69,8 @@ export const wrapper = async function (file, level) {
                 locations.push({
                     line:      loc.start.line,
                     column:    loc.start.column,
-                    lineEnd:   loc.end.line,
-                    columnEnd: loc.end.column,
+                    endLine:   loc.end.line,
+                    endColumn: loc.end.column,
                 });
             }
         }

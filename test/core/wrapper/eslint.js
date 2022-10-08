@@ -65,8 +65,8 @@ describe("src/core/wrapper/eslint.js", function () {
                     locations: [{
                         line:      4,
                         column:    1,
-                        lineEnd:   4,
-                        columnEnd: 4,
+                        endLine:   4,
+                        endColumn: 4,
                     }],
                 }, {
                     file,
@@ -77,8 +77,8 @@ describe("src/core/wrapper/eslint.js", function () {
                     locations: [{
                         line:      5,
                         column:    5,
-                        lineEnd:   5,
-                        columnEnd: 19,
+                        endLine:   5,
+                        endColumn: 19,
                     }],
                 },
             ]);
@@ -161,8 +161,8 @@ describe("src/core/wrapper/eslint.js", function () {
                     locations: [{
                         line:      2,
                         column:    5,
-                        lineEnd:   2,
-                        columnEnd: 34,
+                        endLine:   2,
+                        endColumn: 34,
                     }],
                 }, {
                     file,
@@ -174,8 +174,8 @@ describe("src/core/wrapper/eslint.js", function () {
                     locations: [{
                         line:      7,
                         column:    1,
-                        lineEnd:   7,
-                        columnEnd: 1,
+                        endLine:   7,
+                        endColumn: 1,
                     }],
                 },
             ]);
