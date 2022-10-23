@@ -18,16 +18,8 @@ describe("src/core/wrapper/stylelint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    stylelint:              mock.load("node_modules" +
-                                                      "/stylelint/"),
-                    "postcss-value-parser": mock.load("node_modules" +
-                                                      "/postcss-value-parser/"),
-                    "style-search":         mock.load("node_modules" +
-                                                      "/style-search/"),
-                },
-                "foo.css": "div {}",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.css":       "div {}",
             });
 
             const file    = "foo.css";
@@ -42,16 +34,8 @@ describe("src/core/wrapper/stylelint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    stylelint:              mock.load("node_modules" +
-                                                      "/stylelint/"),
-                    "postcss-value-parser": mock.load("node_modules" +
-                                                      "/postcss-value-parser/"),
-                    "style-search":         mock.load("node_modules" +
-                                                      "/style-search/"),
-                },
-                "foo.css":    "a { color: #FFFFFF; }",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.css":       "a { color: #FFFFFF; }",
             });
 
             const file    = "foo.css";
@@ -66,17 +50,9 @@ describe("src/core/wrapper/stylelint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    stylelint:              mock.load("node_modules" +
-                                                      "/stylelint/"),
-                    "postcss-value-parser": mock.load("node_modules" +
-                                                      "/postcss-value-parser/"),
-                    "style-search":         mock.load("node_modules" +
-                                                      "/style-search/"),
-                },
-                "foo.css":    "p { font-size: .5em }\n" +
-                              "label::after { content: 'bar'; }",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.css":       "p { font-size: .5em }\n" +
+                                 "label::after { content: 'bar'; }",
             });
 
             const file    = "foo.css";
@@ -112,18 +88,10 @@ describe("src/core/wrapper/stylelint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    stylelint:              mock.load("node_modules" +
-                                                      "/stylelint/"),
-                    "postcss-value-parser": mock.load("node_modules" +
-                                                      "/postcss-value-parser/"),
-                    "style-search":         mock.load("node_modules" +
-                                                      "/style-search/"),
-                },
-                "foo.css":    "span {\n" +
-                              "    font-style: italic;\n" +
-                              "}",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.css":       "span {\n" +
+                                 "    font-style: italic;\n" +
+                                 "}",
             });
 
             const file    = "foo.css";

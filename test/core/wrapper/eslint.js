@@ -29,20 +29,13 @@ describe("src/core/wrapper/eslint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    eslint:                      mock.load("node_modules" +
-                                                                    "/eslint/"),
-                    "functional-red-black-tree": mock.load("node_modules" +
-                                                             "/functional-red" +
-                                                                "-black-tree/"),
-                },
-                "foo.js":     "var bar = 1;\n" +
-                              "switch (bar) {\n" +
-                              "    case 1: break;\n" +
-                              "   case 2: break;\n" +
-                              "    case 2: break;\n" +
-                              "}",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.js":        "var bar = 1;\n" +
+                                 "switch (bar) {\n" +
+                                 "    case 1: break;\n" +
+                                 "   case 2: break;\n" +
+                                 "    case 2: break;\n" +
+                                 "}",
             });
 
             const file    = "foo.js";
@@ -88,11 +81,8 @@ describe("src/core/wrapper/eslint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    eslint: mock.load("node_modules/eslint/"),
-                },
-                "foo.js":     "var bar = 2 << 9;",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.js":        "var bar = 2 << 9;",
             });
 
             const file    = "foo.js";
@@ -126,17 +116,16 @@ describe("src/core/wrapper/eslint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: mock.load("node_modules/"),
-                "foo.js":     "// filenames/no-index\n" +
-                              "bar(function(baz) { return baz; });\n" +
-                              "\n" +
-                              "/**\n" +
-                              " * Qux.\n" +
-                              " *\n" +
-                              " * @returns {Object} Quux.\n" +
-                              " */\n" +
-                              "function corge() { return {}; }",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.js":        "// filenames/no-index\n" +
+                                 "bar(function(baz) { return baz; });\n" +
+                                 "\n" +
+                                 "/**\n" +
+                                 " * Qux.\n" +
+                                 " *\n" +
+                                 " * @returns {Object} Quux.\n" +
+                                 " */\n" +
+                                 "function corge() { return {}; }",
             });
 
             const file    = "foo.js";

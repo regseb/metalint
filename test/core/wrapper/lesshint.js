@@ -18,12 +18,8 @@ describe("src/core/wrapper/lesshint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    lesshint:       mock.load("node_modules/lesshint/"),
-                    "postcss-less": mock.load("node_modules/postcss-less/"),
-                },
-                "foo.less":   "a {}",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.less":      "a {}",
             });
 
             const file    = "foo.less";
@@ -54,16 +50,12 @@ describe("src/core/wrapper/lesshint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    lesshint:       mock.load("node_modules/lesshint/"),
-                    "postcss-less": mock.load("node_modules/postcss-less/"),
-                },
-                "foo.less":   "div {\n" +
-                              "    width: 100px;\n" +
-                              "    color: black;\n" +
-                              "    background-image: url(bar.png);\n" +
-                              "}\n",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.less":      "div {\n" +
+                                 "    width: 100px;\n" +
+                                 "    color: black;\n" +
+                                 "    background-image: url(bar.png);\n" +
+                                 "}\n",
             });
 
             const file    = "foo.less";
@@ -94,12 +86,8 @@ describe("src/core/wrapper/lesshint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    lesshint:       mock.load("node_modules/lesshint/"),
-                    "postcss-less": mock.load("node_modules/postcss-less/"),
-                },
-                "foo.less":   "span {",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.less":      "span {",
             });
 
             const file    = "foo.less";

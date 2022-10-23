@@ -18,15 +18,11 @@ describe("src/core/wrapper/markdownlint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    markdownlint: mock.load("node_modules/markdownlint/"),
-                    "linkify-it": mock.load("node_modules/linkify-it/"),
-                },
-                "foo.md":     "# bar\n" +
-                              "\n" +
-                              "1. baz\n" +
-                              "3. qux\n",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.md":        "# bar\n" +
+                                 "\n" +
+                                 "1. baz\n" +
+                                 "3. qux\n",
             });
 
             const file    = "foo.md";
@@ -51,14 +47,10 @@ describe("src/core/wrapper/markdownlint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    markdownlint: mock.load("node_modules/markdownlint/"),
-                    "linkify-it": mock.load("node_modules/linkify-it/"),
-                },
-                "foo.md":     "# bar\n" +
-                              "\n" +
-                              "baz\n",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.md":        "# bar\n" +
+                                 "\n" +
+                                 "baz\n",
             });
 
             const file    = "foo.md";
@@ -73,12 +65,8 @@ describe("src/core/wrapper/markdownlint.js", function () {
             mock({
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
-                // eslint-disable-next-line camelcase
-                node_modules: {
-                    markdownlint: mock.load("node_modules/markdownlint/"),
-                    "linkify-it": mock.load("node_modules/linkify-it/"),
-                },
-                "foo.md":     "# bar!\n",
+                "node_modules/": mock.load("node_modules/"),
+                "foo.md":        "# bar!\n",
             });
 
             const file    = "foo.md";

@@ -7,11 +7,11 @@ describe("src/core/index.js", function () {
     describe("metalint()", function () {
         it("should return notices", async function () {
             mock({
-                "src/core/wrapper/":  mock.load("src/core/wrapper/"),
-                "node_modules/":      mock.load("node_modules/"),
-                "foo.html":           "<HTML></HTML>",
-                "bar.md":             "## baz",
-                "qux.js":             "alert('quux')",
+                "src/core/":     mock.load("src/core/"),
+                "node_modules/": mock.load("node_modules/"),
+                "foo.html":      "<HTML></HTML>",
+                "bar.md":        "## baz",
+                "qux.js":        "alert('quux')",
             });
 
             const files    = ["foo.html", "bar.md", "qux.js"];
@@ -70,8 +70,9 @@ describe("src/core/index.js", function () {
 
         it(`should add default "rule" and "severity"`, async function () {
             mock({
-                "src/core/wrapper/": mock.load("src/core/wrapper/"),
-                "foo.json":          "YAML",
+                "src/core/":     mock.load("src/core/"),
+                "node_modules/": mock.load("node_modules/"),
+                "foo.json":      "YAML",
             });
 
             const files    = ["foo.json"];
@@ -101,8 +102,10 @@ describe("src/core/index.js", function () {
 
         it(`should add default "locations"`, async function () {
             mock({
-                "src/core/wrapper/": mock.load("src/core/wrapper/"),
-                "foo.css":           ".black { color: black; }",
+                "src/core/":     mock.load("src/core/"),
+                "node_modules/": mock.load("node_modules/"),
+                "foo.css":       ".black { color: black; }",
+                "foo.html":      "<html></html>",
             });
 
             const files    = ["foo.css"];
@@ -110,7 +113,10 @@ describe("src/core/index.js", function () {
                 {
                     patterns: ["**"],
                     linters:  {
-                        "./wrapper/purgecss.js": { content: "*.html" },
+                        // Récupérer seulement les fichiers HTML à la racine
+                        // pour exclure les fichiers HTML dans les paquets de
+                        // node_modules/.
+                        "./wrapper/purgecss.js": { content: "/*.html" },
                     },
                     level:    SEVERITY.INFO,
                 },
@@ -132,7 +138,8 @@ describe("src/core/index.js", function () {
 
         it("should support sub-files", async function () {
             mock({
-                "src/core/wrapper/": mock.load("src/core/wrapper/"),
+                "src/core/":         mock.load("src/core/"),
+                "node_modules/":     mock.load("node_modules/"),
                 "foo/manifest.json": "{ 'name': 'foo' }",
             });
 
