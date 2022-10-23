@@ -98,8 +98,10 @@ const compile = function (pattern) {
  *                   pas un patron négatif ; sinon <code>"NONE"</code>.
  */
 const exec = function (file, patterns, root, directory) {
-    const relative = "/" + path.relative(root, path.join(process.cwd(), file)) +
-                     (directory ? "/" : "");
+    const relative = "." === file
+        ? "/"
+        : "/" + path.relative(root, path.join(process.cwd(), file)) +
+          (directory ? "/" : "");
 
     let result = "NONE";
     for (const pattern of patterns) {

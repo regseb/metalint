@@ -37,6 +37,20 @@ describe("src/core/glob.js", function () {
             assert.strictEqual(stub.callCount, 1);
         });
 
+        it(`test(["/"])̀`, async function () {
+            const stub = sinon.stub(process, "cwd")
+                              .returns(await import.meta.resolve("."));
+
+            const patterns = ["/"];
+            const root = await import.meta.resolve(".");
+            let matched = glob.test(".", patterns, root, true);
+            assert.strictEqual(matched, true);
+            matched = glob.test("src/", patterns, root, true);
+            assert.strictEqual(matched, false);
+
+            assert.strictEqual(stub.callCount, 1);
+        });
+
         it(`test(["**"])̀`, async function () {
             const stub = sinon.stub(process, "cwd")
                               .returns(await import.meta.resolve("."));
@@ -270,7 +284,7 @@ describe("src/core/glob.js", function () {
             files = await glob.walk(["baz/qux.js"], ["!baz"], "/foo");
             assert.deepStrictEqual(files, []);
 
-            assert.strictEqual(stub.callCount, 55);
+            assert.strictEqual(stub.callCount, 53);
         });
     });
 });
