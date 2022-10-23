@@ -6,10 +6,11 @@ import { wrapper } from "../../../src/core/wrapper/addons-linter.js";
 describe("src/core/wrapper/addons-linter.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
-            const file  = "";
-            const level = SEVERITY.FATAL;
+            const file    = "";
+            const level   = SEVERITY.FATAL;
+            const options = undefined;
 
-            const notices = await wrapper(file, level);
+            const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);
         });
 
@@ -17,10 +18,11 @@ describe("src/core/wrapper/addons-linter.js", function () {
             // Ne pas utiliser mock-fs car il y un bogue avec yaulz (la
             // bibliothèque utilisée par addons-linter pour lire les zip).
             // https://github.com/tschaub/mock-fs/issues/352
-            const file  = "test/data/addon.xpi";
-            const level = SEVERITY.INFO;
+            const file    = "test/data/addon.xpi";
+            const level   = SEVERITY.INFO;
+            const options = undefined;
 
-            const notices = await wrapper(file, level);
+            const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, []);
         });
 
@@ -28,26 +30,30 @@ describe("src/core/wrapper/addons-linter.js", function () {
             mock({
                 foo: {
                     "manifest.json": JSON.stringify({
-                        applications:     { gecko: { id: "bar@baz.com" } },
                         // eslint-disable-next-line camelcase
-                        manifest_version: 2,
-                        version:          "1.0.0",
-                        permissions:      ["god mode"],
+                        browser_specific_settings: {
+                            gecko: { id: "bar@baz.com" },
+                        },
+                        // eslint-disable-next-line camelcase
+                        manifest_version:          2,
+                        version:                   "1.0.0",
+                        permissions:               ["god mode"],
                     }),
                 },
             });
 
-            const file  = "foo/";
-            const level = SEVERITY.WARN;
+            const file    = "foo/";
+            const level   = SEVERITY.WARN;
+            const options = undefined;
 
-            const notices = await wrapper(file, level);
+            const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, [
                 {
                     file:      file + "manifest.json",
                     linter:    "addons-linter",
                     rule:      "MANIFEST_FIELD_REQUIRED",
                     severity:  SEVERITY.ERROR,
-                    message:   `"/name" is a required property`,
+                    message:   `"/" must have required property 'name'`,
                     locations: [],
                 }, {
                     file:      file + "manifest.json",
@@ -61,13 +67,44 @@ describe("src/core/wrapper/addons-linter.js", function () {
             ]);
         });
 
+        it("should accept options", async function () {
+            mock({
+                foo: {
+                    "manifest.json": JSON.stringify({
+                        // eslint-disable-next-line camelcase
+                        manifest_version: 3,
+                        version:          "4.2.1",
+                        name:             "bar",
+                    }),
+                },
+            });
+
+            const file    = "foo/";
+            const level   = SEVERITY.WARN;
+            const options = { maxManifestVersion: 3 };
+
+            const notices = await wrapper(file, level, options);
+            assert.deepStrictEqual(notices, [
+                {
+                    file:      file + "manifest.json",
+                    linter:    "addons-linter",
+                    rule:      "EXTENSION_ID_REQUIRED",
+                    severity:  SEVERITY.ERROR,
+                    message:   "The extension ID is required in Manifest" +
+                               " Version 3 and above.",
+                    locations: [],
+                },
+            ]);
+        });
+
         it("should return notices", async function () {
             mock({ foo: { "bar.txt": "" } });
 
-            const file  = "foo";
-            const level = SEVERITY.INFO;
+            const file    = "foo";
+            const level   = SEVERITY.INFO;
+            const options = undefined;
 
-            const notices = await wrapper(file, level);
+            const notices = await wrapper(file, level, options);
             assert.deepStrictEqual(notices, [
                 {
                     file,

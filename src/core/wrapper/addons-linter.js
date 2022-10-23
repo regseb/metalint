@@ -14,13 +14,16 @@ import SEVERITY from "../severity.js";
 /**
  * Vérifie un fichier avec <strong>Add-ons Linter</strong>.
  *
- * @param {string} file  Le fichier qui sera vérifié.
- * @param {number} level Le niveau de sévérité minimum des notifications
- *                       retournées.
+ * @param {string}           file    Le fichier qui sera vérifié.
+ * @param {number}           level   Le niveau de sévérité minimum des
+ *                                   notifications retournées.
+ * @param {Object|undefined} options Les options qui seront passées au linter ou
+ *                                   <code>undefined</code> pour les options par
+ *                                   défaut.
  * @returns {Promise<Notice[]>} Une promesse retournant la liste des
  *                              notifications.
  */
-export const wrapper = async function (file, level) {
+export const wrapper = async function (file, level, options) {
     if (SEVERITY.ERROR > level) {
         return [];
     }
@@ -36,6 +39,7 @@ export const wrapper = async function (file, level) {
         boring:           false,
         selfHosted:       false,
         shouldScanFile:   () => true,
+        ...options,
     };
     const results = await linter.createInstance({ config }).run();
     return [...results.errors,
