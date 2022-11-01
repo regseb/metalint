@@ -35,6 +35,9 @@ ou des utilitaires selon le type de fichier :
   [JSON Lint](https://regseb.github.io/metalint/user/linters/jsonlint/) et
   [JSON Lint
   (mod)](https://regseb.github.io/metalint/user/linters/jsonlint-mod/) ;
+  - package.json (npm) :
+    [npm-package-json-lint](
+        https://regseb.github.io/metalint/user/linters/npm-package-json-lint/) ;
 - Markdown :
   [MarkdownLint](https://regseb.github.io/metalint/user/linters/markdownlint/) ;
 - YAML : [YAML Lint](https://regseb.github.io/metalint/user/linters/yaml-lint/).
