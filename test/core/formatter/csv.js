@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import WriteString from "../../tools/writestring.js";
 import SEVERITY from "../../../src/core/severity.js";
 import { Formatter } from "../../../src/core/formatter/csv.js";
@@ -12,8 +12,8 @@ describe("src/core/formatter/csv.js", function () {
             await reporter.notify("Foo.java", undefined);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(),
-                "file,line,column,message,linter,rule\r\n");
+            assert.equal(writer.toString(),
+                         "file,line,column,message,linter,rule\r\n");
         });
 
         it("should support empty notices", async function () {
@@ -23,8 +23,8 @@ describe("src/core/formatter/csv.js", function () {
             await reporter.notify("foo.sh", []);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(),
-                "file,line,column,message,linter,rule\r\n");
+            assert.equal(writer.toString(),
+                         "file,line,column,message,linter,rule\r\n");
         });
 
         it("should support notices", async function () {
@@ -60,7 +60,7 @@ describe("src/core/formatter/csv.js", function () {
             ]);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(),
+            assert.equal(writer.toString(),
                 "file,line,column,message,linter,rule\r\n" +
                 `"foo.py",,,"Un fanfaron, amateur de la chasse,",pylint,\r\n` +
                 `"bar.xhtml",1,2,"Venant de perdre un chien de bonne race",` +

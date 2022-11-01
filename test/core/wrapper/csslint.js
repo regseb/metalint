@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import mock from "mock-fs";
 import SEVERITY from "../../../src/core/severity.js";
 import { wrapper } from "../../../src/core/wrapper/csslint.js";
@@ -11,7 +11,7 @@ describe("src/core/wrapper/csslint.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("should use default options", async function () {
@@ -27,7 +27,7 @@ describe("src/core/wrapper/csslint.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("should return notices", async function () {
@@ -41,7 +41,7 @@ describe("src/core/wrapper/csslint.js", function () {
             const options = { "empty-rules": true, ids: 2, important: 1 };
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "csslint",
@@ -71,7 +71,7 @@ describe("src/core/wrapper/csslint.js", function () {
             const options = { "empty-rules": true };
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
     });
 });

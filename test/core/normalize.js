@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import mock from "mock-fs";
@@ -51,7 +51,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(
+            assert.deepEqual(
                 standard.checkers[0].linters["./wrapper/eslint.js"], {
                     plugins: ["bar", "baz"],
                     global:  "bar",
@@ -68,7 +68,7 @@ describe("src/core/normalize.js", function () {
             const dir = "../../.metalint/";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(
+            assert.deepEqual(
                 standard.checkers[0].linters["./wrapper/eslint.js"]
                                                                .parserOptions, {
                     sourceType: "module",
@@ -98,7 +98,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { patterns: ["*.js"] };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard.patterns, ["*.js"]);
+            assert.deepEqual(standard.patterns, ["*.js"]);
         });
 
         it("should use default patterns", async function () {
@@ -107,7 +107,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard.patterns, ["**"]);
+            assert.deepEqual(standard.patterns, ["**"]);
         });
 
         it("should support one pattern", async function () {
@@ -119,7 +119,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard.patterns, ["*.css"]);
+            assert.deepEqual(standard.patterns, ["*.css"]);
         });
 
         it("should support many patterns", async function () {
@@ -131,7 +131,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard.patterns, ["src/**", "!**/test/"]);
+            assert.deepEqual(standard.patterns, ["src/**", "!**/test/"]);
         });
 
         it("should reject invalid patterns", async function () {
@@ -160,7 +160,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { level: "error" };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.strictEqual(standard.level, SEVERITY.ERROR);
+            assert.equal(standard.level, SEVERITY.ERROR);
         });
 
         it("level() #2", async function () {
@@ -172,7 +172,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { level: "warn" };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.strictEqual(standard.level, SEVERITY.WARN);
+            assert.equal(standard.level, SEVERITY.WARN);
         });
     });
 
@@ -186,10 +186,8 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(
-                standard.reporters,
-                [new Unix(SEVERITY.INFO, process.stdout)],
-            );
+            assert.deepEqual(standard.reporters,
+                             [new Unix(SEVERITY.INFO, process.stdout)]);
         });
 
         it("formatter() #2", async function () {
@@ -202,10 +200,8 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(
-                standard.reporters,
-                [new Unix(SEVERITY.ERROR, process.stdout)],
-            );
+            assert.deepEqual(standard.reporters,
+                             [new Unix(SEVERITY.ERROR, process.stdout)]);
         });
 
         it("formatter() #3", async function () {
@@ -281,7 +277,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [
@@ -324,7 +320,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
@@ -347,7 +343,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [],
@@ -370,7 +366,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
@@ -393,7 +389,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
@@ -415,7 +411,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
@@ -438,7 +434,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
@@ -461,7 +457,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
@@ -484,7 +480,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
@@ -506,7 +502,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
@@ -529,7 +525,7 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**"],
                 level:     SEVERITY.INFO,
                 reporters: [new French(SEVERITY.INFO, process.stdout)],
@@ -597,7 +593,7 @@ describe("src/core/normalize.js", function () {
             const dir = path.join(process.cwd(), "metalint/");
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepStrictEqual(standard, {
+            assert.deepEqual(standard, {
                 patterns:  ["**.js"],
                 level:     SEVERITY.ERROR,
                 reporters: [new Unix(SEVERITY.ERROR, process.stdout, {})],

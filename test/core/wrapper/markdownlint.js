@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import mock from "mock-fs";
 import SEVERITY from "../../../src/core/severity.js";
 import { wrapper } from "../../../src/core/wrapper/markdownlint.js";
@@ -11,7 +11,7 @@ describe("src/core/wrapper/markdownlint.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("should use default options", async function () {
@@ -30,7 +30,7 @@ describe("src/core/wrapper/markdownlint.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "markdownlint",
@@ -58,7 +58,7 @@ describe("src/core/wrapper/markdownlint.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("should return notices", async function () {
@@ -74,7 +74,7 @@ describe("src/core/wrapper/markdownlint.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "markdownlint",

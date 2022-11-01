@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import mock from "mock-fs";
 import SEVERITY from "../../../src/core/severity.js";
 import { wrapper } from "../../../src/core/wrapper/doiuse.js";
@@ -11,7 +11,7 @@ describe("src/core/wrapper/doiuse.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("should use default options", async function () {
@@ -25,7 +25,7 @@ describe("src/core/wrapper/doiuse.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "doiuse",
@@ -49,7 +49,7 @@ describe("src/core/wrapper/doiuse.js", function () {
             const options = { browser: "ie >= 9, > 1%, last 2 versions" };
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "doiuse",

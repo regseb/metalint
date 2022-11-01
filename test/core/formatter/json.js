@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import WriteString from "../../tools/writestring.js";
 import SEVERITY from "../../../src/core/severity.js";
 import { Formatter } from "../../../src/core/formatter/json.js";
@@ -12,7 +12,7 @@ describe("src/core/formatter/json.js", function () {
             await reporter.notify("foo.html", undefined);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), `{"foo.html":null}\n`);
+            assert.equal(writer.toString(), `{"foo.html":null}\n`);
         });
 
         it("should support empty notices", async function () {
@@ -24,7 +24,7 @@ describe("src/core/formatter/json.js", function () {
             await reporter.notify("foo.js", []);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), `{"foo.js":[]}\n`);
+            assert.equal(writer.toString(), `{"foo.js":[]}\n`);
         });
 
         it("should support notices", async function () {
@@ -52,7 +52,7 @@ describe("src/core/formatter/json.js", function () {
             ]);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(),
+            assert.equal(writer.toString(),
                 "{\n" +
                 `  "foo.js": [\n` +
                 "    {\n" +
@@ -88,7 +88,7 @@ describe("src/core/formatter/json.js", function () {
             ]);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), `{"foo.md":[]}\n`);
+            assert.equal(writer.toString(), `{"foo.md":[]}\n`);
         });
     });
 });

@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import WriteString from "../../tools/writestring.js";
 import SEVERITY from "../../../src/core/severity.js";
 import { Formatter } from "../../../src/core/formatter/unix.js";
@@ -12,7 +12,7 @@ describe("src/core/formatter/unix.js", function () {
             await reporter.notify("foo.md", undefined);
             await reporter.finalize();
 
-            assert.strictEqual(await writer.toString(), "");
+            assert.equal(await writer.toString(), "");
         });
 
         it("should support empty notices", async function () {
@@ -22,7 +22,7 @@ describe("src/core/formatter/unix.js", function () {
             await reporter.notify("foo.html", []);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), "");
+            assert.equal(writer.toString(), "");
         });
 
         it("should support notices", async function () {
@@ -57,7 +57,7 @@ describe("src/core/formatter/unix.js", function () {
             ]);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(),
+            assert.equal(writer.toString(),
                 "foo.html::: La cigale ayant chanté (htmllint)\n" +
                 "\n" +
                 "bar.js:1:2: Tout l'été, (jslint.1)\n" +
@@ -80,7 +80,7 @@ describe("src/core/formatter/unix.js", function () {
             ]);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), "");
+            assert.equal(writer.toString(), "");
         });
     });
 });

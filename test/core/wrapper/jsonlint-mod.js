@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import mock from "mock-fs";
 import SEVERITY from "../../../src/core/severity.js";
 import { wrapper } from "../../../src/core/wrapper/jsonlint-mod.js";
@@ -10,7 +10,7 @@ describe("src/core/wrapper/jsonlint-mod.js", function () {
             const level = SEVERITY.FATAL;
 
             const notices = await wrapper(file, level);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("should return notice", async function () {
@@ -20,7 +20,7 @@ describe("src/core/wrapper/jsonlint-mod.js", function () {
             const level = SEVERITY.INFO;
 
             const notices = await wrapper(file, level);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "jsonlint-mod",

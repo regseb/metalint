@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import WriteString from "../../tools/writestring.js";
 import { Formatter } from "../../data/french.js";
 import SEVERITY from "../../../src/core/severity.js";
@@ -12,7 +12,7 @@ describe("test/data/french.js", function () {
             await reporter.notify("script.js", undefined);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), "");
+            assert.equal(writer.toString(), "");
         });
 
         it("should support empty notices", async function () {
@@ -22,7 +22,7 @@ describe("test/data/french.js", function () {
             await reporter.notify("stylelint.json", []);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), "");
+            assert.equal(writer.toString(), "");
         });
 
         it("should support notices", async function () {
@@ -57,7 +57,7 @@ describe("test/data/french.js", function () {
             ]);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(),
+            assert.equal(writer.toString(),
                 "Le linter htmlhint a trouvé un problème dans le fichier" +
                 " foo.html : Doctype must be declared first.\n" +
                 "Le linter markdownlint a trouvé que la règle MD012 n'est pas" +

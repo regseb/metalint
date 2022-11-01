@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import mock from "mock-fs";
 import SEVERITY from "../../src/core/severity.js";
 import metalint from "../../src/core/index.js";
@@ -38,7 +38,7 @@ describe("src/core/index.js", function () {
             ];
 
             const results = await metalint(files, checkers, ".");
-            assert.deepStrictEqual(results, {
+            assert.deepEqual(results, {
                 "foo.html": [],
                 "bar.md":   undefined,
                 "qux.js":   [
@@ -85,7 +85,7 @@ describe("src/core/index.js", function () {
             ];
 
             const results = await metalint(files, checkers, ".");
-            assert.deepStrictEqual(results, {
+            assert.deepEqual(results, {
                 "foo.json": [
                     {
                         file:      "foo.json",
@@ -123,7 +123,7 @@ describe("src/core/index.js", function () {
             ];
 
             const results = await metalint(files, checkers, ".");
-            assert.deepStrictEqual(results, {
+            assert.deepEqual(results, {
                 "foo.css": [
                     {
                         file:      "foo.css",
@@ -153,7 +153,7 @@ describe("src/core/index.js", function () {
             ];
 
             const results = await metalint(files, checkers, ".");
-            assert.deepStrictEqual(results, {
+            assert.deepEqual(results, {
                 "foo/":              [
                     {
                         file:      "foo/",

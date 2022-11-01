@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import mock from "mock-fs";
 import WriteString from "../../tools/writestring.js";
 import SEVERITY from "../../../src/core/severity.js";
@@ -13,7 +13,7 @@ describe("src/core/formatter/console.js", function () {
             await reporter.notify("foo.md", undefined);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), "");
+            assert.equal(writer.toString(), "");
         });
 
         it("should print file with undefined notices", async function () {
@@ -25,7 +25,7 @@ describe("src/core/formatter/console.js", function () {
             await reporter.notify("foo.js", undefined);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), "foo.js: No checked.\n\n");
+            assert.equal(writer.toString(), "foo.js: No checked.\n\n");
         });
 
         it("should support empty notices", async function () {
@@ -35,7 +35,7 @@ describe("src/core/formatter/console.js", function () {
             await reporter.notify("foo.json", []);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), "");
+            assert.equal(writer.toString(), "");
         });
 
         it("should print file with empty notices", async function () {
@@ -47,7 +47,7 @@ describe("src/core/formatter/console.js", function () {
             await reporter.notify("foo.css", []);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), "foo.css: 0 notice.\n\n");
+            assert.equal(writer.toString(), "foo.css: 0 notice.\n\n");
         });
 
         it("should support notices", async function () {
@@ -75,7 +75,7 @@ describe("src/core/formatter/console.js", function () {
             ]);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(),
+            assert.equal(writer.toString(),
                 "foo.js: 1 error, 1 warning.\n" +
                 "ERROR: Unexpected var, use let or const instead." +
                                                           " (eslint.no-var)\n" +
@@ -105,7 +105,7 @@ describe("src/core/formatter/console.js", function () {
             ]);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(), "");
+            assert.equal(writer.toString(), "");
         });
     });
 });

@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import WriteString from "../../tools/writestring.js";
 import SEVERITY from "../../../src/core/severity.js";
 import { Formatter } from "../../../src/core/formatter/checkstyle.js";
@@ -12,7 +12,7 @@ describe("src/core/formatter/checkstyle.js", function () {
             await reporter.notify("foo.json", undefined);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(),
+            assert.equal(writer.toString(),
                 `<?xml version="1.0" encoding="UTF-8"?>` +
                 `<checkstyle version="8.28">` +
                 "</checkstyle>\n");
@@ -27,7 +27,7 @@ describe("src/core/formatter/checkstyle.js", function () {
             await reporter.notify("foo.md", []);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(),
+            assert.equal(writer.toString(),
                 `<?xml version="1.0" encoding="UTF-8"?>\n` +
                 `<checkstyle version="8.28">\n` +
                 `<file name="foo.md">\n` +
@@ -77,7 +77,7 @@ describe("src/core/formatter/checkstyle.js", function () {
             ]);
             await reporter.finalize();
 
-            assert.strictEqual(writer.toString(),
+            assert.equal(writer.toString(),
                 `<?xml version="1.0" encoding="UTF-8"?>\n` +
                 `<checkstyle version="8.28">\n` +
                 `  <file name="foo.html">\n` +

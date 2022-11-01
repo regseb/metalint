@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import mock from "mock-fs";
 import SEVERITY from "../../../src/core/severity.js";
 import { wrapper } from "../../../src/core/wrapper/eslint.js";
@@ -11,7 +11,7 @@ describe("src/core/wrapper/eslint.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("should use default options", async function () {
@@ -22,7 +22,7 @@ describe("src/core/wrapper/eslint.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("should return notices", async function () {
@@ -48,7 +48,7 @@ describe("src/core/wrapper/eslint.js", function () {
             };
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "eslint",
@@ -90,7 +90,7 @@ describe("src/core/wrapper/eslint.js", function () {
             const options = { rules: { "no-bitwise": 1 } };
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("should return FATAL notice", async function () {
@@ -101,7 +101,7 @@ describe("src/core/wrapper/eslint.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "eslint",
@@ -140,7 +140,7 @@ describe("src/core/wrapper/eslint.js", function () {
             };
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "eslint",

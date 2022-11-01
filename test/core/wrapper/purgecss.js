@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import mock from "mock-fs";
 import SEVERITY from "../../../src/core/severity.js";
 import { wrapper } from "../../../src/core/wrapper/purgecss.js";
@@ -10,8 +10,8 @@ describe("src/core/wrapper/purgecss.js", function () {
             const level   = SEVERITY.OFF;
             const options = undefined;
 
-            const notices = await wrapper(file, level, options, ".");
-            assert.deepStrictEqual(notices, []);
+            const notices = await wrapper(file, level, options, process.cwd());
+            assert.deepEqual(notices, []);
         });
 
         it("should return FATAL notice", async function () {
@@ -19,8 +19,8 @@ describe("src/core/wrapper/purgecss.js", function () {
             const level   = SEVERITY.FATAL;
             const options = { content: [] };
 
-            const notices = await wrapper(file, level, options, ".");
-            assert.deepStrictEqual(notices, [
+            const notices = await wrapper(file, level, options, process.cwd());
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "purgecss",
@@ -45,8 +45,8 @@ describe("src/core/wrapper/purgecss.js", function () {
                 content: "*.html",
             };
 
-            const notices = await wrapper(file, level, options, ".");
-            assert.deepStrictEqual(notices, [
+            const notices = await wrapper(file, level, options, process.cwd());
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "purgecss",
@@ -75,8 +75,8 @@ describe("src/core/wrapper/purgecss.js", function () {
                 content: "*.html",
             };
 
-            const notices = await wrapper(file, level, options, ".");
-            assert.deepStrictEqual(notices, []);
+            const notices = await wrapper(file, level, options, process.cwd());
+            assert.deepEqual(notices, []);
         });
     });
 });

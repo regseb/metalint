@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import mock from "mock-fs";
 import SEVERITY from "../../../src/core/severity.js";
 import { wrapper } from "../../../src/core/wrapper/addons-linter.js";
@@ -11,7 +11,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("shouldn't return notice from zip", async function () {
@@ -23,7 +23,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, []);
+            assert.deepEqual(notices, []);
         });
 
         it("should return notices found in file", async function () {
@@ -47,7 +47,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file:      file + "manifest.json",
                     linter:    "addons-linter",
@@ -84,7 +84,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
             const options = { maxManifestVersion: 3 };
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file:      file + "manifest.json",
                     linter:    "addons-linter",
@@ -105,7 +105,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
-            assert.deepStrictEqual(notices, [
+            assert.deepEqual(notices, [
                 {
                     file,
                     linter:    "addons-linter",
