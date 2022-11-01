@@ -20,21 +20,37 @@ import SEVERITY from "../severity.js";
  *                              notifications.
  */
 export const wrapper = async function (file, level) {
-    if (SEVERITY.ERROR > level) {
+    if (SEVERITY.FATAL > level) {
         return [];
     }
 
-    const results = await new Promise((resolve) => {
-        standard.lintFiles([file], (_, r) => resolve(r));
-    });
-    return results.results[0].messages.map((result) => ({
-        file,
-        linter:    "standard",
-        rule:      result.ruleId,
-        message:   result.message,
-        locations: [{
-            line:   result.line,
-            column: result.column,
-        }],
-    }));
+    const results = await standard.lintFiles([file]);
+    return results[0].messages.map((result) => {
+        let severity;
+        if (result.fatal) {
+            severity = SEVERITY.FATAL;
+        } else if (1 === result.severity) {
+            severity = SEVERITY.WARN;
+        } else {
+            severity = SEVERITY.ERROR;
+        }
+
+        return {
+            file,
+            linter: "standard",
+            ...null === result.ruleId ? {}
+                                      : { rule: result.ruleId },
+            severity,
+            message:   result.message,
+            locations: [{
+                line:   result.line,
+                column: result.column,
+                ...undefined === result.endLine ? {}
+                                                : { endLine: result.endLine },
+                ...undefined === result.endColumn
+                                              ? {}
+                                              : { endColumn: result.endColumn },
+            }],
+        };
+    }).filter((n) => level >= n.severity);
 };
