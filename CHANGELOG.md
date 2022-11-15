@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.11.0](https://github.com/regseb/metalint/compare/v0.10.0...v0.11.0) (2022-11-15)
+
+
+### Features
+
+* Ajouter la gestion de LintHTML. ([5b3f757](https://github.com/regseb/metalint/commit/5b3f757c05a346f5f5d1985b2c6f160a800ac7c3))
+* Ajouter la gestion de markuplint. ([3a72a80](https://github.com/regseb/metalint/commit/3a72a80ee1f400a9ff272cb26efb862bca4e1190))
+* Ajouter la gestion de npm-package-json-lint. ([062edc4](https://github.com/regseb/metalint/commit/062edc43ad8523ccc7eabe68834697dbacb39b7b))
+* Ajouter un formateur pour les GitHub Actions. ([cb2335c](https://github.com/regseb/metalint/commit/cb2335cf9c8c97ed7ddc14fab14c79f5e144f70a))
+* Permettre de passer des options à addons-linter. ([a9962ad](https://github.com/regseb/metalint/commit/a9962adc839843c97264c2a9dffb4cdc505f80c7))
+
+
+### Bug Fixes
+
+* Gérer la dernière version de standard. ([3e4ca6a](https://github.com/regseb/metalint/commit/3e4ca6a5d88d805a6523be6db91bdf22a9c483ef))
+* Gérer le pattern '/'. ([e146951](https://github.com/regseb/metalint/commit/e1469513e745cd47a0f3a58cda007b9e533ecd74))
+* Renommer lineEnd en endLine (idem pour columnEnd). ([1e88d5f](https://github.com/regseb/metalint/commit/1e88d5ff378f2733588a2bdfbc7b5429aea2c383))
+
 ### [0.10.0](https://github.com/regseb/metalint/compare/v0.9.0...v0.10.0) (2022-03-30)
 
 ### [0.9.0](https://github.com/regseb/metalint/compare/v0.8.9...v0.9.0) (2020-11-20)
