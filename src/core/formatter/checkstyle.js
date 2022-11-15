@@ -71,7 +71,7 @@ export const Formatter = class {
      * La taille des indentations (en espace) ou <code>-1</code> pour ne pas
      * mettre de retour à la ligne.
      *
-     * @param {number}
+     * @type {number}
      */
     #indent;
 

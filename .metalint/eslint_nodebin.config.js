@@ -1,5 +1,5 @@
 export default {
     rules: {
-        "node/no-process-exit": 0,
+        "n/no-process-exit": 0,
     },
 };

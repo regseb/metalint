@@ -48,14 +48,24 @@ describe("src/core/index.js", function () {
                         rule:      "no-alert",
                         severity:  SEVERITY.ERROR,
                         message:   "Unexpected alert.",
-                        locations: [{ line: 1, column: 1 }],
+                        locations: [{
+                            line:      1,
+                            column:    1,
+                            endLine:   1,
+                            endColumn: 14,
+                        }],
                     }, {
                         file:      "qux.js",
                         linter:    "eslint",
                         rule:      "quotes",
                         severity:  SEVERITY.ERROR,
                         message:   "Strings must use doublequote.",
-                        locations: [{ line: 1, column: 7 }],
+                        locations: [{
+                            line:      1,
+                            column:    7,
+                            endLine:   1,
+                            endColumn: 13,
+                        }],
                     }, {
                         file:      "qux.js",
                         linter:    "jshint",

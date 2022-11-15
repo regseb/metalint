@@ -53,5 +53,16 @@ describe("src/core/wrapper/json-lint.js", function () {
                 },
             ]);
         });
+
+        it("should return empty when no error", async function () {
+            mock({ "foo.json": `{ "bar": 0 }` });
+
+            const file    = "foo.json";
+            const level   = SEVERITY.WARN;
+            const options = undefined;
+
+            const notices = await wrapper(file, level, options);
+            assert.deepEqual(notices, []);
+        });
     });
 });

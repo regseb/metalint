@@ -1,3 +1,7 @@
+/**
+ * @module
+ */
+
 import fs from "node:fs/promises";
 
 const paths = await fs.readFile(".gitignore", "utf8");

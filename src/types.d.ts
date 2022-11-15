@@ -26,7 +26,7 @@ export type Formatter = {
 };
 
 export type Config = {
-    patterns:  Object[],
+    patterns:  string[],
     level:     number,
     reporters: Formatter[],
     checkers:  Checker[],
