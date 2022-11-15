@@ -24,8 +24,9 @@ ou des utilitaires selon le type de fichier :
   [PurgeCSS](https://regseb.github.io/metalint/user/linters/purgecss/) et
   [stylelint](https://regseb.github.io/metalint/user/linters/stylelint/) ;
 - HTML : [HTMLHint](https://regseb.github.io/metalint/user/linters/htmlhint/),
-  [htmllint](https://regseb.github.io/metalint/user/linters/htmllint/) et
-  [linthtml](https://regseb.github.io/metalint/user/linters/linthtml/) ;
+  [htmllint](https://regseb.github.io/metalint/user/linters/htmllint/),
+  [linthtml](https://regseb.github.io/metalint/user/linters/linthtml/) et
+  [markuplint](https://regseb.github.io/metalint/user/linters/markuplint/) ;
 - JavaScript : [ESLint](https://regseb.github.io/metalint/user/linters/eslint/),
   [Flow](https://regseb.github.io/metalint/user/linters/flow-bin/),
   [JSHint](https://regseb.github.io/metalint/user/linters/jshint/) et
