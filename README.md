@@ -13,6 +13,8 @@
 L'analyse est déléguée à des linters (outils d'analyse statique de code source)
 ou des utilitaires selon le type de fichier :
 
+- _Générique_ :
+  [Prettier](https://regseb.github.io/metalint/user/linters/prettier/) ;
 - WebExtension : [Add-ons
   Linter](https://regseb.github.io/metalint/user/linters/addons-linter/) ;
 - CoffeeScript :

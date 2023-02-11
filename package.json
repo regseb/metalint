@@ -82,6 +82,7 @@
         "mocha": "10.2.0",
         "mock-fs": "5.2.0",
         "npm-package-json-lint": "6.4.0",
+        "prettier": "2.8.4",
         "purgecss": "5.0.0",
         "sinon": "15.0.1",
         "standard": "17.0.0",
