@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import mock from "mock-fs";
-import normalize from "../../src/core/normalize.js";
-import SEVERITY from "../../src/core/severity.js";
 import { Formatter as Console } from "../../src/core/formatter/console.js";
 import { Formatter as Unix } from "../../src/core/formatter/unix.js";
+import normalize from "../../src/core/normalize.js";
+import SEVERITY from "../../src/core/severity.js";
 import { Formatter as French } from "../data/french.js";
 
 if (undefined === import.meta.resolve) {

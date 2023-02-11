@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
-import WriteString from "../../tools/writestring.js";
-import SEVERITY from "../../../src/core/severity.js";
 import { Formatter } from "../../../src/core/formatter/unix.js";
+import SEVERITY from "../../../src/core/severity.js";
+import WriteString from "../../tools/writestring.js";
 
 describe("src/core/formatter/unix.js", function () {
     describe("Formatter", function () {

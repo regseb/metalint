@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import mock from "mock-fs";
-import WriteString from "../../tools/writestring.js";
-import SEVERITY from "../../../src/core/severity.js";
 import { Formatter } from "../../../src/core/formatter/console.js";
+import SEVERITY from "../../../src/core/severity.js";
+import WriteString from "../../tools/writestring.js";
 
 describe("src/core/formatter/console.js", function () {
     describe("Formatter", function () {

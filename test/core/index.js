@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import mock from "mock-fs";
-import SEVERITY from "../../src/core/severity.js";
 import metalint from "../../src/core/index.js";
+import SEVERITY from "../../src/core/severity.js";
 
 describe("src/core/index.js", function () {
     describe("metalint()", function () {

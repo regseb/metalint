@@ -1,6 +1,6 @@
 import { Writable } from "node:stream";
 
-export default class extends Writable {
+export default class WriteString extends Writable {
 
     /**
      * @type {string[]}

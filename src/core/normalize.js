@@ -2,8 +2,8 @@
  * @module
  */
 
-import fs from "node:fs/promises";
 import { createWriteStream } from "node:fs";
+import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import SEVERITY from "./severity.js";
@@ -207,7 +207,7 @@ const formatter = async function (rotten, auto, root, overwriting = {}) {
  *                                       <code>"output"</code>.
  * @param {WritableStream} auto          La valeur par défaut.
  * @param {string}         root          L'adresse du répertoire où se trouve le
- *                                        dossier <code>.metalint/</code>.
+ *                                       dossier <code>.metalint/</code>.
  * @param {Object}         [overwriting] Les valeurs passées dans la ligne de
  *                                       commande pour surcharger la
  *                                       configuration.

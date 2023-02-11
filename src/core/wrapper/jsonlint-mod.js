@@ -39,9 +39,7 @@ export const wrapper = async function (file, level) {
             message:   result[3],
             // Augmenter de un le numéro de la ligne car JSON Lint (mod)
             // commence les numérotations à zéro.
-            locations: [{
-                line: Number.parseInt(result[0].slice(20, -1), 10) + 1,
-            }],
+            locations: [{ line: Number(result[0].slice(20, -1)) + 1 }],
         }];
     }
 };

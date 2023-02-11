@@ -13,7 +13,7 @@ import path from "node:path";
  *                   protégés.
  */
 const sanitize = function (pattern) {
-    return pattern.replace(/[$()*+.?[\\\]^{|}]/gu, "\\$&");
+    return pattern.replaceAll(/[$()*+.?[\\\]^{|}]/gu, "\\$&");
 };
 
 /**

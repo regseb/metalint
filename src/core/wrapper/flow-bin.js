@@ -3,8 +3,8 @@
  * @see {@link https://www.npmjs.com/package/flow-bin|Flow}
  */
 
-import fs from "node:fs/promises";
 import { spawn } from "node:child_process";
+import fs from "node:fs/promises";
 import flow from "flow-bin";
 import SEVERITY from "../severity.js";
 

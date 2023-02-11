@@ -24,8 +24,7 @@ ou des utilitaires selon le type de fichier :
   [PurgeCSS](https://regseb.github.io/metalint/user/linters/purgecss/) et
   [stylelint](https://regseb.github.io/metalint/user/linters/stylelint/) ;
 - HTML : [HTMLHint](https://regseb.github.io/metalint/user/linters/htmlhint/),
-  [htmllint](https://regseb.github.io/metalint/user/linters/htmllint/),
-  [linthtml](https://regseb.github.io/metalint/user/linters/linthtml/) et
+  [htmllint](https://regseb.github.io/metalint/user/linters/htmllint/) et
   [markuplint](https://regseb.github.io/metalint/user/linters/markuplint/) ;
 - JavaScript : [ESLint](https://regseb.github.io/metalint/user/linters/eslint/),
   [Flow](https://regseb.github.io/metalint/user/linters/flow-bin/),
@@ -37,8 +36,8 @@ ou des utilitaires selon le type de fichier :
   [JSON Lint
   (mod)](https://regseb.github.io/metalint/user/linters/jsonlint-mod/) ;
   - package.json (npm) :
-    [npm-package-json-lint](
-        https://regseb.github.io/metalint/user/linters/npm-package-json-lint/) ;
+    [npm-package-json-lint](https://regseb.github.io/metalint/user/linters/npm-package-json-lint/)
+    ;
 - Markdown :
   [MarkdownLint](https://regseb.github.io/metalint/user/linters/markdownlint/) ;
 - YAML : [YAML Lint](https://regseb.github.io/metalint/user/linters/yaml-lint/).
@@ -47,7 +46,7 @@ ou des utilitaires selon le type de fichier :
 
 Vous pouvez installer Metalint en utilisant [npm][link-npm] :
 
-```shell
+```Shell
 npm install metalint --save-dev
 ```
 
@@ -85,16 +84,14 @@ export default {
 
 ## Usage
 
-```shell
+```Shell
 metalint
 ```
 
-<!-- Ne pas ajouter les logos car la couleur du logo de npm n'est pas
-     personnalisable. https://github.com/badges/shields/issues/6208 -->
-[img-npm]:https://img.shields.io/npm/dm/metalint?label=npm
-[img-build]:https://img.shields.io/github/workflow/status/regseb/metalint/CI
-[img-coverage]:https://img.shields.io/coveralls/github/regseb/metalint
-[img-semver]:https://img.shields.io/badge/semver-2.0.0-blue
+[img-npm]:https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=white
+[img-build]:https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=white
+[img-coverage]:https://img.shields.io/coveralls/github/regseb/metalint?logo=coveralls&logoColor=white
+[img-semver]:https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&logoColor=white
 
 [link-npm]:https://www.npmjs.com/package/metalint
 [link-build]:https://github.com/regseb/metalint/actions/workflows/ci.yml?query=branch%3Amain

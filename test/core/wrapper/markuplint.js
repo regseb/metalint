@@ -19,7 +19,7 @@ describe("src/core/wrapper/markuplint.js", function () {
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
                 "node_modules/": mock.load("node_modules/"),
-                "foo.html":      "<html></html>",
+                "foo.html":      "<title>Foo</title>",
             });
 
             const file    = "foo.html";
@@ -35,16 +35,16 @@ describe("src/core/wrapper/markuplint.js", function () {
                 // Ne pas simuler le répertoire "node_modules" car le linter
                 // doit accéder à des fichiers dans celui-ci.
                 "node_modules/": mock.load("node_modules/"),
-                "foo.html":      `<img src="bar.svg"src="" class="BAZ" />`,
+                "foo.html":      `<img src='bar.svg' src="" class="BAZ" />`,
             });
 
             const file    = "foo.html";
             const level   = SEVERITY.INFO;
             const options = {
                 rules: {
-                    "attr-duplication": true,
-                    "attr-spacing":     true,
-                    "class-naming":     {
+                    "attr-duplication":  true,
+                    "attr-value-quotes": true,
+                    "class-naming":      {
                         value:    "/[a-z]+/",
                         severity: "info",
                     },
@@ -59,14 +59,15 @@ describe("src/core/wrapper/markuplint.js", function () {
                     rule:      "attr-duplication",
                     severity:  SEVERITY.ERROR,
                     message:   "The attribute name is duplicated",
-                    locations: [{ line: 1, column: 19 }],
+                    locations: [{ line: 1, column: 20 }],
                 }, {
                     file,
                     linter:    "markuplint",
-                    rule:      "attr-spacing",
+                    rule:      "attr-value-quotes",
                     severity:  SEVERITY.WARN,
-                    message:   "Required space",
-                    locations: [{ line: 1, column: 19 }],
+                    message:   "Attribute value is must quote on double" +
+                               " quotation mark",
+                    locations: [{ line: 1, column: 6 }],
                 }, {
                     file,
                     linter:    "markuplint",
@@ -74,7 +75,7 @@ describe("src/core/wrapper/markuplint.js", function () {
                     severity:  SEVERITY.INFO,
                     message:   `The "BAZ" class name is unmatched with the` +
                                ` below patterns: "/[a-z]+/"`,
-                    locations: [{ line: 1, column: 33 }],
+                    locations: [{ line: 1, column: 34 }],
                 },
             ]);
         });

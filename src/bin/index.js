@@ -5,8 +5,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import yargs from "yargs";
 import glob from "../core/glob.js";
-import normalize from "../core/normalize.js";
 import metalint from "../core/index.js";
+import normalize from "../core/normalize.js";
 import SEVERITY from "../core/severity.js";
 
 /**

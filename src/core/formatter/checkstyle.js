@@ -26,7 +26,7 @@ const encode = function (input) {
     };
     let output = input;
     for (const [character, entity] of Object.entries(ENTITIES)) {
-        output = output.replace(new RegExp(character, "gu"), entity);
+        output = output.replaceAll(new RegExp(character, "gu"), entity);
     }
     return output;
 };
