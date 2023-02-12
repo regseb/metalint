@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/standard|JavaScript Standard Style}
+ * @author Sébastien Règne
  */
 
 import standard from "standard";
@@ -25,32 +27,36 @@ export const wrapper = async function (file, level) {
     }
 
     const results = await standard.lintFiles([file]);
-    return results[0].messages.map((result) => {
-        let severity;
-        if (result.fatal) {
-            severity = SEVERITY.FATAL;
-        } else if (1 === result.severity) {
-            severity = SEVERITY.WARN;
-        } else {
-            severity = SEVERITY.ERROR;
-        }
+    return results[0].messages
+        .map((result) => {
+            let severity;
+            if (result.fatal) {
+                severity = SEVERITY.FATAL;
+            } else if (1 === result.severity) {
+                severity = SEVERITY.WARN;
+            } else {
+                severity = SEVERITY.ERROR;
+            }
 
-        return {
-            file,
-            linter: "standard",
-            ...null === result.ruleId ? {}
-                                      : { rule: result.ruleId },
-            severity,
-            message:   result.message,
-            locations: [{
-                line:   result.line,
-                column: result.column,
-                ...undefined === result.endLine ? {}
-                                                : { endLine: result.endLine },
-                ...undefined === result.endColumn
-                                              ? {}
-                                              : { endColumn: result.endColumn },
-            }],
-        };
-    }).filter((n) => level >= n.severity);
+            return {
+                file,
+                linter: "standard",
+                ...(null === result.ruleId ? {} : { rule: result.ruleId }),
+                severity,
+                message: result.message,
+                locations: [
+                    {
+                        line: result.line,
+                        column: result.column,
+                        ...(undefined === result.endLine
+                            ? {}
+                            : { endLine: result.endLine }),
+                        ...(undefined === result.endColumn
+                            ? {}
+                            : { endColumn: result.endColumn }),
+                    },
+                ],
+            };
+        })
+        .filter((n) => level >= n.severity);
 };

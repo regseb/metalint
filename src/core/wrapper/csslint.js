@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/csslint|CSSLint}
+ * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
@@ -29,17 +31,20 @@ export const wrapper = async function (file, level, options) {
     }
 
     const source = await fs.readFile(file, "utf8");
-    return CSSLint.verify(source, options).messages
-                  .map((result) => ({
-        file,
-        linter:    "csslint",
-        rule:      result.rule.id,
-        severity:  "warning" === result.type ? SEVERITY.WARN
-                                             : SEVERITY.ERROR,
-        message:   result.message,
-        locations: [{
-            line:   result.line,
-            column: result.col,
-        }],
-    })).filter((n) => level >= n.severity);
+    return CSSLint.verify(source, options)
+        .messages.map((result) => ({
+            file,
+            linter: "csslint",
+            rule: result.rule.id,
+            severity:
+                "warning" === result.type ? SEVERITY.WARN : SEVERITY.ERROR,
+            message: result.message,
+            locations: [
+                {
+                    line: result.line,
+                    column: result.col,
+                },
+            ],
+        }))
+        .filter((n) => level >= n.severity);
 };

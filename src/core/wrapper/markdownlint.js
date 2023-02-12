@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/markdownlint|Markdownlint}
+ * @author Sébastien Règne
  */
 
 import markdownlint from "markdownlint";
@@ -28,23 +30,25 @@ export const wrapper = async function (file, level, options) {
     }
 
     const config = {
-        files:  file,
+        files: file,
         config: options,
     };
     const results = await markdownlint.promises.markdownlint(config);
     return Object.values(results)
-                 .shift()
-                 .map((result) => ({
-        file,
-        linter:    "markdownlint",
-        rule:      result.ruleNames.join("/"),
-        severity:  SEVERITY.ERROR,
-        message:   result.ruleDescription + " [" +
-                   (result.errorDetail ?? "") +
-                   (null === result.errorContext
-                                        ? ""
-                                        : `Context: "${result.errorContext}"`) +
-                   "]",
-        locations: [{ line: result.lineNumber }],
-    }));
+        .shift()
+        .map((result) => ({
+            file,
+            linter: "markdownlint",
+            rule: result.ruleNames.join("/"),
+            severity: SEVERITY.ERROR,
+            message:
+                result.ruleDescription +
+                " [" +
+                (result.errorDetail ?? "") +
+                (null === result.errorContext
+                    ? ""
+                    : `Context: "${result.errorContext}"`) +
+                "]",
+            locations: [{ line: result.lineNumber }],
+        }));
 };

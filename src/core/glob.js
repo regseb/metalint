@@ -1,5 +1,7 @@
 /**
  * @module
+ * @license MIT
+ * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
@@ -27,8 +29,7 @@ const sanitize = function (pattern) {
 const compile = function (pattern) {
     const negate = pattern.startsWith("!");
     const glob = pattern.replace(/^!/u, "");
-    let regexp = glob.startsWith("/") ? "^"
-                                      : "^(.*/)?";
+    let regexp = glob.startsWith("/") ? "^" : "^(.*/)?";
 
     for (let i = 0; i < glob.length; ++i) {
         if ("/" === glob[i]) {
@@ -40,8 +41,9 @@ const compile = function (pattern) {
                     regexp += "/.*";
                     i += 2;
                 } else {
-                    throw new Error(`${pattern}: '**' not followed by a` +
-                                    " slash.");
+                    throw new Error(
+                        `${pattern}: '**' not followed by a slash.`,
+                    );
                 }
             } else {
                 regexp += "/";
@@ -51,8 +53,8 @@ const compile = function (pattern) {
             // étoile.
             if (glob.length === i + 1 || "*" !== glob[i + 1]) {
                 regexp += "[^/]*";
-            // Sinon : ce n'est pas le dernier caractère et le prochain est
-            // une étoile.
+                // Sinon : ce n'est pas le dernier caractère et le prochain est
+                // une étoile.
             } else if (0 === i) {
                 regexp += ".*";
                 ++i;
@@ -74,8 +76,7 @@ const compile = function (pattern) {
     }
 
     if (negate) {
-        regexp += regexp.endsWith("/") ? ".*"
-                                       : "(/.*)?";
+        regexp += regexp.endsWith("/") ? ".*" : "(/.*)?";
     } else if (!regexp.endsWith("/")) {
         regexp += "/?";
     }
@@ -98,10 +99,12 @@ const compile = function (pattern) {
  *                   pas un patron négatif ; sinon <code>"NONE"</code>.
  */
 const exec = function (file, patterns, root, directory) {
-    const relative = "." === file
-        ? "/"
-        : "/" + path.relative(root, path.join(process.cwd(), file)) +
-          (directory ? "/" : "");
+    const relative =
+        "." === file
+            ? "/"
+            : "/" +
+              path.relative(root, path.join(process.cwd(), file)) +
+              (directory ? "/" : "");
 
     let result = "NONE";
     for (const pattern of patterns) {
@@ -141,7 +144,7 @@ const deep = async function (base, patterns, root) {
     }
     if (directory) {
         for (const file of await fs.readdir(base)) {
-            files.push(...await deep(path.join(base, file), patterns, root));
+            files.push(...(await deep(path.join(base, file), patterns, root)));
         }
     }
     return files;
@@ -175,8 +178,9 @@ const test = function (file, patterns, root, directory) {
  *                              respectant un des patrons.
  */
 const walk = async function (bases, patterns, root) {
-    const compileds = Array.isArray(patterns) ? patterns.map(compile)
-                                              : [patterns].map(compile);
+    const compileds = Array.isArray(patterns)
+        ? patterns.map(compile)
+        : [patterns].map(compile);
 
     if (0 === bases.length) {
         return deep(".", compileds, root);
@@ -184,7 +188,7 @@ const walk = async function (bases, patterns, root) {
 
     const files = [];
     for (const base of bases) {
-        files.push(...await deep(base, compileds, root));
+        files.push(...(await deep(base, compileds, root)));
     }
     return files;
 };

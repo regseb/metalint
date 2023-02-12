@@ -1,3 +1,9 @@
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
 import assert from "node:assert/strict";
 import SEVERITY from "../../../src/core/severity.js";
 import { Formatter } from "../../data/french.js";
@@ -31,40 +37,44 @@ describe("test/data/french.js", function () {
             const reporter = new Formatter(SEVERITY.INFO, writer);
             await reporter.notify("foo.html", [
                 {
-                    file:      "foo.html",
-                    linter:    "htmlhint",
-                    severity:  SEVERITY.ERROR,
-                    message:   "Doctype must be declared first.",
+                    file: "foo.html",
+                    linter: "htmlhint",
+                    severity: SEVERITY.ERROR,
+                    message: "Doctype must be declared first.",
                     locations: [],
                 },
             ]);
             await reporter.notify("bar.md", [
                 {
-                    file:      "bar.md",
-                    linter:    "markdownlint",
-                    rule:      "MD012",
-                    severity:  SEVERITY.WARN,
-                    message:   "Multiple consecutive blank lines",
+                    file: "bar.md",
+                    linter: "markdownlint",
+                    rule: "MD012",
+                    severity: SEVERITY.WARN,
+                    message: "Multiple consecutive blank lines",
                     locations: [],
-                }, {
-                    file:      "bar.md",
-                    linter:    "markdownlint",
-                    rule:      "MD010",
-                    severity:  SEVERITY.INFO,
-                    message:   "Hard tabs",
+                },
+                {
+                    file: "bar.md",
+                    linter: "markdownlint",
+                    rule: "MD010",
+                    severity: SEVERITY.INFO,
+                    message: "Hard tabs",
                     locations: [{ line: 3 }],
                 },
             ]);
             await reporter.finalize();
 
-            assert.equal(writer.toString(),
+            assert.equal(
+                writer.toString(),
                 "Le linter htmlhint a trouvé un problème dans le fichier" +
-                " foo.html : Doctype must be declared first.\n" +
-                "Le linter markdownlint a trouvé que la règle MD012 n'est pas" +
-                " respectée dans le fichier bar.md : Multiple consecutive" +
-                " blank lines\n" +
-                "Le linter markdownlint a trouvé que la règle MD010 n'est pas" +
-                " respectée à la ligne 3 du fichier bar.md : Hard tabs\n");
+                    " foo.html : Doctype must be declared first.\n" +
+                    "Le linter markdownlint a trouvé que la règle MD012 n'est" +
+                    " pas respectée dans le fichier bar.md : Multiple" +
+                    " consecutive blank lines\n" +
+                    "Le linter markdownlint a trouvé que la règle MD010 n'est" +
+                    " pas respectée à la ligne 3 du fichier bar.md : Hard" +
+                    " tabs\n",
+            );
         });
     });
 });

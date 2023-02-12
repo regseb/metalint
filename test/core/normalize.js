@@ -1,3 +1,9 @@
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
 import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,7 +15,6 @@ import SEVERITY from "../../src/core/severity.js";
 import { Formatter as French } from "../data/french.js";
 
 if (undefined === import.meta.resolve) {
-
     /**
      * Résous un chemin relatif à partir du module.
      *
@@ -20,8 +25,9 @@ if (undefined === import.meta.resolve) {
      * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
      */
     import.meta.resolve = (specifier) => {
-        return Promise.resolve(fileURLToPath(new URL(specifier,
-                                                     import.meta.url).href));
+        return Promise.resolve(
+            fileURLToPath(new URL(specifier, import.meta.url).href),
+        );
     };
 }
 
@@ -35,12 +41,13 @@ describe("src/core/normalize.js", function () {
                             eslint: [
                                 {
                                     plugins: ["foo"],
-                                    global:  "foo",
-                                    rules:   ["foo"],
-                                }, {
+                                    global: "foo",
+                                    rules: ["foo"],
+                                },
+                                {
                                     plugins: ["bar", "baz"],
-                                    global:  "bar",
-                                    rules:   { bar: "baz" },
+                                    global: "bar",
+                                    rules: { bar: "baz" },
                                 },
                             ],
                         },
@@ -52,10 +59,11 @@ describe("src/core/normalize.js", function () {
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(
-                standard.checkers[0].linters["./wrapper/eslint.js"], {
+                standard.checkers[0].linters["./wrapper/eslint.js"],
+                {
                     plugins: ["bar", "baz"],
-                    global:  "bar",
-                    rules:   { bar: "baz" },
+                    global: "bar",
+                    rules: { bar: "baz" },
                 },
             );
         });
@@ -70,7 +78,8 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(
                 standard.checkers[0].linters["./wrapper/eslint.js"]
-                                                               .parserOptions, {
+                    .parserOptions,
+                {
                     sourceType: "module",
                 },
             );
@@ -84,7 +93,7 @@ describe("src/core/normalize.js", function () {
             await assert.rejects(
                 () => normalize(rotten, root, dir, overwriting),
                 {
-                    name:    "Error",
+                    name: "Error",
                     message: "Cannot import '../.metalint/jshint.config.js'.",
                 },
             );
@@ -145,9 +154,10 @@ describe("src/core/normalize.js", function () {
             await assert.rejects(
                 () => normalize(rotten, root, dir, overwriting),
                 {
-                    name:    "TypeError",
-                    message: "Property 'patterns' is incorrect type (string" +
-                             " and array are accepted).",
+                    name: "TypeError",
+                    message:
+                        "Property 'patterns' is incorrect type (string and" +
+                        " array are accepted).",
                 },
             );
         });
@@ -165,7 +175,7 @@ describe("src/core/normalize.js", function () {
 
         it("level() #2", async function () {
             const rotten = {
-                level:    "error",
+                level: "error",
                 checkers: [{ linters: { eslint: {} } }],
             };
             const root = ".";
@@ -186,13 +196,14 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepEqual(standard.reporters,
-                             [new Unix(SEVERITY.INFO, process.stdout)]);
+            assert.deepEqual(standard.reporters, [
+                new Unix(SEVERITY.INFO, process.stdout),
+            ]);
         });
 
         it("formatter() #2", async function () {
             const rotten = {
-                level:    "error",
+                level: "error",
                 reporter: { formatter: "console" },
                 checkers: [{ linters: { eslint: {} } }],
             };
@@ -200,8 +211,9 @@ describe("src/core/normalize.js", function () {
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
-            assert.deepEqual(standard.reporters,
-                             [new Unix(SEVERITY.ERROR, process.stdout)]);
+            assert.deepEqual(standard.reporters, [
+                new Unix(SEVERITY.ERROR, process.stdout),
+            ]);
         });
 
         it("formatter() #3", async function () {
@@ -212,9 +224,10 @@ describe("src/core/normalize.js", function () {
             await assert.rejects(
                 () => normalize(rotten, root, dir, overwriting),
                 {
-                    name:    "TypeError",
-                    message: "Property 'formatter' is incorrect type (only" +
-                             " string is accepted).",
+                    name: "TypeError",
+                    message:
+                        "Property 'formatter' is incorrect type (only string" +
+                        " is accepted).",
                 },
             );
         });
@@ -229,9 +242,9 @@ describe("src/core/normalize.js", function () {
             await assert.rejects(
                 () => normalize(rotten, root, dir, overwriting),
                 {
-                    name:    "Error",
-                    message: "Permission denied to open output file" +
-                             " '/output.log'.",
+                    name: "Error",
+                    message:
+                        "Permission denied to open output file '/output.log'.",
                 },
             );
         });
@@ -244,9 +257,10 @@ describe("src/core/normalize.js", function () {
             await assert.rejects(
                 () => normalize(rotten, root, dir, overwriting),
                 {
-                    name:    "Error",
-                    message: "Permission denied to open output file" +
-                             " './not_exist/output.log'.",
+                    name: "Error",
+                    message:
+                        "Permission denied to open output file" +
+                        " './not_exist/output.log'.",
                 },
             );
         });
@@ -259,9 +273,10 @@ describe("src/core/normalize.js", function () {
             await assert.rejects(
                 () => normalize(rotten, root, dir, overwriting),
                 {
-                    name:    "TypeError",
-                    message: "Property 'output' is incorrect type (only" +
-                             " string is accepted).",
+                    name: "TypeError",
+                    message:
+                        "Property 'output' is incorrect type (only string is" +
+                        " accepted).",
                 },
             );
         });
@@ -271,25 +286,25 @@ describe("src/core/normalize.js", function () {
         it("options() #1", async function () {
             const rotten = {
                 reporters: { options: { showZeroNotice: true } },
-                checkers:  [{ linters: { markdownlint: undefined } }],
+                checkers: [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [
                     new Console(SEVERITY.INFO, process.stdout, {
                         showZeroNotice: true,
                     }),
                 ],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": undefined },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -303,9 +318,10 @@ describe("src/core/normalize.js", function () {
             await assert.rejects(
                 () => normalize(rotten, root, dir, overwriting),
                 {
-                    name:    "TypeError",
-                    message: "Property 'options' is incorrect type (only" +
-                             " object is accepted).",
+                    name: "TypeError",
+                    message:
+                        "Property 'options' is incorrect type (only object is" +
+                        " accepted).",
                 },
             );
         });
@@ -321,14 +337,14 @@ describe("src/core/normalize.js", function () {
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": undefined },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -337,21 +353,21 @@ describe("src/core/normalize.js", function () {
         it("reporters() #2", async function () {
             const rotten = {
                 reporters: [],
-                checkers:  [{ linters: { markdownlint: undefined } }],
+                checkers: [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": undefined },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -360,21 +376,21 @@ describe("src/core/normalize.js", function () {
         it("reporters() #3", async function () {
             const rotten = {
                 reporters: {},
-                checkers:  [{ linters: { markdownlint: undefined } }],
+                checkers: [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": undefined },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -383,21 +399,21 @@ describe("src/core/normalize.js", function () {
         it("reporters() #4", async function () {
             const rotten = {
                 reporters: [{}],
-                checkers:  [{ linters: { markdownlint: undefined } }],
+                checkers: [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": undefined },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -405,21 +421,21 @@ describe("src/core/normalize.js", function () {
 
         it("reporters() #5", async function () {
             const rotten = {
-                checkers:  [{ linters: { markdownlint: undefined } }],
+                checkers: [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": undefined },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -428,21 +444,21 @@ describe("src/core/normalize.js", function () {
         it("reporters() #6", async function () {
             const rotten = {
                 reporters: [],
-                checkers:  [{ linters: { markdownlint: undefined } }],
+                checkers: [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": undefined },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -451,21 +467,21 @@ describe("src/core/normalize.js", function () {
         it("reporters() #7", async function () {
             const rotten = {
                 reporters: [{}],
-                checkers:  [{ linters: { markdownlint: undefined } }],
+                checkers: [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": undefined },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -474,21 +490,21 @@ describe("src/core/normalize.js", function () {
         it("reporters() #8", async function () {
             const rotten = {
                 reporters: {},
-                checkers:  [{ linters: { markdownlint: undefined } }],
+                checkers: [{ linters: { markdownlint: undefined } }],
             };
             const root = ".";
             const dir = ".";
             const overwriting = { formatter: "unix" };
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/markdownlint.js": undefined },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/markdownlint.js": undefined },
                     },
                 ],
             });
@@ -503,14 +519,14 @@ describe("src/core/normalize.js", function () {
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/eslint.js": {} },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/eslint.js": {} },
                     },
                 ],
             });
@@ -519,21 +535,21 @@ describe("src/core/normalize.js", function () {
         it("normalize() #1", async function () {
             const rotten = {
                 reporters: { formatter: "./french.js" },
-                checkers:  [{ linters: { eslint: {} } }],
+                checkers: [{ linters: { eslint: {} } }],
             };
             const root = await import.meta.resolve("../data/");
             const dir = ".";
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**"],
-                level:     SEVERITY.INFO,
+                patterns: ["**"],
+                level: SEVERITY.INFO,
                 reporters: [new French(SEVERITY.INFO, process.stdout)],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.INFO,
-                        linters:  { "./wrapper/eslint.js": {} },
+                        level: SEVERITY.INFO,
+                        linters: { "./wrapper/eslint.js": {} },
                     },
                 ],
             });
@@ -542,49 +558,57 @@ describe("src/core/normalize.js", function () {
         it("normalize() #2", async function () {
             mock({
                 "metalint/": {
-                    "csslintrc.js":           "export default {\n" +
-                                              `    "empty-rules": true,\n` +
-                                              "};",
-                    "eslint.config.js":       "export default {\n" +
-                                              "    rules: {\n" +
-                                              `        "no-empty": 2,\n` +
-                                              "        curly: 2,\n" +
-                                              "    },\n" +
-                                              "};",
-                    "htmlhint.config.js":     "export default {\n" +
-                                              `    "tagname-lowercase":` +
-                                                                    " true,\n" +
-                                              "};",
-                    "htmllint.config.js":     "export default {\n" +
-                                              `    "doctype-html5": true,\n` +
-                                              "};",
-                    "markdownlint.config.js": "export default {\n" +
-                                              `    MD035: { style: "---" },\n` +
-                                              "};\n",
+                    "csslintrc.js":
+                        "export default {\n" +
+                        `    "empty-rules": true,\n` +
+                        "};",
+                    "eslint.config.js":
+                        "export default {\n" +
+                        "    rules: {\n" +
+                        `        "no-empty": 2,\n` +
+                        "        curly: 2,\n" +
+                        "    },\n" +
+                        "};",
+                    "htmlhint.config.js":
+                        "export default {\n" +
+                        `    "tagname-lowercase":` +
+                        " true,\n" +
+                        "};",
+                    "htmllint.config.js":
+                        "export default {\n" +
+                        `    "doctype-html5": true,\n` +
+                        "};",
+                    "markdownlint.config.js":
+                        "export default {\n" +
+                        `    MD035: { style: "---" },\n` +
+                        "};\n",
                 },
                 "src/core/formatter/": mock.load("src/core/formatter/"),
-                "src/core/wrapper/":   mock.load("src/core/wrapper/"),
+                "src/core/wrapper/": mock.load("src/core/wrapper/"),
             });
 
             const rotten = {
-                patterns:  "**.js",
-                level:     "Error",
+                patterns: "**.js",
+                level: "Error",
                 reporters: { formatter: "unix", output: undefined },
-                checkers:  [
+                checkers: [
                     {
-                        level:   "info",
+                        level: "info",
                         linters: "markdownlint",
-                    }, {
+                    },
+                    {
                         patterns: ["!**.min.js", "**"],
-                        linters:  {
+                        linters: {
                             eslint: [
                                 "eslint.config.js",
                                 { rules: { curly: 1, "no-var": 2 } },
                             ],
                         },
-                    }, {
+                    },
+                    {
                         linters: ["htmllint", "htmlhint"],
-                    }, {
+                    },
+                    {
                         linters: { csslint: "csslintrc.js" },
                     },
                 ],
@@ -594,39 +618,42 @@ describe("src/core/normalize.js", function () {
             const overwriting = {};
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
-                patterns:  ["**.js"],
-                level:     SEVERITY.ERROR,
+                patterns: ["**.js"],
+                level: SEVERITY.ERROR,
                 reporters: [new Unix(SEVERITY.ERROR, process.stdout, {})],
-                checkers:  [
+                checkers: [
                     {
                         patterns: ["**"],
-                        level:    SEVERITY.ERROR,
-                        linters:  {
+                        level: SEVERITY.ERROR,
+                        linters: {
                             "./wrapper/markdownlint.js": {
                                 MD035: { style: "---" },
                             },
                         },
-                    }, {
+                    },
+                    {
                         patterns: ["!**.min.js", "**"],
-                        level:    SEVERITY.ERROR,
-                        linters:  {
+                        level: SEVERITY.ERROR,
+                        linters: {
                             "./wrapper/eslint.js": {
                                 rules: { "no-empty": 2, curly: 1, "no-var": 2 },
                             },
                         },
-                    }, {
+                    },
+                    {
                         patterns: ["**"],
-                        level:    SEVERITY.ERROR,
-                        linters:  {
+                        level: SEVERITY.ERROR,
+                        linters: {
                             "./wrapper/htmlhint.js": {
                                 "tagname-lowercase": true,
                             },
                             "./wrapper/htmllint.js": { "doctype-html5": true },
                         },
-                    }, {
+                    },
+                    {
                         patterns: ["**"],
-                        level:    SEVERITY.ERROR,
-                        linters:  {
+                        level: SEVERITY.ERROR,
+                        linters: {
                             "./wrapper/csslint.js": { "empty-rules": true },
                         },
                     },
@@ -637,13 +664,13 @@ describe("src/core/normalize.js", function () {
         it("should reject invalid data", async function () {
             const rotten = { checkers: [{ linters: { jsonlint: [1] } }] };
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "TypeError",
+                name: "TypeError",
                 message: "Linter option incorrect type.",
             });
 
             rotten.checkers[0].linters.jsonlint[0] = undefined;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "Error",
+                name: "Error",
                 message: "Linter option is undefined.",
             });
 
@@ -651,19 +678,19 @@ describe("src/core/normalize.js", function () {
             // eslint-disable-next-line unicorn/no-null
             rotten.checkers[0].linters.jsonlint[0] = null;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "Error",
+                name: "Error",
                 message: "Linter option is null.",
             });
 
             rotten.checkers[0].linters.jsonlint = 1;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "TypeError",
+                name: "TypeError",
                 message: "Linter incorrect type.",
             });
 
             rotten.checkers[0].linters = 1;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "TypeError",
+                name: "TypeError",
                 message: "'checkers[].linters' incorrect type.",
             });
 
@@ -671,47 +698,48 @@ describe("src/core/normalize.js", function () {
             // eslint-disable-next-line unicorn/no-null
             rotten.checkers[0].linters = null;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "Error",
+                name: "Error",
                 message: "'checkers[].linters' is null.",
             });
 
             Reflect.deleteProperty(rotten.checkers[0], "linters");
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "Error",
+                name: "Error",
                 message: "'checkers[].linters' is undefined.",
             });
 
             rotten.checkers.length = 0;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "Error",
+                name: "Error",
                 message: "'checkers' is empty.",
             });
 
             rotten.checkers = 1;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "TypeError",
+                name: "TypeError",
                 message: "'checkers' is not an array.",
             });
 
             rotten.reporters = 1;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "TypeError",
+                name: "TypeError",
                 message: "'reporters' incorrect type.",
             });
 
             rotten.level = "APOCALYPSE";
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "Error",
-                message: "Value of property 'level' is unknown (possibles" +
-                         " values: 'off', 'fatal', 'error', 'warn' and" +
-                         " 'info').",
+                name: "Error",
+                message:
+                    "Value of property 'level' is unknown (possibles values:" +
+                    " 'off', 'fatal', 'error', 'warn' and 'info').",
             });
 
             rotten.level = 1;
             await assert.rejects(() => normalize(rotten, ".", ".", {}), {
-                name:    "TypeError",
-                message: "Property 'level' is incorrect type (only string is" +
-                         " accepted).",
+                name: "TypeError",
+                message:
+                    "Property 'level' is incorrect type (only string is" +
+                    " accepted).",
             });
         });
     });

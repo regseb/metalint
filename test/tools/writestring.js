@@ -1,7 +1,12 @@
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
 import { Writable } from "node:stream";
 
 export default class WriteString extends Writable {
-
     /**
      * @type {string[]}
      */

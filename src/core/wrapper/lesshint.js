@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/lesshint|lesshint}
+ * @author Sébastien Règne
  */
 
 import { Lesshint } from "lesshint";
@@ -30,28 +32,34 @@ export const wrapper = async function (file, level, options) {
     const lesshint = new Lesshint();
     lesshint.configure(options);
     const results = await lesshint.checkFiles(file);
-    return results.map((result) => {
-        let rule;
-        let severity;
-        if ("parse error" === result.linter) {
-            rule = "parseError";
-            severity = SEVERITY.FATAL;
-        } else {
-            rule = result.linter;
-            severity = "warning" === result.severity ? SEVERITY.WARN
-                                                     : SEVERITY.ERROR;
-        }
+    return results
+        .map((result) => {
+            let rule;
+            let severity;
+            if ("parse error" === result.linter) {
+                rule = "parseError";
+                severity = SEVERITY.FATAL;
+            } else {
+                rule = result.linter;
+                severity =
+                    "warning" === result.severity
+                        ? SEVERITY.WARN
+                        : SEVERITY.ERROR;
+            }
 
-        return {
-            file,
-            linter:    "lesshint",
-            rule,
-            severity,
-            message:   result.message,
-            locations: [{
-                line:   result.line,
-                column: result.column,
-            }],
-        };
-    }).filter((n) => level >= n.severity);
+            return {
+                file,
+                linter: "lesshint",
+                rule,
+                severity,
+                message: result.message,
+                locations: [
+                    {
+                        line: result.line,
+                        column: result.column,
+                    },
+                ],
+            };
+        })
+        .filter((n) => level >= n.severity);
 };

@@ -1,5 +1,7 @@
 /**
  * @module
+ * @license MIT
+ * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
@@ -21,8 +23,11 @@ import glob from "./glob.js";
  *                   sont égales ; sinon un nombre positif.
  */
 const compare = function (notice1, notice2) {
-    for (let i = 0; i < notice1.locations.length &&
-                    i < notice2.locations.length; ++i) {
+    for (
+        let i = 0;
+        i < notice1.locations.length && i < notice2.locations.length;
+        ++i
+    ) {
         const locations1 = notice1.locations[i];
         const locations2 = notice2.locations[i];
 
@@ -83,8 +88,9 @@ export default async function metalint(files, checkers, root) {
         }
     }
     // Trier les notifications.
-    Object.values(results).filter((r) => undefined !== r)
-                          .forEach((r) => r.sort(compare));
+    Object.values(results)
+        .filter((r) => undefined !== r)
+        .forEach((r) => r.sort(compare));
 
     return results;
 }

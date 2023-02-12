@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/jsonlint-mod|JSON Lint (mod)}
+ * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
@@ -32,14 +34,16 @@ export const wrapper = async function (file, level) {
     } catch (err) {
         const result = err.message.split("\n");
 
-        return [{
-            file,
-            linter:    "jsonlint-mod",
-            severity:  SEVERITY.ERROR,
-            message:   result[3],
-            // Augmenter de un le numéro de la ligne car JSON Lint (mod)
-            // commence les numérotations à zéro.
-            locations: [{ line: Number(result[0].slice(20, -1)) + 1 }],
-        }];
+        return [
+            {
+                file,
+                linter: "jsonlint-mod",
+                severity: SEVERITY.ERROR,
+                message: result[3],
+                // Augmenter de un le numéro de la ligne car JSON Lint (mod)
+                // commence les numérotations à zéro.
+                locations: [{ line: Number(result[0].slice(20, -1)) + 1 }],
+            },
+        ];
     }
 };

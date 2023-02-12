@@ -1,5 +1,7 @@
 /**
  * @module
+ * @license MIT
+ * @author Sébastien Règne
  */
 
 import SEVERITY from "../severity.js";
@@ -18,11 +20,11 @@ import SEVERITY from "../severity.js";
  */
 const encode = function (input) {
     const ENTITIES = {
-        "&":  "&amp;",
-        "<":  "&lt;",
-        ">":  "&gt;",
-        "'":  "&apos;",
-        "\"": "&quot;",
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "'": "&apos;",
+        '"': "&quot;",
     };
     let output = input;
     for (const [character, entity] of Object.entries(ENTITIES)) {
@@ -52,7 +54,6 @@ const shift = function (depth, writer, size) {
  * <strong>checkstyle</strong>.
  */
 export const Formatter = class {
-
     /**
      * Le niveau de sévérité minimum des notifications affichées.
      *
@@ -88,7 +89,7 @@ export const Formatter = class {
      *                                          retour à la ligne.
      */
     constructor(level, writer, options) {
-        this.#level  = level;
+        this.#level = level;
         this.#writer = writer;
         this.#indent = options.indent ?? -1;
 
@@ -120,14 +121,16 @@ export const Formatter = class {
             if (0 !== notice.locations.length) {
                 this.#writer.write(` line="${notice.locations[0].line}"`);
                 if ("column" in notice.locations[0]) {
-                    this.#writer.write(` column="` +
-                                       `${notice.locations[0].column}"`);
+                    this.#writer.write(
+                        ` column="${notice.locations[0].column}"`,
+                    );
                 }
             }
 
             this.#writer.write(` severity="`);
             switch (notice.severity) {
-                case SEVERITY.FATAL: case SEVERITY.ERROR:
+                case SEVERITY.FATAL:
+                case SEVERITY.ERROR:
                     this.#writer.write("error");
                     break;
                 case SEVERITY.WARN:

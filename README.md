@@ -90,12 +90,11 @@ export default {
 metalint
 ```
 
-[img-npm]:https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=white
-[img-build]:https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=white
-[img-coverage]:https://img.shields.io/coveralls/github/regseb/metalint?logo=coveralls&logoColor=white
-[img-semver]:https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&logoColor=white
-
-[link-npm]:https://www.npmjs.com/package/metalint
-[link-build]:https://github.com/regseb/metalint/actions/workflows/ci.yml?query=branch%3Amain
-[link-coverage]:https://coveralls.io/github/regseb/metalint
-[link-semver]:https://semver.org/spec/v2.0.0.html "Semantic Versioning 2.0.0"
+[img-npm]: https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=white
+[img-build]: https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=white
+[img-coverage]: https://img.shields.io/coveralls/github/regseb/metalint?logo=coveralls&logoColor=white
+[img-semver]: https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&logoColor=white
+[link-npm]: https://www.npmjs.com/package/metalint
+[link-build]: https://github.com/regseb/metalint/actions/workflows/ci.yml?query=branch%3Amain
+[link-coverage]: https://coveralls.io/github/regseb/metalint
+[link-semver]: https://semver.org/spec/v2.0.0.html "Semantic Versioning 2.0.0"

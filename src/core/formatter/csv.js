@@ -1,5 +1,7 @@
 /**
  * @module
+ * @license MIT
+ * @author Sébastien Règne
  */
 
 /**
@@ -24,7 +26,6 @@ const doublequote = function (value) {
  * @see https://tools.ietf.org/html/rfc4180
  */
 export const Formatter = class {
-
     /**
      * Le niveau de sévérité minimum des notifications affichées.
      *
@@ -47,7 +48,7 @@ export const Formatter = class {
      * @param {WritableStream} writer Le flux où écrire les résultats.
      */
     constructor(level, writer) {
-        this.#level  = level;
+        this.#level = level;
         this.#writer = writer;
 
         // Ecrire la ligne des titres.
@@ -80,8 +81,9 @@ export const Formatter = class {
                 }
             }
 
-            this.#writer.write(`,${doublequote(notice.message)}` +
-                               `,${notice.linter},`);
+            this.#writer.write(
+                `,${doublequote(notice.message)},${notice.linter},`,
+            );
             if (undefined !== notice.rule) {
                 this.#writer.write(doublequote(notice.rule));
             }

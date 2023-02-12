@@ -1,5 +1,7 @@
 /**
  * @module
+ * @license MIT
+ * @author Sébastien Règne
  */
 
 /**
@@ -12,7 +14,6 @@
  * par ligne.
  */
 export const Formatter = class {
-
     /**
      * Le niveau de sévérité minimum des notifications affichées.
      *
@@ -56,8 +57,10 @@ export const Formatter = class {
     notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
         // critères des checkers) ou si aucune notification a été remontée.
-        if (undefined === notices ||
-                !notices.some((n) => this.#level >= n.severity)) {
+        if (
+            undefined === notices ||
+            !notices.some((n) => this.#level >= n.severity)
+        ) {
             return;
         }
 

@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/yaml-lint|YAML Lint}
+ * @author Sébastien Règne
  */
 
 import yamlLint from "yaml-lint";
@@ -31,17 +33,22 @@ export const wrapper = async function (file, level, options) {
         await yamlLint.lintFile(file, options);
         return [];
     } catch (err) {
-        return [{
-            file,
-            linter:    "yaml-lint",
-            severity:  SEVERITY.ERROR,
-            message:   err.reason,
-            locations: [{
-                // Augmenter de un le numéro de la ligne et de la colonne car
-                // YAML Lint commence les numérotations à zéro.
-                line:   err.mark.line + 1,
-                column: err.mark.column + 1,
-            }],
-        }];
+        return [
+            {
+                file,
+                linter: "yaml-lint",
+                severity: SEVERITY.ERROR,
+                message: err.reason,
+                locations: [
+                    {
+                        // Augmenter de un le numéro de la ligne et de la
+                        // colonne car YAML Lint commence les numérotations à
+                        // zéro.
+                        line: err.mark.line + 1,
+                        column: err.mark.column + 1,
+                    },
+                ],
+            },
+        ];
     }
 };

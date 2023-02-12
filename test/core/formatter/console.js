@@ -1,3 +1,9 @@
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
 import assert from "node:assert/strict";
 import mock from "mock-fs";
 import { Formatter } from "../../../src/core/formatter/console.js";
@@ -58,35 +64,38 @@ describe("src/core/formatter/console.js", function () {
             const reporter = new Formatter(SEVERITY.INFO, writer, {});
             await reporter.notify("foo.js", [
                 {
-                    file:      "foo.js",
-                    linter:    "eslint",
-                    rule:      "no-var",
-                    severity:  SEVERITY.ERROR,
-                    message:   "Unexpected var, use let or const instead.",
+                    file: "foo.js",
+                    linter: "eslint",
+                    rule: "no-var",
+                    severity: SEVERITY.ERROR,
+                    message: "Unexpected var, use let or const instead.",
                     locations: [{ line: 1, column: 1 }],
-                }, {
-                    file:      "foo.js",
-                    linter:    "eslint",
-                    rule:      "no-unused-vars",
-                    severity:  SEVERITY.WARN,
-                    message:   "'foo' is defined but never used",
+                },
+                {
+                    file: "foo.js",
+                    linter: "eslint",
+                    rule: "no-unused-vars",
+                    severity: SEVERITY.WARN,
+                    message: "'foo' is defined but never used",
                     locations: [{ line: 1, column: 5 }],
                 },
             ]);
             await reporter.finalize();
 
-            assert.equal(writer.toString(),
+            assert.equal(
+                writer.toString(),
                 "foo.js: 1 error, 1 warning.\n" +
-                "ERROR: Unexpected var, use let or const instead." +
-                                                          " (eslint.no-var)\n" +
-               "    1‖ var foo = 0;\n" +
-               "-------^\n" +
-               "\n" +
-               "WARN : 'foo' is defined but never used" +
-                                                  " (eslint.no-unused-vars)\n" +
-               "    1‖ var foo = 0;\n" +
-               "-----------^\n" +
-               "\n");
+                    "ERROR: Unexpected var, use let or const instead." +
+                    " (eslint.no-var)\n" +
+                    "    1‖ var foo = 0;\n" +
+                    "-------^\n" +
+                    "\n" +
+                    "WARN : 'foo' is defined but never used" +
+                    " (eslint.no-unused-vars)\n" +
+                    "    1‖ var foo = 0;\n" +
+                    "-----------^\n" +
+                    "\n",
+            );
         });
 
         it("should ignore error with FATAL level", async function () {
@@ -95,11 +104,11 @@ describe("src/core/formatter/console.js", function () {
             const reporter = new Formatter(SEVERITY.FATAL, writer, {});
             await reporter.notify("foo.md", [
                 {
-                    file:      "foo.md",
-                    linter:    "markdownlint",
-                    rule:      "MD002",
-                    severity:  SEVERITY.ERROR,
-                    message:   "First header should be a h1 header.",
+                    file: "foo.md",
+                    linter: "markdownlint",
+                    rule: "MD002",
+                    severity: SEVERITY.ERROR,
+                    message: "First header should be a h1 header.",
                     locations: [{ line: 1 }],
                 },
             ]);

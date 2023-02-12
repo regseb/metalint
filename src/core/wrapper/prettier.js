@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/prettier|Prettier}
+ * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
@@ -30,12 +32,15 @@ export const wrapper = async function (file, level, options) {
 
     const source = await fs.readFile(file, "utf8");
     const result = prettier.check(source, { filepath: file, ...options });
-    return result ? []
-                  : [{
-        file,
-        linter:    "prettier",
-        severity:  SEVERITY.ERROR,
-        message:   "Code style issues found.",
-        locations: [],
-    }];
+    return result
+        ? []
+        : [
+              {
+                  file,
+                  linter: "prettier",
+                  severity: SEVERITY.ERROR,
+                  message: "Code style issues found.",
+                  locations: [],
+              },
+          ];
 };

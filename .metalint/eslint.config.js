@@ -1,3 +1,9 @@
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
 export default {
     plugins: [
         "array-func",
@@ -52,12 +58,15 @@ export default {
         "no-import-assign": 2,
         "no-inner-declarations": [2, "both"],
         "no-invalid-regexp": 2,
-        "no-irregular-whitespace": [2, {
-            skipStrings: false,
-            skipComments: false,
-            skipRegExps: false,
-            skipTemplates: false,
-        }],
+        "no-irregular-whitespace": [
+            2,
+            {
+                skipStrings: false,
+                skipComments: false,
+                skipRegExps: false,
+                skipTemplates: false,
+            },
+        ],
         "no-loss-of-precision": 2,
         "no-misleading-character-class": 2,
         "no-new-native-nonconstructor": 2,
@@ -78,23 +87,32 @@ export default {
         "no-unreachable-loop": 2,
         "no-unsafe-finally": 2,
         "no-unsafe-negation": [2, { enforceForOrderingRelations: true }],
-        "no-unsafe-optional-chaining": [2, {
-            disallowArithmeticOperators: true,
-        }],
+        "no-unsafe-optional-chaining": [
+            2,
+            {
+                disallowArithmeticOperators: true,
+            },
+        ],
         "no-unused-private-class-members": 2,
-        "no-unused-vars": [2, {
-            args: "all",
-            argsIgnorePattern: "^_",
-            caughtErrors: "all",
-            caughtErrorsIgnorePattern: "^_",
-        }],
+        "no-unused-vars": [
+            2,
+            {
+                args: "all",
+                argsIgnorePattern: "^_",
+                caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_",
+            },
+        ],
         "no-use-before-define": 2,
         "no-useless-backreference": 2,
         "require-atomic-updates": 0,
-        "use-isnan": [2, {
-            enforceForSwitchCase: true,
-            enforceForIndexOf: true,
-        }],
+        "use-isnan": [
+            2,
+            {
+                enforceForSwitchCase: true,
+                enforceForIndexOf: true,
+            },
+        ],
         "valid-typeof": 2,
 
         // Suggestions.
@@ -102,9 +120,13 @@ export default {
         "arrow-body-style": 0,
         "block-scoped-var": 2,
         camelcase: 2,
-        "capitalized-comments": [2, "always", {
-            ignoreConsecutiveComments: true,
-        }],
+        "capitalized-comments": [
+            2,
+            "always",
+            {
+                ignoreConsecutiveComments: true,
+            },
+        ],
         "class-methods-use-this": 2,
         complexity: [1, { max: 50 }],
         "consistent-return": 2,
@@ -124,17 +146,31 @@ export default {
         "id-length": 0,
         "id-match": 0,
         "init-declarations": 0,
-        "logical-assignment-operators": [2, "always", {
-            enforceForIfStatements: true,
-        }],
+        "logical-assignment-operators": [
+            2,
+            "always",
+            {
+                enforceForIfStatements: true,
+            },
+        ],
         "max-classes-per-file": 2,
         "max-depth": [1, { max: 5 }],
-        "max-lines": [1, {
-            max: 1000, skipBlankLines: true, skipComments: true,
-        }],
-        "max-lines-per-function": [1, {
-            max: 100, skipBlankLines: true, skipComments: true,
-        }],
+        "max-lines": [
+            1,
+            {
+                max: 1000,
+                skipBlankLines: true,
+                skipComments: true,
+            },
+        ],
+        "max-lines-per-function": [
+            1,
+            {
+                max: 100,
+                skipBlankLines: true,
+                skipComments: true,
+            },
+        ],
         "max-nested-callbacks": 1,
         "max-params": [1, { max: 5 }],
         "max-statements": [1, { max: 50 }],
@@ -187,10 +223,13 @@ export default {
         "no-nonoctal-decimal-escape": 2,
         "no-octal": 2,
         "no-octal-escape": 2,
-        "no-param-reassign": [2, {
-            props: true,
-            ignorePropertyModificationsFor: ["input"],
-        }],
+        "no-param-reassign": [
+            2,
+            {
+                props: true,
+                ignorePropertyModificationsFor: ["input"],
+            },
+        ],
         "no-plusplus": 0,
         "no-proto": 2,
         "no-redeclare": 2,
@@ -270,11 +309,14 @@ export default {
         "require-await": 2,
         "require-unicode-regexp": 2,
         "require-yield": 2,
-        "sort-imports": [2, {
-            // Ne pas trier les imports en fonction des variables et de leur
-            // type, mais préférer un tri en fonction du fichier importé.
-            ignoreDeclarationSort: true,
-        }],
+        "sort-imports": [
+            2,
+            {
+                // Ne pas trier les imports en fonction des variables et de leur
+                // type, mais préférer un tri en fonction du fichier importé.
+                ignoreDeclarationSort: true,
+            },
+        ],
         "sort-keys": 0,
         "sort-vars": 0,
         "spaced-comment": 2,
@@ -294,9 +336,13 @@ export default {
         "comma-dangle": [2, "always-multiline"],
         "comma-spacing": 2,
         "comma-style": 2,
-        "computed-property-spacing": [2, "never", {
-            enforceForClassMembers: true,
-        }],
+        "computed-property-spacing": [
+            2,
+            "never",
+            {
+                enforceForClassMembers: true,
+            },
+        ],
         "dot-location": [2, "property"],
         "eol-last": 2,
         "func-call-spacing": [2, "never"],
@@ -306,21 +352,22 @@ export default {
         "implicit-arrow-linebreak": 2,
         indent: 0,
         "jsx-quotes": 0,
-        "key-spacing": [2, { mode: "minimum", align: "value" }],
+        "key-spacing": 2,
         "keyword-spacing": 2,
         "line-comment-position": 2,
         "linebreak-style": 2,
-        "lines-around-comment": 2,
+        // Ne pas vérifier les lignes vides avant les blocs de commentaire car
+        // Prettier les enlèves.
+        "lines-around-comment": [2, { beforeBlockComment: false }],
         "lines-between-class-members": 2,
         "max-len": 1,
         "max-statements-per-line": [2, { max: 2 }],
         "multiline-ternary": 0,
         "new-parens": 2,
         "newline-per-chained-call": 0,
-        "no-extra-parens": [2, "all", {
-            enforceForArrowConditionals: false,
-            allowParensAfterCommentPattern: "@type",
-        }],
+        // Ne pas activer cette règle pour "all" car Prettier ajoute des
+        // parenthèses qui sont considérées inutiles par ESLint.
+        "no-extra-parens": [2, "functions"],
         "no-mixed-spaces-and-tabs": 2,
         "no-multi-spaces": 0,
         "no-multiple-empty-lines": [2, { max: 2, maxEOF: 0, maxBOF: 0 }],
@@ -330,24 +377,39 @@ export default {
         "nonblock-statement-body-position": 2,
         "object-curly-newline": 2,
         "object-curly-spacing": [2, "always"],
-        "object-property-newline": [2, {
-            allowAllPropertiesOnSameLine: true,
-        }],
+        "object-property-newline": [
+            2,
+            {
+                allowAllPropertiesOnSameLine: true,
+            },
+        ],
         "operator-linebreak": 2,
         "padded-blocks": [2, { switches: "never" }],
-        "padding-line-between-statements": [2, {
-            blankLine: "always", prev: "directive", next: "*",
-        }],
-        quotes: [2, "double", { allowTemplateLiterals: true }],
+        "padding-line-between-statements": [
+            2,
+            {
+                blankLine: "always",
+                prev: "directive",
+                next: "*",
+            },
+        ],
+        quotes: [
+            2,
+            "double",
+            { avoidEscape: true, allowTemplateLiterals: true },
+        ],
         "rest-spread-spacing": 2,
         semi: 2,
         "semi-spacing": 2,
         "semi-style": [2, "last"],
         "space-before-blocks": 2,
-        "space-before-function-paren": [2, {
-            anonymous: "always",
-            named: "never",
-        }],
+        "space-before-function-paren": [
+            2,
+            {
+                anonymous: "always",
+                named: "never",
+            },
+        ],
         "space-in-parens": 2,
         "space-infix-ops": 2,
         "space-unary-ops": 2,
@@ -378,13 +440,16 @@ export default {
 
         // Stylistic Issues.
         "eslint-comments/no-restricted-disable": 2,
-        "eslint-comments/no-use": [2, {
-            allow: [
-                "eslint-disable",
-                "eslint-disable-next-line",
-                "eslint-enable",
-            ],
-        }],
+        "eslint-comments/no-use": [
+            2,
+            {
+                allow: [
+                    "eslint-disable",
+                    "eslint-disable-next-line",
+                    "eslint-enable",
+                ],
+            },
+        ],
         "eslint-comments/require-description": 0,
 
         // Plugin eslint-plugin-import.
@@ -392,13 +457,16 @@ export default {
         "import/export": 2,
         "import/no-deprecated": 2,
         "import/no-empty-named-blocks": 2,
-        "import/no-extraneous-dependencies": [2, {
-            devDependencies: [
-                ".script/**/*.js",
-                "src/core/wrapper/**/*.js",
-                "test/**/*.js",
-            ],
-        }],
+        "import/no-extraneous-dependencies": [
+            2,
+            {
+                devDependencies: [
+                    ".script/**/*.js",
+                    "src/core/wrapper/**/*.js",
+                    "test/**/*.js",
+                ],
+            },
+        ],
         "import/no-mutable-exports": 2,
         "import/no-named-as-default": 0,
         "import/no-named-as-default-member": 0,
@@ -430,10 +498,13 @@ export default {
         "import/no-relative-parent-imports": 0,
         "import/no-restricted-paths": 0,
         "import/no-self-import": 2,
-        "import/no-unresolved": [2, {
-            caseSensitive: true,
-            caseSensitiveStrict: true,
-        }],
+        "import/no-unresolved": [
+            2,
+            {
+                caseSensitive: true,
+                caseSensitiveStrict: true,
+            },
+        ],
         "import/no-useless-path-segments": 2,
         "import/no-webpack-loader-syntax": 2,
 
@@ -452,21 +523,27 @@ export default {
         // les imports ne sont pas gérés.
         // https://github.com/import-js/eslint-plugin-import/issues/2673
         "import/newline-after-import": [2, { considerComments: false }],
-        "import/no-anonymous-default-export": [2, {
-            allowArray: true,
-            allowCallExpression: false,
-            allowObject: true,
-        }],
+        "import/no-anonymous-default-export": [
+            2,
+            {
+                allowArray: true,
+                allowCallExpression: false,
+                allowObject: true,
+            },
+        ],
         "import/no-default-export": 0,
         "import/no-duplicates": 2,
         "import/no-named-default": 2,
         "import/no-named-export": 0,
         "import/no-namespace": 0,
         "import/no-unassigned-import": 2,
-        "import/order": [2, {
-            "newlines-between": "never",
-            alphabetize: { order: "asc" },
-        }],
+        "import/order": [
+            2,
+            {
+                "newlines-between": "never",
+                alphabetize: { order: "asc" },
+            },
+        ],
         "import/prefer-default-export": 0,
 
         // Plugin eslint-plugin-jsdoc.
@@ -477,13 +554,17 @@ export default {
         // https://github.com/gajus/eslint-plugin-jsdoc/releases/tag/v37.0.0
         "jsdoc/check-examples": 0,
         "jsdoc/check-indentation": 0,
-        "jsdoc/check-line-alignment": [2, "always", {
-            tags: ["param", "property"],
-            customSpacings: {
-                postDelimiter: 1,
-                postTag: 1,
+        "jsdoc/check-line-alignment": [
+            2,
+            "always",
+            {
+                tags: ["param", "property"],
+                customSpacings: {
+                    postDelimiter: 1,
+                    postTag: 1,
+                },
             },
-        }],
+        ],
         "jsdoc/check-param-names": 2,
         "jsdoc/check-property-names": 2,
         "jsdoc/check-syntax": 2,
@@ -510,12 +591,15 @@ export default {
         "jsdoc/require-file-overview": 0,
         "jsdoc/require-hyphen-before-param-description": [2, "never"],
         "jsdoc/require-jsdoc": 2,
-        "jsdoc/require-param": [2, {
-            checkRestProperty: true,
-            checkGetters: true,
-            checkSetters: true,
-            checkDestructuredRoots: true,
-        }],
+        "jsdoc/require-param": [
+            2,
+            {
+                checkRestProperty: true,
+                checkGetters: true,
+                checkSetters: true,
+                checkDestructuredRoots: true,
+            },
+        ],
         "jsdoc/require-param-description": 2,
         "jsdoc/require-param-name": 2,
         "jsdoc/require-param-type": 2,
@@ -616,10 +700,13 @@ export default {
 
         // Stylistic Issues.
         "regexp/hexadecimal-escape": 0,
-        "regexp/letter-case": [2, {
-            unicodeEscape: "uppercase",
-            hexadecimalEscape: "uppercase",
-        }],
+        "regexp/letter-case": [
+            2,
+            {
+                unicodeEscape: "uppercase",
+                hexadecimalEscape: "uppercase",
+            },
+        ],
         "regexp/match-any": 2,
         "regexp/no-useless-escape": 2,
         "regexp/no-useless-non-capturing-group": 2,
@@ -789,7 +876,7 @@ export default {
                 exception: "throws",
                 yield: "yields",
                 linkcode: "link",
-                linkplain:" link",
+                linkplain: " link",
             },
         },
     },

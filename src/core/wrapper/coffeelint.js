@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/@coffeelint/cli|CoffeeLint}
+ * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
@@ -29,14 +31,15 @@ export const wrapper = async function (file, level, options) {
     }
 
     const source = await fs.readFile(file, "utf8");
-    return coffeelint.lint(source, options ?? {})
-                     .map((result) => ({
-        file,
-        linter:    "coffeelint",
-        rule:      result.rule,
-        severity:  "warn" === result.level ? SEVERITY.WARN
-                                           : SEVERITY.ERROR,
-        message:   result.message,
-        locations: [{ line: result.lineNumber }],
-    })).filter((n) => level >= n.severity);
+    return coffeelint
+        .lint(source, options ?? {})
+        .map((result) => ({
+            file,
+            linter: "coffeelint",
+            rule: result.rule,
+            severity: "warn" === result.level ? SEVERITY.WARN : SEVERITY.ERROR,
+            message: result.message,
+            locations: [{ line: result.lineNumber }],
+        }))
+        .filter((n) => level >= n.severity);
 };

@@ -1,7 +1,9 @@
 /* eslint-disable max-len */
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/npm-package-json-lint|npm-package-json-lint}
+ * @author Sébastien Règne
  */
 /* eslint-enable max-len */
 
@@ -30,18 +32,20 @@ export const wrapper = async function (file, level, options) {
 
     const source = await fs.readFile(file, "utf8");
     const npmPackageJsonLint = new NpmPackageJsonLint({
-        packageJsonObject:   JSON.parse(source),
+        packageJsonObject: JSON.parse(source),
         packageJsonFilePath: file,
-        config:              options,
+        config: options,
     });
     const results = npmPackageJsonLint.lint();
-    return results.results[0].issues.map((result) => ({
-        file,
-        linter:    "npm-package-json-lint",
-        rule:      result.lintId,
-        severity:  "warning" === result.severity ? SEVERITY.WARN
-                                                 : SEVERITY.ERROR,
-        message:   result.lintMessage,
-        locations: [],
-    })).filter((n) => level >= n.severity);
+    return results.results[0].issues
+        .map((result) => ({
+            file,
+            linter: "npm-package-json-lint",
+            rule: result.lintId,
+            severity:
+                "warning" === result.severity ? SEVERITY.WARN : SEVERITY.ERROR,
+            message: result.lintMessage,
+            locations: [],
+        }))
+        .filter((n) => level >= n.severity);
 };

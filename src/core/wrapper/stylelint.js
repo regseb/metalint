@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/stylelint|stylelint}
+ * @author Sébastien Règne
  */
 
 import stylelint from "stylelint";
@@ -28,21 +30,25 @@ export const wrapper = async function (file, level, options) {
     }
 
     const config = {
-        config:                options ?? { rules: {} },
-        files:                 file,
+        config: options ?? { rules: {} },
+        files: file,
         disableDefaultIgnores: true,
     };
     const results = await stylelint.lint(config);
-    return results.results[0].warnings.map((result) => ({
-        file,
-        linter:    "stylelint",
-        rule:      result.rule,
-        severity:  "warning" === result.severity ? SEVERITY.WARN
-                                                 : SEVERITY.ERROR,
-        message:   result.text.slice(0, result.text.lastIndexOf(" (")),
-        locations: [{
-            line:   result.line,
-            column: result.column,
-        }],
-    })).filter((n) => level >= n.severity);
+    return results.results[0].warnings
+        .map((result) => ({
+            file,
+            linter: "stylelint",
+            rule: result.rule,
+            severity:
+                "warning" === result.severity ? SEVERITY.WARN : SEVERITY.ERROR,
+            message: result.text.slice(0, result.text.lastIndexOf(" (")),
+            locations: [
+                {
+                    line: result.line,
+                    column: result.column,
+                },
+            ],
+        }))
+        .filter((n) => level >= n.severity);
 };

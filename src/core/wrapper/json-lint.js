@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/json-lint|JSON-Lint}
+ * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
@@ -31,16 +33,20 @@ export const wrapper = async function (file, level, options) {
     const source = await fs.readFile(file, "utf8");
     const result = jsonlint(source, options);
     if ("error" in result) {
-        return [{
-            file,
-            linter:    "json-lint",
-            severity:  SEVERITY.ERROR,
-            message:   result.error,
-            locations: [{
-                line:   result.line,
-                column: result.character,
-            }],
-        }];
+        return [
+            {
+                file,
+                linter: "json-lint",
+                severity: SEVERITY.ERROR,
+                message: result.error,
+                locations: [
+                    {
+                        line: result.line,
+                        column: result.character,
+                    },
+                ],
+            },
+        ];
     }
 
     return [];

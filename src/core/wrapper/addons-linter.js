@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/addons-linter|Add-ons Linter}
+ * @author Sébastien Règne
  */
 
 import path from "node:path";
@@ -29,38 +31,44 @@ export const wrapper = async function (file, level, options) {
     }
 
     const config = {
-        _:                [file],
-        logLevel:         "error",
-        stack:            false,
-        pretty:           false,
+        _: [file],
+        logLevel: "error",
+        stack: false,
+        pretty: false,
         warningsAsErrors: false,
-        metadata:         false,
-        output:           "none",
-        boring:           false,
-        selfHosted:       false,
-        shouldScanFile:   () => true,
+        metadata: false,
+        output: "none",
+        boring: false,
+        selfHosted: false,
+        shouldScanFile: () => true,
         ...options,
     };
     const results = await linter.createInstance({ config }).run();
-    return [...results.errors,
-            ...results.warnings,
-            ...results.notices].map((result) => {
-        let severity;
-        switch (result["_type"]) {
-            case "error":   severity = SEVERITY.ERROR; break;
-            case "warning": severity = SEVERITY.WARN;  break;
-            default:        severity = SEVERITY.INFO;
-        }
+    return [...results.errors, ...results.warnings, ...results.notices]
+        .map((result) => {
+            let severity;
+            switch (result["_type"]) {
+                case "error":
+                    severity = SEVERITY.ERROR;
+                    break;
+                case "warning":
+                    severity = SEVERITY.WARN;
+                    break;
+                default:
+                    severity = SEVERITY.INFO;
+            }
 
-        return {
-            file:      null === result.file || undefined === result.file
-                                                 ? file
-                                                 : path.join(file, result.file),
-            linter:    "addons-linter",
-            rule:      result.code,
-            severity,
-            message:   result.message,
-            locations: [],
-        };
-    }).filter((n) => level >= n.severity);
+            return {
+                file:
+                    null === result.file || undefined === result.file
+                        ? file
+                        : path.join(file, result.file),
+                linter: "addons-linter",
+                rule: result.code,
+                severity,
+                message: result.message,
+                locations: [],
+            };
+        })
+        .filter((n) => level >= n.severity);
 };

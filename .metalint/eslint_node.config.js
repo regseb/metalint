@@ -1,3 +1,9 @@
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
 export default {
     env: {
         node: true,
@@ -5,23 +11,29 @@ export default {
 
     rules: {
         // Suggestions.
-        "no-restricted-properties": [2, {
-            object: "assert",
-            property: "deepStrictEqual",
-            message: "Use assert.deepEqual instead.",
-        }, {
-            object: "assert",
-            property: "notDeepStrictEqual",
-            message: "Use assert.notDeepEqual instead.",
-        }, {
-            object: "assert",
-            property: "notStrictEqual",
-            message: "Use assert.notEqual instead.",
-        }, {
-            object: "assert",
-            property: "strictEqual",
-            message: "Use assert.equal instead.",
-        }],
+        "no-restricted-properties": [
+            2,
+            {
+                object: "assert",
+                property: "deepStrictEqual",
+                message: "Use assert.deepEqual instead.",
+            },
+            {
+                object: "assert",
+                property: "notDeepStrictEqual",
+                message: "Use assert.notDeepEqual instead.",
+            },
+            {
+                object: "assert",
+                property: "notStrictEqual",
+                message: "Use assert.notEqual instead.",
+            },
+            {
+                object: "assert",
+                property: "strictEqual",
+                message: "Use assert.equal instead.",
+            },
+        ],
 
         // Plugin eslint-plugin-import.
         // Module systems.
@@ -43,9 +55,12 @@ export default {
         "n/no-unpublished-import": 0,
         "n/no-unpublished-require": 2,
         "n/no-unsupported-features/es-builtins": 2,
-        "n/no-unsupported-features/es-syntax": [2, {
-            ignores: ["dynamicImport", "modules"],
-        }],
+        "n/no-unsupported-features/es-syntax": [
+            2,
+            {
+                ignores: ["dynamicImport", "modules"],
+            },
+        ],
         "n/no-unsupported-features/node-builtins": 2,
         "n/process-exit-as-throw": 2,
         "n/shebang": 2,

@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/doiuse|doiuse}
+ * @author Sébastien Règne
  */
 
 // Ne pas utiliser la version promise de fs car la fonction createReadStream()
@@ -32,20 +34,25 @@ export const wrapper = async function (file, level, options) {
 
     const results = await new Promise((resolve) => {
         const data = [];
-        createReadStream(file).pipe(doiuse(options ?? {}))
-                              .on("data", (d) => data.push(d))
-                              .on("end", () => resolve(data));
+        createReadStream(file)
+            .pipe(doiuse(options ?? {}))
+            .on("data", (d) => data.push(d))
+            .on("end", () => resolve(data));
     });
     return results.map((result) => ({
         file,
-        linter:    "doiuse",
-        rule:      result.feature,
-        severity:  SEVERITY.ERROR,
-        message:   result.message.slice(result.message.indexOf(": ") + 2,
-                                        result.message.lastIndexOf(" (")),
-        locations: [{
-            line:   result.usage.source.original.start.line,
-            column: result.usage.source.original.start.column,
-        }],
+        linter: "doiuse",
+        rule: result.feature,
+        severity: SEVERITY.ERROR,
+        message: result.message.slice(
+            result.message.indexOf(": ") + 2,
+            result.message.lastIndexOf(" ("),
+        ),
+        locations: [
+            {
+                line: result.usage.source.original.start.line,
+                column: result.usage.source.original.start.column,
+            },
+        ],
     }));
 };

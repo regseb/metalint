@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/flow-bin|Flow}
+ * @author Sébastien Règne
  */
 
 import { spawn } from "node:child_process";
@@ -59,17 +61,16 @@ export const wrapper = async function (file, level) {
 
     const source = await fs.readFile(file, "utf8");
     const raw = await exec(flow, ["check-contents", "--json", file], source);
-    return JSON.parse(raw).errors
-               .map(({ message }) => {
+    return JSON.parse(raw).errors.map(({ message }) => {
         const messages = [];
         const locations = [];
         for (const { descr, loc } of message) {
             messages.push(descr);
             if (undefined !== loc) {
                 locations.push({
-                    line:      loc.start.line,
-                    column:    loc.start.column,
-                    endLine:   loc.end.line,
+                    line: loc.start.line,
+                    column: loc.start.column,
+                    endLine: loc.end.line,
                     endColumn: loc.end.column,
                 });
             }
@@ -77,7 +78,7 @@ export const wrapper = async function (file, level) {
 
         return {
             file,
-            linter:  "flow-bin",
+            linter: "flow-bin",
             message: messages.join(" "),
             locations,
         };

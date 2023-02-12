@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/markuplint|markuplint}
+ * @author Sébastien Règne
  */
 
 import { MLEngine } from "markuplint";
@@ -32,23 +34,25 @@ export const wrapper = async function (file, level, options) {
     });
     const results = await engine.exec();
 
-    return results.violations.map((result) => {
-        let severity;
-        if ("info" === result.severity) {
-            severity = SEVERITY.INFO;
-        } else if ("warning" === result.severity) {
-            severity = SEVERITY.WARN;
-        } else {
-            severity = SEVERITY.ERROR;
-        }
+    return results.violations
+        .map((result) => {
+            let severity;
+            if ("info" === result.severity) {
+                severity = SEVERITY.INFO;
+            } else if ("warning" === result.severity) {
+                severity = SEVERITY.WARN;
+            } else {
+                severity = SEVERITY.ERROR;
+            }
 
-        return {
-            file,
-            linter:    "markuplint",
-            rule:      result.ruleId,
-            severity,
-            message:   result.message,
-            locations: [{ line: result.line, column: result.col }],
-        };
-    }).filter((n) => level >= n.severity);
+            return {
+                file,
+                linter: "markuplint",
+                rule: result.ruleId,
+                severity,
+                message: result.message,
+                locations: [{ line: result.line, column: result.col }],
+            };
+        })
+        .filter((n) => level >= n.severity);
 };

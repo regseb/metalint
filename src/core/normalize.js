@@ -1,5 +1,7 @@
 /**
  * @module
+ * @license MIT
+ * @author Sébastien Règne
  */
 
 import { createWriteStream } from "node:fs";
@@ -15,7 +17,6 @@ import SEVERITY from "./severity.js";
  */
 
 if (undefined === import.meta.resolve) {
-
     /**
      * Résous un chemin relatif à partir du module.
      *
@@ -26,8 +27,9 @@ if (undefined === import.meta.resolve) {
      * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
      */
     import.meta.resolve = (specifier) => {
-        return Promise.resolve(fileURLToPath(new URL(specifier,
-                                                     import.meta.url).href));
+        return Promise.resolve(
+            fileURLToPath(new URL(specifier, import.meta.url).href),
+        );
     };
 }
 
@@ -55,18 +57,24 @@ const WRAPPERS = await fs.readdir(await import.meta.resolve("wrapper/"));
 const merge = function (first, second) {
     let third;
 
-    if ("object" === typeof first && !Array.isArray(first) &&
-            "object" === typeof second && !Array.isArray(second)) {
+    if (
+        "object" === typeof first &&
+        !Array.isArray(first) &&
+        "object" === typeof second &&
+        !Array.isArray(second)
+    ) {
         third = {};
-        for (const key of new Set([...Object.keys(first),
-                                   ...Object.keys(second)])) {
+        for (const key of new Set([
+            ...Object.keys(first),
+            ...Object.keys(second),
+        ])) {
             // Si la propriété est dans les deux objets.
             if (key in first && key in second) {
                 third[key] = merge(first[key], second[key]);
-            // Si la propriété est seulement dans le premier objet.
+                // Si la propriété est seulement dans le premier objet.
             } else if (key in first) {
                 third[key] = first[key];
-            // Si la propriété est seulement dans le second objet.
+                // Si la propriété est seulement dans le second objet.
             } else {
                 third[key] = second[key];
             }
@@ -106,8 +114,7 @@ const read = async function (file) {
  * @throws {TypeError} Si le <code>"patterns"</code> n'a pas le bon type.
  */
 const patterns = function (rotten, auto, overwriting = {}) {
-    const interim = "patterns" in overwriting ? overwriting.patterns
-                                              : rotten;
+    const interim = "patterns" in overwriting ? overwriting.patterns : rotten;
 
     let standard;
     if (undefined === interim) {
@@ -117,8 +124,10 @@ const patterns = function (rotten, auto, overwriting = {}) {
     } else if (Array.isArray(interim)) {
         standard = interim;
     } else {
-        throw new TypeError("Property 'patterns' is incorrect type (string" +
-                            " and array are accepted).");
+        throw new TypeError(
+            "Property 'patterns' is incorrect type (string and array are" +
+                " accepted).",
+        );
     }
 
     return standard;
@@ -136,8 +145,7 @@ const patterns = function (rotten, auto, overwriting = {}) {
  * @throws {TypeError} Si le <code>"level"</code> n'a pas le bon type.
  */
 const level = function (rotten, auto, overwriting = {}) {
-    const interim = "level" in overwriting ? overwriting.level
-                                           : rotten;
+    const interim = "level" in overwriting ? overwriting.level : rotten;
 
     let standard;
     if (undefined === interim) {
@@ -149,13 +157,15 @@ const level = function (rotten, auto, overwriting = {}) {
                 standard = auto;
             }
         } else {
-            throw new Error("Value of property 'level' is unknown (possibles" +
-                            " values: 'off', 'fatal', 'error', 'warn' and" +
-                            " 'info').");
+            throw new Error(
+                "Value of property 'level' is unknown (possibles values:" +
+                    " 'off', 'fatal', 'error', 'warn' and 'info').",
+            );
         }
     } else {
-        throw new TypeError("Property 'level' is incorrect type (only string" +
-                            " is accepted).");
+        throw new TypeError(
+            "Property 'level' is incorrect type (only string is accepted).",
+        );
     }
 
     return standard;
@@ -174,8 +184,7 @@ const level = function (rotten, auto, overwriting = {}) {
  * @returns {Promise<Class>} La valeur normalisée.
  */
 const formatter = async function (rotten, auto, root, overwriting = {}) {
-    const interim = "formatter" in overwriting ? overwriting.formatter
-                                               : rotten;
+    const interim = "formatter" in overwriting ? overwriting.formatter : rotten;
 
     let standard;
     if (undefined === interim) {
@@ -184,8 +193,9 @@ const formatter = async function (rotten, auto, root, overwriting = {}) {
     } else if ("string" === typeof interim) {
         if (FORMATTERS.includes(interim.toLowerCase() + ".js")) {
             // eslint-disable-next-line no-unsanitized/method
-            standard = await import("./formatter/" + interim.toLowerCase() +
-                                    ".js");
+            standard = await import(
+                "./formatter/" + interim.toLowerCase() + ".js"
+            );
         } else if (interim.startsWith(".")) {
             // eslint-disable-next-line no-unsanitized/method
             standard = await import(path.join(root, interim));
@@ -194,8 +204,9 @@ const formatter = async function (rotten, auto, root, overwriting = {}) {
             standard = await import(interim);
         }
     } else {
-        throw new TypeError("Property 'formatter' is incorrect type (only" +
-                            " string is accepted).");
+        throw new TypeError(
+            "Property 'formatter' is incorrect type (only string is accepted).",
+        );
     }
     return standard.Formatter;
 };
@@ -214,8 +225,7 @@ const formatter = async function (rotten, auto, root, overwriting = {}) {
  * @returns {Promise<WritableStream>} La valeur normalisée.
  */
 const output = async function (rotten, auto, root, overwriting = {}) {
-    const interim = "output" in overwriting ? overwriting.output
-                                            : rotten;
+    const interim = "output" in overwriting ? overwriting.output : rotten;
 
     let standard;
     if (undefined === interim || null === interim) {
@@ -224,16 +234,19 @@ const output = async function (rotten, auto, root, overwriting = {}) {
         let fileHandle;
         try {
             fileHandle = interim.startsWith(".")
-                                  ? await fs.open(path.join(root, interim), "w")
-                                  : await fs.open(interim, "w");
+                ? await fs.open(path.join(root, interim), "w")
+                : await fs.open(interim, "w");
         } catch (err) {
-            throw new Error("Permission denied to open output file '" +
-                            interim + "'.", { cause: err });
+            throw new Error(
+                "Permission denied to open output file '" + interim + "'.",
+                { cause: err },
+            );
         }
         standard = createWriteStream("", { fd: fileHandle.fd });
     } else {
-        throw new TypeError("Property 'output' is incorrect type (only string" +
-                            " is accepted).");
+        throw new TypeError(
+            "Property 'output' is incorrect type (only string is accepted).",
+        );
     }
     return standard;
 };
@@ -258,8 +271,9 @@ const options = function (rotten, auto, overwriting = {}) {
     } else if ("object" === typeof rotten) {
         standard = rotten;
     } else {
-        throw new TypeError("Property 'options' is incorrect type (only" +
-                            " object is accepted).");
+        throw new TypeError(
+            "Property 'options' is incorrect type (only object is accepted).",
+        );
     }
     return standard;
 };
@@ -279,65 +293,92 @@ const options = function (rotten, auto, overwriting = {}) {
 const reporters = async function (rottens, auto, root, overwriting) {
     let standards;
     if (undefined === rottens) {
-        const Formatter = await formatter(undefined,
-                                          "console",
-                                          root,
-                                          overwriting);
-        standards = [new Formatter(
-            level(undefined, auto.level),
-            await output(undefined, process.stdout, root, overwriting),
-            options(undefined, {}, overwriting),
-        )];
+        const Formatter = await formatter(
+            undefined,
+            "console",
+            root,
+            overwriting,
+        );
+        standards = [
+            new Formatter(
+                level(undefined, auto.level),
+                await output(undefined, process.stdout, root, overwriting),
+                options(undefined, {}, overwriting),
+            ),
+        ];
     } else if (Array.isArray(rottens)) {
         // Si le formateur ou le fichier de sortie sont surchargés : garder
         // seulement le premier rapporteur.
         if ("formatter" in overwriting || "output" in overwriting) {
             if (0 === rottens.length) {
-                const Formatter = await formatter(undefined,
-                                                  "console",
-                                                  root,
-                                                  overwriting);
-                standards = [new Formatter(
-                    level(undefined, auto.level),
-                    await output(undefined, process.stdout, root, overwriting),
-                    options(undefined, {}, overwriting),
-                )];
+                const Formatter = await formatter(
+                    undefined,
+                    "console",
+                    root,
+                    overwriting,
+                );
+                standards = [
+                    new Formatter(
+                        level(undefined, auto.level),
+                        await output(
+                            undefined,
+                            process.stdout,
+                            root,
+                            overwriting,
+                        ),
+                        options(undefined, {}, overwriting),
+                    ),
+                ];
             } else {
-                const Formatter = await formatter(rottens[0].formatter,
-                                                  "console",
-                                                  root,
-                                                  overwriting);
-                standards = [new Formatter(
-                    level(rottens[0].level, auto.level),
-                    await output(rottens[0].output,
-                                 process.stdout,
-                                 root,
-                                 overwriting),
-                    options(rottens[0].options, {}, overwriting),
-                )];
+                const Formatter = await formatter(
+                    rottens[0].formatter,
+                    "console",
+                    root,
+                    overwriting,
+                );
+                standards = [
+                    new Formatter(
+                        level(rottens[0].level, auto.level),
+                        await output(
+                            rottens[0].output,
+                            process.stdout,
+                            root,
+                            overwriting,
+                        ),
+                        options(rottens[0].options, {}, overwriting),
+                    ),
+                ];
             }
         } else {
-            standards = await Promise.all(rottens.map(async (rotten) => {
-                const Formatter = await formatter(rotten.formatter,
-                                                  "console",
-                                                  root);
-                return new Formatter(
-                    level(rotten.level, auto.level),
-                    await output(rotten.output, process.stdout, root),
-                    options(rotten.options, {}),
-                );
-            }));
+            standards = await Promise.all(
+                rottens.map(async (rotten) => {
+                    const Formatter = await formatter(
+                        rotten.formatter,
+                        "console",
+                        root,
+                    );
+                    return new Formatter(
+                        level(rotten.level, auto.level),
+                        await output(rotten.output, process.stdout, root),
+                        options(rotten.options, {}),
+                    );
+                }),
+            );
         }
     } else if ("object" === typeof rottens) {
-        const Formatter = await formatter(rottens.formatter,
-                                          "console",
-                                          root,
-                                          overwriting);
-        standards = [new Formatter(
-            level(rottens.level, auto.level),
-            await output(rottens.output, process.stdout, root, overwriting),
-            options(rottens.options, {}, overwriting),
-        )];
+        const Formatter = await formatter(
+            rottens.formatter,
+            "console",
+            root,
+            overwriting,
+        );
+        standards = [
+            new Formatter(
+                level(rottens.level, auto.level),
+                await output(rottens.output, process.stdout, root, overwriting),
+                options(rottens.options, {}, overwriting),
+            ),
+        ];
     } else {
         throw new TypeError("'reporters' incorrect type.");
     }
@@ -357,9 +398,9 @@ const wrapper = function (rotten, root) {
     if (WRAPPERS.includes(rotten + ".js")) {
         standard = "./wrapper/" + rotten + ".js";
     } else if (rotten.startsWith(".")) {
-       standard = path.join(root, rotten);
+        standard = path.join(root, rotten);
     } else {
-       standard = rotten;
+        standard = rotten;
     }
     return standard;
 };
@@ -380,50 +421,55 @@ const linters = async function (rottens, root, dir) {
         throw new Error("'checkers[].linters' is undefined.");
     } else if (null === rottens) {
         throw new Error("'checkers[].linters' is null.");
-    // "linters": "foolint"
+        // "linters": "foolint"
     } else if ("string" === typeof rottens) {
-        standards[wrapper(rottens, root)] =
-                             await read(path.join(dir, rottens + ".config.js"));
-    // "linters": ["foolint", "barlint"]
+        standards[wrapper(rottens, root)] = await read(
+            path.join(dir, rottens + ".config.js"),
+        );
+        // "linters": ["foolint", "barlint"]
     } else if (Array.isArray(rottens)) {
         for (const linter of rottens) {
-            standards[wrapper(linter, root)] =
-                              await read(path.join(dir, linter + ".config.js"));
+            standards[wrapper(linter, root)] = await read(
+                path.join(dir, linter + ".config.js"),
+            );
         }
-    // "linters": { "foolint": ..., "barlint": ... }
+        // "linters": { "foolint": ..., "barlint": ... }
     } else if ("object" === typeof rottens) {
         for (const [linter, params] of Object.entries(rottens)) {
             // "linters": { "foolint": "qux.config.js" }
             if ("string" === typeof params) {
-                standards[wrapper(linter, root)] =
-                                             await read(path.join(dir, params));
-            // "linters": { "foolint": [..., ...] }
+                standards[wrapper(linter, root)] = await read(
+                    path.join(dir, params),
+                );
+                // "linters": { "foolint": [..., ...] }
             } else if (Array.isArray(params)) {
                 standards[wrapper(linter, root)] = {};
                 for (const param of params) {
                     // "linters": { "foolint": [undefined, ...] }
                     if (undefined === param) {
                         throw new Error("Linter option is undefined.");
-                    // "linters": { "foolint": [null, ...] }
+                        // "linters": { "foolint": [null, ...] }
                     } else if (null === param) {
                         throw new Error("Linter option is null.");
-                    // "linters": { "foolint": ["qux.config.js", ...] }
+                        // "linters": { "foolint": ["qux.config.js", ...] }
                     } else if ("string" === typeof param) {
-                        standards[wrapper(linter, root)] =
-                                       merge(standards[wrapper(linter, root)],
-                                             await read(path.join(dir, param)));
-                    // "linters": { "foolint": [{ "qux": ..., ... }, ...]
+                        standards[wrapper(linter, root)] = merge(
+                            standards[wrapper(linter, root)],
+                            await read(path.join(dir, param)),
+                        );
+                        // "linters": { "foolint": [{ "qux": ..., ... }, ...]
                     } else if ("object" === typeof param) {
-                        standards[wrapper(linter, root)] =
-                                         merge(standards[wrapper(linter, root)],
-                                               param);
+                        standards[wrapper(linter, root)] = merge(
+                            standards[wrapper(linter, root)],
+                            param,
+                        );
                     } else {
                         throw new TypeError("Linter option incorrect type.");
                     }
                 }
-            // "linters": { "foolint": { "qux": ..., "corge": ... } }
-            // "linters": { "foolint": null }
-            // "linters": { "foolint": undefined }
+                // "linters": { "foolint": { "qux": ..., "corge": ... } }
+                // "linters": { "foolint": null }
+                // "linters": { "foolint": undefined }
             } else if ("object" === typeof params || undefined === params) {
                 standards[wrapper(linter, root)] = params;
             } else {
@@ -453,11 +499,13 @@ const checkers = async function (rottens, auto, root, dir) {
         if (0 === rottens.length) {
             throw new Error("'checkers' is empty.");
         } else {
-            standards = await Promise.all(rottens.map(async (rotten) => ({
-                patterns: patterns(rotten.patterns, ["**"]),
-                level:    level(rotten.level, auto.level),
-                linters:  await linters(rotten.linters, root, dir),
-            })));
+            standards = await Promise.all(
+                rottens.map(async (rotten) => ({
+                    patterns: patterns(rotten.patterns, ["**"]),
+                    level: level(rotten.level, auto.level),
+                    linters: await linters(rotten.linters, root, dir),
+                })),
+            );
         }
     } else {
         throw new TypeError("'checkers' is not an array.");
@@ -482,12 +530,14 @@ const checkers = async function (rottens, auto, root, dir) {
 export default async function normalize(rotten, root, dir, overwriting) {
     const standard = {
         patterns: patterns(rotten.patterns, ["**"], overwriting),
-        level:    level(rotten.level, SEVERITY.INFO, overwriting),
+        level: level(rotten.level, SEVERITY.INFO, overwriting),
     };
-    standard.reporters = await reporters(rotten.reporters,
-                                         standard,
-                                         root,
-                                         overwriting);
+    standard.reporters = await reporters(
+        rotten.reporters,
+        standard,
+        root,
+        overwriting,
+    );
     standard.checkers = await checkers(rotten.checkers, standard, root, dir);
     return standard;
 }

@@ -1,5 +1,7 @@
 /**
  * @module
+ * @license MIT
+ * @author Sébastien Règne
  */
 
 import SEVERITY from "../severity.js";
@@ -13,7 +15,6 @@ import SEVERITY from "../severity.js";
  * Le formateur qui écrit les résultats pour les Github Actions.
  */
 export const Formatter = class {
-
     /**
      * Le niveau de sévérité minimum des notifications affichées.
      *
@@ -50,15 +51,18 @@ export const Formatter = class {
     notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
         // critères des checkers) ou si aucune notification a été remontée.
-        if (undefined === notices ||
-                !notices.some((n) => this.#level >= n.severity)) {
+        if (
+            undefined === notices ||
+            !notices.some((n) => this.#level >= n.severity)
+        ) {
             return;
         }
 
         for (const notice of notices.filter((n) => this.#level >= n.severity)) {
             this.#writer.write("::");
             switch (notice.severity) {
-                case SEVERITY.FATAL: case SEVERITY.ERROR:
+                case SEVERITY.FATAL:
+                case SEVERITY.ERROR:
                     this.#writer.write("error");
                     break;
                 case SEVERITY.WARN:
@@ -77,12 +81,14 @@ export const Formatter = class {
                     this.#writer.write(`,col=${location.column.toString()}`);
                 }
                 if ("endLine" in location) {
-                    this.#writer.write(",endLine=" +
-                                       location.endLine.toString());
+                    this.#writer.write(
+                        `,endLine=${location.endLine.toString()}`,
+                    );
                 }
                 if ("endColumn" in location) {
-                    this.#writer.write(",endColumn=" +
-                                       location.endColumn.toString());
+                    this.#writer.write(
+                        `,endColumn=${location.endColumn.toString()}`,
+                    );
                 }
             }
 

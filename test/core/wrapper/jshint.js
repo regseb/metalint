@@ -1,3 +1,9 @@
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
 import assert from "node:assert/strict";
 import mock from "mock-fs";
 import SEVERITY from "../../../src/core/severity.js";
@@ -6,8 +12,8 @@ import { wrapper } from "../../../src/core/wrapper/jshint.js";
 describe("src/core/wrapper/jshint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
-            const file    = "";
-            const level   = SEVERITY.FATAL;
+            const file = "";
+            const level = SEVERITY.FATAL;
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
@@ -17,18 +23,18 @@ describe("src/core/wrapper/jshint.js", function () {
         it("should use default options", async function () {
             mock({ "foo.js": `eval("bar");` });
 
-            const file    = "foo.js";
-            const level   = SEVERITY.WARN;
+            const file = "foo.js";
+            const level = SEVERITY.WARN;
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepEqual(notices, [
                 {
                     file,
-                    linter:    "jshint",
-                    rule:      "W061",
-                    severity:  SEVERITY.WARN,
-                    message:   "eval can be harmful.",
+                    linter: "jshint",
+                    rule: "W061",
+                    severity: SEVERITY.WARN,
+                    message: "eval can be harmful.",
                     locations: [{ line: 1, column: 1 }],
                 },
             ]);
@@ -40,32 +46,34 @@ describe("src/core/wrapper/jshint.js", function () {
                                console.log("bar");`,
             });
 
-            const file    = "foo.js";
-            const level   = SEVERITY.WARN;
+            const file = "foo.js";
+            const level = SEVERITY.WARN;
             const options = { eqeqeq: true };
 
             const notices = await wrapper(file, level, options);
             assert.deepEqual(notices, [
                 {
                     file,
-                    linter:    "jshint",
-                    rule:      "W116",
-                    severity:  SEVERITY.WARN,
-                    message:   "Expected '===' and instead saw '=='.",
+                    linter: "jshint",
+                    rule: "W116",
+                    severity: SEVERITY.WARN,
+                    message: "Expected '===' and instead saw '=='.",
                     locations: [{ line: 1, column: 9 }],
-                }, {
+                },
+                {
                     file,
-                    linter:    "jshint",
-                    rule:      "E019",
-                    severity:  SEVERITY.ERROR,
-                    message:   "Unmatched '{'.",
+                    linter: "jshint",
+                    rule: "E019",
+                    severity: SEVERITY.ERROR,
+                    message: "Unmatched '{'.",
                     locations: [{ line: 1, column: 15 }],
-                }, {
+                },
+                {
                     file,
-                    linter:    "jshint",
-                    rule:      "E041",
-                    severity:  SEVERITY.ERROR,
-                    message:   "Unrecoverable syntax error. (100% scanned).",
+                    linter: "jshint",
+                    rule: "E041",
+                    severity: SEVERITY.ERROR,
+                    message: "Unrecoverable syntax error. (100% scanned).",
                     locations: [{ line: 2, column: 50 }],
                 },
             ]);
@@ -74,8 +82,8 @@ describe("src/core/wrapper/jshint.js", function () {
         it("should ignore warning with ERROR level", async function () {
             mock({ "foo.js": "const bar = [];" });
 
-            const file    = "foo.js";
-            const level   = SEVERITY.ERROR;
+            const file = "foo.js";
+            const level = SEVERITY.ERROR;
             const options = { esnext: true };
 
             const notices = await wrapper(file, level, options);

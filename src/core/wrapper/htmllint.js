@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/htmllint|htmllint}
+ * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
@@ -32,12 +34,14 @@ export const wrapper = async function (file, level, options) {
     const results = await htmllint(source, options);
     return results.map((result) => ({
         file,
-        linter:    "htmllint",
-        rule:      result.rule,
-        message:   result.code,
-        locations: [{
-            line:   result.line,
-            column: result.column,
-        }],
+        linter: "htmllint",
+        rule: result.rule,
+        message: result.code,
+        locations: [
+            {
+                line: result.line,
+                column: result.column,
+            },
+        ],
     }));
 };

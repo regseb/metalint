@@ -1,3 +1,9 @@
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
 import assert from "node:assert/strict";
 import mock from "mock-fs";
 import SEVERITY from "../../../src/core/severity.js";
@@ -6,8 +12,8 @@ import { wrapper } from "../../../src/core/wrapper/doiuse.js";
 describe("src/core/wrapper/doiuse.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
-            const file    = "";
-            const level   = SEVERITY.FATAL;
+            const file = "";
+            const level = SEVERITY.FATAL;
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
@@ -20,19 +26,20 @@ describe("src/core/wrapper/doiuse.js", function () {
             // [ [ 'root' ] ]".
             mock({ "foo.css": "button { border-radius: 10px; }\n" });
 
-            const file    = "foo.css";
-            const level   = SEVERITY.INFO;
+            const file = "foo.css";
+            const level = SEVERITY.INFO;
             const options = undefined;
 
             const notices = await wrapper(file, level, options);
             assert.deepEqual(notices, [
                 {
                     file,
-                    linter:    "doiuse",
-                    rule:      "border-radius",
-                    severity:  SEVERITY.ERROR,
-                    message:   "CSS3 Border-radius (rounded corners) not" +
-                               " supported by: Opera Mini (all)",
+                    linter: "doiuse",
+                    rule: "border-radius",
+                    severity: SEVERITY.ERROR,
+                    message:
+                        "CSS3 Border-radius (rounded corners) not supported" +
+                        " by: Opera Mini (all)",
                     locations: [{ line: 1, column: 1 }],
                 },
             ]);
@@ -44,19 +51,20 @@ describe("src/core/wrapper/doiuse.js", function () {
             // [ [ 'root' ] ]".
             mock({ "foo.css": "div { background-size: cover; }\n" });
 
-            const file    = "foo.css";
-            const level   = SEVERITY.INFO;
+            const file = "foo.css";
+            const level = SEVERITY.INFO;
             const options = { browser: "ie >= 9, > 1%, last 2 versions" };
 
             const notices = await wrapper(file, level, options);
             assert.deepEqual(notices, [
                 {
                     file,
-                    linter:    "doiuse",
-                    rule:      "background-img-opts",
-                    severity:  SEVERITY.ERROR,
-                    message:   "CSS3 Background-image options only partially" +
-                               " supported by: Opera Mini (all)",
+                    linter: "doiuse",
+                    rule: "background-img-opts",
+                    severity: SEVERITY.ERROR,
+                    message:
+                        "CSS3 Background-image options only partially" +
+                        " supported by: Opera Mini (all)",
                     locations: [{ line: 1, column: 1 }],
                 },
             ]);

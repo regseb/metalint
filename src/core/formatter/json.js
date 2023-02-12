@@ -1,5 +1,7 @@
 /**
  * @module
+ * @license MIT
+ * @author Sébastien Règne
  */
 
 /**
@@ -11,7 +13,6 @@
  * Le formateur qui écrit les résultats brut (au format JSON).
  */
 export const Formatter = class {
-
     /**
      * Le niveau de sévérité minimum des notifications affichées.
      *
@@ -76,13 +77,15 @@ export const Formatter = class {
      */
     finalize() {
         // Afficher l'objet JSON.
-        this.#writer.write(JSON.stringify(
-            this.#results,
-            // Remplacer les undefined par null.
-            // eslint-disable-next-line unicorn/no-null
-            (_, v) => v ?? null,
-            this.#indent,
-        ));
+        this.#writer.write(
+            JSON.stringify(
+                this.#results,
+                // Remplacer les undefined par null.
+                // eslint-disable-next-line unicorn/no-null
+                (_, v) => v ?? null,
+                this.#indent,
+            ),
+        );
         return new Promise((resolve) => {
             this.#writer.write("\n", "utf8", resolve);
         });

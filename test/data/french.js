@@ -1,5 +1,7 @@
 /**
  * @module
+ * @license MIT
+ * @author Sébastien Règne
  */
 
 /**
@@ -11,7 +13,6 @@
  * Le formateur qui écrit les résultats avec des phrases en français.
  */
 export const Formatter = class {
-
     #level;
 
     #writer;
@@ -47,15 +48,17 @@ export const Formatter = class {
             if (undefined === notice.rule) {
                 this.#writer.write("un problème ");
             } else {
-                this.#writer.write(`que la règle ${notice.rule} n'est pas` +
-                                   " respectée ");
+                this.#writer.write(
+                    `que la règle ${notice.rule} n'est pas respectée `,
+                );
             }
             if (0 === notice.locations.length) {
                 this.#writer.write("dans le fichier ");
             } else {
-                this.#writer.write("à la ligne " +
-                                   `${notice.locations[0].line.toString()} du` +
-                                   " fichier ");
+                this.#writer.write(
+                    `à la ligne ${notice.locations[0].line.toString()} du` +
+                        " fichier ",
+                );
             }
             this.#writer.write(`${file} : ${notice.message}\n`);
         }

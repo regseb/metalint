@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/jshint|JSHint}
+ * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
@@ -31,16 +33,21 @@ export const wrapper = async function (file, level, options) {
     const source = await fs.readFile(file, "utf8");
     // eslint-disable-next-line new-cap
     JSHINT(source, options);
-    return JSHINT.errors.map((result) => ({
-        file,
-        linter:    "jshint",
-        rule:      result.code,
-        severity:  result.code.startsWith("W") ? SEVERITY.WARN
-                                               : SEVERITY.ERROR,
-        message:   result.reason,
-        locations: [{
-            line:   result.line,
-            column: result.character,
-        }],
-    })).filter((n) => level >= n.severity);
+    return JSHINT.errors
+        .map((result) => ({
+            file,
+            linter: "jshint",
+            rule: result.code,
+            severity: result.code.startsWith("W")
+                ? SEVERITY.WARN
+                : SEVERITY.ERROR,
+            message: result.reason,
+            locations: [
+                {
+                    line: result.line,
+                    column: result.character,
+                },
+            ],
+        }))
+        .filter((n) => level >= n.severity);
 };

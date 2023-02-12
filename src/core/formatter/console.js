@@ -1,5 +1,7 @@
 /**
  * @module
+ * @license MIT
+ * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
@@ -23,12 +25,23 @@ const print = function (writer, message, style) {
     let line;
     if (process.stdout === writer) {
         switch (style) {
-            case "BOLD":    line = chalk.bold(message);    break;
-            case "MAGENTA": line = chalk.magenta(message); break;
-            case "RED":     line = chalk.red(message);     break;
-            case "YELLOW":  line = chalk.yellow(message);  break;
-            case "BLUE":    line = chalk.blue(message);    break;
-            default:        line = message;
+            case "BOLD":
+                line = chalk.bold(message);
+                break;
+            case "MAGENTA":
+                line = chalk.magenta(message);
+                break;
+            case "RED":
+                line = chalk.red(message);
+                break;
+            case "YELLOW":
+                line = chalk.yellow(message);
+                break;
+            case "BLUE":
+                line = chalk.blue(message);
+                break;
+            default:
+                line = message;
         }
     } else {
         line = message;
@@ -79,7 +92,7 @@ const printCodeSource = function (locations, content, writer) {
         }
         if (characters.length === i) {
             characters[i] = {
-                line:    location.line,
+                line: location.line,
                 columns: [],
             };
             if ("column" in location) {
@@ -97,8 +110,10 @@ const printCodeSource = function (locations, content, writer) {
         if (0 !== columns.length) {
             let dashs = "-".repeat(6 + columns.at(-1));
             for (const column of columns) {
-                dashs = dashs.slice(0, 6 + column) + "^" +
-                        dashs.slice(6 + column + 1);
+                dashs =
+                    dashs.slice(0, 6 + column) +
+                    "^" +
+                    dashs.slice(6 + column + 1);
             }
             print(writer, dashs + "\n");
         }
@@ -111,7 +126,6 @@ const printCodeSource = function (locations, content, writer) {
  * Le formateur qui écrit les résultats dans un format adapté pour la console.
  */
 export const Formatter = class {
-
     /**
      * Le niveau de sévérité minimum des notifications affichées.
      *
@@ -148,10 +162,10 @@ export const Formatter = class {
      *                                                  fichiers non-analysés.
      */
     constructor(level, writer, options) {
-        this.#level          = level;
-        this.#writer         = writer;
+        this.#level = level;
+        this.#writer = writer;
         this.#showZeroNotice = options.showZeroNotice ?? false;
-        this.#showNoChecked  = options.showNoChecked ?? false;
+        this.#showNoChecked = options.showNoChecked ?? false;
     }
 
     /**
@@ -241,13 +255,17 @@ export const Formatter = class {
         for (const notice of notices.filter((n) => this.#level >= n.severity)) {
             switch (notice.severity) {
                 case SEVERITY.FATAL:
-                    print(this.#writer, "FATAL", "MAGENTA"); break;
+                    print(this.#writer, "FATAL", "MAGENTA");
+                    break;
                 case SEVERITY.ERROR:
-                    print(this.#writer, "ERROR", "RED"); break;
+                    print(this.#writer, "ERROR", "RED");
+                    break;
                 case SEVERITY.WARN:
-                    print(this.#writer, "WARN ", "YELLOW"); break;
+                    print(this.#writer, "WARN ", "YELLOW");
+                    break;
                 case SEVERITY.INFO:
-                    print(this.#writer, "INFO ", "BLUE"); break;
+                    print(this.#writer, "INFO ", "BLUE");
+                    break;
                 default:
                     print(this.#writer, "      ");
             }

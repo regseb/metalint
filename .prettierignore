@@ -1,0 +1,7 @@
+/.git/
+/CHANGELOG.md
+/coverage/
+/jsdocs/
+/node_modules/
+/types/
+*.swp

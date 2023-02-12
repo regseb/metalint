@@ -1,3 +1,9 @@
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
 import assert from "node:assert/strict";
 import { Formatter } from "../../../src/core/formatter/json.js";
 import SEVERITY from "../../../src/core/severity.js";
@@ -35,41 +41,45 @@ describe("src/core/formatter/json.js", function () {
             });
             await reporter.notify("foo.js", [
                 {
-                    file:      "foo.js",
-                    linter:    "eslint",
-                    rule:      "complexity",
-                    severity:  SEVERITY.WARN,
-                    message:   "Method 'eval' has a complexity of 666.",
+                    file: "foo.js",
+                    linter: "eslint",
+                    rule: "complexity",
+                    severity: SEVERITY.WARN,
+                    message: "Method 'eval' has a complexity of 666.",
                     locations: [{ line: 1, column: 4 }],
-                }, {
-                    file:      "foo.js",
-                    linter:    "eslint",
-                    rule:      "no-unused-vars",
-                    severity:  SEVERITY.ERROR,
-                    message:   "'superflous' is defined but never used",
+                },
+                {
+                    file: "foo.js",
+                    linter: "eslint",
+                    rule: "no-unused-vars",
+                    severity: SEVERITY.ERROR,
+                    message: "'superflous' is defined but never used",
                     locations: [{ line: 2, column: 7 }],
                 },
             ]);
             await reporter.finalize();
 
-            assert.equal(writer.toString(),
+            assert.equal(
+                writer.toString(),
                 "{\n" +
-                `  "foo.js": [\n` +
-                "    {\n" +
-                `      "file": "foo.js",\n` +
-                `      "linter": "eslint",\n` +
-                `      "rule": "no-unused-vars",\n` +
-                `      "severity": 2,\n` +
-                `      "message": "'superflous' is defined but never used",\n` +
-                `      "locations": [\n` +
-                "        {\n" +
-                `          "line": 2,\n` +
-                `          "column": 7\n` +
-                "        }\n" +
-                "      ]\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}\n");
+                    `  "foo.js": [\n` +
+                    "    {\n" +
+                    `      "file": "foo.js",\n` +
+                    `      "linter": "eslint",\n` +
+                    `      "rule": "no-unused-vars",\n` +
+                    `      "severity": 2,\n` +
+                    `      "message": "'superflous' is defined but never` +
+                    ` used",\n` +
+                    `      "locations": [\n` +
+                    "        {\n" +
+                    `          "line": 2,\n` +
+                    `          "column": 7\n` +
+                    "        }\n" +
+                    "      ]\n" +
+                    "    }\n" +
+                    "  ]\n" +
+                    "}\n",
+            );
         });
 
         it("should ignore error with FATAL level", async function () {
@@ -78,11 +88,11 @@ describe("src/core/formatter/json.js", function () {
             const reporter = new Formatter(SEVERITY.FATAL, writer, {});
             await reporter.notify("foo.md", [
                 {
-                    file:      "foo.md",
-                    linter:    "markdownlint",
-                    rule:      "MD002",
-                    severity:  SEVERITY.ERROR,
-                    message:   "First header should be a h1 header.",
+                    file: "foo.md",
+                    linter: "markdownlint",
+                    rule: "MD002",
+                    severity: SEVERITY.ERROR,
+                    message: "First header should be a h1 header.",
                     locations: [{ line: 1 }],
                 },
             ]);

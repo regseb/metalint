@@ -1,6 +1,8 @@
 /**
  * @module
+ * @license MIT
  * @see {@link https://www.npmjs.com/package/purgecss|PurgeCSS}
+ * @author Sébastien Règne
  */
 
 import { PurgeCSS } from "purgecss";
@@ -33,25 +35,29 @@ export const wrapper = async function (file, level, options, root) {
     const results = await new PurgeCSS().purge({
         ...options,
         // Utiliser le format des patrons de Metalint.
-        content:  await glob.walk([], options.content, root),
-        css:      [file],
+        content: await glob.walk([], options.content, root),
+        css: [file],
         rejected: true,
     });
     if (0 === results.length) {
-        return [{
-            file,
-            linter:    "purgecss",
-            severity:  SEVERITY.FATAL,
-            message:   "No content provided.",
-            locations: [],
-        }];
+        return [
+            {
+                file,
+                linter: "purgecss",
+                severity: SEVERITY.FATAL,
+                message: "No content provided.",
+                locations: [],
+            },
+        ];
     }
 
-    return results[0].rejected.map((rejected) => ({
-        file,
-        linter:    "purgecss",
-        severity:  SEVERITY.ERROR,
-        message:   `'${rejected}' is never used.`,
-        locations: [],
-    })).filter((n) => level >= n.severity);
+    return results[0].rejected
+        .map((rejected) => ({
+            file,
+            linter: "purgecss",
+            severity: SEVERITY.ERROR,
+            message: `'${rejected}' is never used.`,
+            locations: [],
+        }))
+        .filter((n) => level >= n.severity);
 };
