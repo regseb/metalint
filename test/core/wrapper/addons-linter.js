@@ -13,10 +13,10 @@ describe("src/core/wrapper/addons-linter.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -25,10 +25,10 @@ describe("src/core/wrapper/addons-linter.js", function () {
             // bibliothèque utilisée par addons-linter pour lire les zip).
             // https://github.com/tschaub/mock-fs/issues/352
             const file = "test/data/addon.xpi";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -49,10 +49,10 @@ describe("src/core/wrapper/addons-linter.js", function () {
             });
 
             const file = "foo/";
-            const level = SEVERITY.WARN;
             const options = undefined;
+            const level = SEVERITY.WARN;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file: file + "manifest.json",
@@ -88,10 +88,10 @@ describe("src/core/wrapper/addons-linter.js", function () {
             });
 
             const file = "foo/";
-            const level = SEVERITY.WARN;
             const options = { maxManifestVersion: 3 };
+            const level = SEVERITY.WARN;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file: file + "manifest.json",
@@ -110,10 +110,10 @@ describe("src/core/wrapper/addons-linter.js", function () {
             mock({ foo: { "bar.txt": "" } });
 
             const file = "foo";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,

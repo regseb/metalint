@@ -13,10 +13,10 @@ describe("src/core/wrapper/lesshint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with OFF level", async function () {
             const file = "";
-            const level = SEVERITY.OFF;
             const options = undefined;
+            const level = SEVERITY.OFF;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -29,10 +29,10 @@ describe("src/core/wrapper/lesshint.js", function () {
             });
 
             const file = "foo.less";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -67,10 +67,10 @@ describe("src/core/wrapper/lesshint.js", function () {
             });
 
             const file = "foo.less";
-            const level = SEVERITY.INFO;
             const options = { urlQuotes: { severity: "error" } };
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -100,10 +100,10 @@ describe("src/core/wrapper/lesshint.js", function () {
             });
 
             const file = "foo.less";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,

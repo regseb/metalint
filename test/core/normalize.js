@@ -294,6 +294,7 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [
                     new Console(SEVERITY.INFO, process.stdout, {
@@ -303,6 +304,7 @@ describe("src/core/normalize.js", function () {
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/markdownlint.js": undefined },
                     },
@@ -338,11 +340,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/markdownlint.js": undefined },
                     },
@@ -361,11 +365,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/markdownlint.js": undefined },
                     },
@@ -384,11 +390,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/markdownlint.js": undefined },
                     },
@@ -407,11 +415,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/markdownlint.js": undefined },
                     },
@@ -429,11 +439,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/markdownlint.js": undefined },
                     },
@@ -452,11 +464,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/markdownlint.js": undefined },
                     },
@@ -475,11 +489,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/markdownlint.js": undefined },
                     },
@@ -498,11 +514,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [new Unix(SEVERITY.INFO, process.stdout)],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/markdownlint.js": undefined },
                     },
@@ -520,11 +538,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [new Console(SEVERITY.INFO, process.stdout, {})],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/eslint.js": {} },
                     },
@@ -543,11 +563,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**"],
+                fix: undefined,
                 level: SEVERITY.INFO,
                 reporters: [new French(SEVERITY.INFO, process.stdout)],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.INFO,
                         linters: { "./wrapper/eslint.js": {} },
                     },
@@ -619,11 +641,13 @@ describe("src/core/normalize.js", function () {
             const standard = await normalize(rotten, root, dir, overwriting);
             assert.deepEqual(standard, {
                 patterns: ["**.js"],
+                fix: undefined,
                 level: SEVERITY.ERROR,
                 reporters: [new Unix(SEVERITY.ERROR, process.stdout, {})],
                 checkers: [
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.ERROR,
                         linters: {
                             "./wrapper/markdownlint.js": {
@@ -633,6 +657,7 @@ describe("src/core/normalize.js", function () {
                     },
                     {
                         patterns: ["!**.min.js", "**"],
+                        fix: false,
                         level: SEVERITY.ERROR,
                         linters: {
                             "./wrapper/eslint.js": {
@@ -642,6 +667,7 @@ describe("src/core/normalize.js", function () {
                     },
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.ERROR,
                         linters: {
                             "./wrapper/htmlhint.js": {
@@ -652,6 +678,7 @@ describe("src/core/normalize.js", function () {
                     },
                     {
                         patterns: ["**"],
+                        fix: false,
                         level: SEVERITY.ERROR,
                         linters: {
                             "./wrapper/csslint.js": { "empty-rules": true },

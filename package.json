@@ -27,8 +27,8 @@
   "repository": "regseb/metalint",
   "type": "module",
   "scripts": {
-    "format": "prettier --config .prettier.config.cjs --write --cache .",
     "lint": "src/bin/index.js",
+    "lint:fix": "src/bin/index.js --fix",
     "lint:types": "tsc --project .tsconfig_lint.json",
     "test": "c8 mocha --config test/mocharc.json",
     "coverage:html": "c8 report --reporter html",

@@ -134,6 +134,35 @@ const patterns = function (rotten, auto, overwriting = {}) {
 };
 
 /**
+ * Normalise la propriété <code>"fix"</code>.
+ *
+ * @param {*}                 rotten        La valeur de la propriété
+ *                                          <code>"fix"</code>.
+ * @param {boolean|undefined} auto          La valeur par défaut.
+ * @param {Object}            [overwriting] Les valeurs passées dans la ligne de
+ *                                          commande pour surcharger la
+ *                                          configuration.
+ * @returns {boolean|undefined} La valeur normalisée.
+ * @throws {TypeError} Si le <code>"fix"</code> n'a pas le bon type.
+ */
+const fix = function (rotten, auto, overwriting = {}) {
+    const interim = "fix" in overwriting ? overwriting.fix : rotten;
+
+    let standard;
+    if (undefined === interim) {
+        standard = auto;
+    } else if ("boolean" === typeof interim) {
+        standard = interim && (auto ?? true);
+    } else {
+        throw new TypeError(
+            "Property 'fix' is incorrect type (only boolean is accepted).",
+        );
+    }
+
+    return standard;
+};
+
+/**
  * Normalise la propriété <code>"level"</code>.
  *
  * @param {*}      rotten        La valeur de la propriété <code>"level"</code>.
@@ -502,6 +531,7 @@ const checkers = async function (rottens, auto, root, dir) {
             standards = await Promise.all(
                 rottens.map(async (rotten) => ({
                     patterns: patterns(rotten.patterns, ["**"]),
+                    fix: fix(rotten.fix, auto.fix) ?? false,
                     level: level(rotten.level, auto.level),
                     linters: await linters(rotten.linters, root, dir),
                 })),
@@ -530,6 +560,7 @@ const checkers = async function (rottens, auto, root, dir) {
 export default async function normalize(rotten, root, dir, overwriting) {
     const standard = {
         patterns: patterns(rotten.patterns, ["**"], overwriting),
+        fix: fix(rotten.fix, undefined, overwriting),
         level: level(rotten.level, SEVERITY.INFO, overwriting),
     };
     standard.reporters = await reporters(

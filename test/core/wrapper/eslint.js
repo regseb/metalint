@@ -13,10 +13,11 @@ describe("src/core/wrapper/eslint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with OFF level", async function () {
             const file = "";
-            const level = SEVERITY.OFF;
             const options = undefined;
+            const level = SEVERITY.OFF;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, []);
         });
 
@@ -24,10 +25,11 @@ describe("src/core/wrapper/eslint.js", function () {
             mock({ "foo.js": `console.log("bar");` });
 
             const file = "foo.js";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, []);
         });
 
@@ -46,15 +48,16 @@ describe("src/core/wrapper/eslint.js", function () {
             });
 
             const file = "foo.js";
-            const level = SEVERITY.WARN;
             const options = {
                 rules: {
                     indent: [1, 4, { SwitchCase: 1 }],
                     "no-duplicate-case": 2,
                 },
             };
+            const level = SEVERITY.WARN;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -98,10 +101,11 @@ describe("src/core/wrapper/eslint.js", function () {
             });
 
             const file = "foo.js";
-            const level = SEVERITY.ERROR;
             const options = { rules: { "no-bitwise": 1 } };
+            const level = SEVERITY.ERROR;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, []);
         });
 
@@ -109,10 +113,11 @@ describe("src/core/wrapper/eslint.js", function () {
             mock({ "foo.js": "var bar = ;" });
 
             const file = "foo.js";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -142,7 +147,6 @@ describe("src/core/wrapper/eslint.js", function () {
             });
 
             const file = "foo.js";
-            const level = SEVERITY.INFO;
             const options = {
                 plugins: ["jsdoc", "mocha"],
                 rules: {
@@ -151,8 +155,10 @@ describe("src/core/wrapper/eslint.js", function () {
                     "mocha/prefer-arrow-callback": 2,
                 },
             };
+            const level = SEVERITY.INFO;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, [
                 {
                     file,

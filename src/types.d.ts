@@ -16,6 +16,7 @@ export type Notice = {
 
 export type Checker = {
     patterns: string[];
+    fix: boolean;
     level: number;
     linters: Object;
 };
@@ -27,6 +28,7 @@ export type Formatter = {
 
 export type Config = {
     patterns: string[];
+    fix: boolean;
     level: number;
     reporters: Formatter[];
     checkers: Checker[];

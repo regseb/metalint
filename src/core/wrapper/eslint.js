@@ -5,6 +5,7 @@
  * @author Sébastien Règne
  */
 
+import fs from "node:fs/promises";
 import { ESLint } from "eslint";
 import SEVERITY from "../severity.js";
 
@@ -15,16 +16,20 @@ import SEVERITY from "../severity.js";
 /**
  * Vérifie un fichier avec le linter <strong>ESLint</strong>.
  *
- * @param {string}           file    Le fichier qui sera vérifié.
- * @param {number}           level   Le niveau de sévérité minimum des
- *                                   notifications retournées.
- * @param {Object|undefined} options Les options qui seront passées au linter ou
- *                                   <code>undefined</code> pour les options par
- *                                   défaut.
+ * @param {string}           file          Le fichier qui sera vérifié.
+ * @param {Object|undefined} options       Les options qui seront passées au
+ *                                         linter ou <code>undefined</code> pour
+ *                                         les options par défaut.
+ * @param {Object}           context       Le contexte avec d'autres
+ *                                         informations.
+ * @param {number}           context.level Le niveau de sévérité minimum des
+ *                                         notifications retournées.
+ * @param {boolean}          context.fix   La marque indiquant s'il faut
+ *                                         corriger le fichier.
  * @returns {Promise<Notice[]>} Une promesse retournant la liste des
  *                              notifications.
  */
-export const wrapper = async function (file, level, options) {
+export const wrapper = async function (file, options, { level, fix }) {
     if (SEVERITY.FATAL > level) {
         return [];
     }
@@ -34,9 +39,15 @@ export const wrapper = async function (file, level, options) {
         ignore: false,
         baseConfig: options,
         useEslintrc: false,
+        fix,
     });
-    const results = await eslint.lintFiles(file);
-    return results[0].messages
+    const [results] = await eslint.lintFiles(file);
+
+    if (undefined !== results.output) {
+        await fs.writeFile(file, results.output);
+    }
+
+    return results.messages
         .map((result) => {
             let severity;
             if (result.fatal) {

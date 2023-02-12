@@ -13,10 +13,10 @@ describe("src/core/wrapper/doiuse.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -27,10 +27,10 @@ describe("src/core/wrapper/doiuse.js", function () {
             mock({ "foo.css": "button { border-radius: 10px; }\n" });
 
             const file = "foo.css";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -52,10 +52,10 @@ describe("src/core/wrapper/doiuse.js", function () {
             mock({ "foo.css": "div { background-size: cover; }\n" });
 
             const file = "foo.css";
-            const level = SEVERITY.INFO;
             const options = { browser: "ie >= 9, > 1%, last 2 versions" };
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,

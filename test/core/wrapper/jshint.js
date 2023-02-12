@@ -13,10 +13,10 @@ describe("src/core/wrapper/jshint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -24,10 +24,10 @@ describe("src/core/wrapper/jshint.js", function () {
             mock({ "foo.js": `eval("bar");` });
 
             const file = "foo.js";
-            const level = SEVERITY.WARN;
             const options = undefined;
+            const level = SEVERITY.WARN;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -47,10 +47,10 @@ describe("src/core/wrapper/jshint.js", function () {
             });
 
             const file = "foo.js";
-            const level = SEVERITY.WARN;
             const options = { eqeqeq: true };
+            const level = SEVERITY.WARN;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -83,10 +83,10 @@ describe("src/core/wrapper/jshint.js", function () {
             mock({ "foo.js": "const bar = [];" });
 
             const file = "foo.js";
-            const level = SEVERITY.ERROR;
             const options = { esnext: true };
+            const level = SEVERITY.ERROR;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
     });

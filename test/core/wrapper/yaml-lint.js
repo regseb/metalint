@@ -13,10 +13,10 @@ describe("src/core/wrapper/yaml-lint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -24,10 +24,10 @@ describe("src/core/wrapper/yaml-lint.js", function () {
             mock({ "foo.yaml": "foo - bar" });
 
             const file = "foo.yaml";
-            const level = SEVERITY.ERROR;
             const options = undefined;
+            const level = SEVERITY.ERROR;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -35,10 +35,10 @@ describe("src/core/wrapper/yaml-lint.js", function () {
             mock({ "foo.yml": ": bar" });
 
             const file = "foo.yml";
-            const level = SEVERITY.INFO;
             const options = { schema: "FAILSAFE_SCHEMA" };
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,

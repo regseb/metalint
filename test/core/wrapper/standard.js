@@ -13,9 +13,10 @@ describe("src/core/wrapper/standard.js", function () {
     describe("wrapper()", function () {
         it("should ignore with OFF level", async function () {
             const file = "";
+            const options = undefined;
             const level = SEVERITY.OFF;
 
-            const notices = await wrapper(file, level);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -28,9 +29,10 @@ describe("src/core/wrapper/standard.js", function () {
             });
 
             const file = "foo.js";
+            const options = undefined;
             const level = SEVERITY.WARN;
 
-            const notices = await wrapper(file, level);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -74,9 +76,10 @@ describe("src/core/wrapper/standard.js", function () {
             });
 
             const file = "foo.js";
+            const options = undefined;
             const level = SEVERITY.ERROR;
 
-            const notices = await wrapper(file, level);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -89,9 +92,10 @@ describe("src/core/wrapper/standard.js", function () {
             });
 
             const file = "foo.js";
+            const options = undefined;
             const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,

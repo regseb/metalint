@@ -13,10 +13,10 @@ describe("src/core/wrapper/npm-package-json-lint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = {};
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -29,15 +29,15 @@ describe("src/core/wrapper/npm-package-json-lint.js", function () {
             });
 
             const file = "package.json";
-            const level = SEVERITY.WARN;
             const options = {
                 rules: {
                     "require-version": "warning",
                     "name-format": "error",
                 },
             };
+            const level = SEVERITY.WARN;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -67,10 +67,10 @@ describe("src/core/wrapper/npm-package-json-lint.js", function () {
             });
 
             const file = "package.json";
-            const level = SEVERITY.ERROR;
             const options = { rules: { "require-description": "warning" } };
+            const level = SEVERITY.ERROR;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
     });

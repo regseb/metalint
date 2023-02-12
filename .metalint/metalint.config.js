@@ -7,6 +7,7 @@
 export default {
     patterns: [
         "!/.git/",
+        "!/CHANGELOG.md",
         "!/coverage/",
         "!/jsdocs/",
         "!/node_modules/",
@@ -16,16 +17,13 @@ export default {
     ],
     checkers: [
         {
-            patterns: ["!CHANGELOG.md", "*.md", "*.yml"],
+            patterns: ["*.json", "*.md", "*.yml"],
             linters: "prettier",
         },
         {
-            patterns: ["*.cjs", "*.js", "*.ts"],
+            patterns: ["*.js", "*.ts"],
             linters: {
-                prettier: [
-                    "prettier.config.js",
-                    "prettier_tabWidth4.config.js",
-                ],
+                prettier: ["prettier.config.js", { tabWidth: 4 }],
             },
         },
         {
@@ -67,7 +65,7 @@ export default {
             },
         },
         {
-            patterns: ["!/CHANGELOG.md", "*.md"],
+            patterns: "*.md",
             linters: "markdownlint",
         },
         {

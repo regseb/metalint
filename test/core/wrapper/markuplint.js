@@ -13,10 +13,10 @@ describe("src/core/wrapper/markuplint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -29,10 +29,10 @@ describe("src/core/wrapper/markuplint.js", function () {
             });
 
             const file = "foo.html";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -45,7 +45,6 @@ describe("src/core/wrapper/markuplint.js", function () {
             });
 
             const file = "foo.html";
-            const level = SEVERITY.INFO;
             const options = {
                 rules: {
                     "attr-duplication": true,
@@ -56,8 +55,9 @@ describe("src/core/wrapper/markuplint.js", function () {
                     },
                 },
             };
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -101,10 +101,10 @@ describe("src/core/wrapper/markuplint.js", function () {
             });
 
             const file = "foo.html";
-            const level = SEVERITY.ERROR;
             const options = { rules: { indentation: true } };
+            const level = SEVERITY.ERROR;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
     });

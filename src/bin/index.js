@@ -44,6 +44,10 @@ const argv = yargs(process.argv.slice(2))
             requiresArg: true,
             type: "string",
         },
+        fix: {
+            alias: "fix",
+            type: "boolean",
+        },
         l: {
             alias: "level",
             requiresArg: true,

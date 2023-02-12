@@ -13,10 +13,11 @@ describe("src/core/wrapper/stylelint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, []);
         });
 
@@ -29,10 +30,11 @@ describe("src/core/wrapper/stylelint.js", function () {
             });
 
             const file = "foo.css";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, []);
         });
 
@@ -45,10 +47,11 @@ describe("src/core/wrapper/stylelint.js", function () {
             });
 
             const file = "foo.css";
-            const level = SEVERITY.INFO;
             const options = { rules: { "color-hex-case": "upper" } };
+            const level = SEVERITY.INFO;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, []);
         });
 
@@ -63,15 +66,16 @@ describe("src/core/wrapper/stylelint.js", function () {
             });
 
             const file = "foo.css";
-            const level = SEVERITY.WARN;
             const options = {
                 rules: {
                     "number-leading-zero": ["always", { severity: "warning" }],
                     "string-quotes": "double",
                 },
             };
+            const level = SEVERITY.WARN;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -101,12 +105,13 @@ describe("src/core/wrapper/stylelint.js", function () {
             });
 
             const file = "foo.css";
-            const level = SEVERITY.ERROR;
             const options = {
                 rules: { indentation: [2, { severity: "warning" }] },
             };
+            const level = SEVERITY.ERROR;
+            const fix = false;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level, fix });
             assert.deepEqual(notices, []);
         });
     });

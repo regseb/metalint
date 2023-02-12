@@ -13,10 +13,10 @@ describe("src/core/wrapper/markdownlint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -29,10 +29,10 @@ describe("src/core/wrapper/markdownlint.js", function () {
             });
 
             const file = "foo.md";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -56,10 +56,10 @@ describe("src/core/wrapper/markdownlint.js", function () {
             });
 
             const file = "foo.md";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -72,10 +72,10 @@ describe("src/core/wrapper/markdownlint.js", function () {
             });
 
             const file = "foo.md";
-            const level = SEVERITY.WARN;
             const options = undefined;
+            const level = SEVERITY.WARN;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,

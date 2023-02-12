@@ -24,6 +24,7 @@ describe("src/core/index.js", function () {
             const checkers = [
                 {
                     patterns: ["*.js"],
+                    fix: false,
                     linters: {
                         "./wrapper/jshint.js": undefined,
                         "./wrapper/eslint.js": {
@@ -37,6 +38,7 @@ describe("src/core/index.js", function () {
                 },
                 {
                     patterns: ["*.html"],
+                    fix: false,
                     linters: {
                         "./wrapper/htmlhint.js": { "tagname-lowercase": true },
                     },
@@ -102,6 +104,7 @@ describe("src/core/index.js", function () {
             const checkers = [
                 {
                     patterns: ["**"],
+                    fix: false,
                     linters: { "./wrapper/json-lint.js": undefined },
                     level: SEVERITY.INFO,
                 },
@@ -135,6 +138,7 @@ describe("src/core/index.js", function () {
             const checkers = [
                 {
                     patterns: ["**"],
+                    fix: false,
                     linters: {
                         // Récupérer seulement les fichiers HTML à la racine
                         // pour exclure les fichiers HTML dans les paquets de
@@ -170,6 +174,7 @@ describe("src/core/index.js", function () {
             const checkers = [
                 {
                     patterns: ["foo/"],
+                    fix: false,
                     linters: { "./wrapper/addons-linter.js": undefined },
                     level: SEVERITY.INFO,
                 },

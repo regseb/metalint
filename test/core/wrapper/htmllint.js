@@ -13,10 +13,10 @@ describe("src/core/wrapper/htmllint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -24,10 +24,10 @@ describe("src/core/wrapper/htmllint.js", function () {
             mock({ "foo.html": "<html></html>" });
 
             const file = "foo.html";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -43,10 +43,10 @@ describe("src/core/wrapper/htmllint.js", function () {
             mock({ "foo.html": `<img SRC="bar.svg" />\n` });
 
             const file = "foo.html";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,

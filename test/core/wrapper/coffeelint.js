@@ -13,10 +13,10 @@ describe("src/core/wrapper/coffeelint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -24,10 +24,10 @@ describe("src/core/wrapper/coffeelint.js", function () {
             mock({ "foo.coffee": "bar = true || false" });
 
             const file = "foo.coffee";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -36,15 +36,15 @@ describe("src/core/wrapper/coffeelint.js", function () {
             mock({ "foo.coffee": "bar =\n	true || false" });
 
             const file = "foo.coffee";
-            const level = SEVERITY.WARN;
-            /* eslint-disable camelcase */
             const options = {
+                /* eslint-disable camelcase */
                 no_tabs: { level: "error" },
                 prefer_english_operator: { level: "warn" },
+                /* eslint-enable camelcase */
             };
-            /* eslint-enable camelcase */
+            const level = SEVERITY.WARN;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -69,11 +69,11 @@ describe("src/core/wrapper/coffeelint.js", function () {
             mock({ "foo.coffee": "bar = true || false" });
 
             const file = "foo.coffee";
-            const level = SEVERITY.ERROR;
             // eslint-disable-next-line camelcase
             const options = { prefer_english_operator: { level: "warn" } };
+            const level = SEVERITY.ERROR;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
     });

@@ -13,19 +13,25 @@ describe("src/core/wrapper/purgecss.js", function () {
     describe("wrapper()", function () {
         it("should ignore with OFF level", async function () {
             const file = "";
-            const level = SEVERITY.OFF;
             const options = undefined;
+            const level = SEVERITY.OFF;
 
-            const notices = await wrapper(file, level, options, process.cwd());
+            const notices = await wrapper(file, options, {
+                level,
+                root: process.cwd(),
+            });
             assert.deepEqual(notices, []);
         });
 
         it("should return FATAL notice", async function () {
             const file = "foo.css";
-            const level = SEVERITY.FATAL;
             const options = { content: [] };
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options, process.cwd());
+            const notices = await wrapper(file, options, {
+                level,
+                root: process.cwd(),
+            });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -47,12 +53,13 @@ describe("src/core/wrapper/purgecss.js", function () {
             });
 
             const file = "baz.css";
+            const options = { content: "*.html" };
             const level = SEVERITY.INFO;
-            const options = {
-                content: "*.html",
-            };
 
-            const notices = await wrapper(file, level, options, process.cwd());
+            const notices = await wrapper(file, options, {
+                level,
+                root: process.cwd(),
+            });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -78,12 +85,13 @@ describe("src/core/wrapper/purgecss.js", function () {
             });
 
             const file = "bar.css";
+            const options = { content: "*.html" };
             const level = SEVERITY.FATAL;
-            const options = {
-                content: "*.html",
-            };
 
-            const notices = await wrapper(file, level, options, process.cwd());
+            const notices = await wrapper(file, options, {
+                level,
+                root: process.cwd(),
+            });
             assert.deepEqual(notices, []);
         });
     });

@@ -13,9 +13,10 @@ describe("src/core/wrapper/jsonlint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
+            const options = undefined;
             const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -23,9 +24,10 @@ describe("src/core/wrapper/jsonlint.js", function () {
             mock({ "foo.json": `{ "bar": "baz }` });
 
             const file = "foo.json";
+            const options = undefined;
             const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,

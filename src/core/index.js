@@ -71,13 +71,19 @@ export default async function metalint(files, checkers, root) {
                     // le fichier.
                     // eslint-disable-next-line no-unsanitized/method
                     const { wrapper } = await import(name);
-                    wraps.push(wrapper(file, checker.level, linter, root));
+                    wraps.push(
+                        await wrapper(file, linter, {
+                            level: checker.level,
+                            fix: checker.fix,
+                            root,
+                        }),
+                    );
                 }
             }
         }
     }
 
-    for await (const notices of wraps) {
+    for (const notices of wraps) {
         for (const notice of notices.flat()) {
             // Regrouper les notifications par fichiers.
             if (undefined === results[notice.file]) {

@@ -13,10 +13,10 @@ describe("src/core/wrapper/htmlhint.js", function () {
     describe("wrapper()", function () {
         it("should ignore with FATAL level", async function () {
             const file = "";
-            const level = SEVERITY.FATAL;
             const options = undefined;
+            const level = SEVERITY.FATAL;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
 
@@ -24,10 +24,10 @@ describe("src/core/wrapper/htmlhint.js", function () {
             mock({ "foo.html": "<html></html>" });
 
             const file = "foo.html";
-            const level = SEVERITY.INFO;
             const options = undefined;
+            const level = SEVERITY.INFO;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -44,10 +44,10 @@ describe("src/core/wrapper/htmlhint.js", function () {
             mock({ "foo.html": `<img SRC="bar.svg" />` });
 
             const file = "foo.html";
-            const level = SEVERITY.WARN;
             const options = { "attr-lowercase": true, "alt-require": true };
+            const level = SEVERITY.WARN;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, [
                 {
                     file,
@@ -79,10 +79,10 @@ describe("src/core/wrapper/htmlhint.js", function () {
             });
 
             const file = "foo.html";
-            const level = SEVERITY.ERROR;
             const options = { "head-script-disabled": true };
+            const level = SEVERITY.ERROR;
 
-            const notices = await wrapper(file, level, options);
+            const notices = await wrapper(file, options, { level });
             assert.deepEqual(notices, []);
         });
     });

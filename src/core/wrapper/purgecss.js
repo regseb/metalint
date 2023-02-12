@@ -16,18 +16,20 @@ import SEVERITY from "../severity.js";
 /**
  * Vérifie un fichier avec l'utilitaire <strong>PurgeCSS</strong>.
  *
- * @param {string}           file    Le fichier qui sera vérifié.
- * @param {number}           level   Le niveau de sévérité minimum des
- *                                   notifications retournées.
- * @param {Object|undefined} options Les options qui seront passées au linter ou
- *                                   <code>undefined</code> pour les options par
- *                                   défaut.
- * @param {string}           root    L'adresse du répertoire où se trouve le
- *                                   dossier <code>.metalint/</code>.
+ * @param {string}           file          Le fichier qui sera vérifié.
+ * @param {Object|undefined} options       Les options qui seront passées au
+ *                                         linter ou <code>undefined</code> pour
+ *                                         les options par défaut.
+ * @param {Object}           context       Le contexte avec d'autres
+ *                                         informations.
+ * @param {number}           context.level Le niveau de sévérité minimum des
+ *                                         notifications retournées.
+ * @param {string}           context.root  L'adresse du répertoire où se trouve
+ *                                         le dossier <code>.metalint/</code>.
  * @returns {Promise<Notice[]>} Une promesse retournant la liste des
  *                              notifications.
  */
-export const wrapper = async function (file, level, options, root) {
+export const wrapper = async function (file, options, { level, root }) {
     if (SEVERITY.FATAL > level) {
         return [];
     }

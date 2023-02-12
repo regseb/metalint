@@ -6,13 +6,14 @@ options courtes.
   -c, --config=CONFIG        spécifier l'emplacement du fichier de configuration
   -f, --formatter=FORMATTER  définir le formateur utilisé pour afficher les
                                résultats
+  --fix                      corriger les fichiers
   -l, --level=NIVEAU         définir le niveau de sévérité global
   -o, --output=OUTPUT        spécifier le fichier de sortie où seront écrit les
                                résultats
   -p, --patterns=PATRONS     spécifier les patrons pour filtrer les fichiers qui
                                seront analysés
-      --help     afficher l'aide et quitter
-      --version  afficher des informations de version et quitter
+  --help     afficher l'aide et quitter
+  --version  afficher des informations de version et quitter
 
 L'argument NIVEAU peut avoir comme valeur : off, fatal, error, warn ou info.
 
