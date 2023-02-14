@@ -4,7 +4,6 @@
  * @author Sébastien Règne
  */
 
-import fs from "node:fs/promises";
 import glob from "./glob.js";
 
 /**
@@ -62,9 +61,8 @@ export default async function metalint(files, checkers, root) {
     for (const file of files) {
         results[file] = undefined;
 
-        const stat = await fs.lstat(file);
         for (const checker of checkers) {
-            if (glob.test(file, checker.patterns, root, stat.isDirectory())) {
+            if (glob.test(file, checker.patterns, root)) {
                 results[file] = [];
                 for (const [name, linter] of Object.entries(checker.linters)) {
                     // Charger l'enrobage du linter et l'utiliser pour vérifier

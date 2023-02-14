@@ -137,7 +137,8 @@ try {
         argv,
     );
 
-    const files = await glob.walk(argv._, patterns, root);
+    const bases = await Promise.resolve(argv._.map((a) => glob.normalize(a)));
+    const files = await glob.walk(bases, patterns, root);
 
     const severity = await check(files, checkers, root, reporters);
     let code;

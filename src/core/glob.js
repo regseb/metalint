@@ -5,7 +5,7 @@
  */
 
 import fs from "node:fs/promises";
-import path from "node:path";
+import path from "node:path/posix";
 
 /**
  * Protège les caractères spéciaux pour les expressions rationnelles.
@@ -52,7 +52,7 @@ const compile = function (pattern) {
             // Si c'est le dernier caractère ou qu'il n'est pas suivi par une
             // étoile.
             if (glob.length === i + 1 || "*" !== glob[i + 1]) {
-                regexp += "[^/]*";
+                regexp += "[^/]+";
                 // Sinon : ce n'est pas le dernier caractère et le prochain est
                 // une étoile.
             } else if (0 === i) {
@@ -75,10 +75,9 @@ const compile = function (pattern) {
         }
     }
 
-    if (negate) {
-        regexp += regexp.endsWith("/") ? ".*" : "(/.*)?";
-    } else if (!regexp.endsWith("/")) {
-        regexp += "/?";
+    // Pour la négation d'un répertoire : exclure aussi tous ses fichiers.
+    if (negate && regexp.endsWith("/")) {
+        regexp += ".*";
     }
     regexp += "$";
 
@@ -86,25 +85,24 @@ const compile = function (pattern) {
 };
 
 /**
- * Teste si un fichier respecte un des patrons.
+ * Teste si un fichier / répertoire respecte un des patrons.
  *
- * @param {string}   file      L'adresse du fichier qui sera vérifié.
- * @param {Object[]} patterns  La liste des patrons.
- * @param {string}   root      L'adresse du répertoire où se trouve le dossier
- *                             <code>.metalint/</code>.
- * @param {boolean}  directory La marque indiquant si le fichier est un
- *                             répertoire.
- * @returns {string} <code>"MATCHED"</code> si le fichier respecte au moins un
- *                   patron ; <code>"NEGATE"</code> si le fichier ne respecte
- *                   pas un patron négatif ; sinon <code>"NONE"</code>.
+ * @param {string}   file     L'adresse du fichier / répertoire  qui sera
+ *                            vérifié.
+ * @param {Object[]} patterns La liste des patrons.
+ * @param {string}   root     L'adresse du répertoire où se trouve le dossier
+ *                            <code>.metalint/</code>.
+ * @returns {string} <code>"MATCHED"</code> si le fichier / répertoire respecte
+ *                   au moins un patron ; <code>"NEGATE"</code> si le fichier ne
+ *                   respecte pas un patron négatif ; sinon <code>"NONE"</code>.
  */
-const exec = function (file, patterns, root, directory) {
+const exec = function (file, patterns, root) {
     const relative =
-        "." === file
+        "./" === file
             ? "/"
             : "/" +
               path.relative(root, path.join(process.cwd(), file)) +
-              (directory ? "/" : "");
+              (file.endsWith("/") ? "/" : "");
 
     let result = "NONE";
     for (const pattern of patterns) {
@@ -120,20 +118,31 @@ const exec = function (file, patterns, root, directory) {
 };
 
 /**
- * Récupère toute l'arborescence des fichiers respectant un des patrons.
+ * Normalise un fichier / répertoire en ajoutant une barre oblique aux
+ * répertoires.
+ *
+ * @param {string} file Le fichier / répertoire.
+ * @returns {Promise<string>} Le fichier / répertoire normalisé.
+ */
+export const normalize = async function (file) {
+    const stats = await fs.lstat(file);
+    return file + (stats.isDirectory() ? "/" : "");
+};
+
+/**
+ * Récupère toute l'arborescence des fichiers / répertoires respectant un des
+ * patrons.
  *
  * @param {string}   base     Le fichier / répertoire servant de racine pour
  *                            l'arborescence.
  * @param {Object[]} patterns La liste des patrons compilés.
  * @param {string}   root     L'adresse du répertoire où se trouve le dossier
  *                            <code>.metalint/</code>.
- * @returns {Promise<string[]>} Une promesse contenant la liste des fichiers
- *                              respectant un des patrons.
+ * @returns {Promise<string[]>} Une promesse contenant la liste des fichiers /
+ *                              répertoires respectant un des patrons.
  */
 const deep = async function (base, patterns, root) {
-    const stats = await fs.lstat(base);
-    const directory = stats.isDirectory();
-    const result = exec(base, patterns, root, directory);
+    const result = exec(base, patterns, root);
     if ("NEGATE" === result) {
         return [];
     }
@@ -142,48 +151,54 @@ const deep = async function (base, patterns, root) {
     if ("MATCHED" === result) {
         files.push(base);
     }
-    if (directory) {
+    if (base.endsWith("/")) {
         for (const file of await fs.readdir(base)) {
-            files.push(...(await deep(path.join(base, file), patterns, root)));
+            files.push(
+                ...(await deep(
+                    await normalize(path.join(base, file)),
+                    patterns,
+                    root,
+                )),
+            );
         }
     }
     return files;
 };
 
 /**
- * Vérifie si un fichier respecte un des patrons.
+ * Vérifie si un fichier / répertoire respecte un des patrons.
  *
- * @param {string}   file      L'adresse du fichier qui sera vérifié.
- * @param {string[]} patterns  La liste des patrons.
- * @param {string}   root      L'adresse du répertoire où se trouve le dossier
- *                             <code>.metalint/</code>.
- * @param {boolean}  directory La marque indiquant si le fichier est un
- *                             répertoire.
- * @returns {boolean} <code>true</code> si le fichier respectent au moins un
- *                    patron ; sinon <code>false</code>.
+ * @param {string}   file     L'adresse du fichier / répertoire qui sera
+ *                            vérifié.
+ * @param {string[]} patterns La liste des patrons.
+ * @param {string}   root     L'adresse du répertoire où se trouve le dossier
+ *                            <code>.metalint/</code>.
+ * @returns {boolean} <code>true</code> si le fichier / répertoire respectent au
+ *                    moins un patron ; sinon <code>false</code>.
  */
-const test = function (file, patterns, root, directory) {
-    return "MATCHED" === exec(file, patterns.map(compile), root, directory);
+export const test = function (file, patterns, root) {
+    return "MATCHED" === exec(file, patterns.map(compile), root);
 };
 
 /**
- * Récupère toute l'arborescence des fichiers respectant un des patrons.
+ * Récupère toute l'arborescence des fichiers / répertoires respectant un des
+ * patrons.
  *
  * @param {string[]}          bases    La liste des fichiers / répertoires
  *                                     servant de racine pour l'arborescence.
  * @param {(string[]|string)} patterns La liste des patrons.
  * @param {string}            root     L'adresse du répertoire où se trouve le
  *                                     dossier <code>.metalint/</code>.
- * @returns {Promise<string[]>} Une promesse contenant la liste des fichiers
- *                              respectant un des patrons.
+ * @returns {Promise<string[]>} Une promesse contenant la liste des fichiers /
+ *                              répertoires respectant un des patrons.
  */
-const walk = async function (bases, patterns, root) {
+export const walk = async function (bases, patterns, root) {
     const compileds = Array.isArray(patterns)
         ? patterns.map(compile)
         : [patterns].map(compile);
 
     if (0 === bases.length) {
-        return deep(".", compileds, root);
+        return deep("./", compileds, root);
     }
 
     const files = [];
@@ -193,4 +208,4 @@ const walk = async function (bases, patterns, root) {
     return files;
 };
 
-export default { test, walk };
+export default { normalize, test, walk };

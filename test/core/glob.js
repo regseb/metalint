@@ -5,6 +5,7 @@
  */
 
 import assert from "node:assert/strict";
+import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import mock from "mock-fs";
 import sinon from "sinon";
@@ -28,279 +29,250 @@ if (undefined === import.meta.resolve) {
 }
 
 describe("src/core/glob.js", function () {
+    describe("normalize()", function () {
+        it("should normalize file", async function () {
+            const stub = sinon.stub(fs, "lstat").resolves({
+                isDirectory() {
+                    return false;
+                },
+            });
+
+            const normalized = await glob.normalize("foo");
+            assert.equal(normalized, "foo");
+
+            assert.equal(stub.callCount, 1);
+            assert.deepEqual(stub.firstCall.args, ["foo"]);
+        });
+
+        it("should normalize directory", async function () {
+            const stub = sinon.stub(fs, "lstat").resolves({
+                isDirectory() {
+                    return true;
+                },
+            });
+
+            const normalized = await glob.normalize("foo");
+            assert.equal(normalized, "foo/");
+
+            assert.equal(stub.callCount, 1);
+            assert.deepEqual(stub.firstCall.args, ["foo"]);
+        });
+    });
+
     describe("test()", function () {
-        it("test([])", async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it("should reject all file with no pattern", async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
             const patterns = [];
             const root = await import.meta.resolve(".");
-            const matched = glob.test(
-                "src/core/index.js",
-                patterns,
-                root,
-                false,
-            );
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 1);
+            assert.equal(glob.test("./", patterns, root), false);
+            assert.equal(glob.test("foo/", patterns, root), false);
+            assert.equal(glob.test("bar", patterns, root), false);
+            assert.equal(glob.test("baz/qux/", patterns, root), false);
+            assert.equal(glob.test("baz/quux", patterns, root), false);
         });
 
-        it(`test(["/"])̀`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it("should accept only root", async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
             const patterns = ["/"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test(".", patterns, root, true);
-            assert.equal(matched, true);
-            matched = glob.test("src/", patterns, root, true);
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 1);
+            assert.equal(glob.test("./", patterns, root), true);
+            assert.equal(glob.test("foo/", patterns, root), false);
+            assert.equal(glob.test("bar", patterns, root), false);
+            assert.equal(glob.test("baz/qux/", patterns, root), false);
+            assert.equal(glob.test("baz/quux", patterns, root), false);
         });
 
-        it(`test(["**"])̀`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it("should accept only files", async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
-            const patterns = ["**"];
+            const patterns = ["*"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test(
-                "src/core/index.min.js",
-                patterns,
-                root,
-                false,
-            );
-            assert.equal(matched, true);
-            matched = glob.test("src/", patterns, root, true);
-            assert.equal(matched, true);
-
-            assert.equal(stub.callCount, 2);
+            assert.equal(glob.test("./", patterns, root), false);
+            assert.equal(glob.test("foo/", patterns, root), false);
+            assert.equal(glob.test("bar", patterns, root), true);
+            assert.equal(glob.test("baz/qux/", patterns, root), false);
+            assert.equal(glob.test("baz/quux", patterns, root), true);
         });
 
-        it(`test(["**/*.js"])`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it("should accept only directories", async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
-            const patterns = ["**/*.js"];
+            const patterns = ["*/"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test(
-                "src/core/index.min.js",
-                patterns,
-                root,
-                false,
-            );
-            assert.equal(matched, true);
-            matched = glob.test("index.min.js", patterns, root, false);
-            assert.equal(matched, true);
-            matched = glob.test("src/core/index.min.js/", patterns, root, true);
-            assert.equal(matched, true);
-            matched = glob.test("src/core/", patterns, root, true);
-            assert.equal(matched, false);
-            matched = glob.test(
-                "src/core.js/index.html",
-                patterns,
-                root,
-                false,
-            );
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 5);
+            assert.equal(glob.test("./", patterns, root), false);
+            assert.equal(glob.test("foo/", patterns, root), true);
+            assert.equal(glob.test("bar", patterns, root), false);
+            assert.equal(glob.test("baz/qux/", patterns, root), true);
+            assert.equal(glob.test("baz/quux", patterns, root), false);
         });
 
-        it(`test(["!**/*~", "**"])̀`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it("should accept only files in first level", async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
-            const patterns = ["!**/*~", "**"];
+            const patterns = ["/*"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test(
-                "src/core/index.min.js",
-                patterns,
-                root,
-                false,
-            );
-            assert.equal(matched, true);
-            matched = glob.test(
-                "src/core/index~.min.js",
-                patterns,
-                root,
-                false,
-            );
-            assert.equal(matched, true);
-            matched = glob.test(
-                "src/core/index.min.js~",
-                patterns,
-                root,
-                false,
-            );
-            assert.equal(matched, false);
-            matched = glob.test(
-                "src/core/index.js~/i.html",
-                patterns,
-                root,
-                false,
-            );
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 4);
+            assert.equal(glob.test("./", patterns, root), false);
+            assert.equal(glob.test("foo/", patterns, root), false);
+            assert.equal(glob.test("bar", patterns, root), true);
+            assert.equal(glob.test("baz/qux/", patterns, root), false);
+            assert.equal(glob.test("baz/quux", patterns, root), false);
         });
 
-        it(`test(["/**/*.md"])`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it("should accept only directories in first level", async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
-            const patterns = ["/**/*.md"];
+            const patterns = ["/*/"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test("foo/bar.md", patterns, root, false);
-            assert.equal(matched, true);
-            matched = glob.test("foo.md", patterns, root, false);
-            assert.equal(matched, true);
-            matched = glob.test("foo.txt", patterns, root, false);
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 3);
+            assert.equal(glob.test("./", patterns, root), false);
+            assert.equal(glob.test("foo/", patterns, root), true);
+            assert.equal(glob.test("bar", patterns, root), false);
+            assert.equal(glob.test("baz/qux/", patterns, root), false);
+            assert.equal(glob.test("baz/quux", patterns, root), false);
         });
 
-        it(`test(["/*/*.md"])`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it("should accept files in depth", async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
-            const patterns = ["/*/*.md"];
+            const patterns = ["foo"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test("foo/bar.md", patterns, root, false);
-            assert.equal(matched, true);
-            matched = glob.test("foo.md", patterns, root, false);
-            assert.equal(matched, false);
-            matched = glob.test("foo/bar.txt", patterns, root, false);
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 3);
+            assert.equal(glob.test("foo", patterns, root), true);
+            assert.equal(glob.test("bar", patterns, root), false);
+            assert.equal(glob.test("baz/foo", patterns, root), true);
+            assert.equal(glob.test("qux/quux/foo", patterns, root), true);
         });
 
-        it(`test(["foo/**"])`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it(`should support "/**/"`, async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
-            const patterns = ["foo/**"];
+            const patterns = ["/foo/**/bar"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test("foo", patterns, root, true);
-            assert.equal(matched, true);
-            matched = glob.test("foo/", patterns, root, true);
-            assert.equal(matched, true);
-            matched = glob.test("foo/bar.js", patterns, root, false);
-            assert.equal(matched, true);
-            matched = glob.test("foobar/baz.js", patterns, root, false);
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 4);
+            assert.equal(glob.test("foobar", patterns, root), false);
+            assert.equal(glob.test("foo/bar", patterns, root), true);
+            assert.equal(glob.test("foo/baz", patterns, root), false);
+            assert.equal(glob.test("foo/baz/bar", patterns, root), true);
+            assert.equal(glob.test("foo/baz/qux", patterns, root), false);
+            assert.equal(glob.test("foo/baz/qux/bar", patterns, root), true);
+            assert.equal(glob.test("foo/baz/qux/quux", patterns, root), false);
         });
 
-        it(`test(["foo?bar"])`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it(`should support "/**"`, async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
+
+            const patterns = ["/foo/**"];
+            const root = await import.meta.resolve(".");
+            assert.equal(glob.test("foobar", patterns, root), false);
+            assert.equal(glob.test("foo/bar", patterns, root), true);
+            assert.equal(glob.test("foo/bar/baz", patterns, root), true);
+        });
+
+        it(`should support "?"`, async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
             const patterns = ["foo?bar"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test("foo.bar", patterns, root, false);
-            assert.equal(matched, true);
-            matched = glob.test("foo/bar", patterns, root, true);
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 2);
+            assert.equal(glob.test("foobar", patterns, root), false);
+            assert.equal(glob.test("fooXbar", patterns, root), true);
+            assert.equal(glob.test("fooXXbar", patterns, root), false);
         });
 
-        it(`test(["foo[123].js"])`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it(`should support "[]"`, async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
-            const patterns = ["foo[123].js"];
+            const patterns = ["foo[12]"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test("foo1.js", patterns, root, false);
-            assert.equal(matched, true);
-            matched = glob.test("foo2.js", patterns, root, false);
-            assert.equal(matched, true);
-            matched = glob.test("foo3.js", patterns, root, false);
-            assert.equal(matched, true);
-            matched = glob.test("foo4.js", patterns, root, false);
-            assert.equal(matched, false);
-            matched = glob.test("foo.js", patterns, root, false);
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 5);
+            assert.equal(glob.test("foo", patterns, root), false);
+            assert.equal(glob.test("foo1", patterns, root), true);
+            assert.equal(glob.test("foo2", patterns, root), true);
+            assert.equal(glob.test("foo3", patterns, root), false);
+            assert.equal(glob.test("foo12", patterns, root), false);
+            assert.equal(glob.test("foo[", patterns, root), false);
+            assert.equal(glob.test("foo[12]", patterns, root), false);
         });
 
-        it(`test(["!foo/", "**"])`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it("should reject file", async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
-            const patterns = ["!foo/", "**"];
+            const patterns = ["!foo", "**"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test("bar/baz.js", patterns, root, false);
-            assert.equal(matched, true);
-            matched = glob.test("foo/", patterns, root, true);
-            assert.equal(matched, false);
-            matched = glob.test("foo/bar.js", patterns, root, false);
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 3);
+            assert.equal(glob.test("foo", patterns, root), false);
+            assert.equal(glob.test("foobar", patterns, root), true);
+            assert.equal(glob.test("baz", patterns, root), true);
         });
 
-        it(`test(["foo/"])`, async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it("should reject all sub-files in directory", async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
-            const patterns = ["foo/"];
+            const patterns = ["!/foo/", "**"];
             const root = await import.meta.resolve(".");
-            let matched = glob.test("foo/", patterns, root, true);
-            assert.equal(matched, true);
-            matched = glob.test("foo", patterns, root, true);
-            assert.equal(matched, true);
-            matched = glob.test("foo", patterns, root, false);
-            assert.equal(matched, false);
-
-            assert.equal(stub.callCount, 3);
+            assert.equal(glob.test("foo/", patterns, root), false);
+            assert.equal(glob.test("foo/bar", patterns, root), false);
+            assert.equal(glob.test("foo/baz/", patterns, root), false);
+            assert.equal(glob.test("qux", patterns, root), true);
+            assert.equal(glob.test("quux/", patterns, root), true);
+            assert.equal(glob.test("corge/foo/", patterns, root), true);
         });
 
-        it("test() throws", async function () {
-            const stub = sinon
-                .stub(process, "cwd")
-                .returns(await import.meta.resolve("."));
+        it("should sanitize pattern", async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
 
-            assert.throws(() => glob.test("", ["/**foo"], "", false), {
+            const patterns = ["foo("];
+            const root = await import.meta.resolve(".");
+            assert.equal(glob.test("foo", patterns, root), false);
+            assert.equal(glob.test("foo(", patterns, root), true);
+            assert.equal(glob.test("foo()", patterns, root), false);
+        });
+
+        it(`should sanitize pattern in "[]"`, async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
+
+            const patterns = ["foo[)(]"];
+            const root = await import.meta.resolve(".");
+            assert.equal(glob.test("foo", patterns, root), false);
+            assert.equal(glob.test("foo(", patterns, root), true);
+            assert.equal(glob.test("foo)", patterns, root), true);
+            assert.equal(glob.test("foo()", patterns, root), false);
+        });
+
+        it(`should sanitize "!" when it isn't first`, async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
+
+            const patterns = ["foo!"];
+            const root = await import.meta.resolve(".");
+            assert.equal(glob.test("foo", patterns, root), false);
+            assert.equal(glob.test("foo!", patterns, root), true);
+            assert.equal(glob.test("foo!bar", patterns, root), false);
+        });
+
+        it(`should reject "**" not followed by a slash`, async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
+
+            assert.throws(() => glob.test("", ["/**foo"], ""), {
                 name: "Error",
                 message: "/**foo: '**' not followed by a slash.",
             });
+        });
 
-            assert.throws(() => glob.test("", ["foo**"], "", false), {
+        it(`should reject "**" not preceded by a slash`, async function () {
+            sinon.stub(process, "cwd").returns(await import.meta.resolve("."));
+
+            assert.throws(() => glob.test("", ["foo**"], ""), {
                 name: "Error",
                 message: "foo**: '**' not preceded by a slash.",
             });
+        });
 
-            assert.throws(() => glob.test("", ["fo[ou"], "", false), {
+        it(`should reject "[" not closed`, function () {
+            assert.throws(() => glob.test("", ["foo[bar"], ""), {
                 name: "Error",
-                message: "fo[ou: ']' missing.",
+                message: "foo[bar: ']' missing.",
             });
-
-            assert.equal(stub.callCount, 0);
         });
     });
 
     describe("walk()", function () {
-        it("walk()", async function () {
+        it("should work", async function () {
             mock({
                 "/foo": {
                     "bar.js": "",
@@ -310,24 +282,22 @@ describe("src/core/glob.js", function () {
                     },
                 },
             });
-            const stub = sinon.stub(process, "cwd").returns("/foo");
+            sinon.stub(process, "cwd").returns("/foo");
 
             let files = await glob.walk([], ["**/bar.js"], "/");
             assert.deepEqual(files, ["bar.js"]);
 
-            files = await glob.walk([], ["**/bar.js"], "/foo");
+            files = await glob.walk([], ["**/bar.js"], "/foo/");
             assert.deepEqual(files, ["bar.js"]);
 
-            files = await glob.walk(["baz"], ["**/qux.js"], "/foo");
+            files = await glob.walk(["baz/"], ["**/qux.js"], "/foo/");
             assert.deepEqual(files, ["baz/qux.js"]);
 
-            files = await glob.walk(["baz/qux.js"], ["**/quux.js"], "/foo");
+            files = await glob.walk(["baz/qux.js"], ["**/quux.js"], "/foo/");
             assert.deepEqual(files, []);
 
-            files = await glob.walk(["baz/qux.js"], ["!baz"], "/foo");
+            files = await glob.walk(["baz/"], ["!baz/", "**"], "/foo/");
             assert.deepEqual(files, []);
-
-            assert.equal(stub.callCount, 53);
         });
     });
 });
