@@ -92,9 +92,13 @@ metalint
 
 [img-npm]: https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=white
 [img-build]: https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=white
-[img-coverage]: https://img.shields.io/coveralls/github/regseb/metalint?logo=coveralls&logoColor=white
+
+<!-- Attendre que le logo de Stryker soit accepté.
+     https://github.com/simple-icons/simple-icons/pull/7388 -->
+
+[img-coverage]: https://img.shields.io/endpoint?label=coverage&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fregseb%2Fmetalint%2Fmain
 [img-semver]: https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&logoColor=white
 [link-npm]: https://www.npmjs.com/package/metalint
 [link-build]: https://github.com/regseb/metalint/actions/workflows/ci.yml?query=branch%3Amain
-[link-coverage]: https://coveralls.io/github/regseb/metalint
+[link-coverage]: https://dashboard.stryker-mutator.io/reports/github.com/regseb/metalint/main
 [link-semver]: https://semver.org/spec/v2.0.0.html "Semantic Versioning 2.0.0"

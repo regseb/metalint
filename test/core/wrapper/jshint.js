@@ -21,7 +21,12 @@ describe("src/core/wrapper/jshint.js", function () {
         });
 
         it("should use default options", async function () {
-            mock({ "foo.js": `eval("bar");` });
+            mock({
+                // Ne pas simuler le répertoire "node_modules" car le linter
+                // doit accéder à des fichiers dans celui-ci.
+                "node_modules/": mock.load("node_modules/"),
+                "foo.js": `eval("bar");`,
+            });
 
             const file = "foo.js";
             const options = undefined;
@@ -42,6 +47,9 @@ describe("src/core/wrapper/jshint.js", function () {
 
         it("should return notices", async function () {
             mock({
+                // Ne pas simuler le répertoire "node_modules" car le linter
+                // doit accéder à des fichiers dans celui-ci.
+                "node_modules/": mock.load("node_modules/"),
                 "foo.js": `if (1 == "1") {
                                console.log("bar");`,
             });

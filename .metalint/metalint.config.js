@@ -8,9 +8,9 @@ export default {
     patterns: [
         "!/.git/",
         "!/CHANGELOG.md",
-        "!/coverage/",
         "!/jsdocs/",
         "!/node_modules/",
+        "!/.stryker/",
         "!/types/",
         "!*.swp",
         "**",
@@ -59,7 +59,7 @@ export default {
             },
         },
         {
-            patterns: "/.metalint/**/*.js",
+            patterns: "*.config.js",
             linters: {
                 eslint: ["eslint.config.js", "eslint_config.config.js"],
             },
