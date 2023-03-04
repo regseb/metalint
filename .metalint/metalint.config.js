@@ -6,8 +6,8 @@
 
 export default {
     patterns: [
-        "!/.git/",
         "!/CHANGELOG.md",
+        "!/.git/",
         "!/jsdocs/",
         "!/node_modules/",
         "!/.stryker/",
@@ -27,7 +27,7 @@ export default {
             },
         },
         {
-            patterns: "/src/core/**/*.js",
+            patterns: ["/.script/**/*.js", "/src/core/**/*.js"],
             linters: {
                 eslint: ["eslint.config.js", "eslint_node.config.js"],
             },
@@ -40,12 +40,6 @@ export default {
                     "eslint_node.config.js",
                     "eslint_nodebin.config.js",
                 ],
-            },
-        },
-        {
-            patterns: "/.script/**/*.js",
-            linters: {
-                eslint: ["eslint.config.js", "eslint_node.config.js"],
             },
         },
         {

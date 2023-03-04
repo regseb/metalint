@@ -876,7 +876,7 @@ export default {
                 exception: "throws",
                 yield: "yields",
                 linkcode: "link",
-                linkplain: " link",
+                linkplain: "link",
             },
         },
     },
