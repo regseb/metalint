@@ -1,5 +1,9 @@
 # Metalint
 
+<!-- Utiliser du HTML pour faire flotter l'image à droite. -->
+<!-- markdownlint-disable-next-line no-inline-html-->
+<img src="asset/logo.svg" align="right" alt="">
+
 [![npm][img-npm]][link-npm]
 [![build][img-build]][link-build]
 [![coverage][img-coverage]][link-coverage]
@@ -56,17 +60,18 @@ npm install metalint --save-dev
 
 Tous les fichiers de configuration sont à regrouper dans le répertoire
 `.metalint/` qui doit être placé à la racine du projet. Le fichier
-`metalint.config.js` contient un objet JSON indiquant les linters à utiliser
-pour chaque fichier. Les autres fichiers contiennent les options spécifiques
-pour les linters.
+`metalint.config.js` export un objet JSON indiquant les linters à utiliser pour
+chaque fichier. Les autres fichiers contiennent les options spécifiques pour les
+linters.
 
 ## Exemple
 
-Dans cet exemple du fichier de configuration `metalint.json`, Metalint analyse
-les fichiers JavaScript (non-minifiés), HTML et CSS ; avec respectivement les
-linters ESLint, HTMLHint et stylelint.
+Dans cet exemple des fichiers de configuration, Metalint analyse les fichiers
+JavaScript (non-minifiés), HTML et CSS ; avec respectivement les linters ESLint,
+HTMLHint et stylelint.
 
 ```JavaScript
+// .metalint/metalint.config.js
 export default {
     patterns: ["!/.git/", "!/node_modules/", "**"],
     checkers: [
@@ -84,11 +89,46 @@ export default {
 };
 ```
 
-## Usage
-
-```Shell
-metalint
+```JavaScript
+// .metalint/eslint.config.js
+export default {
+    rules: {
+        quotes: ["error", "double"],
+        semi: ["error", "always"],
+    },
+};
 ```
+
+```JavaScript
+// .metalint/htmlhint.config.js
+export default {
+    "attr-value-not-empty": false,
+};
+```
+
+```JavaScript
+// .metalint/stylelint.config.js
+export default {
+    rules: {
+        "color-no-invalid-hex": true,
+    },
+};
+```
+
+## Intégration
+
+Après avoir installé Metalint et les linters dans votre projet npm, vous pouvez
+ajouter le script suivant dans votre `package.json` :
+
+```JSON
+{
+    "scripts": {
+        "lint": "metalint"
+    }
+}
+```
+
+Metalint est maintenant utilisable avec la commande : `npm run lint`
 
 [img-npm]: https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=white
 [img-build]: https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=white
