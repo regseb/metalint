@@ -17,7 +17,7 @@ export default {
     ],
     checkers: [
         {
-            patterns: ["*.json", "*.md", "*.yml"],
+            patterns: ["*.json", "*.md", "*.svg", "*.yml"],
             linters: "prettier",
         },
         {
