@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.11.1](https://github.com/regseb/metalint/compare/v0.11.0...v0.11.1) (2023-03-04)
+
+
+### Features
+
+* Ajouter le wrapper pour Prettier. ([c4e5075](https://github.com/regseb/metalint/commit/c4e5075813376a28a065e18932e348e7d1d88af1))
+* Ajouter une option pour corriger les fichiers. ([ef96f0d](https://github.com/regseb/metalint/commit/ef96f0d2e47162b757c9237a175016593daa3f8a))
+
+
+### Bug Fixes
+
+* "*" représente seulement les fichiers. ([13d76d4](https://github.com/regseb/metalint/commit/13d76d4a5aeca82f8c38c198d7dab6acea1e827c))
+
 ### [0.11.0](https://github.com/regseb/metalint/compare/v0.10.0...v0.11.0) (2022-11-15)
 
 
