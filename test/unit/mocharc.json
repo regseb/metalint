@@ -1,0 +1,5 @@
+{
+  "require": ["test/hooks.js"],
+  "spec": "test/unit/**/*.js",
+  "timeout": 0
+}

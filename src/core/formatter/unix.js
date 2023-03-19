@@ -4,23 +4,19 @@
  * @author Sébastien Règne
  */
 
+import Formatter from "./formatter.js";
+
 /**
  * @typedef {NodeJS.WritableStream} WritableStream
- * @typedef {import("../../types").Notice} Notice
+ * @typedef {import("../../type/index.js").Level} Level
+ * @typedef {import("../../type/index.js").Notice} Notice
  */
 
 /**
  * Le formateur qui écrit les résultats dans un format simple : une notification
  * par ligne.
  */
-export const Formatter = class {
-    /**
-     * Le niveau de sévérité minimum des notifications affichées.
-     *
-     * @type {number}
-     */
-    #level;
-
+export default class UnixFormatter extends Formatter {
     /**
      * Le flux où écrire les résultats.
      *
@@ -38,13 +34,14 @@ export const Formatter = class {
     /**
      * Crée un formateur.
      *
-     * @param {number}         level  Le niveau de sévérité minimum des
-     *                                notifications affichées.
-     * @param {WritableStream} writer Le flux où écrire les résultats.
+     * @param {Level}          level            Le niveau de sévérité minimum
+     *                                          des notifications affichées.
+     * @param {Object}         options          Les options du formateur.
+     * @param {WritableStream} [options.writer] Le flux où écrire les résultats.
      */
-    constructor(level, writer) {
-        this.#level = level;
-        this.#writer = writer;
+    constructor(level, options) {
+        super(level);
+        this.#writer = options.writer ?? process.stdout;
     }
 
     /**
@@ -53,15 +50,17 @@ export const Formatter = class {
      * @param {string}             file    Le fichier analysé.
      * @param {Notice[]|undefined} notices La liste des notifications ou
      *                                     <code>undefined</code>.
+     * @returns {Promise<void>} La promesse indiquant que les notifications ont
+     *                          été traitées.
      */
     notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
         // critères des checkers) ou si aucune notification a été remontée.
         if (
             undefined === notices ||
-            !notices.some((n) => this.#level >= n.severity)
+            !notices.some((n) => this.level >= n.severity)
         ) {
-            return;
+            return Promise.resolve();
         }
 
         // Séparer les fichiers par une ligne vide.
@@ -71,14 +70,14 @@ export const Formatter = class {
             this.#writer.write("\n");
         }
 
-        for (const notice of notices.filter((n) => this.#level >= n.severity)) {
+        for (const notice of notices.filter((n) => this.level >= n.severity)) {
             this.#writer.write(`${file}:`);
 
             if (0 === notice.locations.length) {
                 this.#writer.write(":");
             } else {
-                this.#writer.write(`${notice.locations[0].line.toString()}:`);
-                if ("column" in notice.locations[0]) {
+                this.#writer.write(`${notice.locations[0].line}:`);
+                if (undefined !== notice.locations[0].column) {
                     this.#writer.write(notice.locations[0].column.toString());
                 }
             }
@@ -89,17 +88,18 @@ export const Formatter = class {
             }
             this.#writer.write(")\n");
         }
+        return Promise.resolve();
     }
 
     /**
-     * Finalise l'affichage.
+     * Finalise les résultats.
      *
-     * @returns {Promise<void>} La promesse indiquant que tous les textes sont
-     *                          écrits.
+     * @returns {Promise<void>} La promesse indiquant que les résultats ont été
+     *                          finalisés.
      */
     finalize() {
         return new Promise((resolve) => {
-            this.#writer.write("", "utf8", resolve);
+            this.#writer.write("", () => resolve());
         });
     }
-};
+}

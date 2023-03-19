@@ -1,77 +1,128 @@
 /**
  * @module
  * @license MIT
- * @see {@link https://www.npmjs.com/package/prettier|Prettier}
  * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
 import prettier from "prettier";
-import SEVERITY from "../severity.js";
+import Levels from "../levels.js";
+import Severities from "../severities.js";
+import Wrapper from "./wrapper.js";
 
 /**
- * @typedef {import("../../types").Notice} Notice
+ * @typedef {import("../../type/index.d.ts").Level} Level
+ * @typedef {import("../../type/index.d.ts").PartialNotice} PartialNotice
  */
 
 /**
- * Vérifie un fichier avec l'utilitaire <strong>Prettier</strong>.
+ * L'enrobage du linter <strong>Prettier</strong>.
  *
- * @param {string}           file          Le fichier qui sera vérifié.
- * @param {Object|undefined} options       Les options qui seront passées au
- *                                         linter ou <code>undefined</code> pour
- *                                         les options par défaut.
- * @param {Object}           context       Le contexte avec d'autres
- *                                         informations.
- * @param {number}           context.level Le niveau de sévérité minimum des
- *                                         notifications retournées.
- * @param {boolean}          context.fix   La marque indiquant s'il faut
- *                                         corriger le fichier.
- * @returns {Promise<Notice[]>} Une promesse retournant la liste des
- *                              notifications.
+ * @see https://www.npmjs.com/package/prettier
  */
-export const wrapper = async function (file, options, { level, fix }) {
-    if (SEVERITY.FATAL > level) {
-        return [];
+export default class PrettierWrapper extends Wrapper {
+    /**
+     * Les options du linter.
+     *
+     * @type {Record<string, any>}
+     * @see https://prettier.io/docs/en/options.html
+     */
+    #options;
+
+    /**
+     * Crée un enrobage pour l'utilitaire <strong>Prettier</strong>.
+     *
+     * @param {Object}              context       Le contexte de l'enrobage.
+     * @param {Level}               context.level Le niveau de sévérité minimum
+     *                                            des notifications retournées.
+     * @param {boolean}             context.fix   La marque indiquant s'il faut
+     *                                            corriger le fichier.
+     * @param {string}              context.root  L'adresse du répertoire où se
+     *                                            trouve le répertoire
+     *                                            <code>.metalint/</code>.
+     * @param {string[]}            context.files La liste de tous les fichiers
+     *                                            analysés.
+     * @param {Record<string, any>} options       Les options du linter.
+     */
+    constructor(context, options) {
+        super(context);
+        this.#options = options;
     }
 
-    const source = await fs.readFile(file, "utf8");
-    const config = { filepath: file, ...options };
-
-    try {
-        if (fix) {
-            const output = prettier.format(source, config);
-            if (source !== output) {
-                await fs.writeFile(file, output);
-            }
+    /**
+     * Vérifie un fichier.
+     *
+     * @param {string} file Le fichier qui sera vérifié.
+     * @returns {Promise<PartialNotice[]>} Une promesse retournant la liste des
+     *                                     notifications.
+     */
+    async lint(file) {
+        if (Levels.FATAL > this.level) {
             return [];
         }
 
-        const result = prettier.check(source, config);
-        if (!result || SEVERITY.ERROR > level) {
+        const source = await fs.readFile(file, "utf8");
+        const config = { ...this.#options, filepath: file };
+
+        try {
+            if (this.fix) {
+                const output = prettier.format(source, config);
+                if (source !== output) {
+                    await fs.writeFile(file, output);
+                }
+                return [];
+            }
+
+            const result = prettier.check(source, config);
+            if (result || Levels.ERROR > this.level) {
+                return [];
+            }
+
             return [
                 {
                     file,
                     linter: "prettier",
-                    severity: SEVERITY.ERROR,
                     message: "Code style issues found.",
-                    locations: [],
+                },
+            ];
+        } catch (err) {
+            if ("UndefinedParserError" === err.constructor.name) {
+                return [
+                    {
+                        file,
+                        linter: "prettier",
+                        severity: Severities.FATAL,
+                        message: err.message.replace(/: .*$/u, "."),
+                    },
+                ];
+            }
+            if ("SyntaxError" === err.name) {
+                return [
+                    {
+                        file,
+                        linter: "prettier",
+                        severity: Severities.FATAL,
+                        message: err.message.slice(
+                            0,
+                            err.message.indexOf(" ("),
+                        ),
+                        locations: [
+                            {
+                                line: err.loc.start.line,
+                                column: err.loc.start.column,
+                            },
+                        ],
+                    },
+                ];
+            }
+            return [
+                {
+                    file,
+                    linter: "prettier",
+                    severity: Severities.FATAL,
+                    message: err.message,
                 },
             ];
         }
-        return [];
-    } catch (err) {
-        return [
-            {
-                file,
-                linter: "prettier",
-                severity: SEVERITY.FATAL,
-                message:
-                    `${err.name}:` +
-                    ` ${err.message.slice(0, err.message.indexOf(" ("))}`,
-                locations: [
-                    { line: err.loc.start.line, column: err.loc.start.column },
-                ],
-            },
-        ];
     }
-};
+}

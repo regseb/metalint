@@ -6,10 +6,22 @@
 
 import fs from "node:fs/promises";
 
-const paths = await fs.readFile(".gitignore", "utf8");
-paths
-    .split("\n")
-    .filter((p) => "" !== p)
-    // Enlever la barre oblique commençant le chemin.
-    .map((p) => p.slice(1))
-    .forEach((p) => fs.rm(p, { force: true, recursive: true }));
+/**
+ * La liste des répertoires générés.
+ *
+ * @type {string[]}
+ */
+const PATHS = [
+    // Ignorer les répertoires générés.
+    ".stryker/",
+    "jsdocs/",
+    "node_modules/",
+    "types/",
+    // Ignorer les autres lockfile.
+    "pnpm-lock.yaml",
+    "yarn.lock",
+];
+
+for (const path of PATHS) {
+    fs.rm(path, { force: true, recursive: true });
+}

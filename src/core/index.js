@@ -4,16 +4,18 @@
  * @author Sébastien Règne
  */
 
-import glob from "./glob.js";
+import { mergeLinters } from "./configuration/override.js";
+import Severities from "./severities.js";
+import Glob from "./utils/glob.js";
 
 /**
- * @typedef {import("../types").Notice} Notice
- * @typedef {import("../types").Checker} Checker
+ * @typedef {import("../type/index.d.ts").FlattenedConfigChecker} FlattenedConfigChecker
+ * @typedef {import("../type/index.d.ts").Notice} Notice
  */
 
 /**
- * Compare deux notifications. En commançant par le numéro de ligne, puis celui
- * de la colonne.
+ * Compare deux notifications. En commençant par le numéro de la ligne, puis
+ * celui de la colonne.
  *
  * @param {Notice} notice1 La première notification.
  * @param {Notice} notice2 La seconde notification.
@@ -43,58 +45,108 @@ const compare = function (notice1, notice2) {
     return notice1.locations.length - notice2.locations.length;
 };
 
+const Results = class {
+    /**
+     * Les données des résultats.
+     *
+     * @type {Record<string, Notice[]|undefined>}
+     */
+    #data;
+
+    constructor(files) {
+        this.#data = Object.fromEntries(files.map((f) => [f, undefined]));
+    }
+
+    add(file, notices) {
+        // Ajouter un tableau vide dans les données pour indiquer que le fichier
+        // a été analysé par au moins un linter.
+        if (undefined === this.#data[file]) {
+            this.#data[file] = [];
+        }
+        for (const notice of notices) {
+            // Vérifier aussi le fichier de la notification car il peut être
+            // différent du fichier d'origine (qui est peut être un répertoire
+            // ou une archive).
+            if (undefined === this.#data[notice.file]) {
+                this.#data[notice.file] = [];
+            }
+            this.#data[notice.file].push({
+                rule: undefined,
+                severity: Severities.ERROR,
+                locations: [],
+                ...notice,
+            });
+        }
+    }
+
+    toObject() {
+        // Trier les notifications.
+        Object.values(this.#data)
+            .filter((r) => undefined !== r)
+            .forEach((r) => r.sort(compare));
+        return this.#data;
+    }
+};
+
 /**
  * Vérifie (en appelant des linters) une liste de fichiers.
  *
- * @param {string[]}  files    La liste des fichiers.
- * @param {Checker[]} checkers La liste des vérifications faites sur les
- *                             fichiers.
- * @param {string}    root     L'adresse du répertoire où se trouve le dossier
- *                             <code>.metalint/</code>.
- * @returns {Promise<Object>} Une promesse retournant la liste des notifications
- *                            regrouper par fichier.
+ * @param {string[]}                 files    La liste des fichiers.
+ * @param {FlattenedConfigChecker[]} checkers La liste des vérifications faites
+ *                                            sur les fichiers.
+ * @param {string}                   root     L'adresse du répertoire où se
+ *                                            trouve le répertoire
+ *                                            <code>.metalint/</code>.
+ * @returns {Promise<Record<string, Notice[]|undefined>>} Une promesse
+ *                                                        retournant la liste
+ *                                                        des notifications
+ *                                                        regroupées par
+ *                                                        fichier.
  */
 export default async function metalint(files, checkers, root) {
-    const results = {};
-
-    const wraps = [];
+    const cache = new Map();
+    const results = new Results(files);
     for (const file of files) {
-        results[file] = undefined;
-
         for (const checker of checkers) {
-            if (glob.test(file, checker.patterns, root)) {
-                results[file] = [];
-                for (const [name, linter] of Object.entries(checker.linters)) {
-                    // Charger l'enrobage du linter et l'utiliser pour vérifier
-                    // le fichier.
-                    // eslint-disable-next-line no-unsanitized/method
-                    const { wrapper } = await import(name);
-                    wraps.push(
-                        await wrapper(file, linter, {
-                            level: checker.level,
-                            fix: checker.fix,
-                            root,
-                        }),
-                    );
+            const glob = new Glob(checker.patterns, { root });
+            if (glob.test(file)) {
+                const key = [glob];
+                const values = [checker.linters];
+                for (const override of checker.overrides) {
+                    const subglob = new Glob(override.patterns, { root });
+                    if (subglob.test(file)) {
+                        key.push(subglob);
+                        values.push(override.linters);
+                    }
+                }
+
+                let wrappers = [];
+                if (cache.has(key)) {
+                    wrappers = cache.get(key);
+                } else {
+                    const linters = values.reduce(mergeLinters);
+                    for (const linter of linters) {
+                        wrappers.push(
+                            // eslint-disable-next-line new-cap
+                            new linter.wrapper(
+                                {
+                                    fix: linter.fix,
+                                    level: linter.level,
+                                    root,
+                                    files,
+                                },
+                                linter.options,
+                            ),
+                        );
+                    }
+                    cache.set(key, wrappers);
+                }
+                for (const wrapper of wrappers) {
+                    results.add(file, await wrapper.lint(file));
                 }
             }
         }
     }
 
-    for (const notices of wraps) {
-        for (const notice of notices.flat()) {
-            // Regrouper les notifications par fichiers.
-            if (undefined === results[notice.file]) {
-                results[notice.file] = [notice];
-            } else {
-                results[notice.file].push(notice);
-            }
-        }
-    }
-    // Trier les notifications.
-    Object.values(results)
-        .filter((r) => undefined !== r)
-        .forEach((r) => r.sort(compare));
-
-    return results;
+    return results.toObject();
 }

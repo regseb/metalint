@@ -1,21 +1,22 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "nodenext",
 
     "allowJs": true,
 
     "esModuleInterop": true,
 
-    "target": "ESNext"
+    "lib": ["dom"],
+    "target": "esnext"
   },
   "include": ["**/*", "**/.*", "**/.*/**/*", "**/.*/**/.*"],
   "exclude": [
     ".git/",
-    "coverage/",
+    ".stryker/",
     "jsdocs/",
     "node_modules/",
     "test/data/",
-    "types/"
+    "types/",
+    ".vscode/"
   ]
 }

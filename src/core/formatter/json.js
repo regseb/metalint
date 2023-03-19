@@ -4,22 +4,22 @@
  * @author Sébastien Règne
  */
 
+import Formatter from "./formatter.js";
+
 /**
  * @typedef {NodeJS.WritableStream} WritableStream
- * @typedef {import("../../types").Notice} Notice
+ * @typedef {import("../../type/index.js").Level} Level
+ * @typedef {import("../../type/index.js").Notice} Notice
  */
 
 /**
- * Le formateur qui écrit les résultats brut (au format JSON).
+ * Le formateur qui écrit les résultats brut (au format JSON). La seul
+ * altération des résultats est le remplacement des <code>undefined</code> par
+ * des <code>null</code>.
+ *
+ * @see https://www.json.org/
  */
-export const Formatter = class {
-    /**
-     * Le niveau de sévérité minimum des notifications affichées.
-     *
-     * @type {number}
-     */
-    #level;
-
+export default class JSONFormatter extends Formatter {
     /**
      * Le flux où écrire les résultats.
      *
@@ -38,23 +38,23 @@ export const Formatter = class {
      * Les notifications (regroupées par fichiers) ayant une sévérité supérieure
      * au niveau minimum.
      *
-     * @type {Object<string, Notice[]|undefined>}
+     * @type {Record<string, Notice[]|undefined>}
      */
     #results = {};
 
     /**
      * Crée un formateur.
      *
-     * @param {number}         level            Le niveau de sévérité minimum
+     * @param {Level}          level            Le niveau de sévérité minimum
      *                                          des notifications affichées.
-     * @param {WritableStream} writer           Le flux où écrire les résultats.
      * @param {Object}         options          Les options du formateur.
+     * @param {WritableStream} [options.writer] Le flux où écrire les résultats.
      * @param {number}         [options.indent] La taille des indentations (en
      *                                          espace).
      */
-    constructor(level, writer, options) {
-        this.#level = level;
-        this.#writer = writer;
+    constructor(level, options) {
+        super(level);
+        this.#writer = options.writer ?? process.stdout;
         this.#indent = options.indent ?? 0;
     }
 
@@ -64,30 +64,33 @@ export const Formatter = class {
      * @param {string}             file    Le fichier analysé.
      * @param {Notice[]|undefined} notices La liste des notifications ou
      *                                     <code>undefined</code>.
+     * @returns {Promise<void>} La promesse indiquant que les notifications ont
+     *                          été traitées.
      */
     notify(file, notices) {
-        this.#results[file] = notices?.filter((n) => this.#level >= n.severity);
+        this.#results[file] = notices?.filter((n) => this.level >= n.severity);
+        return Promise.resolve();
     }
 
     /**
-     * Affiche les résultats.
+     * Finalise les résultats.
      *
-     * @returns {Promise<void>} La promesse indiquant que tous les textes sont
-     *                          écrits.
+     * @returns {Promise<void>} La promesse indiquant que les résultats ont été
+     *                          finalisés.
      */
     finalize() {
         // Afficher l'objet JSON.
         this.#writer.write(
             JSON.stringify(
                 this.#results,
-                // Remplacer les undefined par null.
+                // Remplacer les undefined par des null.
                 // eslint-disable-next-line unicorn/no-null
                 (_, v) => v ?? null,
                 this.#indent,
             ),
         );
         return new Promise((resolve) => {
-            this.#writer.write("\n", "utf8", resolve);
+            this.#writer.write("\n", () => resolve());
         });
     }
-};
+}

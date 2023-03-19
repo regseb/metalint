@@ -1,7 +1,6 @@
 /**
  * @module
  * @license MIT
- * @see {@link https://www.npmjs.com/package/doiuse|doiuse}
  * @author Sébastien Règne
  */
 
@@ -9,52 +8,80 @@
 // n'y est pas. https://github.com/nodejs/node/issues/38627
 import { createReadStream } from "node:fs";
 import doiuse from "doiuse/stream.js";
-import SEVERITY from "../severity.js";
+import Levels from "../levels.js";
+import Wrapper from "./wrapper.js";
 
 /**
- * @typedef {import("../../types").Notice} Notice
+ * @typedef {import("../../type/index.d.ts").Level} Level
+ * @typedef {import("../../type/index.d.ts").PartialNotice} PartialNotice
  */
 
 /**
- * Vérifie un fichier avec le linter <strong>doiuse</strong>.
+ * L'enrobage du linter <strong>doiuse</strong>.
  *
- * @param {string}           file          Le fichier qui sera vérifié.
- * @param {Object|undefined} options       Les options qui seront passées au
- *                                         linter ou <code>undefined</code> pour
- *                                         les options par défaut.
- * @param {Object}           context       Le contexte avec d'autres
- *                                         informations.
- * @param {number}           context.level Le niveau de sévérité minimum des
- *                                         notifications retournées.
- * @returns {Promise<Notice[]>} Une promesse retournant la liste des
- *                              notifications.
+ * @see https://www.npmjs.com/package/doiuse
  */
-export const wrapper = async function (file, options, { level }) {
-    if (SEVERITY.ERROR > level) {
-        return [];
+export default class DoiuseWrapper extends Wrapper {
+    /**
+     * Les options du linter.
+     *
+     * @type {Record<string, any>}
+     */
+    #options;
+
+    /**
+     * Crée un enrobage pour le linter <strong>doiuse</strong>.
+     *
+     * @param {Object}              context       Le contexte de l'enrobage.
+     * @param {Level}               context.level Le niveau de sévérité minimum
+     *                                            des notifications retournées.
+     * @param {boolean}             context.fix   La marque indiquant s'il faut
+     *                                            corriger le fichier.
+     * @param {string}              context.root  L'adresse du répertoire où se
+     *                                            trouve le répertoire
+     *                                            <code>.metalint/</code>.
+     * @param {string[]}            context.files La liste de tous les fichiers
+     *                                            analysés.
+     * @param {Record<string, any>} options       Les options du linter.
+     */
+    constructor(context, options) {
+        super(context);
+        this.#options = options;
     }
 
-    const results = await new Promise((resolve) => {
-        const data = [];
-        createReadStream(file)
-            .pipe(doiuse(options ?? {}))
-            .on("data", (d) => data.push(d))
-            .on("end", () => resolve(data));
-    });
-    return results.map((result) => ({
-        file,
-        linter: "doiuse",
-        rule: result.feature,
-        severity: SEVERITY.ERROR,
-        message: result.message.slice(
-            result.message.indexOf(": ") + 2,
-            result.message.lastIndexOf(" ("),
-        ),
-        locations: [
-            {
-                line: result.usage.source.original.start.line,
-                column: result.usage.source.original.start.column,
-            },
-        ],
-    }));
-};
+    /**
+     * Vérifie un fichier.
+     *
+     * @param {string} file Le fichier qui sera vérifié.
+     * @returns {Promise<PartialNotice[]>} Une promesse retournant la liste des
+     *                                     notifications.
+     */
+    async lint(file) {
+        if (Levels.ERROR > this.level) {
+            return [];
+        }
+
+        const results = await new Promise((resolve) => {
+            const data = [];
+            createReadStream(file)
+                .pipe(doiuse(this.#options))
+                .on("data", (d) => data.push(d))
+                .on("end", () => resolve(data));
+        });
+        return results.map((result) => ({
+            file,
+            linter: "doiuse",
+            rule: result.feature,
+            message: result.message.slice(
+                result.message.indexOf(": ") + 2,
+                result.message.lastIndexOf(" ("),
+            ),
+            locations: [
+                {
+                    line: result.usage.source.original.start.line,
+                    column: result.usage.source.original.start.column,
+                },
+            ],
+        }));
+    }
+}

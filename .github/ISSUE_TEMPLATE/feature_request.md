@@ -17,10 +17,10 @@ assignees: ""
 
 ### Environment
 
-- Metalint version<!-- e.g. 0.10.0 -->:
-- Node version<!-- e.g. v16.14.0 -->:
-- Linter version (if appropriate)<!-- e.g. eslint 8.9.0 -->:
+- Metalint version<!-- e.g. 0.12.0 -->:
+- Node version<!-- e.g. v18.12.0 -->:
+- Linter version (if appropriate)<!-- e.g. eslint 8.39.0 -->:
 
 ### Additional context
 
-<!-- Add any other context or screenshots about the feature request here. -->
+<!-- Add any other context about the feature request here. -->

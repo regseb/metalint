@@ -1,65 +1,95 @@
 /**
  * @module
  * @license MIT
- * @see {@link https://www.npmjs.com/package/purgecss|PurgeCSS}
  * @author Sébastien Règne
  */
 
 import { PurgeCSS } from "purgecss";
-import glob from "../glob.js";
-import SEVERITY from "../severity.js";
+import Levels from "../levels.js";
+import Severities from "../severities.js";
+import Glob from "../utils/glob.js";
+import Wrapper from "./wrapper.js";
 
 /**
- * @typedef {import("../../types").Notice} Notice
+ * @typedef {import("../../type/index.d.ts").Level} Level
+ * @typedef {import("../../type/index.d.ts").PartialNotice} PartialNotice
  */
 
 /**
- * Vérifie un fichier avec l'utilitaire <strong>PurgeCSS</strong>.
+ * L'enrobage du linter <strong>PurgeCSS</strong>.
  *
- * @param {string}           file          Le fichier qui sera vérifié.
- * @param {Object|undefined} options       Les options qui seront passées au
- *                                         linter ou <code>undefined</code> pour
- *                                         les options par défaut.
- * @param {Object}           context       Le contexte avec d'autres
- *                                         informations.
- * @param {number}           context.level Le niveau de sévérité minimum des
- *                                         notifications retournées.
- * @param {string}           context.root  L'adresse du répertoire où se trouve
- *                                         le dossier <code>.metalint/</code>.
- * @returns {Promise<Notice[]>} Une promesse retournant la liste des
- *                              notifications.
+ * @see https://www.npmjs.com/package/purgecss
  */
-export const wrapper = async function (file, options, { level, root }) {
-    if (SEVERITY.FATAL > level) {
-        return [];
-    }
+export default class PurgeCSSWrapper extends Wrapper {
+    /**
+     * Les options du linter.
+     *
+     * @type {Record<string, any>}
+     * @see https://purgecss.com/configuration.html
+     */
+    #options;
 
-    const results = await new PurgeCSS().purge({
-        ...options,
+    /**
+     * Crée un enrobage pour l'utilitaire <strong>PurgeCSS</strong>.
+     *
+     * @param {Object}              context       Le contexte de l'enrobage.
+     * @param {Level}               context.level Le niveau de sévérité minimum
+     *                                            des notifications retournées.
+     * @param {boolean}             context.fix   La marque indiquant s'il faut
+     *                                            corriger le fichier.
+     * @param {string}              context.root  L'adresse du répertoire où se
+     *                                            trouve le répertoire
+     *                                            <code>.metalint/</code>.
+     * @param {string[]}            context.files La liste de tous les fichiers
+     *                                            analysés.
+     * @param {Record<string, any>} options       Les options du linter.
+     */
+    constructor(context, options) {
+        super(context);
         // Utiliser le format des patrons de Metalint.
-        content: await glob.walk([], options.content, root),
-        css: [file],
-        rejected: true,
-    });
-    if (0 === results.length) {
-        return [
-            {
-                file,
-                linter: "purgecss",
-                severity: SEVERITY.FATAL,
-                message: "No content provided.",
-                locations: [],
-            },
-        ];
+        const glob = new Glob(options.content, { root: this.root });
+        this.#options = {
+            ...options,
+            content: context.files.filter((f) => glob.test(f)),
+            rejected: true,
+        };
     }
 
-    return results[0].rejected
-        .map((rejected) => ({
+    /**
+     * Vérifie un fichier.
+     *
+     * @param {string} file Le fichier qui sera vérifié.
+     * @returns {Promise<PartialNotice[]>} Une promesse retournant la liste des
+     *                                     notifications.
+     */
+    async lint(file) {
+        if (Levels.FATAL > this.level) {
+            return [];
+        }
+
+        const results = await new PurgeCSS().purge({
+            ...this.#options,
+            css: [file],
+        });
+        if (0 === results.length) {
+            return [
+                {
+                    file,
+                    linter: "purgecss",
+                    severity: Severities.FATAL,
+                    message: "No content provided.",
+                },
+            ];
+        }
+
+        if (Levels.ERROR > this.level) {
+            return [];
+        }
+
+        return results[0].rejected.map((rejected) => ({
             file,
             linter: "purgecss",
-            severity: SEVERITY.ERROR,
             message: `'${rejected}' is never used.`,
-            locations: [],
-        }))
-        .filter((n) => level >= n.severity);
-};
+        }));
+    }
+}

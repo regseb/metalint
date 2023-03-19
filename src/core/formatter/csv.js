@@ -4,9 +4,12 @@
  * @author Sébastien Règne
  */
 
+import Formatter from "./formatter.js";
+
 /**
  * @typedef {NodeJS.WritableStream} WritableStream
- * @typedef {import("../../types").Notice} Notice
+ * @typedef {import("../../type/index.js").Level} Level
+ * @typedef {import("../../type/index.js").Notice} Notice
  */
 
 /**
@@ -17,7 +20,7 @@
  * @returns {string} Le texte protégé.
  */
 const doublequote = function (value) {
-    return `"` + value.replaceAll(`"`, `""`) + `"`;
+    return '"' + value.replaceAll('"', '""') + '"';
 };
 
 /**
@@ -25,14 +28,7 @@ const doublequote = function (value) {
  *
  * @see https://tools.ietf.org/html/rfc4180
  */
-export const Formatter = class {
-    /**
-     * Le niveau de sévérité minimum des notifications affichées.
-     *
-     * @type {number}
-     */
-    #level;
-
+export default class CSVFormatter extends Formatter {
     /**
      * Le flux où écrire les résultats.
      *
@@ -43,13 +39,14 @@ export const Formatter = class {
     /**
      * Crée un formateur.
      *
-     * @param {number}         level  Le niveau de sévérité minimum des
-     *                                notifications affichées.
-     * @param {WritableStream} writer Le flux où écrire les résultats.
+     * @param {Level}          level            Le niveau de sévérité minimum
+     *                                          des notifications affichées.
+     * @param {Object}         options          Les options du formateur.
+     * @param {WritableStream} [options.writer] Le flux où écrire les résultats.
      */
-    constructor(level, writer) {
-        this.#level = level;
-        this.#writer = writer;
+    constructor(level, options) {
+        super(level);
+        this.#writer = options.writer ?? process.stdout;
 
         // Ecrire la ligne des titres.
         this.#writer.write("file,line,column,message,linter,rule\r\n");
@@ -61,22 +58,24 @@ export const Formatter = class {
      * @param {string}             file    Le fichier analysé.
      * @param {Notice[]|undefined} notices La liste des notifications ou
      *                                     <code>undefined</code>.
+     * @returns {Promise<void>} La promesse indiquant que les notifications ont
+     *                          été traitées.
      */
     notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
         // critères des checkers).
         if (undefined === notices) {
-            return;
+            return Promise.resolve();
         }
 
-        for (const notice of notices.filter((n) => this.#level >= n.severity)) {
+        for (const notice of notices.filter((n) => this.level >= n.severity)) {
             this.#writer.write(`${doublequote(file)},`);
 
             if (0 === notice.locations.length) {
                 this.#writer.write(",");
             } else {
-                this.#writer.write(`${notice.locations[0].line.toString()},`);
-                if ("column" in notice.locations[0]) {
+                this.#writer.write(`${notice.locations[0].line},`);
+                if (undefined !== notice.locations[0].column) {
                     this.#writer.write(notice.locations[0].column.toString());
                 }
             }
@@ -89,17 +88,18 @@ export const Formatter = class {
             }
             this.#writer.write("\r\n");
         }
+        return Promise.resolve();
     }
 
     /**
-     * Finalise l'affichage.
+     * Finalise les résultats.
      *
-     * @returns {Promise<void>} La promesse indiquant que tous les textes sont
-     *                          écrits.
+     * @returns {Promise<void>} La promesse indiquant que les résultats ont été
+     *                          finalisés.
      */
     finalize() {
         return new Promise((resolve) => {
-            this.#writer.write("", "utf8", resolve);
+            this.#writer.write("", () => resolve());
         });
     }
-};
+}

@@ -1,82 +1,109 @@
 /**
  * @module
  * @license MIT
- * @see {@link https://www.npmjs.com/package/eslint|ESLint}
  * @author Sébastien Règne
  */
 
 import fs from "node:fs/promises";
 import { ESLint } from "eslint";
-import SEVERITY from "../severity.js";
+import Levels from "../levels.js";
+import Severities from "../severities.js";
+import Wrapper from "./wrapper.js";
 
 /**
- * @typedef {import("../../types").Notice} Notice
+ * @typedef {import("../../type/index.d.ts").Level} Level
+ * @typedef {import("../../type/index.d.ts").PartialNotice} PartialNotice
  */
 
 /**
- * Vérifie un fichier avec le linter <strong>ESLint</strong>.
+ * L'enrobage du linter <strong>ESLint</strong>.
  *
- * @param {string}           file          Le fichier qui sera vérifié.
- * @param {Object|undefined} options       Les options qui seront passées au
- *                                         linter ou <code>undefined</code> pour
- *                                         les options par défaut.
- * @param {Object}           context       Le contexte avec d'autres
- *                                         informations.
- * @param {number}           context.level Le niveau de sévérité minimum des
- *                                         notifications retournées.
- * @param {boolean}          context.fix   La marque indiquant s'il faut
- *                                         corriger le fichier.
- * @returns {Promise<Notice[]>} Une promesse retournant la liste des
- *                              notifications.
+ * @see https://www.npmjs.com/package/eslint
  */
-export const wrapper = async function (file, options, { level, fix }) {
-    if (SEVERITY.FATAL > level) {
-        return [];
+export default class ESLintWrapper extends Wrapper {
+    /**
+     * L'instance de ESLint.
+     *
+     * @type {typeof ESLint}
+     * @see https://eslint.org/docs/latest/integrate/nodejs-api
+     */
+    #eslint;
+
+    /**
+     * Crée un enrobage pour le linter <strong>ESLint</strong>.
+     *
+     * @param {Object}              context       Le contexte de l'enrobage.
+     * @param {Level}               context.level Le niveau de sévérité minimum
+     *                                            des notifications retournées.
+     * @param {boolean}             context.fix   La marque indiquant s'il faut
+     *                                            corriger le fichier.
+     * @param {string}              context.root  L'adresse du répertoire où se
+     *                                            trouve le répertoire
+     *                                            <code>.metalint/</code>.
+     * @param {string[]}            context.files La liste de tous les fichiers
+     *                                            analysés.
+     * @param {Record<string, any>} options       Les options du linter.
+     */
+    constructor(context, options) {
+        super(context);
+        this.#eslint = new ESLint({
+            globInputPaths: false,
+            ignore: false,
+            baseConfig: options,
+            useEslintrc: false,
+            fix: this.fix,
+        });
     }
 
-    const eslint = new ESLint({
-        globInputPaths: false,
-        ignore: false,
-        baseConfig: options,
-        useEslintrc: false,
-        fix,
-    });
-    const [results] = await eslint.lintFiles(file);
+    /**
+     * Vérifie un fichier.
+     *
+     * @param {string} file Le fichier qui sera vérifié.
+     * @returns {Promise<PartialNotice[]>} Une promesse retournant la liste des
+     *                                     notifications.
+     */
+    async lint(file) {
+        if (Levels.FATAL > this.level) {
+            return [];
+        }
 
-    if (undefined !== results.output) {
-        await fs.writeFile(file, results.output);
+        const [results] = await this.#eslint.lintFiles(file);
+
+        if (undefined !== results.output) {
+            await fs.writeFile(file, results.output);
+        }
+
+        return results.messages
+            .map((result) => {
+                let severity;
+                if (result.fatal) {
+                    severity = Severities.FATAL;
+                } else if (1 === result.severity) {
+                    severity = Severities.WARN;
+                } else {
+                    severity = Severities.ERROR;
+                }
+
+                return {
+                    file,
+                    linter: "eslint",
+                    rule: result.ruleId ?? undefined,
+                    severity,
+                    message: result.message,
+                    locations: [
+                        {
+                            line: result.line,
+                            column: result.column,
+                            ...(undefined === result.endLine
+                                ? {}
+                                : { endLine: result.endLine }),
+                            ...(undefined === result.endColumn
+                                ? {}
+                                : { endColumn: result.endColumn }),
+                        },
+                    ],
+                };
+            })
+            .filter((n) => this.level >= n.severity);
     }
-
-    return results.messages
-        .map((result) => {
-            let severity;
-            if (result.fatal) {
-                severity = SEVERITY.FATAL;
-            } else if (1 === result.severity) {
-                severity = SEVERITY.WARN;
-            } else {
-                severity = SEVERITY.ERROR;
-            }
-
-            return {
-                file,
-                linter: "eslint",
-                ...(null === result.ruleId ? {} : { rule: result.ruleId }),
-                severity,
-                message: result.message,
-                locations: [
-                    {
-                        line: result.line,
-                        column: result.column,
-                        ...(undefined === result.endLine
-                            ? {}
-                            : { endLine: result.endLine }),
-                        ...(undefined === result.endColumn
-                            ? {}
-                            : { endColumn: result.endColumn }),
-                    },
-                ],
-            };
-        })
-        .filter((n) => level >= n.severity);
-};
+}

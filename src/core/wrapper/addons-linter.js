@@ -1,76 +1,105 @@
 /**
  * @module
  * @license MIT
- * @see {@link https://www.npmjs.com/package/addons-linter|Add-ons Linter}
  * @author Sébastien Règne
  */
 
-import path from "node:path";
+import path from "node:path/posix";
 import linter from "addons-linter";
-import SEVERITY from "../severity.js";
+import Levels from "../levels.js";
+import Severities from "../severities.js";
+import Wrapper from "./wrapper.js";
 
 /**
- * @typedef {import("../../types").Notice} Notice
+ * @typedef {import("../../type/index.d.ts").Level} Level
+ * @typedef {import("../../type/index.d.ts").PartialNotice} PartialNotice
  */
 
 /**
- * Vérifie un fichier avec <strong>Add-ons Linter</strong>.
+ * L'enrobage du linter <strong>Add-ons Linter</strong>.
  *
- * @param {string}           file          Le fichier qui sera vérifié.
- * @param {Object|undefined} options       Les options qui seront passées au
- *                                         linter ou <code>undefined</code> pour
- *                                         les options par défaut.
- * @param {Object}           context       Le contexte avec d'autres
- *                                         informations.
- * @param {number}           context.level Le niveau de sévérité minimum des
- *                                         notifications retournées.
- * @returns {Promise<Notice[]>} Une promesse retournant la liste des
- *                              notifications.
+ * @see https://www.npmjs.com/package/addons-linter
  */
-export const wrapper = async function (file, options, { level }) {
-    if (SEVERITY.ERROR > level) {
-        return [];
+export default class AddonsLinterWrapper extends Wrapper {
+    /**
+     * Les options du linter.
+     *
+     * @type {Record<string, any>}
+     * @see https://github.com/mozilla/addons-linter#linter-api-usage
+     */
+    #options;
+
+    /**
+     * Crée un enrobage pour le linter <strong>Add-ons Linter</strong>.
+     *
+     * @param {Object}              context       Le contexte de l'enrobage.
+     * @param {Level}               context.level Le niveau de sévérité minimum
+     *                                            des notifications retournées.
+     * @param {boolean}             context.fix   La marque indiquant s'il faut
+     *                                            corriger le fichier.
+     * @param {string}              context.root  L'adresse du répertoire où se
+     *                                            trouve le répertoire
+     *                                            <code>.metalint/</code>.
+     * @param {string[]}            context.files La liste de tous les fichiers
+     *                                            analysés.
+     * @param {Record<string, any>} options       Les options du linter.
+     */
+    constructor(context, options) {
+        super(context);
+        this.#options = {
+            logLevel: "error",
+            stack: false,
+            metadata: false,
+            output: "none",
+            boring: false,
+            selfHosted: false,
+            shouldScanFile: () => true,
+            ...options,
+        };
     }
 
-    const config = {
-        _: [file],
-        logLevel: "error",
-        stack: false,
-        pretty: false,
-        warningsAsErrors: false,
-        metadata: false,
-        output: "none",
-        boring: false,
-        selfHosted: false,
-        shouldScanFile: () => true,
-        ...options,
-    };
-    const results = await linter.createInstance({ config }).run();
-    return [...results.errors, ...results.warnings, ...results.notices]
-        .map((result) => {
-            let severity;
-            switch (result["_type"]) {
-                case "error":
-                    severity = SEVERITY.ERROR;
-                    break;
-                case "warning":
-                    severity = SEVERITY.WARN;
-                    break;
-                default:
-                    severity = SEVERITY.INFO;
-            }
+    /**
+     * Vérifie un fichier.
+     *
+     * @param {string} file Le fichier qui sera vérifié.
+     * @returns {Promise<PartialNotice[]>} Une promesse retournant la liste des
+     *                                     notifications.
+     */
+    async lint(file) {
+        if (Levels.ERROR > this.level) {
+            return [];
+        }
 
-            return {
-                file:
-                    null === result.file || undefined === result.file
-                        ? file
-                        : path.join(file, result.file),
-                linter: "addons-linter",
-                rule: result.code,
-                severity,
-                message: result.message,
-                locations: [],
-            };
-        })
-        .filter((n) => level >= n.severity);
-};
+        const config = {
+            ...this.#options,
+            _: [file],
+        };
+        const results = await linter.createInstance({ config }).run();
+        return [...results.errors, ...results.warnings, ...results.notices]
+            .map((result) => {
+                let severity;
+                switch (result["_type"]) {
+                    case "error":
+                        severity = Severities.ERROR;
+                        break;
+                    case "warning":
+                        severity = Severities.WARN;
+                        break;
+                    default:
+                        severity = Severities.INFO;
+                }
+
+                return {
+                    file:
+                        null === result.file || undefined === result.file
+                            ? file
+                            : path.join(file, result.file),
+                    linter: "addons-linter",
+                    rule: result.code,
+                    severity,
+                    message: result.message,
+                };
+            })
+            .filter((n) => this.level >= n.severity);
+    }
+}

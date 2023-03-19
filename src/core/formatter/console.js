@@ -6,12 +6,15 @@
 
 import fs from "node:fs/promises";
 import chalk from "chalk";
-import SEVERITY from "../severity.js";
+import Severities from "../severities.js";
+import Formatter from "./formatter.js";
 
 /**
  * @typedef {NodeJS.WritableStream} WritableStream
- * @typedef {import("../../types").Notice} Notice
- * @typedef {import("../../types").Location} Location
+ * @typedef {import("../../type/index.js").Level} Level
+ * @typedef {import("../../type/index.js").Location} Location
+ * @typedef {import("../../type/index.js").Notice} Notice
+ * @typedef {import("../../type/index.js").Severity} Severity
  */
 
 /**
@@ -83,7 +86,7 @@ const printCodeSource = function (locations, content, writer) {
         let i;
         for (i = 0; i < characters.length; ++i) {
             if (characters[i].line === location.line) {
-                if ("column" in location) {
+                if (undefined !== location.column) {
                     characters[i].columns.push(location.column);
                     characters[i].columns.sort();
                 }
@@ -95,7 +98,7 @@ const printCodeSource = function (locations, content, writer) {
                 line: location.line,
                 columns: [],
             };
-            if ("column" in location) {
+            if (undefined !== location.column) {
                 characters[i].columns.push(location.column);
                 characters[i].columns.sort();
             }
@@ -125,14 +128,7 @@ const printCodeSource = function (locations, content, writer) {
 /**
  * Le formateur qui écrit les résultats dans un format adapté pour la console.
  */
-export const Formatter = class {
-    /**
-     * Le niveau de sévérité minimum des notifications affichées.
-     *
-     * @type {number}
-     */
-    #level;
-
+export default class ConsoleFormatter extends Formatter {
     /**
      * Le flux où écrire les résultats.
      *
@@ -140,30 +136,41 @@ export const Formatter = class {
      */
     #writer;
 
+    /**
+     * La marque indiquant s'il faut afficher les fichiers sans notification.
+     *
+     * @type {boolean}
+     */
     #showZeroNotice;
 
+    /**
+     * Le marque indiquant s'il  faut afficher les fichiers non-analysés.
+     *
+     * @type {boolean}
+     */
     #showNoChecked;
 
     /**
      * Crée un formateur.
      *
-     * @param {number}         level                    Le niveau de sévérité
+     * @param {Level}          level                    Le niveau de sévérité
      *                                                  minimum des
      *                                                  notifications affichées.
-     * @param {WritableStream} writer                   Le flux où écrire les
-     *                                                  résultats.
      * @param {Object}         options                  Les options du
      *                                                  formateur.
+     * @param {WritableStream} [options.writer]         Le flux où écrire les
+     *                                                  résultats.
      * @param {boolean}        [options.showZeroNotice] La marque indiquant s'il
      *                                                  faut afficher les
-     *                                                  fichiers sans alerte.
+     *                                                  fichiers sans
+     *                                                  notification.
      * @param {boolean}        [options.showNoChecked]  Le marque indiquant s'il
      *                                                  faut afficher les
      *                                                  fichiers non-analysés.
      */
-    constructor(level, writer, options) {
-        this.#level = level;
-        this.#writer = writer;
+    constructor(level, options) {
+        super(level);
+        this.#writer = options.writer ?? process.stdout;
         this.#showZeroNotice = options.showZeroNotice ?? false;
         this.#showNoChecked = options.showNoChecked ?? false;
     }
@@ -174,6 +181,8 @@ export const Formatter = class {
      * @param {string}             file    Le fichier analysé.
      * @param {Notice[]|undefined} notices La liste des notifications ou
      *                                     <code>undefined</code>.
+     * @returns {Promise<void>} La promesse indiquant que les notifications ont
+     *                          été traitées.
      */
     async notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
@@ -185,7 +194,7 @@ export const Formatter = class {
             }
             return;
         }
-        if (!notices.some((n) => this.#level >= n.severity)) {
+        if (!notices.some((n) => this.level >= n.severity)) {
             if (this.#showZeroNotice) {
                 print(this.#writer, `${file}: 0 notice.`, "BOLD");
                 print(this.#writer, "\n\n");
@@ -193,42 +202,42 @@ export const Formatter = class {
             return;
         }
 
-        /** @type {Object<number, number>} */
-        const counts = {};
-        counts[SEVERITY.FATAL] = 0;
-        counts[SEVERITY.ERROR] = 0;
-        counts[SEVERITY.WARN] = 0;
-        counts[SEVERITY.INFO] = 0;
+        const counts = {
+            [Severities.FATAL]: 0,
+            [Severities.ERROR]: 0,
+            [Severities.WARN]: 0,
+            [Severities.INFO]: 0,
+        };
 
-        for (const notice of notices.filter((n) => this.#level >= n.severity)) {
+        for (const notice of notices.filter((n) => this.level >= n.severity)) {
             counts[notice.severity] += 1;
         }
 
         let line = file + ": ";
-        if (0 < counts[SEVERITY.FATAL]) {
-            line += counts[SEVERITY.FATAL].toString() + " fatal";
-            if (1 < counts[SEVERITY.FATAL]) {
+        if (0 < counts[Severities.FATAL]) {
+            line += `${counts[Severities.FATAL]} fatal`;
+            if (1 < counts[Severities.FATAL]) {
                 line += "s";
             }
             line += ", ";
         }
-        if (0 < counts[SEVERITY.ERROR]) {
-            line += counts[SEVERITY.ERROR].toString() + " error";
-            if (1 < counts[SEVERITY.ERROR]) {
+        if (0 < counts[Severities.ERROR]) {
+            line += `${counts[Severities.ERROR]} error`;
+            if (1 < counts[Severities.ERROR]) {
                 line += "s";
             }
             line += ", ";
         }
-        if (0 < counts[SEVERITY.WARN]) {
-            line += counts[SEVERITY.WARN].toString() + " warning";
-            if (1 < counts[SEVERITY.WARN]) {
+        if (0 < counts[Severities.WARN]) {
+            line += `${counts[Severities.WARN]} warning`;
+            if (1 < counts[Severities.WARN]) {
                 line += "s";
             }
             line += ", ";
         }
-        if (0 < counts[SEVERITY.INFO]) {
-            line += counts[SEVERITY.INFO].toString() + " info";
-            if (1 < counts[SEVERITY.INFO]) {
+        if (0 < counts[Severities.INFO]) {
+            line += `${counts[Severities.INFO]} info`;
+            if (1 < counts[Severities.INFO]) {
                 line += "s";
             }
             line += ", ";
@@ -238,11 +247,10 @@ export const Formatter = class {
         print(this.#writer, "\n");
 
         // Récupérer le code source du fichier si ce n'est pas un répertoire et
-        // s'il existe (il n'est pas dans une archive par exemple).
+        // s'il existe (s'il n'est pas dans une archive par exemple).
         let content;
         try {
-            const stats = await fs.stat(file);
-            if (!stats.isDirectory()) {
+            if (!file.endsWith("/")) {
                 const buffer = await fs.readFile(file, "utf8");
                 content = buffer.split("\n");
             }
@@ -252,18 +260,18 @@ export const Formatter = class {
             }
         }
 
-        for (const notice of notices.filter((n) => this.#level >= n.severity)) {
+        for (const notice of notices.filter((n) => this.level >= n.severity)) {
             switch (notice.severity) {
-                case SEVERITY.FATAL:
+                case Severities.FATAL:
                     print(this.#writer, "FATAL", "MAGENTA");
                     break;
-                case SEVERITY.ERROR:
+                case Severities.ERROR:
                     print(this.#writer, "ERROR", "RED");
                     break;
-                case SEVERITY.WARN:
+                case Severities.WARN:
                     print(this.#writer, "WARN ", "YELLOW");
                     break;
-                case SEVERITY.INFO:
+                case Severities.INFO:
                     print(this.#writer, "INFO ", "BLUE");
                     break;
                 default:
@@ -284,14 +292,14 @@ export const Formatter = class {
     }
 
     /**
-     * Finalise l'affichage.
+     * Finalise les résultats.
      *
-     * @returns {Promise<void>} La promesse indiquant que tous les textes sont
-     *                          écrits.
+     * @returns {Promise<void>} La promesse indiquant que les résultats ont été
+     *                          finalisés.
      */
     finalize() {
         return new Promise((resolve) => {
-            this.#writer.write("", "utf8", resolve);
+            this.#writer.write("", () => resolve());
         });
     }
-};
+}

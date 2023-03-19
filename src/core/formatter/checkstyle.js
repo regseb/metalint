@@ -4,11 +4,13 @@
  * @author Sébastien Règne
  */
 
-import SEVERITY from "../severity.js";
+import Severities from "../severities.js";
+import Formatter from "./formatter.js";
 
 /**
  * @typedef {NodeJS.WritableStream} WritableStream
- * @typedef {import("../../types").Notice} Notice
+ * @typedef {import("../../type/index.js").Level} Level
+ * @typedef {import("../../type/index.js").Notice} Notice
  */
 
 /**
@@ -28,39 +30,18 @@ const encode = function (input) {
     };
     let output = input;
     for (const [character, entity] of Object.entries(ENTITIES)) {
-        output = output.replaceAll(new RegExp(character, "gu"), entity);
+        output = output.replaceAll(character, entity);
     }
     return output;
 };
 
 /**
- * Indente le texte si le niveau de verbosité est supérieure ou égal à
- * <code>1</code>.
- *
- * @param {number}         depth  La profondeur de l'indentation.
- * @param {WritableStream} writer Le flux où écrire l'indentation.
- * @param {number}         size   La taille des indentations (en espace) ou
- *                                <code>-1</code> pour ne pas mettre de retour à
- *                                la ligne.
- */
-const shift = function (depth, writer, size) {
-    if (-1 !== size) {
-        writer.write("\n" + " ".repeat(depth * size));
-    }
-};
-
-/**
  * Le formateur qui écrit les résultats dans le format de
  * <strong>checkstyle</strong>.
+ *
+ * @see https://checkstyle.sourceforge.io/
  */
-export const Formatter = class {
-    /**
-     * Le niveau de sévérité minimum des notifications affichées.
-     *
-     * @type {number}
-     */
-    #level;
-
+export default class CheckstyleFormatter extends Formatter {
     /**
      * Le flux où écrire les résultats.
      *
@@ -79,23 +60,34 @@ export const Formatter = class {
     /**
      * Crée un formateur.
      *
-     * @param {number}         level            Le niveau de sévérité minimum
+     * @param {Level}          level            Le niveau de sévérité minimum
      *                                          des notifications affichées.
-     * @param {WritableStream} writer           Le flux où écrire les résultats.
      * @param {Object}         options          Les options du formateur.
+     * @param {WritableStream} [options.writer] Le flux où écrire les résultats.
      * @param {number}         [options.indent] La taille des indentations (en
      *                                          espace) ou <code>-1</code> (par
      *                                          défaut) pour ne pas mettre de
      *                                          retour à la ligne.
      */
-    constructor(level, writer, options) {
-        this.#level = level;
-        this.#writer = writer;
+    constructor(level, options) {
+        super(level);
+        this.#writer = options.writer ?? process.stdout;
         this.#indent = options.indent ?? -1;
 
-        this.#writer.write(`<?xml version="1.0" encoding="UTF-8"?>`);
-        shift(0, this.#writer, this.#indent);
-        this.#writer.write(`<checkstyle version="8.28">`);
+        this.#writer.write('<?xml version="1.0" encoding="UTF-8"?>');
+        this.#shift(0);
+        this.#writer.write('<checkstyle version="8.28">');
+    }
+
+    /**
+     * Indente et ajoute des retours à la ligne dans le texte.
+     *
+     * @param {number} depth La profondeur de l'indentation.
+     */
+    #shift(depth) {
+        if (-1 !== this.#indent) {
+            this.#writer.write("\n" + " ".repeat(depth * this.#indent));
+        }
     }
 
     /**
@@ -104,42 +96,44 @@ export const Formatter = class {
      * @param {string}             file    Le fichier analysé.
      * @param {Notice[]|undefined} notices La liste des notifications ou
      *                                     <code>undefined</code>.
+     * @returns {Promise<void>} La promesse indiquant que les notifications ont
+     *                          été traitées.
      */
     notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
         // critères des checkers).
         if (undefined === notices) {
-            return;
+            return Promise.resolve();
         }
 
-        shift(1, this.#writer, this.#indent);
-        this.#writer.write(`<file name="${file}">`);
-        for (const notice of notices.filter((n) => this.#level >= n.severity)) {
-            shift(2, this.#writer, this.#indent);
+        this.#shift(1);
+        this.#writer.write(`<file name="${encode(file)}">`);
+        for (const notice of notices.filter((n) => this.level >= n.severity)) {
+            this.#shift(2);
             this.#writer.write("<error");
 
             if (0 !== notice.locations.length) {
                 this.#writer.write(` line="${notice.locations[0].line}"`);
-                if ("column" in notice.locations[0]) {
+                if (undefined !== notice.locations[0].column) {
                     this.#writer.write(
                         ` column="${notice.locations[0].column}"`,
                     );
                 }
             }
 
-            this.#writer.write(` severity="`);
+            this.#writer.write(' severity="');
             switch (notice.severity) {
-                case SEVERITY.FATAL:
-                case SEVERITY.ERROR:
+                case Severities.FATAL:
+                case Severities.ERROR:
                     this.#writer.write("error");
                     break;
-                case SEVERITY.WARN:
+                case Severities.WARN:
                     this.#writer.write("warning");
                     break;
                 default:
                     this.#writer.write("info");
             }
-            this.#writer.write(`"`);
+            this.#writer.write('"');
 
             this.#writer.write(` message="${encode(notice.message)}"`);
 
@@ -147,22 +141,23 @@ export const Formatter = class {
             if (undefined !== notice.rule) {
                 this.#writer.write(`.${encode(notice.rule)}`);
             }
-            this.#writer.write(`" />`);
+            this.#writer.write('" />');
         }
-        shift(1, this.#writer, this.#indent);
+        this.#shift(1);
         this.#writer.write("</file>");
+        return Promise.resolve();
     }
 
     /**
-     * Finalise l'affichage.
+     * Finalise les résultats.
      *
-     * @returns {Promise<void>} La promesse indiquant que tous les textes sont
-     *                          écrits.
+     * @returns {Promise<void>} La promesse indiquant que les résultats ont été
+     *                          finalisés.
      */
     finalize() {
-        shift(0, this.#writer, this.#indent);
+        this.#shift(0);
         return new Promise((resolve) => {
-            this.#writer.write("</checkstyle>\n", "utf8", resolve);
+            this.#writer.write("</checkstyle>\n", () => resolve());
         });
     }
-};
+}

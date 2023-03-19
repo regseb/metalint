@@ -4,24 +4,21 @@
  * @author Sébastien Règne
  */
 
-import SEVERITY from "../severity.js";
+import Severities from "../severities.js";
+import Formatter from "./formatter.js";
 
 /**
  * @typedef {NodeJS.WritableStream} WritableStream
- * @typedef {import("../../types").Notice} Notice
+ * @typedef {import("../../type/index.js").Level} Level
+ * @typedef {import("../../type/index.js").Notice} Notice
  */
 
 /**
  * Le formateur qui écrit les résultats pour les Github Actions.
+ *
+ * @see https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions
  */
-export const Formatter = class {
-    /**
-     * Le niveau de sévérité minimum des notifications affichées.
-     *
-     * @type {number}
-     */
-    #level;
-
+export default class GitHubFormatter extends Formatter {
     /**
      * Le flux où écrire les résultats.
      *
@@ -32,13 +29,14 @@ export const Formatter = class {
     /**
      * Crée un formateur.
      *
-     * @param {number}         level  Le niveau de sévérité minimum des
-     *                                notifications affichées.
-     * @param {WritableStream} writer Le flux où écrire les résultats.
+     * @param {Level}          level            Le niveau de sévérité minimum
+     *                                          des notifications affichées.
+     * @param {Object}         options          Les options du formateur.
+     * @param {WritableStream} [options.writer] Le flux où écrire les résultats.
      */
-    constructor(level, writer) {
-        this.#level = level;
-        this.#writer = writer;
+    constructor(level, options) {
+        super(level);
+        this.#writer = options.writer ?? process.stdout;
     }
 
     /**
@@ -47,25 +45,24 @@ export const Formatter = class {
      * @param {string}             file    Le fichier analysé.
      * @param {Notice[]|undefined} notices La liste des notifications ou
      *                                     <code>undefined</code>.
+     * @returns {Promise<void>} La promesse indiquant que les notifications ont
+     *                          été traitées.
      */
     notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
-        // critères des checkers) ou si aucune notification a été remontée.
-        if (
-            undefined === notices ||
-            !notices.some((n) => this.#level >= n.severity)
-        ) {
-            return;
+        // critères des checkers).
+        if (undefined === notices) {
+            return Promise.resolve();
         }
 
-        for (const notice of notices.filter((n) => this.#level >= n.severity)) {
+        for (const notice of notices.filter((n) => this.level >= n.severity)) {
             this.#writer.write("::");
             switch (notice.severity) {
-                case SEVERITY.FATAL:
-                case SEVERITY.ERROR:
+                case Severities.FATAL:
+                case Severities.ERROR:
                     this.#writer.write("error");
                     break;
-                case SEVERITY.WARN:
+                case Severities.WARN:
                     this.#writer.write("warning");
                     break;
                 default:
@@ -76,19 +73,15 @@ export const Formatter = class {
 
             if (0 !== notice.locations.length) {
                 const location = notice.locations[0];
-                this.#writer.write(`,line=${location.line.toString()}`);
-                if ("column" in location) {
-                    this.#writer.write(`,col=${location.column.toString()}`);
+                this.#writer.write(`,line=${location.line}`);
+                if (undefined !== location.column) {
+                    this.#writer.write(`,col=${location.column}`);
                 }
-                if ("endLine" in location) {
-                    this.#writer.write(
-                        `,endLine=${location.endLine.toString()}`,
-                    );
+                if (undefined !== location.endLine) {
+                    this.#writer.write(`,endLine=${location.endLine}`);
                 }
-                if ("endColumn" in location) {
-                    this.#writer.write(
-                        `,endColumn=${location.endColumn.toString()}`,
-                    );
+                if (undefined !== location.endColumn) {
+                    this.#writer.write(`,endColumn=${location.endColumn}`);
                 }
             }
 
@@ -98,17 +91,18 @@ export const Formatter = class {
             }
             this.#writer.write(")\n");
         }
+        return Promise.resolve();
     }
 
     /**
-     * Finalise l'affichage.
+     * Finalise les résultats.
      *
-     * @returns {Promise<void>} La promesse indiquant que tous les textes sont
-     *                          écrits.
+     * @returns {Promise<void>} La promesse indiquant que les résultats ont été
+     *                          finalisés.
      */
     finalize() {
         return new Promise((resolve) => {
-            this.#writer.write("", "utf8", resolve);
+            this.#writer.write("", () => resolve());
         });
     }
-};
+}

@@ -1,17 +1,21 @@
 #!/usr/bin/env node
 
-import fs from "node:fs";
+import fs from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-import yargs from "yargs";
-import glob from "../core/glob.js";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import flatten from "../core/configuration/flatten.js";
+import normalize from "../core/configuration/normalize.js";
 import metalint from "../core/index.js";
-import normalize from "../core/normalize.js";
-import SEVERITY from "../core/severity.js";
+import Severities from "../core/severities.js";
+import { exists } from "../core/utils/file.js";
+import Glob from "../core/utils/glob.js";
+import { parse } from "./argv.js";
 
 /**
- * @typedef {import("../types").Checker} Checker
- * @typedef {import("../types").Formatter} Formatter
+ * @typedef {import("../core/formatter/formatter.js")} Formatter
+ * @typedef {import("../type/index.d.ts").FlattenedConfigChecker} FlattenedConfigChecker
+ * @typedef {import("../type/index.d.ts").FlattenedConfigReporter} FlattenedConfigReporter
+ * @typedef {import("../type/index.d.ts").Severity} Severity
  */
 
 if (undefined === import.meta.resolve) {
@@ -20,72 +24,36 @@ if (undefined === import.meta.resolve) {
      *
      * @param {string} specifier Le chemin relatif vers un fichier ou un
      *                           répertoire.
-     * @returns {Promise<string>} Une promesse contenant le chemin absolue vers
-     *                            le fichier ou le répertoire.
+     * @returns {string} L'URL absolue vers le fichier ou le répertoire.
      * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
      */
     import.meta.resolve = (specifier) => {
-        return Promise.resolve(
-            fileURLToPath(new URL(specifier, import.meta.url).href),
-        );
+        return new URL(specifier, import.meta.url).href;
     };
 }
-
-const argv = yargs(process.argv.slice(2))
-    .options({
-        c: {
-            alias: "config",
-            default: ".metalint/metalint.config.js",
-            requiresArg: true,
-            type: "string",
-        },
-        f: {
-            alias: "formatter",
-            requiresArg: true,
-            type: "string",
-        },
-        fix: {
-            alias: "fix",
-            type: "boolean",
-        },
-        l: {
-            alias: "level",
-            requiresArg: true,
-            type: "string",
-        },
-        o: {
-            alias: "output",
-            requiresArg: true,
-            type: "string",
-        },
-        p: {
-            alias: "patterns",
-            requiresArg: true,
-            type: "array",
-        },
-        help: {
-            alias: "help",
-            type: "boolean",
-        },
-    })
-    .help(false).argv;
 
 /**
  * Vérifie (en appelant des linters) une liste de fichiers.
  *
- * @param {string[]}    files     La liste des fichiers.
- * @param {Checker[]}   checkers  La liste des vérifications faites sur les
- *                                fichiers.
- * @param {string}      root      L'adresse du répertoire où se trouve le
- *                                dossier <code>.metalint/</code>.
- * @param {Formatter[]} reporters La liste des rapporteurs utilisés pour
- *                                afficher les résultats.
- * @returns {Promise<number|undefined>} La sévérité la plus élévée des
- *                                      résultats.
+ * @param {string[]}                  files     La liste des fichiers.
+ * @param {FlattenedConfigChecker[]}  checkers  La liste des vérifications
+ *                                              faites sur les fichiers.
+ * @param {string}                    root      L'adresse du répertoire où se
+ *                                              trouve le répertoire
+ *                                              <code>.metalint/</code>.
+ * @param {FlattenedConfigReporter[]} reporters La liste des rapporteurs
+ *                                              utilisés pour afficher les
+ *                                              résultats.
+ * @returns {Promise<Severity|undefined>} La sévérité la plus élévée des
+ *                                        résultats.
  */
 const check = async function (files, checkers, root, reporters) {
     let severity;
 
+    const formatters = reporters.map((reporter) => {
+        // eslint-disable-next-line new-cap
+        return new reporter.formatter(reporter.level, reporter.options);
+    });
     const results = await metalint(files, checkers, root);
     for (const [file, notices] of Object.entries(results)) {
         // Déterminer la sévérité la plus élévée des résultats.
@@ -98,19 +66,20 @@ const check = async function (files, checkers, root, reporters) {
         }
 
         // Afficher les notifications avec chaque rapporteur.
-        for (const reporter of reporters) {
-            await reporter.notify(file, notices);
+        for (const formatter of formatters) {
+            await formatter.notify(file, notices);
         }
     }
 
     // Attendre tous les rapporteurs.
-    await Promise.all(reporters.map((r) => r.finalize(severity)));
+    await Promise.all(formatters.map((f) => f.finalize()));
     return severity;
 };
 
+const argv = await parse();
 if (argv.help) {
     process.stdout.write(
-        fs.readFileSync(await import.meta.resolve("./help.txt")),
+        await fs.readFile(fileURLToPath(import.meta.resolve("./help.txt"))),
     );
     process.exit(0);
 }
@@ -118,7 +87,7 @@ if (argv.help) {
 let root = process.cwd();
 // Rechercher le fichier de configuration dans le répertoire courant, puis dans
 // les parents, grands-parents...
-while (!fs.existsSync(path.join(root, argv.config))) {
+while (!(await exists(path.join(root, argv.config)))) {
     // Si on est remonté à la racine.
     if (path.join(root, "..") === root) {
         process.stderr.write("metalint: no such config file.\n");
@@ -129,24 +98,29 @@ while (!fs.existsSync(path.join(root, argv.config))) {
 
 try {
     // eslint-disable-next-line no-unsanitized/method
-    const { default: config } = await import(path.join(root, argv.config));
-    const { patterns, checkers, reporters } = await normalize(
-        config,
-        root,
-        path.dirname(path.join(root, argv.config)),
+    const { default: config } = await import(
+        pathToFileURL(path.join(root, argv.config))
+    );
+    const { patterns, reporters, checkers } = flatten(
+        await normalize(config, {
+            dir: path.dirname(path.join(root, argv.config)),
+        }),
         argv,
     );
 
-    const bases = await Promise.resolve(argv._.map((a) => glob.normalize(a)));
-    const files = await glob.walk(bases, patterns, root);
+    const glob = new Glob(patterns, { root });
+    const files = [];
+    for (const base of argv._) {
+        files.push(...(await glob.walk(base)));
+    }
 
     const severity = await check(files, checkers, root, reporters);
     let code;
     switch (severity) {
-        case SEVERITY.FATAL:
+        case Severities.FATAL:
             code = 2;
             break;
-        case SEVERITY.ERROR:
+        case Severities.ERROR:
             code = 1;
             break;
         default:

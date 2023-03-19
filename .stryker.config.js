@@ -15,7 +15,7 @@ export default {
     // sur le répertoire node_modules.
     // https://github.com/stryker-mutator/stryker-js/issues/3978
     inPlace: true,
-    mochaOptions: { config: "test/mocharc.json" },
+    mochaOptions: { config: "test/unit/mocharc.json" },
     mutate: ["src/core/**/*.js"],
     reporters: ["dots", "clear-text"],
     tempDirName: ".stryker/tmp/",

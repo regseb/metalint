@@ -14,46 +14,138 @@
 ## Description
 
 **Metalint** est un outil pour analyser tous les fichiers de votre projet.
-L'analyse est déléguée à des linters (outils d'analyse statique de code source)
-ou des utilitaires selon le type de fichier :
+L'analyse est déléguée à des linters (outils d'analyse statique de code
+source) :
 
-- _Générique_ :
-  [Prettier](https://regseb.github.io/metalint/user/linters/prettier/) ;
-- WebExtension : [Add-ons
-  Linter](https://regseb.github.io/metalint/user/linters/addons-linter/) ;
-- CoffeeScript :
-  [CoffeeLint](https://regseb.github.io/metalint/user/linters/coffeelint/) ;
-- CSS (SCSS, Sass, Less) :
-  [CSSLint](https://regseb.github.io/metalint/user/linters/csslint/),
-  [doiuse](https://regseb.github.io/metalint/user/linters/doiuse/),
-  [lesshint](https://regseb.github.io/metalint/user/linters/lesshint/),
-  [PurgeCSS](https://regseb.github.io/metalint/user/linters/purgecss/) et
-  [stylelint](https://regseb.github.io/metalint/user/linters/stylelint/) ;
-- HTML : [HTMLHint](https://regseb.github.io/metalint/user/linters/htmlhint/),
-  [htmllint](https://regseb.github.io/metalint/user/linters/htmllint/) et
-  [markuplint](https://regseb.github.io/metalint/user/linters/markuplint/) ;
-- JavaScript : [ESLint](https://regseb.github.io/metalint/user/linters/eslint/),
-  [Flow](https://regseb.github.io/metalint/user/linters/flow-bin/),
-  [JSHint](https://regseb.github.io/metalint/user/linters/jshint/) et
-  [JavaScript Standard
-  Style](https://regseb.github.io/metalint/user/linters/standard/) ;
-- JSON : [JSON-Lint](https://regseb.github.io/metalint/user/linters/json-lint/),
-  [JSON Lint](https://regseb.github.io/metalint/user/linters/jsonlint/) et
-  [JSON Lint
-  (mod)](https://regseb.github.io/metalint/user/linters/jsonlint-mod/) ;
-  - package.json (npm) :
-    [npm-package-json-lint](https://regseb.github.io/metalint/user/linters/npm-package-json-lint/)
-    ;
-- Markdown :
-  [MarkdownLint](https://regseb.github.io/metalint/user/linters/markdownlint/) ;
-- YAML : [YAML Lint](https://regseb.github.io/metalint/user/linters/yaml-lint/).
+<!-- markdownlint-disable no-inline-html -->
+<table>
+  <tr>
+    <th>Langage / Technologie</th>
+    <th>Linters</th>
+  </tr>
+  <tr>
+    <td>CoffeeScript</td>
+    <td>
+      <a title="@coffeelint/cli"
+         href="https://www.npmjs.com/package/@coffeelint/cli">CoffeeLint</a>
+    </td>
+  </tr>
+  <tr>
+    <td>CSS</td>
+    <td>
+      <a title="csslint"
+         href="https://www.npmjs.com/package/csslint">CSSLint</a>,
+      <a title="doiuse" href="https://www.npmjs.com/package/doiuse">doiuse</a>,
+      <a title="prettier"
+         href="https://www.npmjs.com/package/prettier">Prettier</a>,
+      <a title="purgecss"
+         href="https://www.npmjs.com/package/purgecss">PurgeCSS</a>,
+      <a title="stylelint"
+         href="https://www.npmjs.com/package/stylelint">Stylelint</a>
+   </td>
+  </tr>
+  <tr>
+    <td>HTML</td>
+    <td>
+      <a title="htmlhint"
+         href="https://www.npmjs.com/package/htmlhint">HTMLHint</a>,
+      <a title="htmllint"
+         href="https://www.npmjs.com/package/htmllint">htmllint</a>,
+      <a title="markuplint"
+         href="https://www.npmjs.com/package/markuplint">markuplint</a>,
+      <a title="prettier"
+         href="https://www.npmjs.com/package/prettier">Prettier</a>
+    </td>
+  </tr>
+  <tr>
+    <td>JavaScript</td>
+    <td>
+      <a title="eslint" href="https://www.npmjs.com/package/eslint">ESLint</a>,
+      <a title="jshint" href="https://www.npmjs.com/package/jshint">JSHint</a>,
+      <a title="standard"
+         href="https://www.npmjs.com/package/standard">JavaScript Standard
+        Style</a>,
+      <a title="prettier"
+         href="https://www.npmjs.com/package/prettier">Prettier</a>
+    </td>
+  </tr>
+  <tr>
+    <td>JSON</td>
+    <td>
+      <a title="@prantlf/jsonlint"
+         href="https://www.npmjs.com/package/@prantlf/jsonlint">@prantlf/JSON
+        Lint</a>,
+      <a title="jsonlint-mod"
+         href="https://www.npmjs.com/package/jsonlint-mod">JSON Lint (mod)</a>,
+      <a title="prettier"
+         href="https://www.npmjs.com/package/prettier">Prettier</a>
+    </td>
+  </tr>
+  <tr>
+    <td>Less</td>
+    <td>
+      <a title="prettier"
+         href="https://www.npmjs.com/package/prettier">Prettier</a>,
+      <a title="stylelint"
+         href="https://www.npmjs.com/package/stylelint">Stylelint</a>
+    </td>
+  </tr>
+  <tr>
+    <td>Markdown</td>
+    <td>
+      <a title="markdownlint"
+         href="https://www.npmjs.com/package/markdownlint">MarkdownLint</a>
+    </td>
+  </tr>
+  <tr>
+    <td>package.json</td>
+    <td>
+      <a title="npm-package-json-lint"
+         href="https://www.npmjs.com/package/npm-package-json-lint"
+         >npm-package-json-lint</a>
+    </td>
+  </tr>
+  <tr>
+    <td>SCSS</td>
+    <td>
+      <a title="prettier"
+         href="https://www.npmjs.com/package/prettier">Prettier</a>,
+      <a title="stylelint"
+         href="https://www.npmjs.com/package/stylelint">Stylelint</a>
+  </td>
+  </tr>
+  <tr>
+    <td>SugarSS</td>
+    <td>
+      <a title="stylelint"
+         href="https://www.npmjs.com/package/stylelint">Stylelint</a>
+    </td>
+  </tr>
+  <tr>
+    <td>WebExtension</td>
+    <td>
+      <a title="addons-linter"
+         href="https://www.npmjs.com/package/addons-linter">Add-ons Linter</a>
+    </td>
+  </tr>
+  <tr>
+    <td>YAML</td>
+    <td>
+      <a title="yaml-lint"
+         href="https://www.npmjs.com/package/yaml-lint">YAML Lint</a>,
+      <a title="prettier"
+         href="https://www.npmjs.com/package/prettier">Prettier</a>
+    </td>
+  </tr>
+</table>
+<!-- markdownlint-enable no-inline-html -->
 
 ## Installation
 
 Vous pouvez installer Metalint en utilisant [npm][link-npm] :
 
 ```Shell
-npm install metalint --save-dev
+npm install --save-dev metalint
 ```
 
 ## Configuration
@@ -68,15 +160,15 @@ linters.
 
 Dans cet exemple des fichiers de configuration, Metalint analyse les fichiers
 JavaScript (non-minifiés), HTML et CSS ; avec respectivement les linters ESLint,
-HTMLHint et stylelint.
+HTMLHint et Stylelint.
 
 ```JavaScript
 // .metalint/metalint.config.js
 export default {
-    patterns: ["!/.git/", "!/node_modules/", "**"],
+    patterns: ["**", "!/.git/**", "!/node_modules/**"],
     checkers: [
         {
-            patterns: ["!*.min.js", "*.js"],
+            patterns: ["*.js", "!*.min.js"],
             linters: "eslint",
         }, {
             patterns: "*.html",
