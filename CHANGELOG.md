@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.12.0](https://github.com/regseb/metalint/compare/v0.11.1...v0.12.0) (2023-04-30)
+
+
+### Features
+
+* Ajouter les propriétés "overrides". ([61b81d7](https://github.com/regseb/metalint/commit/61b81d7882bb14c920bb4df2da6016a1dafc8332))
+
 ### [0.11.1](https://github.com/regseb/metalint/compare/v0.11.0...v0.11.1) (2023-03-04)
 
 
