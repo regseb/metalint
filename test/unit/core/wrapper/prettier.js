@@ -159,12 +159,17 @@ describe("src/core/wrapper/prettier.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return FATAL notice", async function () {
+            it("should return FATAL notice with locations", async function () {
                 mock({
                     // Ne pas simuler le répertoire "node_modules" car le linter
                     // doit accéder à des fichiers dans celui-ci.
                     "node_modules/": mock.load("node_modules/"),
-                    "foo.js": 'const bar = { "baz;\n',
+                    "foo.js":
+                        "// Ajouter des lignes pour avoir le numéro de la \n" +
+                        '// ligne avec deux chiffres (pour tester le "+" de\n' +
+                        '// "d+".\n' +
+                        "\n\n\n\n\n\n" +
+                        'const bar = { "baz;\n',
                 });
 
                 const context = {
@@ -184,12 +189,12 @@ describe("src/core/wrapper/prettier.js", function () {
                         linter: "prettier",
                         severity: Severities.FATAL,
                         message: "Unterminated string constant.",
-                        locations: [{ line: 1, column: 15 }],
+                        locations: [{ line: 10, column: 15 }],
                     },
                 ]);
             });
 
-            it("should return FATAL notice with 'loc'", async function () {
+            it("should return default FATAL notice", async function () {
                 mock({
                     // Ne pas simuler le répertoire "node_modules" car le linter
                     // doit accéder à des fichiers dans celui-ci.
@@ -213,7 +218,8 @@ describe("src/core/wrapper/prettier.js", function () {
                         file,
                         linter: "prettier",
                         severity: Severities.FATAL,
-                        message: "No parser could be inferred for file.",
+                        message:
+                            'No parser could be inferred for file "foo.php".',
                     },
                 ]);
             });

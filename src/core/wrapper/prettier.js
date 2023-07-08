@@ -5,7 +5,7 @@
  */
 
 import fs from "node:fs/promises";
-import prettier from "prettier";
+import * as prettier from "prettier";
 import Levels from "../levels.js";
 import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
@@ -66,14 +66,14 @@ export default class PrettierWrapper extends Wrapper {
 
         try {
             if (this.fix) {
-                const output = prettier.format(source, config);
+                const output = await prettier.format(source, config);
                 if (source !== output) {
                     await fs.writeFile(file, output);
                 }
                 return [];
             }
 
-            const result = prettier.check(source, config);
+            const result = await prettier.check(source, config);
             if (result || Levels.ERROR > this.level) {
                 return [];
             }
@@ -86,43 +86,35 @@ export default class PrettierWrapper extends Wrapper {
                 },
             ];
         } catch (err) {
-            if ("UndefinedParserError" === err.constructor.name) {
-                return [
-                    {
-                        file,
-                        linter: "prettier",
-                        severity: Severities.FATAL,
-                        message: err.message.replace(/: .*$/u, "."),
-                    },
-                ];
+            switch (err.name) {
+                case "SyntaxError":
+                    return [
+                        {
+                            file,
+                            linter: "prettier",
+                            severity: Severities.FATAL,
+                            message: err.message.replace(
+                                / \(\d+:\d+\)\n.*/su,
+                                "",
+                            ),
+                            locations: [
+                                {
+                                    line: err.loc.start.line,
+                                    column: err.loc.start.column,
+                                },
+                            ],
+                        },
+                    ];
+                default:
+                    return [
+                        {
+                            file,
+                            linter: "prettier",
+                            severity: Severities.FATAL,
+                            message: err.message,
+                        },
+                    ];
             }
-            if ("SyntaxError" === err.name) {
-                return [
-                    {
-                        file,
-                        linter: "prettier",
-                        severity: Severities.FATAL,
-                        message: err.message.slice(
-                            0,
-                            err.message.indexOf(" ("),
-                        ),
-                        locations: [
-                            {
-                                line: err.loc.start.line,
-                                column: err.loc.start.column,
-                            },
-                        ],
-                    },
-                ];
-            }
-            return [
-                {
-                    file,
-                    linter: "prettier",
-                    severity: Severities.FATAL,
-                    message: err.message,
-                },
-            ];
         }
     }
 }
