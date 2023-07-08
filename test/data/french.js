@@ -4,6 +4,7 @@
  * @author Sébastien Règne
  */
 
+import process from "node:process";
 import Formatter from "../../src/core/formatter/formatter.js";
 
 /**

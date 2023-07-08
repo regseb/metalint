@@ -2,6 +2,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import process from "node:process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import flatten from "../core/configuration/flatten.js";
 import normalize from "../core/configuration/normalize.js";

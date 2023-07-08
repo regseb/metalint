@@ -6,6 +6,7 @@
 
 import assert from "node:assert/strict";
 import path from "node:path";
+import process from "node:process";
 import { fileURLToPath } from "node:url";
 import mock from "mock-fs";
 import sinon from "sinon";

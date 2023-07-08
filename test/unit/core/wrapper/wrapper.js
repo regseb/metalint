@@ -5,6 +5,7 @@
  */
 
 import assert from "node:assert/strict";
+import process from "node:process";
 import Levels from "../../../../src/core/levels.js";
 import Wrapper from "../../../../src/core/wrapper/wrapper.js";
 

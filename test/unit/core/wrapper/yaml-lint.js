@@ -5,6 +5,7 @@
  */
 
 import assert from "node:assert/strict";
+import process from "node:process";
 import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import YAMLLintWrapper from "../../../../src/core/wrapper/yaml-lint.js";

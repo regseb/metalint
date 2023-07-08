@@ -5,6 +5,7 @@
  */
 
 import fs from "node:fs/promises";
+import process from "node:process";
 import chalk from "chalk";
 import Severities from "../severities.js";
 import Formatter from "./formatter.js";

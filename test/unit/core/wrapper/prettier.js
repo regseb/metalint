@@ -6,6 +6,7 @@
 
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
+import process from "node:process";
 import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";

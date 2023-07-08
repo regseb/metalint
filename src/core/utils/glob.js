@@ -6,6 +6,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path/posix";
+import process from "node:process";
 import { wrap } from "./array.js";
 
 /**
