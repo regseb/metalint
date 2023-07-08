@@ -35,7 +35,7 @@ source) :
     <td>
       <a title="csslint"
          href="https://www.npmjs.com/package/csslint">CSSLint</a>,
-      <a title="doiuse" href="https://www.npmjs.com/package/doiuse">doiuse</a>,
+      <a title="doiuse" href="https://www.npmjs.com/package/doiuse">DoIUse</a>,
       <a title="prettier"
          href="https://www.npmjs.com/package/prettier">Prettier</a>,
       <a title="purgecss"

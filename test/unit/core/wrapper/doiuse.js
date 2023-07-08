@@ -8,10 +8,10 @@ import assert from "node:assert/strict";
 import process from "node:process";
 import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
-import DoiuseWrapper from "../../../../src/core/wrapper/doiuse.js";
+import DoIUseWrapper from "../../../../src/core/wrapper/doiuse.js";
 
 describe("src/core/wrapper/doiuse.js", function () {
-    describe("DoiuseWrapper", function () {
+    describe("DoIUseWrapper", function () {
         describe("lint()", function () {
             it("should ignore with FATAL level", async function () {
                 const context = {
@@ -25,7 +25,7 @@ describe("src/core/wrapper/doiuse.js", function () {
                 // l'enrobage si le fichier est analysé.
                 const file = "foo";
 
-                const wrapper = new DoiuseWrapper(context, options);
+                const wrapper = new DoIUseWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, []);
             });
@@ -45,7 +45,7 @@ describe("src/core/wrapper/doiuse.js", function () {
                 const options = {};
                 const file = "foo.css";
 
-                const wrapper = new DoiuseWrapper(context, options);
+                const wrapper = new DoIUseWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, [
                     {
@@ -55,7 +55,7 @@ describe("src/core/wrapper/doiuse.js", function () {
                         message:
                             "CSS3 Border-radius (rounded corners) not" +
                             " supported by: Opera Mini (all)",
-                        locations: [{ line: 1, column: 1 }],
+                        locations: [{ line: 1, column: 10 }],
                     },
                 ]);
             });
@@ -75,7 +75,7 @@ describe("src/core/wrapper/doiuse.js", function () {
                 const options = { browser: "ie >= 9, > 1%, last 2 versions" };
                 const file = "foo.css";
 
-                const wrapper = new DoiuseWrapper(context, options);
+                const wrapper = new DoIUseWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, [
                     {
@@ -85,7 +85,7 @@ describe("src/core/wrapper/doiuse.js", function () {
                         message:
                             "CSS3 Background-image options only partially" +
                             " supported by: Opera Mini (all)",
-                        locations: [{ line: 1, column: 1 }],
+                        locations: [{ line: 1, column: 7 }],
                     },
                 ]);
             });

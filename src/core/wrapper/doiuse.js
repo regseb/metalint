@@ -7,7 +7,12 @@
 // Ne pas utiliser la version promise de fs car la fonction createReadStream()
 // n'y est pas. https://github.com/nodejs/node/issues/38627
 import { createReadStream } from "node:fs";
-import doiuse from "doiuse/stream.js";
+// Désactiver deux règles ESLint pour cette import car elles ne supportent pas
+// la propriété "exports" du package.json.
+// https://github.com/import-js/eslint-plugin-import/issues/1810
+// https://github.com/eslint-community/eslint-plugin-n/issues/21
+// eslint-disable-next-line import/no-unresolved, n/file-extension-in-import
+import doiuse from "doiuse/stream";
 import Levels from "../levels.js";
 import Wrapper from "./wrapper.js";
 
@@ -21,13 +26,13 @@ import Wrapper from "./wrapper.js";
  *
  * @see https://www.npmjs.com/package/doiuse
  */
-export default class DoiuseWrapper extends Wrapper {
+export default class DoIUseWrapper extends Wrapper {
     /**
-     * Les options du linter.
+     * L'instance de DoIUse.
      *
-     * @type {Record<string, any>}
+     * @type {Object}
      */
-    #options;
+    #doiuse;
 
     /**
      * Crée un enrobage pour le linter <strong>doiuse</strong>.
@@ -46,7 +51,7 @@ export default class DoiuseWrapper extends Wrapper {
      */
     constructor(context, options) {
         super(context);
-        this.#options = options;
+        this.#doiuse = doiuse(options);
     }
 
     /**
@@ -64,7 +69,7 @@ export default class DoiuseWrapper extends Wrapper {
         const results = await new Promise((resolve) => {
             const data = [];
             createReadStream(file)
-                .pipe(doiuse(this.#options))
+                .pipe(this.#doiuse)
                 .on("data", (d) => data.push(d))
                 .on("end", () => resolve(data));
         });
@@ -78,8 +83,8 @@ export default class DoiuseWrapper extends Wrapper {
             ),
             locations: [
                 {
-                    line: result.usage.source.original.start.line,
-                    column: result.usage.source.original.start.column,
+                    line: result.usage.source.start.line,
+                    column: result.usage.source.start.column,
                 },
             ],
         }));
