@@ -100,6 +100,9 @@ source) :
   <tr>
     <td>package.json</td>
     <td>
+      <a title="npm-check-updates"
+         href="https://www.npmjs.com/package/npm-check-updates"
+         >npm-check-updates</a>,
       <a title="npm-package-json-lint"
          href="https://www.npmjs.com/package/npm-package-json-lint"
          >npm-package-json-lint</a>

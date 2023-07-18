@@ -429,9 +429,9 @@ describe("src/core/configuration/normalize.js", function () {
                     ' values: "addons-linter", "coffeelint__cli", "csslint",' +
                     ' "doiuse", "eslint", "htmlhint", "htmllint", "jshint",' +
                     ' "jsonlint-mod", "markdownlint", "markuplint",' +
-                    ' "npm-package-json-lint", "prantlf__jsonlint",' +
-                    ' "prettier", "purgecss", "standard", "stylelint",' +
-                    ' "yaml-lint").',
+                    ' "npm-check-updates", "npm-package-json-lint",' +
+                    ' "prantlf__jsonlint", "prettier", "purgecss",' +
+                    ' "standard", "stylelint", "yaml-lint").',
             });
         });
 
