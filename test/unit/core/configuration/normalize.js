@@ -431,7 +431,8 @@ describe("src/core/configuration/normalize.js", function () {
                     ' "jsonlint-mod", "markdownlint", "markuplint",' +
                     ' "npm-check-updates", "npm-package-json-lint",' +
                     ' "prantlf__jsonlint", "prettier", "purgecss",' +
-                    ' "standard", "stylelint", "yaml-lint").',
+                    ' "sort-package-json", "standard", "stylelint",' +
+                    ' "yaml-lint").',
             });
         });
 

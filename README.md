@@ -105,7 +105,10 @@ source) :
          >npm-check-updates</a>,
       <a title="npm-package-json-lint"
          href="https://www.npmjs.com/package/npm-package-json-lint"
-         >npm-package-json-lint</a>
+         >npm-package-json-lint</a>,
+      <a title="sort-package-json"
+         href="https://www.npmjs.com/package/sort-package-json"
+         >Sort Package.json</a>
     </td>
   </tr>
   <tr>

@@ -83,6 +83,7 @@
     "purgecss": "5.0.0",
     "sinon": "15.0.4",
     "standard": "17.0.0",
+    "sort-package-json": "2.5.1",
     "standard-version": "9.5.0",
     "stylelint": "15.6.0",
     "typedoc": "0.24.6",
