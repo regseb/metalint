@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.13.0](https://github.com/regseb/metalint/compare/v0.12.0...v0.13.0) (2023-07-22)
+
+
+### Features
+
+* Ajouter un wrapper pour npm-check-updates. ([6d624ea](https://github.com/regseb/metalint/commit/6d624ea195fb57f8af9cb3523df9fc6bb97efddb))
+* Ajouter un wrapper pour sort-package-json. ([2024b62](https://github.com/regseb/metalint/commit/2024b62917fd3f5451ca6d00948d29c688747db6))
+
+
+### Bug Fixes
+
+* Corriger les fichiers même avec le niveau OFF. ([d9697d2](https://github.com/regseb/metalint/commit/d9697d2f36f99eeeed65da16edc7f2c753fdcf6c))
+* Gérer la v3 de Prettier. ([5ff075f](https://github.com/regseb/metalint/commit/5ff075fcb57f06bd41145d7bbd656ea19d55d097))
+* Gérer la v6 de DoIUse. ([7e86dde](https://github.com/regseb/metalint/commit/7e86dded63f8bb82ed912cfda90af87ea4211a80))
+
 ### [0.12.0](https://github.com/regseb/metalint/compare/v0.11.1...v0.12.0) (2023-04-30)
 
 
