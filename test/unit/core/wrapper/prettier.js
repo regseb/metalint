@@ -86,6 +86,11 @@ describe("src/core/wrapper/prettier.js", function () {
                     "node_modules/": mock.load("node_modules/"),
                     "foo.html": "<title>Bar</title>\n",
                 });
+                // Attendre 10 ms pour être sûr d'avoir une date de modification
+                // différente de la date de création du fichier package.json.
+                await new Promise((resolve) => {
+                    setTimeout(resolve, 10);
+                });
 
                 const context = {
                     level: Levels.INFO,
@@ -106,7 +111,7 @@ describe("src/core/wrapper/prettier.js", function () {
                 // contenu (en comparant la date de création et celle de
                 // dernière modification).
                 const stat = await fs.stat("foo.html");
-                assert.equal(stat.mtimeMs, stat.ctimeMs);
+                assert.equal(stat.mtimeMs, stat.birthtimeMs);
             });
 
             it("should return notices", async function () {

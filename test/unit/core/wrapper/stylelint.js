@@ -15,17 +15,49 @@ import StylelintWrapper from "../../../../src/core/wrapper/stylelint.js";
 describe("src/core/wrapper/stylelint.js", function () {
     describe("StylelintWrapper()", function () {
         describe("lint()", function () {
-            it("should ignore with FATAL level", async function () {
+            it("should fix", async function () {
+                mock({
+                    // Ne pas simuler le répertoire "node_modules" car le linter
+                    // doit accéder à des fichiers dans celui-ci.
+                    "node_modules/": mock.load("node_modules/"),
+                    "foo.css": "header { top: 0px; }",
+                });
+
+                const context = {
+                    level: Levels.FATAL,
+                    fix: true,
+                    root: process.cwd(),
+                    files: ["foo.css"],
+                };
+                const options = { rules: { "length-zero-no-unit": true } };
+                const file = "foo.css";
+
+                const wrapper = new StylelintWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, []);
+
+                const content = await fs.readFile("foo.css", "utf8");
+                assert.equal(content, "header { top: 0; }");
+            });
+
+            it("should ignore with FATAL level and no fix", async function () {
+                mock({
+                    // Ne pas simuler le répertoire "node_modules" car le linter
+                    // doit accéder à des fichiers dans celui-ci.
+                    "node_modules/": mock.load("node_modules/"),
+                    "foo.css": "a { animation: 80ms; }",
+                });
+
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
                     root: process.cwd(),
-                    files: ["foo"],
+                    files: ["foo.css"],
                 };
-                const options = {};
-                // Utiliser un fichier qui n'existe pas pour faire échouer
-                // l'enrobage si le fichier est analysé.
-                const file = "foo";
+                const options = {
+                    "time-min-milliseconds": 100,
+                };
+                const file = "foo.css";
 
                 const wrapper = new StylelintWrapper(context, options);
                 const notices = await wrapper.lint(file);
@@ -159,31 +191,6 @@ describe("src/core/wrapper/stylelint.js", function () {
                         locations: [{ line: 2, column: 12 }],
                     },
                 ]);
-            });
-
-            it("should fix", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
-                    "foo.css": "header { top: 0px; }",
-                });
-
-                const context = {
-                    level: Levels.INFO,
-                    fix: true,
-                    root: process.cwd(),
-                    files: ["foo.css"],
-                };
-                const options = { rules: { "length-zero-no-unit": true } };
-                const file = "foo.css";
-
-                const wrapper = new StylelintWrapper(context, options);
-                const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, []);
-
-                const content = await fs.readFile("foo.css", "utf8");
-                assert.equal(content, "header { top: 0; }");
             });
 
             it("should lint all files (cf. disableDefaultIgnores)", async function () {

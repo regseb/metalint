@@ -63,7 +63,7 @@ export default class ESLintWrapper extends Wrapper {
      *                                     notifications.
      */
     async lint(file) {
-        if (Levels.FATAL > this.level) {
+        if (Levels.FATAL > this.level && !this.fix) {
             return [];
         }
 

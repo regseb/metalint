@@ -15,23 +15,6 @@ import ESLintWrapper from "../../../../src/core/wrapper/eslint.js";
 describe("src/core/wrapper/eslint.js", function () {
     describe("ESLintWrapper", function () {
         describe("lint()", function () {
-            it("should ignore with OFF level", async function () {
-                const context = {
-                    level: Levels.OFF,
-                    fix: false,
-                    root: process.cwd(),
-                    files: ["foo"],
-                };
-                const options = {};
-                // Utiliser un fichier qui n'existe pas pour faire échouer
-                // l'enrobage si le fichier est analysé.
-                const file = "foo";
-
-                const wrapper = new ESLintWrapper(context, options);
-                const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, []);
-            });
-
             it("should use default options", async function () {
                 mock({ "foo.js": 'console.log("bar");' });
 
@@ -58,7 +41,7 @@ describe("src/core/wrapper/eslint.js", function () {
                 });
 
                 const context = {
-                    level: Levels.INFO,
+                    level: Levels.OFF,
                     fix: true,
                     root: process.cwd(),
                     files: ["foo.js"],
@@ -72,6 +55,28 @@ describe("src/core/wrapper/eslint.js", function () {
 
                 const content = await fs.readFile("foo.js", "utf8");
                 assert.equal(content, "var bar = 42;");
+            });
+
+            it("should ignore with OFF level and no fix", async function () {
+                mock({
+                    // Ne pas simuler le répertoire "node_modules" car le linter
+                    // doit accéder à des fichiers dans celui-ci.
+                    "node_modules/": mock.load("node_modules/"),
+                    "foo.js": "alert(42);",
+                });
+
+                const context = {
+                    level: Levels.OFF,
+                    fix: false,
+                    root: process.cwd(),
+                    files: ["foo.js"],
+                };
+                const options = { rules: { "no-alert": "error" } };
+                const file = "foo.js";
+
+                const wrapper = new ESLintWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, []);
             });
 
             it("should return notices", async function () {
@@ -96,8 +101,8 @@ describe("src/core/wrapper/eslint.js", function () {
                 };
                 const options = {
                     rules: {
-                        indent: [1, 4, { SwitchCase: 1 }],
-                        "no-duplicate-case": 2,
+                        indent: ["warn", 4, { SwitchCase: 1 }],
+                        "no-duplicate-case": "error",
                     },
                 };
                 const file = "foo.js";
@@ -154,7 +159,7 @@ describe("src/core/wrapper/eslint.js", function () {
                     files: ["foo.js"],
                 };
                 const options = {
-                    rules: { "no-bitwise": 1, "no-self-assign": 2 },
+                    rules: { "no-bitwise": "warn", "no-self-assign": "error" },
                 };
                 const file = "foo.js";
 
@@ -231,9 +236,9 @@ describe("src/core/wrapper/eslint.js", function () {
                 const options = {
                     plugins: ["jsdoc", "mocha"],
                     rules: {
-                        "jsdoc/check-types": 2,
-                        "jsdoc/check-syntax": 2,
-                        "mocha/prefer-arrow-callback": 2,
+                        "jsdoc/check-types": "error",
+                        "jsdoc/check-syntax": "error",
+                        "mocha/prefer-arrow-callback": "error",
                     },
                 };
                 const file = "foo.js";

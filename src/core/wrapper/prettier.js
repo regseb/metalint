@@ -57,7 +57,7 @@ export default class PrettierWrapper extends Wrapper {
      *                                     notifications.
      */
     async lint(file) {
-        if (Levels.FATAL > this.level) {
+        if (Levels.FATAL > this.level && !this.fix) {
             return [];
         }
 

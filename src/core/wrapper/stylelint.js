@@ -63,7 +63,7 @@ export default class StylelintWrapper extends Wrapper {
      *                                     notifications.
      */
     async lint(file) {
-        if (Levels.ERROR > this.level) {
+        if (Levels.ERROR > this.level && !this.fix) {
             return [];
         }
 
