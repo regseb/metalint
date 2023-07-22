@@ -30,7 +30,7 @@ export default class PurgeCSSWrapper extends Wrapper {
     #options;
 
     /**
-     * Crée un enrobage pour l'utilitaire <strong>PurgeCSS</strong>.
+     * Crée un enrobage pour le linter <strong>PurgeCSS</strong>.
      *
      * @param {Object}              context       Le contexte de l'enrobage.
      * @param {Level}               context.level Le niveau de sévérité minimum

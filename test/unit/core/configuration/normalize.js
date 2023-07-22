@@ -470,13 +470,13 @@ describe("src/core/configuration/normalize.js", function () {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinter("eslint_node", {
+            const normalized = await normalize.normalizeLinter("eslint_test", {
                 dir,
             });
             assert.equal(normalized.wrapper, ESLintWrapper);
             assert.equal(normalized.fix, undefined);
             assert.equal(normalized.level, Levels.INFO);
-            assert.deepEqual(normalized.options[0].env, { node: true });
+            assert.deepEqual(normalized.options[0].env, { mocha: true });
         });
 
         it("should support Object", async function () {
@@ -554,13 +554,13 @@ describe("src/core/configuration/normalize.js", function () {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinters("eslint_node", {
+            const normalized = await normalize.normalizeLinters("prettier", {
                 dir,
             });
-            assert.equal(normalized[0].wrapper, ESLintWrapper);
+            assert.equal(normalized[0].wrapper, PrettierWrapper);
             assert.equal(normalized[0].fix, undefined);
             assert.equal(normalized[0].level, Levels.INFO);
-            assert.deepEqual(normalized[0].options[0].env, { node: true });
+            assert.equal(normalized[0].options[0].xmlQuoteAttributes, "double");
         });
 
         it("should support Object", async function () {

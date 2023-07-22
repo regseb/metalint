@@ -8,8 +8,9 @@
  * @type {import("@stryker-mutator/api/core").PartialStrykerOptions}
  */
 export default {
+    disableTypeChecks: false,
     incremental: true,
-    incrementalFile: ".stryker/stryker-incremental.json",
+    incrementalFile: ".stryker/incremental.json",
     ignoreStatic: true,
     // Utiliser inPlace car mock-fs ne fonctionne pas avec un lien symbolique
     // sur le répertoire node_modules.

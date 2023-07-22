@@ -71,6 +71,7 @@ export default class StylelintWrapper extends Wrapper {
             ...this.#options,
             files: file,
         });
+
         return results.results[0].warnings
             .map((result) => ({
                 file,

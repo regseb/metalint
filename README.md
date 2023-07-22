@@ -151,7 +151,7 @@ source) :
 Vous pouvez installer Metalint en utilisant [npm][link-npm] :
 
 ```Shell
-npm install --save-dev metalint
+npm install --save-dev --save-exact metalint
 ```
 
 ## Configuration

@@ -43,8 +43,8 @@ describe("src/core/index.js", function () {
                             fix: false,
                             options: {
                                 rules: {
-                                    "no-alert": 2,
-                                    quotes: 2,
+                                    "no-alert": "error",
+                                    quotes: "error",
                                 },
                             },
                         },

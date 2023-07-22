@@ -30,7 +30,7 @@ export default class PrettierWrapper extends Wrapper {
     #options;
 
     /**
-     * Crée un enrobage pour l'utilitaire <strong>Prettier</strong>.
+     * Crée un enrobage pour le linter <strong>Prettier</strong>.
      *
      * @param {Object}              context       Le contexte de l'enrobage.
      * @param {Level}               context.level Le niveau de sévérité minimum

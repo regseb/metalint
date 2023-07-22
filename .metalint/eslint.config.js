@@ -24,7 +24,7 @@ export default {
 
     env: {
         "shared-node-browser": true,
-        es2022: true,
+        es2023: true,
     },
 
     rules: {
@@ -587,6 +587,9 @@ export default {
         "jsdoc/check-values": "error",
         "jsdoc/empty-tags": "error",
         "jsdoc/implements-on-classes": "error",
+        // Désactiver la règle car elle ne supporte pas la propriété "exports".
+        // https://github.com/gajus/eslint-plugin-jsdoc/issues/1114
+        "jsdoc/imports-as-dependencies": "off",
         "jsdoc/informative-docs": "error",
         "jsdoc/match-description": ["error", { matchDescription: "[A-ZÉ].*" }],
         "jsdoc/match-name": "off",
@@ -795,10 +798,6 @@ export default {
         "unicorn/no-unnecessary-await": "error",
         "unicorn/no-unreadable-array-destructuring": "error",
         "unicorn/no-unreadable-iife": "error",
-        // Désactiver la règle car il y a des faux-positifs avec les petites
-        // valeurs de quantification.
-        // https://github.com/davisjam/safe-regex/issues/10
-        "unicorn/no-unsafe-regex": "off",
         "unicorn/no-unused-properties": "error",
         "unicorn/no-useless-fallback-in-spread": "error",
         "unicorn/no-useless-length-check": "error",
@@ -817,6 +816,7 @@ export default {
         "unicorn/prefer-array-index-of": "error",
         "unicorn/prefer-array-some": "error",
         "unicorn/prefer-at": "error",
+        "unicorn/prefer-blob-reading-methods": "error",
         "unicorn/prefer-code-point": "error",
         "unicorn/prefer-date-now": "error",
         "unicorn/prefer-default-parameters": "error",
@@ -872,7 +872,6 @@ export default {
 
     settings: {
         jsdoc: {
-            mode: "typescript",
             preferredTypes: {
                 ".<>": "<>",
                 "Array<>": "[]",

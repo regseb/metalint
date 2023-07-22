@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+// Désactiver cette règle car elle ne supporte pas les valeurs de la propriété
+// "files" (du package.json) commençant par "./".
+// https://github.com/eslint-community/eslint-plugin-n/issues/99
+// eslint-disable-next-line n/no-unpublished-bin
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";

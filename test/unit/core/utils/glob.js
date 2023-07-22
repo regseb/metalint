@@ -148,6 +148,19 @@ describe("src/core/utils/glob.js", function () {
             assert.equal(glob.test("foo[12]"), false);
         });
 
+        it('should support "{}"', function () {
+            const cwd = fileURLToPath(import.meta.resolve("."));
+            const root = fileURLToPath(import.meta.resolve("."));
+            const glob = new Glob(["foo{bar,baz}"], { cwd, root });
+            assert.equal(glob.test("foo"), false);
+            assert.equal(glob.test("foobar"), true);
+            assert.equal(glob.test("foobaz"), true);
+            assert.equal(glob.test("foobarbaz"), false);
+            assert.equal(glob.test("fooqux"), false);
+            assert.equal(glob.test("fooba"), false);
+            assert.equal(glob.test("foo{bar,baz}"), false);
+        });
+
         it("should reject file", function () {
             const cwd = fileURLToPath(import.meta.resolve("."));
             const root = fileURLToPath(import.meta.resolve("."));
@@ -223,6 +236,15 @@ describe("src/core/utils/glob.js", function () {
                 message: "foo[bar: ']' missing.",
             });
         });
+
+        it('should reject "{" not closed', function () {
+            const cwd = fileURLToPath(import.meta.resolve("."));
+            const root = fileURLToPath(import.meta.resolve("."));
+            assert.throws(() => new Glob(["foo{bar"], { cwd, root }), {
+                name: "Error",
+                message: "foo{bar: '}' missing.",
+            });
+        });
     });
 
     describe("walk()", function () {
@@ -242,8 +264,19 @@ describe("src/core/utils/glob.js", function () {
 
             const cwd = process.cwd();
             let root = stub.wrappedMethod();
-            let glob = new Glob(["**/bar.js"], { cwd, root });
+            let glob = new Glob(["**"], { cwd, root });
             let files = await glob.walk("./");
+            assert.deepEqual(files, [
+                "./",
+                "bar.js",
+                "baz/",
+                "baz/quux.js",
+                "baz/qux.js",
+            ]);
+
+            root = stub.wrappedMethod();
+            glob = new Glob(["**/bar.js"], { cwd, root });
+            files = await glob.walk("./");
             assert.deepEqual(files, ["bar.js"]);
 
             root = process.cwd();
