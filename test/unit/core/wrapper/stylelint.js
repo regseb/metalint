@@ -13,7 +13,7 @@ import Severities from "../../../../src/core/severities.js";
 import StylelintWrapper from "../../../../src/core/wrapper/stylelint.js";
 
 describe("src/core/wrapper/stylelint.js", function () {
-    describe("StylelintWrapper()", function () {
+    describe("StylelintWrapper", function () {
         describe("lint()", function () {
             it("should fix", async function () {
                 mock({
@@ -78,7 +78,7 @@ describe("src/core/wrapper/stylelint.js", function () {
                     root: process.cwd(),
                     files: ["foo.css"],
                 };
-                const options = {};
+                const options = { rules: {} };
                 const file = "foo.css";
 
                 const wrapper = new StylelintWrapper(context, options);
