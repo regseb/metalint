@@ -17,6 +17,7 @@
     "node_modules/",
     "test/data/",
     "types/",
-    ".vscode/"
+    ".vscode/",
+    ".idea/"
   ]
 }
