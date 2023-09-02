@@ -6,9 +6,17 @@
 
 import fs from "node:fs/promises";
 import { ESLint } from "eslint";
+// Désactiver deux règles ESLint pour cet import, car elles ne supportent pas la
+// propriété "exports" du package.json.
+// https://github.com/import-js/eslint-plugin-import/issues/1810
+// https://github.com/eslint-community/eslint-plugin-n/issues/21
+// eslint-disable-next-line import/no-unresolved, n/file-extension-in-import
+import pkg from "eslint/use-at-your-own-risk";
 import Levels from "../levels.js";
 import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
+
+const { FlatESLint } = pkg;
 
 /**
  * @typedef {import("../../type/index.d.ts").Level} Level
@@ -46,13 +54,24 @@ export default class ESLintWrapper extends Wrapper {
      */
     constructor(context, options) {
         super(context);
-        this.#eslint = new ESLint({
-            globInputPaths: false,
-            ignore: false,
-            baseConfig: options,
-            useEslintrc: false,
-            fix: this.fix,
-        });
+        const { configType, ...baseConfig } = options;
+        if ("flat" === configType) {
+            this.#eslint = new FlatESLint({
+                globInputPaths: false,
+                ignore: false,
+                baseConfig,
+                fix: this.fix,
+                overrideConfigFile: true,
+            });
+        } else {
+            this.#eslint = new ESLint({
+                globInputPaths: false,
+                ignore: false,
+                baseConfig,
+                useEslintrc: false,
+                fix: this.fix,
+            });
+        }
     }
 
     /**

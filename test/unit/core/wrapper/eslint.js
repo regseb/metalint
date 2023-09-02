@@ -280,6 +280,48 @@ describe("src/core/wrapper/eslint.js", function () {
                     },
                 ]);
             });
+
+            it("should support flat config", async function () {
+                mock({
+                    // Ne pas simuler le répertoire "node_modules" car le linter
+                    // doit accéder à des fichiers dans celui-ci.
+                    "node_modules/": mock.load("node_modules/"),
+                    "foo.js": "const bar = baz + qux;\n",
+                });
+
+                const context = {
+                    level: Levels.WARN,
+                    fix: false,
+                    root: process.cwd(),
+                    files: ["foo.js"],
+                };
+                const options = {
+                    configType: "flat",
+                    languageOptions: { globals: { baz: "readonly" } },
+                    rules: { "no-undef": "error" },
+                };
+                const file = "foo.js";
+
+                const wrapper = new ESLintWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file,
+                        linter: "eslint",
+                        rule: "no-undef",
+                        severity: Severities.ERROR,
+                        message: "'qux' is not defined.",
+                        locations: [
+                            {
+                                line: 1,
+                                column: 19,
+                                endLine: 1,
+                                endColumn: 22,
+                            },
+                        ],
+                    },
+                ]);
+            });
         });
     });
 });
