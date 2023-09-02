@@ -9,7 +9,7 @@
  *
  * @template T
  * @param {T|T[]} value L'élément.
- * @returns {T[]} Un avec seulement l'élément d'entré ou l'élément.
+ * @returns {T[]} Un tableau avec seulement l'élément d'entrée ou l'élément.
  */
 export const wrap = function (value) {
     return Array.isArray(value) ? value : [value];

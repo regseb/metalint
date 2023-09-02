@@ -32,7 +32,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
             });
 
             it("shouldn't return notice from zip", async function () {
-                // Ne pas utiliser mock-fs car il y un bogue avec yaulz (la
+                // Ne pas utiliser mock-fs, car il y a un bogue avec yaulz (la
                 // bibliothèque utilisée par addons-linter pour lire les zip).
                 // https://github.com/tschaub/mock-fs/issues/352
                 const context = {

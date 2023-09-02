@@ -71,7 +71,7 @@ export default class YAMLLintWrapper extends Wrapper {
                     locations: [
                         {
                             // Augmenter de un le numéro de la ligne et de la
-                            // colonne car YAML Lint commence les numérotations
+                            // colonne, car YAML Lint commence les numérotations
                             // à zéro.
                             line: err.mark.line + 1,
                             column: err.mark.column + 1,

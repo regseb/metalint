@@ -145,7 +145,7 @@ export default class ConsoleFormatter extends Formatter {
     #showZeroNotice;
 
     /**
-     * Le marque indiquant s'il  faut afficher les fichiers non-analysés.
+     * La marque indiquant s'il faut afficher les fichiers non-analysés.
      *
      * @type {boolean}
      */

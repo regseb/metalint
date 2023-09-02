@@ -64,8 +64,8 @@ const Results = class {
             this.#data[file] = [];
         }
         for (const notice of notices) {
-            // Vérifier aussi le fichier de la notification car il peut être
-            // différent du fichier d'origine (qui est peut être un répertoire
+            // Vérifier aussi le fichier de la notification, car il peut être
+            // différent du fichier d'origine (qui est peut-être un répertoire
             // ou une archive).
             if (undefined === this.#data[notice.file]) {
                 this.#data[notice.file] = [];

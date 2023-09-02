@@ -481,8 +481,8 @@ export const normalizeCheckers = async function (partials, { dir }) {
 
 /**
  * Normalise la configuration. La structure de l'objet JSON contenant la
- * configuration est souple pour rendre le fichier moins verbeuse. Cette
- * fonction renseigne les valeurs par défaut pour les propriétes non-présentes.
+ * configuration est souple pour rendre le fichier moins verbeux. Cette fonction
+ * renseigne les valeurs par défaut pour les propriétés non-présentes.
  *
  * @param {*}      partial     L'objet JSON contenant la configuration.
  * @param {Object} context     Le context de la propriété.

@@ -90,7 +90,7 @@ export const parse = async function (argv = process.argv.slice(2)) {
                   ),
         config: args.config,
         fix: args.fix,
-        // Ne pas utiliser yargs.coerce() pour convertir les données car cette
+        // Ne pas utiliser yargs.coerce() pour convertir les données, car cette
         // méthode est incompatible avec yargs.choices().
         // https://github.com/yargs/yargs/issues/1379
         formatter:

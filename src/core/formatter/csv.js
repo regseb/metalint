@@ -49,7 +49,7 @@ export default class CSVFormatter extends Formatter {
         super(level);
         this.#writer = options.writer ?? process.stdout;
 
-        // Ecrire la ligne des titres.
+        // Écrire la ligne des titres.
         this.#writer.write("file,line,column,message,linter,rule\r\n");
     }
 
