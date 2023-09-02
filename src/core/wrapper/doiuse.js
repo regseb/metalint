@@ -7,8 +7,8 @@
 // Ne pas utiliser la version promise de fs car la fonction createReadStream()
 // n'y est pas. https://github.com/nodejs/node/issues/38627
 import { createReadStream } from "node:fs";
-// Désactiver deux règles ESLint pour cette import car elles ne supportent pas
-// la propriété "exports" du package.json.
+// Désactiver deux règles ESLint pour cet import, car elles ne supportent pas la
+// propriété "exports" du package.json.
 // https://github.com/import-js/eslint-plugin-import/issues/1810
 // https://github.com/eslint-community/eslint-plugin-n/issues/21
 // eslint-disable-next-line import/no-unresolved, n/file-extension-in-import

@@ -19,7 +19,7 @@ export default class WriteString extends Writable {
      *
      * @param {string}   chunk     Le texte écrit.
      * @param {string}   _encoding L'encodage du texte.
-     * @param {Function} callback  La fonction appelée après que le texte soit
+     * @param {Function} callback  La fonction appelée après que le texte est
      *                             écrit.
      */
     _write(chunk, _encoding, callback) {

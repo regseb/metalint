@@ -180,7 +180,7 @@ export default class Glob {
     /**
      * Teste si un fichier / répertoire respecte les patrons.
      *
-     * @param {string} file Le chemin du fichier / répertoire  qui sera vérifié.
+     * @param {string} file Le chemin du fichier / répertoire qui sera vérifié.
      * @returns {string} <code>"DEEP_NEGATIVE"</code> pour un répertoire ne
      *                   respectant pas un patron qui exclue aussi ses
      *                   fichiers ; <code>"NEGATIVE"</code> si le fichier /

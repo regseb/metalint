@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Désactiver cette règle car elle ne supporte pas les valeurs de la propriété
+// Désactiver cette règle, car elle ne supporte pas les valeurs de la propriété
 // "files" (du package.json) commençant par "./".
 // https://github.com/eslint-community/eslint-plugin-n/issues/99
 // eslint-disable-next-line n/no-unpublished-bin
@@ -49,7 +49,7 @@ if (undefined === import.meta.resolve) {
  * @param {FlattenedConfigReporter[]} reporters La liste des rapporteurs
  *                                              utilisés pour afficher les
  *                                              résultats.
- * @returns {Promise<Severity|undefined>} La sévérité la plus élévée des
+ * @returns {Promise<Severity|undefined>} La sévérité la plus élevée des
  *                                        résultats.
  */
 const check = async function (files, checkers, root, reporters) {
@@ -61,7 +61,7 @@ const check = async function (files, checkers, root, reporters) {
     });
     const results = await metalint(files, checkers, root);
     for (const [file, notices] of Object.entries(results)) {
-        // Déterminer la sévérité la plus élévée des résultats.
+        // Déterminer la sévérité la plus élevée des résultats.
         if (undefined !== notices) {
             for (const notice of notices) {
                 if (undefined === severity || severity > notice.severity) {

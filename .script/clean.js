@@ -7,7 +7,7 @@
 import fs from "node:fs/promises";
 
 /**
- * La liste des répertoires à supprimer.
+ * La liste des répertoires et des fichiers à supprimer.
  *
  * @type {string[]}
  */

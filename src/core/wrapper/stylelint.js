@@ -15,7 +15,7 @@ import Wrapper from "./wrapper.js";
  */
 
 /**
- * L'enrobage du linter <strong>Stytelint</strong>.
+ * L'enrobage du linter <strong>Stylelint</strong>.
  *
  * @see https://www.npmjs.com/package/stylelint
  */
@@ -29,7 +29,7 @@ export default class StylelintWrapper extends Wrapper {
     #options;
 
     /**
-     * Crée un enrobage pour le linter <strong>Stytelint</strong>.
+     * Crée un enrobage pour le linter <strong>Stylelint</strong>.
      *
      * @param {Object}              context       Le contexte de l'enrobage.
      * @param {Level}               context.level Le niveau de sévérité minimum
