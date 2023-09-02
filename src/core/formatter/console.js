@@ -11,7 +11,7 @@ import Severities from "../severities.js";
 import Formatter from "./formatter.js";
 
 /**
- * @typedef {NodeJS.WritableStream} WritableStream
+ * @typedef {import("node:stream").Writable} Writable
  * @typedef {import("../../type/index.js").Level} Level
  * @typedef {import("../../type/index.js").Location} Location
  * @typedef {import("../../type/index.js").Notice} Notice
@@ -21,9 +21,9 @@ import Formatter from "./formatter.js";
 /**
  * Écrit un message avec un style / couleur.
  *
- * @param {WritableStream} writer  Le flux où afficher le message.
- * @param {string}         message Le message qui sera affiché.
- * @param {string}         [style] Le code du style.
+ * @param {Writable} writer  Le flux où afficher le message.
+ * @param {string}   message Le message qui sera affiché.
+ * @param {string}   [style] Le code du style.
  */
 const print = function (writer, message, style) {
     let line;
@@ -56,11 +56,11 @@ const print = function (writer, message, style) {
 /**
  * Écrit une ligne du code source.
  *
- * @param {number}         line    Le numéro de la ligne.
- * @param {string[]}       content Toutes les lignes du fichiers.
- * @param {boolean}        active  La marque indiquant si la problème est dans
- *                                 cette ligne.
- * @param {WritableStream} writer  Le flux où afficher la ligne.
+ * @param {number}   line    Le numéro de la ligne.
+ * @param {string[]} content Toutes les lignes du fichier.
+ * @param {boolean}  active  La marque indiquant si le problème est dans cette
+ *                           ligne.
+ * @param {Writable} writer  Le flux où afficher la ligne.
  */
 const printCodeSourceLine = function (line, content, active, writer) {
     // Vérifier que le numéro de la ligne demandée existe dans le fichier.
@@ -76,10 +76,10 @@ const printCodeSourceLine = function (line, content, active, writer) {
 /**
  * Écrit le code source proche des lieux où le problème a été trouvé.
  *
- * @param {Location[]}     locations Les positions, dans le code source, du
- *                                   problème.
- * @param {string[]}       content   Toutes les lignes du fichiers.
- * @param {WritableStream} writer    Le flux où afficher les lignes incriminées.
+ * @param {Location[]} locations Les positions, dans le code source, du
+ *                               problème.
+ * @param {string[]}   content   Toutes les lignes du fichier.
+ * @param {Writable}   writer    Le flux où afficher les lignes incriminées.
  */
 const printCodeSource = function (locations, content, writer) {
     const characters = [];
@@ -133,7 +133,7 @@ export default class ConsoleFormatter extends Formatter {
     /**
      * Le flux où écrire les résultats.
      *
-     * @type {WritableStream}
+     * @type {Writable}
      */
     #writer;
 
@@ -154,20 +154,17 @@ export default class ConsoleFormatter extends Formatter {
     /**
      * Crée un formateur.
      *
-     * @param {Level}          level                    Le niveau de sévérité
-     *                                                  minimum des
-     *                                                  notifications affichées.
-     * @param {Object}         options                  Les options du
-     *                                                  formateur.
-     * @param {WritableStream} [options.writer]         Le flux où écrire les
-     *                                                  résultats.
-     * @param {boolean}        [options.showZeroNotice] La marque indiquant s'il
-     *                                                  faut afficher les
-     *                                                  fichiers sans
-     *                                                  notification.
-     * @param {boolean}        [options.showNoChecked]  Le marque indiquant s'il
-     *                                                  faut afficher les
-     *                                                  fichiers non-analysés.
+     * @param {Level}    level                    Le niveau de sévérité minimum
+     *                                            des notifications affichées.
+     * @param {Object}   options                  Les options du formateur.
+     * @param {Writable} [options.writer]         Le flux où écrire les
+     *                                            résultats.
+     * @param {boolean}  [options.showZeroNotice] La marque indiquant s'il faut
+     *                                            afficher les fichiers sans
+     *                                            notification.
+     * @param {boolean}  [options.showNoChecked]  Le marque indiquant s'il faut
+     *                                            afficher les fichiers
+     *                                            non-analysés.
      */
     constructor(level, options) {
         super(level);

@@ -11,7 +11,6 @@ import Levels from "../levels.js";
 import Wrapper, { WRAPPERS } from "../wrapper/wrapper.js";
 
 /**
- * @typedef {NodeJS.WritableStream} WritableStream
  * @typedef {import("../../type/index.d.ts").Level} Level
  * @typedef {import("../../type/index.d.ts").NormalizedConfig} NormalizedConfig
  * @typedef {import("../../type/index.d.ts").NormalizedConfigChecker} NormalizedConfigChecker

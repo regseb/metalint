@@ -602,10 +602,7 @@ export default {
         "jsdoc/no-multi-asterisks": "error",
         "jsdoc/no-restricted-syntax": "off",
         "jsdoc/no-types": "off",
-        "jsdoc/no-undefined-types": [
-            "error",
-            { definedTypes: ["Class", "NodeJS"] },
-        ],
+        "jsdoc/no-undefined-types": "error",
         "jsdoc/require-asterisk-prefix": "error",
         "jsdoc/require-description": "error",
         "jsdoc/require-description-complete-sentence": "off",

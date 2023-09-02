@@ -9,7 +9,7 @@ import Severities from "../severities.js";
 import Formatter from "./formatter.js";
 
 /**
- * @typedef {NodeJS.WritableStream} WritableStream
+ * @typedef {import("node:stream").Writable} Writable
  * @typedef {import("../../type/index.js").Level} Level
  * @typedef {import("../../type/index.js").Notice} Notice
  */
@@ -46,7 +46,7 @@ export default class CheckstyleFormatter extends Formatter {
     /**
      * Le flux où écrire les résultats.
      *
-     * @type {WritableStream}
+     * @type {Writable}
      */
     #writer;
 
@@ -61,14 +61,13 @@ export default class CheckstyleFormatter extends Formatter {
     /**
      * Crée un formateur.
      *
-     * @param {Level}          level            Le niveau de sévérité minimum
-     *                                          des notifications affichées.
-     * @param {Object}         options          Les options du formateur.
-     * @param {WritableStream} [options.writer] Le flux où écrire les résultats.
-     * @param {number}         [options.indent] La taille des indentations (en
-     *                                          espace) ou <code>-1</code> (par
-     *                                          défaut) pour ne pas mettre de
-     *                                          retour à la ligne.
+     * @param {Level}    level            Le niveau de sévérité minimum des
+     *                                    notifications affichées.
+     * @param {Object}   options          Les options du formateur.
+     * @param {Writable} [options.writer] Le flux où écrire les résultats.
+     * @param {number}   [options.indent] La taille des indentations (en espace)
+     *                                    ou <code>-1</code> (par défaut) pour
+     *                                    ne pas mettre de retour à la ligne.
      */
     constructor(level, options) {
         super(level);
