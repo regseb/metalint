@@ -4,27 +4,40 @@
  * @author Sébastien Règne
  */
 
-export default {
-    plugins: [
-        "array-func",
-        "eslint-comments",
-        "import",
-        "jsdoc",
-        "mocha",
-        "n",
-        "no-unsanitized",
-        "promise",
-        "regexp",
-        "unicorn",
-    ],
+import arrayFuncPlugin from "eslint-plugin-array-func";
+import eslintCommentsPlugin from "eslint-plugin-eslint-comments";
+import importPlugin from "eslint-plugin-import";
+import jsdocPlugin from "eslint-plugin-jsdoc";
+import mochaPlugin from "eslint-plugin-mocha";
+import nPlugin from "eslint-plugin-n";
+import noUnsanitizedPlugin from "eslint-plugin-no-unsanitized";
+import promisePlugin from "eslint-plugin-promise";
+import regexpPlugin from "eslint-plugin-regexp";
+import unicornPlugin from "eslint-plugin-unicorn";
+import globals from "globals";
 
-    parserOptions: {
-        sourceType: "module",
+export default {
+    // Enlever cette propriété quand FlatESLint sera la version par défaut.
+    // https://github.com/eslint/eslint/issues/13481
+    configType: "flat",
+
+    plugins: {
+        "array-func": arrayFuncPlugin,
+        "eslint-comments": eslintCommentsPlugin,
+        import: importPlugin,
+        jsdoc: jsdocPlugin,
+        mocha: mochaPlugin,
+        n: nPlugin,
+        "no-unsanitized": noUnsanitizedPlugin,
+        promise: promisePlugin,
+        regexp: regexpPlugin,
+        unicorn: unicornPlugin,
     },
 
-    env: {
-        "shared-node-browser": true,
-        es2023: true,
+    languageOptions: {
+        globals: {
+            ...globals["shared-node-browser"],
+        },
     },
 
     rules: {
@@ -468,7 +481,8 @@ export default {
         // Plugin eslint-plugin-import.
         // Helpful warnings.
         "import/export": "error",
-        "import/no-deprecated": "error",
+        // FIXME Désactiver car il y a un bogue avec FlatESlint
+        "import/no-deprecated": 0,
         "import/no-empty-named-blocks": "error",
         "import/no-extraneous-dependencies": [
             "error",
@@ -500,9 +514,11 @@ export default {
         "import/unambiguous": "off",
 
         // Static analysis.
-        "import/default": "error",
+        // FIXME Désactiver car il y a un bogue avec FlatESlint
+        "import/default": 0,
         "import/named": "error",
-        "import/namespace": "error",
+        // FIXME Désactiver car il y a un bogue avec FlatESlint
+        "import/namespace": 0,
         "import/no-absolute-path": "error",
         "import/no-cycle": ["error", { ignoreExternal: true }],
         // Désactiver cette règle car la méthode require() est déjà interdite.

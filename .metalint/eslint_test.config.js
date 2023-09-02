@@ -4,9 +4,13 @@
  * @author Sébastien Règne
  */
 
+import globals from "globals";
+
 export default {
-    env: {
-        mocha: true,
+    languageOptions: {
+        globals: {
+            ...globals.mocha,
+        },
     },
 
     rules: {
