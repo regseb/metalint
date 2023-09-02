@@ -110,12 +110,12 @@ export default async function metalint(files, checkers, root) {
         for (const checker of checkers) {
             const glob = new Glob(checker.patterns, { root });
             if (glob.test(file)) {
-                const key = [glob];
+                let key = checker.patterns.join();
                 const values = [checker.linters];
                 for (const override of checker.overrides) {
                     const subglob = new Glob(override.patterns, { root });
                     if (subglob.test(file)) {
-                        key.push(subglob);
+                        key += "|" + override.patterns.join();
                         values.push(override.linters);
                     }
                 }
