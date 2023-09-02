@@ -46,9 +46,7 @@ export default class StylelintWrapper extends Wrapper {
     constructor(context, options) {
         super(context);
         this.#options = {
-            // Définir la propriété "rules" car celle-ci est obligatoire (même
-            // si aucune règle est spécifiée).
-            config: { rules: {}, ...options },
+            config: options,
             fix: this.fix,
             // Laisser à Metalint la gestion des fichiers à ignorer.
             disableDefaultIgnores: true,

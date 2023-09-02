@@ -46,10 +46,7 @@ export default class NpmPackageJSONLintWrapper extends Wrapper {
      */
     constructor(context, options) {
         super(context);
-        this.#options = {
-            rules: {},
-            ...options,
-        };
+        this.#options = options;
     }
 
     /**
