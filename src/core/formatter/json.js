@@ -8,13 +8,13 @@ import process from "node:process";
 import Formatter from "./formatter.js";
 
 /**
- * @typedef {NodeJS.WritableStream} WritableStream
+ * @typedef {import("node:stream").Writable} Writable
  * @typedef {import("../../type/index.js").Level} Level
  * @typedef {import("../../type/index.js").Notice} Notice
  */
 
 /**
- * Le formateur qui écrit les résultats brut (au format JSON). La seul
+ * Le formateur qui écrit les résultats bruts (au format JSON). La seule
  * altération des résultats est le remplacement des <code>undefined</code> par
  * des <code>null</code>.
  *
@@ -24,7 +24,7 @@ export default class JSONFormatter extends Formatter {
     /**
      * Le flux où écrire les résultats.
      *
-     * @type {WritableStream}
+     * @type {Writable}
      */
     #writer;
 
@@ -46,12 +46,12 @@ export default class JSONFormatter extends Formatter {
     /**
      * Crée un formateur.
      *
-     * @param {Level}          level            Le niveau de sévérité minimum
-     *                                          des notifications affichées.
-     * @param {Object}         options          Les options du formateur.
-     * @param {WritableStream} [options.writer] Le flux où écrire les résultats.
-     * @param {number}         [options.indent] La taille des indentations (en
-     *                                          espace).
+     * @param {Level}    level            Le niveau de sévérité minimum des
+     *                                    notifications affichées.
+     * @param {Object}   options          Les options du formateur.
+     * @param {Writable} [options.writer] Le flux où écrire les résultats.
+     * @param {number}   [options.indent] La taille des indentations (en
+     *                                    espace).
      */
     constructor(level, options) {
         super(level);

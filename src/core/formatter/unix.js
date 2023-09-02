@@ -8,7 +8,7 @@ import process from "node:process";
 import Formatter from "./formatter.js";
 
 /**
- * @typedef {NodeJS.WritableStream} WritableStream
+ * @typedef {import("node:stream").Writable} Writable
  * @typedef {import("../../type/index.js").Level} Level
  * @typedef {import("../../type/index.js").Notice} Notice
  */
@@ -21,7 +21,7 @@ export default class UnixFormatter extends Formatter {
     /**
      * Le flux où écrire les résultats.
      *
-     * @type {WritableStream}
+     * @type {Writable}
      */
     #writer;
 
@@ -35,10 +35,10 @@ export default class UnixFormatter extends Formatter {
     /**
      * Crée un formateur.
      *
-     * @param {Level}          level            Le niveau de sévérité minimum
-     *                                          des notifications affichées.
-     * @param {Object}         options          Les options du formateur.
-     * @param {WritableStream} [options.writer] Le flux où écrire les résultats.
+     * @param {Level}    level            Le niveau de sévérité minimum des
+     *                                    notifications affichées.
+     * @param {Object}   options          Les options du formateur.
+     * @param {Writable} [options.writer] Le flux où écrire les résultats.
      */
     constructor(level, options) {
         super(level);

@@ -8,7 +8,6 @@ import Levels from "../levels.js";
 import { merge } from "../utils/object.js";
 
 /**
- * @typedef {NodeJS.WritableStream} WritableStream
  * @typedef {import("../formatter/formatter.js").default} TypeofFormatter
  * @typedef {import("../../type/index.d.ts").FlattenedConfig} FlattenedConfig
  * @typedef {import("../../type/index.d.ts").FlattenedConfigChecker} FlattenedConfigChecker
