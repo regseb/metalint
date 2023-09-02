@@ -25,9 +25,9 @@ Steps to reproduce the behavior:
 
 ### Environment
 
-- Metalint version<!-- e.g. 0.12.0 -->:
-- Node version<!-- e.g. v18.12.0 -->:
-- Linter version (if appropriate)<!-- e.g. eslint 8.39.0 -->:
+- Metalint version<!-- e.g. 0.14.0 -->:
+- Node version<!-- e.g. v20.5.1 -->:
+- Linter version (if appropriate)<!-- e.g. eslint 8.48.0 -->:
 
 ### Additional context
 

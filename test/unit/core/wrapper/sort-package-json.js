@@ -166,7 +166,9 @@ describe("src/core/wrapper/sort-package-json.js", function () {
                         file,
                         linter: "sort-package-json",
                         severity: Severities.FATAL,
-                        message: "Unexpected token a in JSON at position 1",
+                        message:
+                            "Unexpected token 'a', \"name=foo\" is not valid" +
+                            " JSON",
                     },
                 ]);
             });
