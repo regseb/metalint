@@ -100,15 +100,21 @@ source) :
   <tr>
     <td>package.json</td>
     <td>
+      <!-- markdownlint-disable no-bare-urls -->
+      <!-- https://github.com/DavidAnson/markdownlint/issues/961 -->
       <a title="npm-check-updates"
          href="https://www.npmjs.com/package/npm-check-updates"
          >npm-check-updates</a>,
+      <!-- markdownlint-enable no-bare-urls -->
+      <!-- markdownlint-disable no-bare-urls -->
+      <!-- https://github.com/DavidAnson/markdownlint/issues/961 -->
       <a title="npm-package-json-lint"
          href="https://www.npmjs.com/package/npm-package-json-lint"
          >npm-package-json-lint</a>,
+      <!-- markdownlint-enable no-bare-urls -->
       <a title="sort-package-json"
-         href="https://www.npmjs.com/package/sort-package-json"
-         >Sort Package.json</a>
+         href="https://www.npmjs.com/package/sort-package-json">Sort
+        Package.json</a>
     </td>
   </tr>
   <tr>
@@ -228,14 +234,10 @@ ajouter le script suivant dans votre `package.json` :
 
 Metalint est maintenant utilisable avec la commande : `npm run lint`
 
-[img-npm]: https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=white
-[img-build]: https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=white
-
-<!-- Attendre que le logo de Stryker soit accepté.
-     https://github.com/simple-icons/simple-icons/pull/7388 -->
-
-[img-coverage]: https://img.shields.io/endpoint?label=coverage&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fregseb%2Fmetalint%2Fmain
-[img-semver]: https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&logoColor=white
+[img-npm]: https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=whitesmoke
+[img-build]: https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=whitesmoke
+[img-coverage]: https://img.shields.io/endpoint?label=coverage&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fregseb%2Fmetalint%2Fmain&logo=stryker&logoColor=whitesmoke
+[img-semver]: https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&logoColor=whitesmoke
 [link-npm]: https://www.npmjs.com/package/metalint
 [link-build]: https://github.com/regseb/metalint/actions/workflows/ci.yml?query=branch%3Amain
 [link-coverage]: https://dashboard.stryker-mutator.io/reports/github.com/regseb/metalint/main

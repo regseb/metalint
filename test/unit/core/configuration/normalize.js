@@ -460,23 +460,30 @@ describe("src/core/configuration/normalize.js", function () {
             const normalized = await normalize.normalizeLinter("yaml-lint", {
                 dir,
             });
-            assert.equal(normalized.wrapper, YAMLLintWrapper);
-            assert.equal(normalized.fix, undefined);
-            assert.equal(normalized.level, Levels.INFO);
-            assert.deepEqual(normalized.options, [{}]);
+            assert.deepEqual(normalized, {
+                wrapper: YAMLLintWrapper,
+                fix: undefined,
+                level: Levels.INFO,
+                options: [{}],
+            });
         });
 
         it("should support string with underscore", async function () {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinter("eslint_test", {
-                dir,
+            const normalized = await normalize.normalizeLinter(
+                "prettier_javascript",
+                {
+                    dir,
+                },
+            );
+            assert.deepEqual(normalized, {
+                wrapper: PrettierWrapper,
+                fix: undefined,
+                level: Levels.INFO,
+                options: [{ tabWidth: 4 }],
             });
-            assert.equal(normalized.wrapper, ESLintWrapper);
-            assert.equal(normalized.fix, undefined);
-            assert.equal(normalized.level, Levels.INFO);
-            assert.deepEqual(normalized.options[0].env, { mocha: true });
         });
 
         it("should support Object", async function () {
@@ -554,13 +561,17 @@ describe("src/core/configuration/normalize.js", function () {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinters("prettier", {
+            const normalized = await normalize.normalizeLinters("yaml-lint", {
                 dir,
             });
-            assert.equal(normalized[0].wrapper, PrettierWrapper);
-            assert.equal(normalized[0].fix, undefined);
-            assert.equal(normalized[0].level, Levels.INFO);
-            assert.equal(normalized[0].options[0].xmlQuoteAttributes, "double");
+            assert.deepEqual(normalized, [
+                {
+                    wrapper: YAMLLintWrapper,
+                    fix: undefined,
+                    level: Levels.INFO,
+                    options: [{}],
+                },
+            ]);
         });
 
         it("should support Object", async function () {

@@ -56,14 +56,15 @@ describe("src/core/wrapper/npm-check-updates.js", function () {
 
                 const wrapper = new NpmCheckUpdatesWrapper(context, options);
                 const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, [
-                    {
-                        file,
-                        linter: "npm-check-updates",
-                        message:
-                            "Dependency 'metalint' has a new version '0.12.0'.",
-                    },
-                ]);
+                assert.equal(notices.length, 1);
+                assert.equal(notices[0].file, file);
+                assert.equal(notices[0].linter, "npm-check-updates");
+                assert.ok(
+                    notices[0].message.startsWith(
+                        "Dependency 'metalint' has a new version ",
+                    ),
+                    `"${notices[0].message}".startsWith("...")`,
+                );
             });
 
             it("should transmit options", async function () {

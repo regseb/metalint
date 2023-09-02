@@ -6,7 +6,6 @@
 
     "esModuleInterop": true,
 
-    "lib": ["dom"],
     "target": "esnext"
   },
   "include": ["**/*", "**/.*", "**/.*/**/*", "**/.*/**/.*"],
