@@ -23,5 +23,5 @@ const PATHS = [
 ];
 
 for (const path of PATHS) {
-    fs.rm(path, { force: true, recursive: true });
+    await fs.rm(path, { force: true, recursive: true });
 }

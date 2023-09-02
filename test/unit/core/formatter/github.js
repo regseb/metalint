@@ -19,7 +19,7 @@ describe("src/core/formatter/github.js", function () {
             await formatter.notify("foo.md", undefined);
             await formatter.finalize();
 
-            assert.equal(await writer.toString(), "");
+            assert.equal(writer.toString(), "");
         });
 
         it("should ignore empty notice", async function () {
