@@ -50,7 +50,6 @@
     "test:coverage": "stryker run .stryker.config.js",
     "jsdocs": "typedoc --tsconfig .tsconfig_jsdocs.json",
     "prepare": "tsc --project .tsconfig_types.json",
-    "release": "standard-version",
     "clean": "node .script/clean.js"
   },
   "dependencies": {
@@ -99,7 +98,6 @@
     "sinon": "15.2.0",
     "sort-package-json": "2.5.1",
     "standard": "17.1.0",
-    "standard-version": "9.5.0",
     "stylelint": "15.10.3",
     "typedoc": "0.25.1",
     "typescript": "5.2.2",
