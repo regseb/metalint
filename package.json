@@ -21,6 +21,21 @@
     "./src/",
     "./types/"
   ],
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./src/code/index.js"
+    },
+    "./api/formatter": {
+      "types": "./types/formatter/formatter.d.ts",
+      "default": "./src/core/formatter/formatter.js"
+    },
+    "./api/wrapper": {
+      "types": "./types/wrapper/wrapper.d.ts",
+      "default": "./src/core/wrapper/wrapper.js"
+    },
+    "./package.json": "./package.json"
+  },
   "main": "./src/core/index.js",
   "types": "./types/index.d.ts",
   "bin": "./src/bin/index.js",
