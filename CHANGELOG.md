@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.14.0](https://github.com/regseb/metalint/compare/v0.13.0...v0.14.0) (2023-09-10)
+
+
+### Features
+
+* Exporter les classes Formatter et Wrapper pour pouvoir les étendre. ([6729af7](https://github.com/regseb/metalint/commit/6729af77be438b4cca6fffe8742afce0f4e6f60c))
+* Gérer les configurations Flat de ESLint. ([4fe54a6](https://github.com/regseb/metalint/commit/4fe54a689f6d93d4242b880f8f441c17693fa5bb))
+
+
+### Bug Fixes
+
+* Corriger le cache des wrappers et de leurs configurations. ([2a51a86](https://github.com/regseb/metalint/commit/2a51a86d1fdd5fad8dbc81c6ad247624eb7b3734))
+* Ne plus pré-remplir la configuration des linters. ([24b37ff](https://github.com/regseb/metalint/commit/24b37ff58cc8aac4bafe2c59b4beaa28a74b1832))
+
 ### [0.13.0](https://github.com/regseb/metalint/compare/v0.12.0...v0.13.0) (2023-07-22)
 
 
