@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.14.1](https://github.com/regseb/metalint/compare/v0.14.0...v0.14.1) (2023-09-10)
+
+
+### Bug Fixes
+
+* Actualiser le package-lock.json. ([31dca91](https://github.com/regseb/metalint/commit/31dca9178fb1d8a1310cacc656c2b9c5d30eb0ae))
+
 ## [0.14.0](https://github.com/regseb/metalint/compare/v0.13.0...v0.14.0) (2023-09-10)
 
 
