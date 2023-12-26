@@ -418,7 +418,7 @@ describe("src/core/configuration/normalize.js", function () {
                     ' "markuplint", "npm-check-updates",' +
                     ' "npm-package-json-lint", "prantlf__jsonlint",' +
                     ' "prettier", "publint", "purgecss", "sort-package-json",' +
-                    ' "standard", "stylelint", "yaml-lint").',
+                    ' "standard", "stylelint", "svglint", "yaml-lint").',
             });
         });
 

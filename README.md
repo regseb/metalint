@@ -134,6 +134,15 @@ source) :
     </td>
   </tr>
   <tr>
+    <td>SVG</td>
+    <td>
+      <a title="prettier"
+         href="https://www.npmjs.com/package/prettier">Prettier</a>,
+      <a title="svglint"
+         href="https://www.npmjs.com/package/svglint">SVGLint</a>
+    </td>
+  </tr>
+  <tr>
     <td>WebExtension</td>
     <td>
       <a title="addons-linter"
