@@ -1,0 +1,122 @@
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
+import fs from "node:fs/promises";
+import Ajv from "ajv";
+import Levels from "../levels.js";
+import Severities from "../severities.js";
+import Wrapper from "./wrapper.js";
+
+/**
+ * @typedef {import("../../type/index.d.ts").Level} Level
+ * @typedef {import("../../type/index.d.ts").PartialNotice} PartialNotice
+ */
+
+/**
+ * L'enrobage du linter <strong>Ajv</strong>.
+ *
+ * @see https://www.npmjs.com/package/ajv
+ */
+export default class AjvWrapper extends Wrapper {
+    /**
+     * Les options du linter.
+     *
+     * @type {Record<string, any>}
+     * @see https://ajv.js.org/options.html#ajv-options
+     */
+    #options;
+
+    /**
+     * L'éventuelle fonction pour ajouter des formats.
+     *
+     * @type {Function|undefined}
+     * @see https://ajv.js.org/guide/formats.html
+     */
+    #addFormats;
+
+    /**
+     * Le schéma du fichier JSON.
+     *
+     * @type {Record<string, any>}
+     */
+    #schema;
+
+    /**
+     * Crée un enrobage pour le linter <strong>Ajv</strong>.
+     *
+     * @param {Object}              context       Le contexte de l'enrobage.
+     * @param {Level}               context.level Le niveau de sévérité minimum
+     *                                            des notifications retournées.
+     * @param {boolean}             context.fix   La marque indiquant s'il faut
+     *                                            corriger le fichier.
+     * @param {string}              context.root  L'adresse du répertoire où se
+     *                                            trouve le répertoire
+     *                                            <code>.metalint/</code>.
+     * @param {string[]}            context.files La liste de tous les fichiers
+     *                                            analysés.
+     * @param {Record<string, any>} options       Les options du linter.
+     */
+    constructor(context, options) {
+        super(context);
+        const { addFormats, schema, ...others } = options;
+        this.#options = {
+            loadSchema: (uri) =>
+                Promise.reject(
+                    new Error(
+                        `loadSchema() must be implemented to load ${uri}`,
+                    ),
+                ),
+            ...others,
+        };
+        this.#addFormats = addFormats;
+        this.#schema = schema;
+    }
+
+    /**
+     * Vérifie un fichier.
+     *
+     * @param {string} file Le fichier qui sera vérifié.
+     * @returns {Promise<PartialNotice[]>} Une promesse retournant la liste des
+     *                                     notifications.
+     */
+    async lint(file) {
+        if (Levels.FATAL > this.level) {
+            return [];
+        }
+
+        try {
+            const source = await fs.readFile(file, "utf8");
+            const ajv = new Ajv(this.#options);
+            if (undefined !== this.#addFormats) {
+                this.#addFormats(ajv);
+            }
+            const validate = await ajv.compileAsync(this.#schema);
+            validate(JSON.parse(source));
+            if (null === validate.errors) {
+                return [];
+            }
+
+            return validate.errors
+                .map((result) => ({
+                    file,
+                    linter: "ajv",
+                    rule: result.keyword,
+                    severity: Severities.ERROR,
+                    message: ajv.errorsText([result], { dataVar: "" }),
+                }))
+                .filter((n) => this.level >= n.severity);
+        } catch (err) {
+            return [
+                {
+                    file,
+                    linter: "ajv",
+                    severity: Severities.FATAL,
+                    message: err.message,
+                },
+            ];
+        }
+    }
+}
