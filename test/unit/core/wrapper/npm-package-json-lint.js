@@ -5,27 +5,23 @@
  */
 
 import assert from "node:assert/strict";
-import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import NpmPackageJSONLintWrapper from "../../../../src/core/wrapper/npm-package-json-lint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/npm-package-json-lint.js", function () {
     describe("NpmPackageJSONLintWrapper", function () {
         describe("lint()", function () {
             it("should ignore with FATAL level", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "package.json": "{}",
                 });
 
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["package.json"],
                 };
                 // Ne pas définir de règles pour faire échouer l'enrobage si le
@@ -39,17 +35,14 @@ describe("src/core/wrapper/npm-package-json-lint.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "package.json": '{ "name": "FOO" }',
                 });
 
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["package.json"],
                 };
                 const options = {
@@ -81,17 +74,14 @@ describe("src/core/wrapper/npm-package-json-lint.js", function () {
             });
 
             it("should ignore warning with ERROR level", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "package.json": "{}",
                 });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["package.json"],
                 };
                 const options = {

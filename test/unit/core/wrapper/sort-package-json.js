@@ -7,10 +7,10 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import SortPackageJsonWrapper from "../../../../src/core/wrapper/sort-package-json.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/sort-package-json.js", function () {
     describe("SortPackageJsonWrapper", function () {
@@ -33,17 +33,14 @@ describe("src/core/wrapper/sort-package-json.js", function () {
             });
 
             it("should fix", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "package.json": '{"version": "1.0.0","name":"foo"}',
                 });
 
                 const context = {
                     level: Levels.OFF,
                     fix: true,
-                    root: process.cwd(),
+                    root,
                     files: ["package.json"],
                 };
                 const options = {};
@@ -58,10 +55,7 @@ describe("src/core/wrapper/sort-package-json.js", function () {
             });
 
             it("shouldn't fix when no problem", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "package.json": '{"name":"foo"}',
                 });
                 // Attendre 10 ms pour être sûr d'avoir une date de modification
@@ -73,7 +67,7 @@ describe("src/core/wrapper/sort-package-json.js", function () {
                 const context = {
                     level: Levels.INFO,
                     fix: true,
-                    root: process.cwd(),
+                    root,
                     files: ["package.json"],
                 };
                 const options = {};
@@ -93,17 +87,14 @@ describe("src/core/wrapper/sort-package-json.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "package.json": '{"version":"1.0.0","name":"foo"}',
                 });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["package.json"],
                 };
                 const options = { semi: false };
@@ -121,17 +112,14 @@ describe("src/core/wrapper/sort-package-json.js", function () {
             });
 
             it("should ignore error with FATAL level", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "package.json": '{"version":"1.0.0","name":"foo"}',
                 });
 
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["package.json"],
                 };
                 const options = { semi: false };
@@ -143,17 +131,14 @@ describe("src/core/wrapper/sort-package-json.js", function () {
             });
 
             it("should return FATAL notice", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "package.json": "name=foo",
                 });
 
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["package.json"],
                 };
                 const options = { semi: false };

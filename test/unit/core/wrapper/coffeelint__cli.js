@@ -6,10 +6,10 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import CoffeeLintCliWrapper from "../../../../src/core/wrapper/coffeelint__cli.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/coffeelint__cli.js", function () {
     describe("CoffeeLintCliWrapper", function () {
@@ -32,12 +32,14 @@ describe("src/core/wrapper/coffeelint__cli.js", function () {
             });
 
             it("should use default options", async function () {
-                mock({ "foo.coffee": "bar = true || false" });
+                const root = await createTempFileSystem({
+                    "foo.coffee": "bar = true || false",
+                });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.coffee"],
                 };
                 const options = {};
@@ -49,12 +51,14 @@ describe("src/core/wrapper/coffeelint__cli.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({ "foo.coffee": "bar =\n\ttrue || false" });
+                const root = await createTempFileSystem({
+                    "foo.coffee": "bar =\n\ttrue || false",
+                });
 
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.coffee"],
                 };
                 const options = {
@@ -88,12 +92,14 @@ describe("src/core/wrapper/coffeelint__cli.js", function () {
             });
 
             it("should ignore warning with ERROR level", async function () {
-                mock({ "foo.coffee": "bar =\n\ttrue || false" });
+                const root = await createTempFileSystem({
+                    "foo.coffee": "bar =\n\ttrue || false",
+                });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.coffee"],
                 };
                 const options = {

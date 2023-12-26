@@ -6,9 +6,9 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import JSONLintModWrapper from "../../../../src/core/wrapper/jsonlint-mod.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/jsonlint-mod.js", function () {
     describe("JSONLintModWrapper", function () {
@@ -31,12 +31,14 @@ describe("src/core/wrapper/jsonlint-mod.js", function () {
             });
 
             it("should return notice", async function () {
-                mock({ "foo.json": '{ "bar": 42\n"baz": 420 }' });
+                const root = await createTempFileSystem({
+                    "foo.json": '{ "bar": 42\n"baz": 420 }',
+                });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.json"],
                 };
                 const options = {};
@@ -55,12 +57,14 @@ describe("src/core/wrapper/jsonlint-mod.js", function () {
             });
 
             it("shouldn't return notice", async function () {
-                mock({ "foo.json": '{ "bar": 42 }' });
+                const root = await createTempFileSystem({
+                    "foo.json": '{ "bar": 42 }',
+                });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.json"],
                 };
                 const options = {};

@@ -7,10 +7,10 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import PrettierWrapper from "../../../../src/core/wrapper/prettier.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/prettier.js", function () {
     describe("PrettierWrapper", function () {
@@ -33,17 +33,14 @@ describe("src/core/wrapper/prettier.js", function () {
             });
 
             it("should use default options", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.html": "<span />\n",
                 });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = {};
@@ -55,17 +52,14 @@ describe("src/core/wrapper/prettier.js", function () {
             });
 
             it("should fix", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.html": "<img>",
                 });
 
                 const context = {
                     level: Levels.INFO,
                     fix: true,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = {};
@@ -80,14 +74,11 @@ describe("src/core/wrapper/prettier.js", function () {
             });
 
             it("shouldn't fix when no problem", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.html": "<title>Bar</title>\n",
                 });
                 // Attendre 10 ms pour être sûr d'avoir une date de modification
-                // différente de la date de création du fichier package.json.
+                // différente de la date de création du fichier foo.html.
                 await new Promise((resolve) => {
                     setTimeout(resolve, 10);
                 });
@@ -95,7 +86,7 @@ describe("src/core/wrapper/prettier.js", function () {
                 const context = {
                     level: Levels.INFO,
                     fix: true,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = {};
@@ -115,17 +106,14 @@ describe("src/core/wrapper/prettier.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js": "const bar = 42;\n",
                 });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = { semi: false };
@@ -143,17 +131,14 @@ describe("src/core/wrapper/prettier.js", function () {
             });
 
             it("should ignore error with FATAL level", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js": "const bar = 42;\n",
                 });
 
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = { semi: false };
@@ -165,14 +150,11 @@ describe("src/core/wrapper/prettier.js", function () {
             });
 
             it("should return FATAL notice with locations", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js":
                         "// Ajouter des lignes pour avoir le numéro de la \n" +
                         '// ligne avec deux chiffres (pour tester le "+" de\n' +
-                        '// "d+".\n' +
+                        '// "\\d+".\n' +
                         "\n\n\n\n\n\n" +
                         'const bar = { "baz;\n',
                 });
@@ -180,7 +162,7 @@ describe("src/core/wrapper/prettier.js", function () {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = { semi: false };
@@ -200,17 +182,14 @@ describe("src/core/wrapper/prettier.js", function () {
             });
 
             it("should return default FATAL notice", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.php": "<?php echo 'bar'; ?>",
                 });
 
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.php"],
                 };
                 const options = {};

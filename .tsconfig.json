@@ -14,8 +14,8 @@
     ".stryker/",
     "jsdocs/",
     "node_modules/",
-    "test/data/",
     "types/",
+    "tmp/",
     ".vscode/",
     ".idea/"
   ]

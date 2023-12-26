@@ -4,12 +4,12 @@
  * @author Sébastien Règne
  */
 
-import mock from "mock-fs";
 import sinon from "sinon";
+import { restore } from "./utils/fake.js";
 
 export const mochaHooks = {
-    afterEach: () => {
-        mock.restore();
+    afterEach: async () => {
         sinon.restore();
+        await restore();
     },
 };

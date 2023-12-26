@@ -5,26 +5,22 @@
  */
 
 import assert from "node:assert/strict";
-import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import MarkdownlintWrapper from "../../../../src/core/wrapper/markdownlint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/markdownlint.js", function () {
     describe("MarkdownlintWrapper", function () {
         describe("lint()", function () {
             it("should ignore with FATAL level", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.md": "Bar",
                 });
 
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.md"],
                 };
                 const options = {};
@@ -36,17 +32,14 @@ describe("src/core/wrapper/markdownlint.js", function () {
             });
 
             it("should use default options", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.md": "# bar\n\n1. baz\n3. qux\n",
                 });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.md"],
                 };
                 const options = {};
@@ -68,17 +61,14 @@ describe("src/core/wrapper/markdownlint.js", function () {
             });
 
             it("shouldn't return notice", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.md": "# bar\n\nbaz\n",
                 });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.md"],
                 };
                 const options = {};
@@ -90,17 +80,14 @@ describe("src/core/wrapper/markdownlint.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.md": "Bar!\n",
                 });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.md"],
                 };
                 const options = {};

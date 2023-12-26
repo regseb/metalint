@@ -14,6 +14,7 @@ export default {
         "!/jsdocs/**",
         "!/node_modules/**",
         "!/types/**",
+        "!/tmp/**",
         // Ignorer les fichiers de configuration de Visual Studio Code.
         "!/.vscode/**",
         // Ignorer les fichiers de configuration de IntelliJ IDEA.

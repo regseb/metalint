@@ -6,22 +6,23 @@
 
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
-import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import ESLintWrapper from "../../../../src/core/wrapper/eslint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/eslint.js", function () {
     describe("ESLintWrapper", function () {
         describe("lint()", function () {
             it("should use default options", async function () {
-                mock({ "foo.js": 'console.log("bar");' });
+                const root = await createTempFileSystem({
+                    "foo.js": 'consol.log("bar");',
+                });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = {};
@@ -33,17 +34,14 @@ describe("src/core/wrapper/eslint.js", function () {
             });
 
             it("should fix", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js": "var bar = 42",
                 });
 
                 const context = {
                     level: Levels.OFF,
                     fix: true,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = { rules: { semi: "error" } };
@@ -58,17 +56,14 @@ describe("src/core/wrapper/eslint.js", function () {
             });
 
             it("should ignore with OFF level and no fix", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js": "alert(42);",
                 });
 
                 const context = {
                     level: Levels.OFF,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = { rules: { "no-alert": "error" } };
@@ -80,10 +75,7 @@ describe("src/core/wrapper/eslint.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js":
                         "var bar = 1;\n" +
                         "switch (bar) {\n" +
@@ -96,7 +88,7 @@ describe("src/core/wrapper/eslint.js", function () {
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = {
@@ -145,17 +137,14 @@ describe("src/core/wrapper/eslint.js", function () {
             });
 
             it("should ignore warning with ERROR level", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js": "var bar = 2 << 9; bar = bar;",
                 });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = {
@@ -185,12 +174,14 @@ describe("src/core/wrapper/eslint.js", function () {
             });
 
             it("should return FATAL notice", async function () {
-                mock({ "foo.js": "var bar = ;" });
+                const root = await createTempFileSystem({
+                    "foo.js": "var bar = ;",
+                });
 
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = {};
@@ -211,10 +202,7 @@ describe("src/core/wrapper/eslint.js", function () {
             });
 
             it("should support plugins", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js":
                         "// filenames/no-index\n" +
                         "bar(function(baz) { return baz; });\n" +
@@ -230,7 +218,7 @@ describe("src/core/wrapper/eslint.js", function () {
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = {
@@ -282,17 +270,14 @@ describe("src/core/wrapper/eslint.js", function () {
             });
 
             it("should support flat config", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js": "const bar = baz + qux;\n",
                 });
 
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = {

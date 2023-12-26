@@ -6,27 +6,23 @@
 
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
-import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import StylelintWrapper from "../../../../src/core/wrapper/stylelint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/stylelint.js", function () {
     describe("StylelintWrapper", function () {
         describe("lint()", function () {
             it("should fix", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.css": "header { top: 0px; }",
                 });
 
                 const context = {
                     level: Levels.FATAL,
                     fix: true,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
                 const options = { rules: { "length-zero-no-unit": true } };
@@ -41,17 +37,14 @@ describe("src/core/wrapper/stylelint.js", function () {
             });
 
             it("should ignore with FATAL level and no fix", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.css": "a { animation: 80ms; }",
                 });
 
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
                 const options = {
@@ -65,17 +58,14 @@ describe("src/core/wrapper/stylelint.js", function () {
             });
 
             it("should use default options", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.css": "div {}",
                 });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
                 const options = { rules: {} };
@@ -87,20 +77,17 @@ describe("src/core/wrapper/stylelint.js", function () {
             });
 
             it("shouldn't return notice", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.css": "a { color: #FFFFFF; }",
                 });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
-                const options = { rules: { "color-hex-case": "upper" } };
+                const options = { rules: { "block-no-empty": true } };
                 const file = "foo.css";
 
                 const wrapper = new StylelintWrapper(context, options);
@@ -109,28 +96,20 @@ describe("src/core/wrapper/stylelint.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
-                    "foo.css":
-                        "p { font-size: .5em }\n" +
-                        "label::after { content: 'bar'; }",
+                const root = await createTempFileSystem({
+                    "foo.css": "p { color: #y3 }\np { }",
                 });
 
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
                 const options = {
                     rules: {
-                        "number-leading-zero": [
-                            "always",
-                            { severity: "warning" },
-                        ],
-                        "string-quotes": "double",
+                        "color-no-invalid-hex": [true, { severity: "warning" }],
+                        "no-duplicate-selectors": true,
                     },
                 };
                 const file = "foo.css";
@@ -141,40 +120,39 @@ describe("src/core/wrapper/stylelint.js", function () {
                     {
                         file,
                         linter: "stylelint",
-                        rule: "number-leading-zero",
+                        rule: "color-no-invalid-hex",
                         severity: Severities.WARN,
-                        message: "Expected a leading zero",
-                        locations: [{ line: 1, column: 16 }],
+                        message: 'Unexpected invalid hex color "#y3"',
+                        locations: [{ line: 1, column: 12 }],
                     },
                     {
                         file,
                         linter: "stylelint",
-                        rule: "string-quotes",
+                        rule: "no-duplicate-selectors",
                         severity: Severities.ERROR,
-                        message: "Expected double quotes",
-                        locations: [{ line: 2, column: 25 }],
+                        message:
+                            'Unexpected duplicate selector "p", first used at' +
+                            " line 1",
+                        locations: [{ line: 2, column: 1 }],
                     },
                 ]);
             });
 
             it("should ignore warning with ERROR level", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
-                    "foo.css": "span {\n    color: #bar;\n}",
+                const root = await createTempFileSystem({
+                    "foo.css": "span { color: #bar; top: 0px; }",
                 });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
                 const options = {
                     rules: {
                         "color-no-invalid-hex": true,
-                        indentation: [2, { severity: "warning" }],
+                        "length-zero-no-unit": [true, { severity: "warning" }],
                     },
                 };
                 const file = "foo.css";
@@ -188,23 +166,20 @@ describe("src/core/wrapper/stylelint.js", function () {
                         rule: "color-no-invalid-hex",
                         severity: Severities.ERROR,
                         message: 'Unexpected invalid hex color "#bar"',
-                        locations: [{ line: 2, column: 12 }],
+                        locations: [{ line: 1, column: 15 }],
                     },
                 ]);
             });
 
             it("should lint all files (cf. disableDefaultIgnores)", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo/node_modules/bar.css": "main { width: 100baz; }",
                 });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo/node_modules/bar.css"],
                 };
                 const options = { rules: { "unit-no-unknown": true } };

@@ -6,9 +6,9 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import DoIUseWrapper from "../../../../src/core/wrapper/doiuse.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/doiuse.js", function () {
     describe("DoIUseWrapper", function () {
@@ -31,15 +31,17 @@ describe("src/core/wrapper/doiuse.js", function () {
             });
 
             it("should use default options", async function () {
-                // Ajouter un saut de ligne à la fin, sinon doiuse affiche le
-                // texte suivant dans la console : "[css-tokenize] unfinished
-                // business [ [ 'root' ] ]".
-                mock({ "foo.css": "button { border-radius: 10px; }\n" });
+                const root = await createTempFileSystem({
+                    // Ajouter un saut de ligne à la fin, sinon doiuse affiche
+                    // le texte suivant dans la console : "[css-tokenize]
+                    // unfinished business [ [ 'root' ] ]".
+                    "foo.css": "button { border-radius: 10px; }\n",
+                });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
                 const options = {};
@@ -61,15 +63,17 @@ describe("src/core/wrapper/doiuse.js", function () {
             });
 
             it("should return notices", async function () {
-                // Ajouter un saut de ligne à la fin, sinon doiuse affiche le
-                // texte suivant dans la console : "[css-tokenize] unfinished
-                // business [ [ 'root' ] ]".
-                mock({ "foo.css": "div { background-size: cover; }\n" });
+                const root = await createTempFileSystem({
+                    // Ajouter un saut de ligne à la fin, sinon doiuse affiche
+                    // le texte suivant dans la console : "[css-tokenize]
+                    // unfinished business [ [ 'root' ] ]".
+                    "foo.css": "div { background-size: cover; }\n",
+                });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
                 const options = { browser: "ie >= 9, > 1%, last 2 versions" };

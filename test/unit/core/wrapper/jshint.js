@@ -6,10 +6,10 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import JSHintWrapper from "../../../../src/core/wrapper/jshint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/jshint.js", function () {
     describe("JSHintWrapper", function () {
@@ -32,17 +32,14 @@ describe("src/core/wrapper/jshint.js", function () {
             });
 
             it("should use default options", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js": 'eval("bar");',
                 });
 
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = {};
@@ -63,10 +60,7 @@ describe("src/core/wrapper/jshint.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.js": `if (1 == "1") {
                                  console.log("bar");`,
                 });
@@ -74,7 +68,7 @@ describe("src/core/wrapper/jshint.js", function () {
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = { eqeqeq: true };
@@ -111,12 +105,14 @@ describe("src/core/wrapper/jshint.js", function () {
             });
 
             it("should ignore warning with ERROR level", async function () {
-                mock({ "foo.js": "const foo;" });
+                const root = await createTempFileSystem({
+                    "foo.js": "const foo;",
+                });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.js"],
                 };
                 const options = { eqeqeq: true };

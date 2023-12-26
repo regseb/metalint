@@ -4,6 +4,7 @@
  * @author Sébastien Règne
  */
 
+import process from "node:process";
 import standard from "standard";
 import Levels from "../levels.js";
 import Severities from "../severities.js";
@@ -52,7 +53,12 @@ export default class StandardWrapper extends Wrapper {
             return [];
         }
 
-        const results = await standard.lintFiles([file]);
+        const results = await standard.lintFiles([file], {
+            // Forcer le répertoire courant, car Standard utilise le répertoire
+            // courant au moment de l'import de "standard".
+            // https://github.com/standard/standard/issues/1956
+            cwd: process.cwd(),
+        });
         return results[0].messages
             .map((result) => {
                 let severity;

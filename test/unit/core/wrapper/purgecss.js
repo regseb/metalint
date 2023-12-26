@@ -6,10 +6,10 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import PurgeCSSWrapper from "../../../../src/core/wrapper/purgecss.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/purgecss.js", function () {
     describe("PurgeCSSWrapper", function () {
@@ -54,7 +54,7 @@ describe("src/core/wrapper/purgecss.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({
+                const root = await createTempFileSystem({
                     "foo.html": '<div class="bar"></div>',
                     "baz.css":
                         ".bar { color: blue; }\n" +
@@ -65,7 +65,7 @@ describe("src/core/wrapper/purgecss.js", function () {
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html", "baz.css"],
                 };
                 const options = { content: "*.html" };
@@ -88,7 +88,7 @@ describe("src/core/wrapper/purgecss.js", function () {
             });
 
             it("should ignore error with FATAL level", async function () {
-                mock({
+                const root = await createTempFileSystem({
                     "foo.html": "<div></div>",
                     "bar.css": ".baz { margin: 0; }",
                 });
@@ -96,7 +96,7 @@ describe("src/core/wrapper/purgecss.js", function () {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html", "bar.css"],
                 };
                 const options = { content: "*.html" };

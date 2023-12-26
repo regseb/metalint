@@ -6,15 +6,18 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
+import sinon from "sinon";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import AddonsLinterWrapper from "../../../../src/core/wrapper/addons-linter.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/addons-linter.js", function () {
     describe("AddonsLinterWrapper", function () {
         describe("lint()", function () {
             it("should ignore with FATAL level", async function () {
+                const spy = sinon.spy(console, "log");
+
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -29,46 +32,85 @@ describe("src/core/wrapper/addons-linter.js", function () {
                 const wrapper = new AddonsLinterWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, []);
+
+                assert.equal(spy.callCount, 0);
             });
 
-            it("shouldn't return notice from zip", async function () {
-                // Ne pas utiliser mock-fs, car il y a un bogue avec yaulz (la
-                // bibliothèque utilisée par addons-linter pour lire les zip).
-                // https://github.com/tschaub/mock-fs/issues/352
-                const context = {
-                    level: Levels.INFO,
-                    fix: false,
-                    root: process.cwd(),
-                    files: ["test/data/addon.xpi"],
-                };
-                const options = {};
-                const file = "test/data/addon.xpi";
-
-                const wrapper = new AddonsLinterWrapper(context, options);
-                const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, []);
-            });
-
-            it("should return notices found in file", async function () {
-                mock({
-                    foo: {
+            it("should return notice from zip", async function () {
+                const root = await createTempFileSystem({
+                    "addon.xpi": {
                         "manifest.json": JSON.stringify({
                             // eslint-disable-next-line camelcase
                             browser_specific_settings: {
-                                gecko: { id: "bar@baz.com" },
+                                gecko: {
+                                    id: "addon@metalint",
+                                    // eslint-disable-next-line camelcase
+                                    strict_min_version: "56.0",
+                                },
                             },
                             // eslint-disable-next-line camelcase
-                            manifest_version: 2,
+                            manifest_version: 1,
+                            name: "addon",
                             version: "1.0.0",
-                            permissions: ["god mode"],
+                            // eslint-disable-next-line camelcase
+                            optional_permissions: ["find"],
                         }),
                     },
                 });
+                const spy = sinon.spy(console, "log");
+
+                const context = {
+                    level: Levels.INFO,
+                    fix: false,
+                    root,
+                    files: ["addon.xpi"],
+                };
+                const options = {};
+                const file = "addon.xpi";
+
+                const wrapper = new AddonsLinterWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file,
+                        linter: "addons-linter",
+                        rule: "JSON_INVALID",
+                        severity: Severities.ERROR,
+                        message: '"/manifest_version" must be >= 2',
+                    },
+                    {
+                        file: file + "/manifest.json",
+                        linter: "addons-linter",
+                        rule: "PERMISSION_FIREFOX_UNSUPPORTED_BY_MIN_VERSION",
+                        severity: Severities.INFO,
+                        message:
+                            "Permission not supported by the specified" +
+                            " minimum Firefox version",
+                    },
+                ]);
+
+                assert.equal(spy.callCount, 0);
+            });
+
+            it("should return notices found in file", async function () {
+                const root = await createTempFileSystem({
+                    "foo/manifest.json": JSON.stringify({
+                        // eslint-disable-next-line camelcase
+                        browser_specific_settings: {
+                            gecko: { id: "bar@baz.com" },
+                        },
+                        // eslint-disable-next-line camelcase
+                        manifest_version: 2,
+                        version: "1.0.0",
+                        permissions: ["god mode"],
+                    }),
+                });
+                const spy = sinon.spy(console, "log");
 
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo/"],
                 };
                 const options = {};
@@ -94,51 +136,45 @@ describe("src/core/wrapper/addons-linter.js", function () {
                             " 0.",
                     },
                 ]);
+
+                assert.equal(spy.callCount, 0);
             });
 
             it("should accept options", async function () {
-                mock({
-                    foo: {
-                        "manifest.json": JSON.stringify({
-                            // eslint-disable-next-line camelcase
-                            manifest_version: 3,
-                            version: "4.2.1",
-                            name: "bar",
-                        }),
-                    },
+                const root = await createTempFileSystem({
+                    "foo/manifest.json": JSON.stringify({
+                        // eslint-disable-next-line camelcase
+                        manifest_version: 1,
+                        version: "2.3.4",
+                        name: "bar",
+                    }),
                 });
+                const spy = sinon.spy(console, "log");
 
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo/"],
                 };
-                const options = { maxManifestVersion: 3 };
+                const options = { minManifestVersion: 1 };
                 const file = "foo/";
 
                 const wrapper = new AddonsLinterWrapper(context, options);
                 const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, [
-                    {
-                        file: file + "manifest.json",
-                        linter: "addons-linter",
-                        rule: "EXTENSION_ID_REQUIRED",
-                        severity: Severities.ERROR,
-                        message:
-                            "The extension ID is required in Manifest Version" +
-                            " 3 and above.",
-                    },
-                ]);
+                assert.deepEqual(notices, []);
+
+                assert.equal(spy.callCount, 0);
             });
 
             it("should return notices on directory", async function () {
-                mock({ foo: { "bar.txt": "" } });
+                const root = await createTempFileSystem({ "foo/bar.txt": "" });
+                const spy = sinon.spy(console, "log");
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo"],
                 };
                 const options = {};
@@ -155,6 +191,83 @@ describe("src/core/wrapper/addons-linter.js", function () {
                         message: "manifest.json was not found",
                     },
                 ]);
+
+                assert.equal(spy.callCount, 0);
+            });
+
+            it("should ignore warning with ERROR level", async function () {
+                const root = await createTempFileSystem({
+                    foo: {
+                        "manifest.json": JSON.stringify({
+                            // eslint-disable-next-line camelcase
+                            manifest_version: 2,
+                            name: "bar",
+                            version: "1.0.0+beta",
+                        }),
+                        "index.js": 'document.write("baz");',
+                    },
+                });
+                const spy = sinon.spy(console, "log");
+
+                const context = {
+                    level: Levels.ERROR,
+                    fix: false,
+                    root,
+                    files: ["foo/"],
+                };
+                const options = {};
+                const file = "foo/";
+
+                const wrapper = new AddonsLinterWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file: file + "manifest.json",
+                        linter: "addons-linter",
+                        rule: "VERSION_FORMAT_INVALID",
+                        severity: Severities.ERROR,
+                        message: "The version string should be simplified.",
+                    },
+                ]);
+
+                assert.equal(spy.callCount, 0);
+            });
+
+            it("should support null file in result", async function () {
+                const root = await createTempFileSystem({
+                    "foo/manifest.json": "{ name: 'foo' }",
+                });
+                const spy = sinon.spy(console, "log");
+
+                const context = {
+                    level: Levels.ERROR,
+                    fix: false,
+                    root,
+                    files: ["foo/"],
+                };
+                const options = {};
+                const file = "foo/";
+
+                const wrapper = new AddonsLinterWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file,
+                        linter: "addons-linter",
+                        rule: "JSON_INVALID",
+                        severity: Severities.ERROR,
+                        message: "Your JSON is not valid.",
+                    },
+                    {
+                        file: file + "manifest.json",
+                        linter: "addons-linter",
+                        rule: "JSON_INVALID",
+                        severity: Severities.ERROR,
+                        message: "Your JSON is not valid.",
+                    },
+                ]);
+
+                assert.equal(spy.callCount, 0);
             });
         });
     });

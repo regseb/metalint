@@ -6,10 +6,10 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import HTMLHintWrapper from "../../../../src/core/wrapper/htmlhint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/htmlhint.js", function () {
     describe("HTMLHintWrapper", function () {
@@ -32,12 +32,14 @@ describe("src/core/wrapper/htmlhint.js", function () {
             });
 
             it("should use default options", async function () {
-                mock({ "foo.html": "<html></html>" });
+                const root = await createTempFileSystem({
+                    "foo.html": "<html></html>",
+                });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = {};
@@ -58,12 +60,14 @@ describe("src/core/wrapper/htmlhint.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({ "foo.html": '<img SRC="bar.svg" />' });
+                const root = await createTempFileSystem({
+                    "foo.html": '<img SRC="bar.svg" />',
+                });
 
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = { "attr-lowercase": true, "alt-require": true };
@@ -96,7 +100,7 @@ describe("src/core/wrapper/htmlhint.js", function () {
             });
 
             it("should ignore warning with ERROR level", async function () {
-                mock({
+                const root = await createTempFileSystem({
                     "foo.html": `
                         <head>
                           <script TYPE="text/javascript" src="bar.js"></script>
@@ -107,7 +111,7 @@ describe("src/core/wrapper/htmlhint.js", function () {
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = {

@@ -5,21 +5,20 @@
  */
 
 import assert from "node:assert/strict";
-import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import YAMLLintWrapper from "../../../../src/core/wrapper/yaml-lint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/yaml-lint.js", function () {
     describe("YAMLLintWrapper", function () {
         describe("lint()", function () {
             it("should ignore with FATAL level", async function () {
-                mock({ "foo.yaml": ":" });
+                const root = await createTempFileSystem({ "foo.yaml": ":" });
 
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.yaml"],
                 };
                 const options = {};
@@ -31,12 +30,12 @@ describe("src/core/wrapper/yaml-lint.js", function () {
             });
 
             it("should use default options", async function () {
-                mock({ "foo.yaml": "bar" });
+                const root = await createTempFileSystem({ "foo.yaml": "bar" });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.yaml"],
                 };
                 const options = {};
@@ -48,12 +47,12 @@ describe("src/core/wrapper/yaml-lint.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({ "foo.yml": ": bar" });
+                const root = await createTempFileSystem({ "foo.yml": ": bar" });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.yml"],
                 };
                 const options = { schema: "FAILSAFE_SCHEMA" };

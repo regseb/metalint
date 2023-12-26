@@ -5,10 +5,10 @@
  */
 
 import assert from "node:assert/strict";
-import mock from "mock-fs";
 import ConsoleFormatter from "../../../../src/core/formatter/console.js";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
+import createTempFileSystem from "../../../utils/fake.js";
 import WriteString from "../../../utils/writestring.js";
 
 describe("src/core/formatter/console.js", function () {
@@ -60,7 +60,7 @@ describe("src/core/formatter/console.js", function () {
         });
 
         it("should support notices", async function () {
-            mock({ "foo.js": "var foo = 0;" });
+            await createTempFileSystem({ "foo.js": "var foo = 0;" });
 
             const writer = new WriteString();
 

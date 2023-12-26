@@ -6,10 +6,10 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import CSSLintWrapper from "../../../../src/core/wrapper/csslint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/csslint.js", function () {
     describe("CSSLintWrapper", function () {
@@ -32,7 +32,7 @@ describe("src/core/wrapper/csslint.js", function () {
             });
 
             it("should use default options", async function () {
-                mock({
+                const root = await createTempFileSystem({
                     "foo.css": `
                         button {
                             color: black;
@@ -44,7 +44,7 @@ describe("src/core/wrapper/csslint.js", function () {
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
                 const options = {};
@@ -56,7 +56,7 @@ describe("src/core/wrapper/csslint.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({
+                const root = await createTempFileSystem({
                     "foo.css": `
                         a { }
                         #bar { width: 0px }
@@ -66,7 +66,7 @@ describe("src/core/wrapper/csslint.js", function () {
                 const context = {
                     level: Levels.WARN,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
                 const options = { "empty-rules": true, ids: 2, important: 1 };
@@ -95,7 +95,7 @@ describe("src/core/wrapper/csslint.js", function () {
             });
 
             it("should ignore warning with ERROR level", async function () {
-                mock({
+                const root = await createTempFileSystem({
                     "foo.css": `
                         a { }
                         #bar { width: 0px !important }
@@ -105,7 +105,7 @@ describe("src/core/wrapper/csslint.js", function () {
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.css"],
                 };
                 const options = { "empty-rules": true, important: 2 };

@@ -2,6 +2,7 @@
 /.stryker/
 /jsdocs/
 /node_modules/
+/tmp/
 /types/
 
 # Ignorer les fichiers de configuration de Visual Studio Code.

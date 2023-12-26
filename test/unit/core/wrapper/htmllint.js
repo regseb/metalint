@@ -6,9 +6,9 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import HtmllintWrapper from "../../../../src/core/wrapper/htmllint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/htmllint.js", function () {
     describe("HtmllintWrapper", function () {
@@ -31,12 +31,14 @@ describe("src/core/wrapper/htmllint.js", function () {
             });
 
             it("should use default options", async function () {
-                mock({ "foo.html": "<html></html>" });
+                const root = await createTempFileSystem({
+                    "foo.html": "<html></html>",
+                });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = {};
@@ -56,12 +58,14 @@ describe("src/core/wrapper/htmllint.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({ "foo.html": '<img SRC="bar.svg" />\n' });
+                const root = await createTempFileSystem({
+                    "foo.html": '<img SRC="bar.svg" />\n',
+                });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = {};

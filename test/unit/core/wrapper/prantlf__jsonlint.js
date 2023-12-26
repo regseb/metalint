@@ -6,9 +6,9 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import PrantlfJSONLintWrapper from "../../../../src/core/wrapper/prantlf__jsonlint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/prantlf__jsonlint.js", function () {
     describe("PrantlfJSONLintWrapper", function () {
@@ -31,12 +31,14 @@ describe("src/core/wrapper/prantlf__jsonlint.js", function () {
             });
 
             it("should return notice", async function () {
-                mock({ "foo.json": '{ "bar":' });
+                const root = await createTempFileSystem({
+                    "foo.json": '{ "bar":',
+                });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.json"],
                 };
                 const options = {};
@@ -55,12 +57,14 @@ describe("src/core/wrapper/prantlf__jsonlint.js", function () {
             });
 
             it("shouldn't return notice", async function () {
-                mock({ "foo.json": '{ "bar": "baz" }' });
+                const root = await createTempFileSystem({
+                    "foo.json": '{ "bar": "baz" }',
+                });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.json"],
                 };
                 const options = {};
@@ -72,12 +76,14 @@ describe("src/core/wrapper/prantlf__jsonlint.js", function () {
             });
 
             it("should take options", async function () {
-                mock({ "foo.json": '{ "bar": "baz", "bar": "qux" }' });
+                const root = await createTempFileSystem({
+                    "foo.json": '{ "bar": "baz", "bar": "qux" }',
+                });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.json"],
                 };
                 const options = { allowDuplicateObjectKeys: false };

@@ -5,7 +5,6 @@
  */
 
 import assert from "node:assert/strict";
-import mock from "mock-fs";
 import metalint from "../../../src/core/index.js";
 import Levels from "../../../src/core/levels.js";
 import Severities from "../../../src/core/severities.js";
@@ -14,13 +13,12 @@ import ESLintWrapper from "../../../src/core/wrapper/eslint.js";
 import HTMLHintWrapper from "../../../src/core/wrapper/htmlhint.js";
 import JSHintWrapper from "../../../src/core/wrapper/jshint.js";
 import Prettier from "../../../src/core/wrapper/prettier.js";
+import createTempFileSystem from "../../utils/fake.js";
 
 describe("src/core/index.js", function () {
     describe("metalint()", function () {
         it("should return notices", async function () {
-            mock({
-                "src/core/": mock.load("src/core/"),
-                "node_modules/": mock.load("node_modules/"),
+            await createTempFileSystem({
                 "foo.html": "<HTML></HTML>",
                 "bar.md": "## baz",
                 "qux.js": "alert('quux')",
@@ -113,9 +111,7 @@ describe("src/core/index.js", function () {
         });
 
         it("should add default properties", async function () {
-            mock({
-                "src/core/": mock.load("src/core/"),
-                "node_modules/": mock.load("node_modules/"),
+            await createTempFileSystem({
                 "foo.json": '{"bar":"baz"}',
             });
 
@@ -151,9 +147,7 @@ describe("src/core/index.js", function () {
         });
 
         it("should support sub-files", async function () {
-            mock({
-                "src/core/": mock.load("src/core/"),
-                "node_modules/": mock.load("node_modules/"),
+            await createTempFileSystem({
                 "foo/manifest.json": "{ 'name': 'foo' }",
             });
 

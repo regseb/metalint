@@ -5,12 +5,10 @@
  */
 
 import assert from "node:assert/strict";
-import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
-import mock from "mock-fs";
-import sinon from "sinon";
 import Glob from "../../../../src/core/utils/glob.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/utils/glob.js", function () {
     describe("test()", function () {
@@ -235,54 +233,39 @@ describe("src/core/utils/glob.js", function () {
 
     describe("walk()", function () {
         it("should work", async function () {
-            mock({
-                foo: {
-                    "bar.js": "",
-                    baz: {
-                        "qux.js": "",
-                        "quux.js": "",
-                    },
+            const root = await createTempFileSystem({
+                "foo.js": "",
+                bar: {
+                    "baz.js": "",
+                    "qux.js": "",
                 },
-            });
-            const stub = sinon.stub(process, "cwd").callsFake(() => {
-                return path.join(stub.wrappedMethod(), "foo");
             });
 
             const cwd = process.cwd();
-            let root = stub.wrappedMethod();
             let glob = new Glob(["**"], { cwd, root });
             let files = await glob.walk("./");
             assert.deepEqual(files, [
                 "./",
-                "bar.js",
-                "baz/",
-                "baz/quux.js",
-                "baz/qux.js",
+                "bar/",
+                "bar/baz.js",
+                "bar/qux.js",
+                "foo.js",
             ]);
 
-            root = stub.wrappedMethod();
-            glob = new Glob(["**/bar.js"], { cwd, root });
+            glob = new Glob(["**/foo.js"], { cwd, root });
             files = await glob.walk("./");
-            assert.deepEqual(files, ["bar.js"]);
+            assert.deepEqual(files, ["foo.js"]);
 
-            root = process.cwd();
-            glob = new Glob(["**/bar.js"], { cwd, root });
-            files = await glob.walk("./");
-            assert.deepEqual(files, ["bar.js"]);
+            glob = new Glob(["**/baz.js"], { cwd, root });
+            files = await glob.walk("bar/");
+            assert.deepEqual(files, ["bar/baz.js"]);
 
-            root = process.cwd();
             glob = new Glob(["**/qux.js"], { cwd, root });
-            files = await glob.walk("baz/");
-            assert.deepEqual(files, ["baz/qux.js"]);
-
-            root = process.cwd();
-            glob = new Glob(["**/quux.js"], { cwd, root });
-            files = await glob.walk("baz/qux.js");
+            files = await glob.walk("bar/baz.js");
             assert.deepEqual(files, []);
 
-            root = process.cwd();
-            glob = new Glob(["!baz/**", "**"], { cwd, root });
-            files = await glob.walk("baz/");
+            glob = new Glob(["!bar/**", "**"], { cwd, root });
+            files = await glob.walk("bar/");
             assert.deepEqual(files, []);
         });
     });

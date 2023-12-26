@@ -6,10 +6,10 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import mock from "mock-fs";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import MarkuplintWrapper from "../../../../src/core/wrapper/markuplint.js";
+import createTempFileSystem from "../../../utils/fake.js";
 
 describe("src/core/wrapper/markuplint.js", function () {
     describe("MarkuplintWrapper", function () {
@@ -32,17 +32,14 @@ describe("src/core/wrapper/markuplint.js", function () {
             });
 
             it("should use default options", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.html": "<title>Bar</title>",
                 });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = {};
@@ -54,17 +51,14 @@ describe("src/core/wrapper/markuplint.js", function () {
             });
 
             it("should return notices", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.html": '<img src=\'bar.svg\' src="" class="BAZ" />',
                 });
 
                 const context = {
                     level: Levels.INFO,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = {
@@ -114,17 +108,14 @@ describe("src/core/wrapper/markuplint.js", function () {
             });
 
             it("should ignore warning with ERROR level", async function () {
-                mock({
-                    // Ne pas simuler le répertoire "node_modules" car le linter
-                    // doit accéder à des fichiers dans celui-ci.
-                    "node_modules/": mock.load("node_modules/"),
+                const root = await createTempFileSystem({
                     "foo.html": '<input required="required" required />',
                 });
 
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo.html"],
                 };
                 const options = {
