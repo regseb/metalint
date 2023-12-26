@@ -63,7 +63,7 @@ export default {
             linters: ["prettier", "prantlf__jsonlint"],
             overrides: {
                 patterns: "/package.json",
-                linters: "npm-package-json-lint",
+                linters: ["npm-package-json-lint", "publint"],
             },
         },
         {

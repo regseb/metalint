@@ -109,6 +109,8 @@ source) :
       <a title="npm-package-json-lint"
          href="https://www.npmjs.com/package/npm-package-json-lint"
          >npm-package-json-lint</a>,
+      <a title="publint"
+         href="https://www.npmjs.com/package/publint">publint</a>,
       <a title="sort-package-json"
          href="https://www.npmjs.com/package/sort-package-json">Sort
         Package.json</a>
