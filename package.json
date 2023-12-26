@@ -70,6 +70,7 @@
     "@types/yargs": "17.0.32",
     "addons-linter": "6.19.0",
     "csslint": "1.0.5",
+    "depcheck": "1.4.7",
     "doiuse": "6.0.2",
     "eslint": "8.56.0",
     "eslint-plugin-array-func": "4.0.0",

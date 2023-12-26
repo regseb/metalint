@@ -413,8 +413,8 @@ describe("src/core/configuration/normalize.js", function () {
                 message:
                     "Value of property 'wrapper' is unknown (possibles" +
                     ' values: "addons-linter", "coffeelint__cli", "csslint",' +
-                    ' "doiuse", "eslint", "htmlhint", "htmllint", "jshint",' +
-                    ' "jsonlint-mod", "markdownlint", "markuplint",' +
+                    ' "depcheck", "doiuse", "eslint", "htmlhint", "htmllint",' +
+                    ' "jshint", "jsonlint-mod", "markdownlint", "markuplint",' +
                     ' "npm-check-updates", "npm-package-json-lint",' +
                     ' "prantlf__jsonlint", "prettier", "purgecss",' +
                     ' "sort-package-json", "standard", "stylelint",' +

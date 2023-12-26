@@ -101,6 +101,8 @@ source) :
   <tr>
     <td>package.json</td>
     <td>
+      <a title="depcheck"
+         href="https://www.npmjs.com/package/depcheck">Depcheck</a>
       <a title="npm-check-updates"
          href="https://www.npmjs.com/package/npm-check-updates"
          >npm-check-updates</a>,
