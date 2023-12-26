@@ -47,13 +47,10 @@ export default class AddonsLinterWrapper extends Wrapper {
     constructor(context, options) {
         super(context);
         this.#options = {
-            logLevel: "error",
-            stack: false,
-            metadata: false,
+            logLevel: "silent",
+            // Ne rien afficher dans la console.
             output: "none",
-            boring: false,
-            selfHosted: false,
-            shouldScanFile: () => true,
+            shouldScanFile: (_fileOrDirName, _isDir) => true,
             ...options,
         };
     }

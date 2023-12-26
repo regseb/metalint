@@ -6,11 +6,10 @@
 
 import fs from "node:fs/promises";
 import { ESLint } from "eslint";
-// Désactiver deux règles ESLint pour cet import, car elles ne supportent pas la
+// Désactiver la règle suivante pour cet import, car elle ne supporte pas la
 // propriété "exports" du package.json.
 // https://github.com/import-js/eslint-plugin-import/issues/1810
-// https://github.com/eslint-community/eslint-plugin-n/issues/21
-// eslint-disable-next-line import/no-unresolved, n/file-extension-in-import
+// eslint-disable-next-line import/no-unresolved
 import pkg from "eslint/use-at-your-own-risk";
 import Levels from "../levels.js";
 import Severities from "../severities.js";

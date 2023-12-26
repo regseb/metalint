@@ -80,12 +80,7 @@ export default class StylelintWrapper extends Wrapper {
                         ? Severities.WARN
                         : Severities.ERROR,
                 message: result.text.slice(0, result.text.lastIndexOf(" (")),
-                locations: [
-                    {
-                        line: result.line,
-                        column: result.column,
-                    },
-                ],
+                locations: [{ line: result.line, column: result.column }],
             }))
             .filter((n) => this.level >= n.severity);
     }

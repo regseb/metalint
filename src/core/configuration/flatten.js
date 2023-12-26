@@ -255,16 +255,18 @@ export const flattenChecker = function (hierarchy, { fix, level }) {
 /**
  * Fusionne la configuration.
  *
- * @param {NormalizedConfig}  hierarchy      L'objet JSON normalisé contenant la
- *                                           configuration.
- * @param {Object}            argv           Certaines options de la ligne de
- *                                           commande.
- * @param {boolean|undefined} argv.fix       L'option <code>--fix</code> de la
- *                                           ligne de commande.
- * @param {TypeofFormatter}   argv.formatter L'option <code>--formatter</code>
- *                                           de la ligne de commande.
- * @param {Level}             argv.level     L'options <code>--level</code> de
- *                                           la ligne de commande.
+ * @param {NormalizedConfig}          hierarchy      L'objet JSON normalisé
+ *                                                   contenant la configuration.
+ * @param {Object}                    argv           Certaines options de la
+ *                                                   ligne de commande.
+ * @param {boolean|undefined}         argv.fix       L'option <code>--fix</code>
+ *                                                   de la ligne de commande.
+ * @param {TypeofFormatter|undefined} argv.formatter L'option
+ *                                                   <code>--formatter</code> de
+ *                                                   la ligne de commande.
+ * @param {Level|undefined}           argv.level     L'options
+ *                                                   <code>--level</code> de la
+ *                                                   ligne de commande.
  * @returns {FlattenedConfig} L'objet JSON fusionné.
  */
 export const flatten = function (hierarchy, argv) {

@@ -67,12 +67,7 @@ export default class HtmllintWrapper extends Wrapper {
             linter: "htmllint",
             rule: result.rule,
             message: result.code,
-            locations: [
-                {
-                    line: result.line,
-                    column: result.column,
-                },
-            ],
+            locations: [{ line: result.line, column: result.column }],
         }));
     }
 }

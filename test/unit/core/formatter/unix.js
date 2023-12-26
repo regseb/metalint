@@ -59,6 +59,35 @@ describe("src/core/formatter/unix.js", function () {
             assert.equal(writer.toString(), "foo.css::: Bar. (csslint)\n");
         });
 
+        it("should ignore when all low level of file", async function () {
+            const writer = new WriteString();
+
+            const formatter = new UnixFormatter(Levels.ERROR, { writer });
+            await formatter.notify("foo.yml", [
+                {
+                    file: "foo.yml",
+                    linter: "yaml-lint",
+                    rule: undefined,
+                    severity: Severities.ERROR,
+                    message: "Bar.",
+                    locations: [],
+                },
+            ]);
+            await formatter.notify("baz.json", [
+                {
+                    file: "baz.json",
+                    linter: "prantlf__jsonlint",
+                    rule: undefined,
+                    severity: Severities.WARN,
+                    message: "Qux.",
+                    locations: [],
+                },
+            ]);
+            await formatter.finalize();
+
+            assert.equal(writer.toString(), "foo.yml::: Bar. (yaml-lint)\n");
+        });
+
         it("should support notices", async function () {
             const writer = new WriteString();
 

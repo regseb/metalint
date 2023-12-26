@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 
-// Désactiver cette règle, car elle ne supporte pas les valeurs de la propriété
-// "files" (du package.json) commençant par "./".
-// https://github.com/eslint-community/eslint-plugin-n/issues/99
-// eslint-disable-next-line n/no-unpublished-bin
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -22,20 +18,6 @@ import { parse } from "./argv.js";
  * @typedef {import("../type/index.d.ts").FlattenedConfigReporter} FlattenedConfigReporter
  * @typedef {import("../type/index.d.ts").Severity} Severity
  */
-
-if (undefined === import.meta.resolve) {
-    /**
-     * Résous un chemin relatif à partir du module.
-     *
-     * @param {string} specifier Le chemin relatif vers un fichier ou un
-     *                           répertoire.
-     * @returns {string} L'URL absolue vers le fichier ou le répertoire.
-     * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
-     */
-    import.meta.resolve = (specifier) => {
-        return new URL(specifier, import.meta.url).href;
-    };
-}
 
 /**
  * Vérifie (en appelant des linters) une liste de fichiers.

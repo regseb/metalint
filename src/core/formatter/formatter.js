@@ -12,20 +12,6 @@ import { fileURLToPath } from "node:url";
  * @typedef {import("../../type/index.js").Notice} Notice
  */
 
-if (undefined === import.meta.resolve) {
-    /**
-     * Résous un chemin relatif à partir du module.
-     *
-     * @param {string} specifier Le chemin relatif vers un fichier ou un
-     *                           répertoire.
-     * @returns {string} L'URL absolue vers le fichier ou le répertoire.
-     * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
-     */
-    import.meta.resolve = (specifier) => {
-        return new URL(specifier, import.meta.url).href;
-    };
-}
-
 /**
  * La liste des fichiers JavaScript des formateurs.
  *
@@ -39,10 +25,11 @@ const scripts = await fs.readdir(fileURLToPath(import.meta.resolve("./")));
  * @constant {string[]} FORMATTERS
  */
 export const FORMATTERS = scripts
-    // Enlever l'extension du fichier.
-    .map((f) => f.slice(0, -3))
-    // Enlever ce fichier qui n'est pas un vrai formateur.
-    .filter((f) => "formatter" !== f);
+    // Garder seulement les fichiers JavaScript et enlever le fichier
+    // "formatter.js" qui n'est pas un vrai formateur.
+    .filter((f) => f.endsWith(".js") && "formatter.js" !== f)
+    // Enlever l'extension des fichiers.
+    .map((f) => f.slice(0, -3));
 
 /**
  * Le formateur parent.

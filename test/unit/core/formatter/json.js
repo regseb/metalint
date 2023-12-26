@@ -56,7 +56,7 @@ describe("src/core/formatter/json.js", function () {
                     linter: "eslint",
                     rule: "no-unused-vars",
                     severity: Severities.ERROR,
-                    message: "'superflous' is defined but never used",
+                    message: "'superfluous' is defined but never used",
                     locations: [{ line: 2, column: 7 }],
                 },
             ]);
@@ -71,7 +71,7 @@ describe("src/core/formatter/json.js", function () {
                     '      "linter": "eslint",\n' +
                     '      "rule": "no-unused-vars",\n' +
                     '      "severity": 2,\n' +
-                    '      "message": "\'superflous\' is defined but never' +
+                    '      "message": "\'superfluous\' is defined but never' +
                     ' used",\n' +
                     '      "locations": [\n' +
                     "        {\n" +

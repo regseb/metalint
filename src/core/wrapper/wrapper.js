@@ -13,20 +13,6 @@ import { fileURLToPath } from "node:url";
  * @typedef {import("../../type/index.d.ts").PartialNotice} PartialNotice
  */
 
-if (undefined === import.meta.resolve) {
-    /**
-     * Résous un chemin relatif à partir du module.
-     *
-     * @param {string} specifier Le chemin relatif vers un fichier ou un
-     *                           répertoire.
-     * @returns {string} L'URL absolue vers le fichier ou le répertoire.
-     * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
-     */
-    import.meta.resolve = (specifier) => {
-        return new URL(specifier, import.meta.url).href;
-    };
-}
-
 /**
  * La liste des fichiers JavaScript des enrobages.
  *
@@ -40,10 +26,11 @@ const scripts = await fs.readdir(fileURLToPath(import.meta.resolve("./")));
  * @constant {string[]} WRAPPERS
  */
 export const WRAPPERS = scripts
-    // Enlever l'extension du fichier.
-    .map((f) => f.slice(0, -3))
-    // Enlever ce fichier qui n'est pas un vrai enrobage.
-    .filter((f) => "wrapper" !== f);
+    // Garder seulement les fichiers JavaScript et enlever le fichier
+    // "wrapper.js" qui n'est pas un vrai enrobage.
+    .filter((f) => f.endsWith(".js") && "wrapper.js" !== f)
+    // Enlever l'extension des fichiers.
+    .map((f) => f.slice(0, -3));
 
 /**
  * La classe mère des enrobages de linters.

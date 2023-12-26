@@ -72,12 +72,7 @@ export default class HTMLHintWrapper extends Wrapper {
                         ? Severities.WARN
                         : Severities.ERROR,
                 message: result.message,
-                locations: [
-                    {
-                        line: result.line,
-                        column: result.col,
-                    },
-                ],
+                locations: [{ line: result.line, column: result.col }],
             }))
             .filter((n) => this.level >= n.severity);
     }

@@ -17,20 +17,6 @@ import PrettierWrapper from "../../../../src/core/wrapper/prettier.js";
 import Wrapper from "../../../../src/core/wrapper/wrapper.js";
 import YAMLLintWrapper from "../../../../src/core/wrapper/yaml-lint.js";
 
-if (undefined === import.meta.resolve) {
-    /**
-     * Résous un chemin relatif à partir du module.
-     *
-     * @param {string} specifier Le chemin relatif vers un fichier ou un
-     *                           répertoire.
-     * @returns {string} L'URL absolue vers le fichier ou le répertoire.
-     * @see https://nodejs.org/api/esm.html#importmetaresolvespecifier-parent
-     */
-    import.meta.resolve = (specifier) => {
-        return new URL(specifier, import.meta.url).href;
-    };
-}
-
 describe("src/core/configuration/normalize.js", function () {
     describe("normalizePatterns()", function () {
         it("should use default", function () {

@@ -46,6 +46,35 @@ describe("src/core/formatter/checkstyle.js", function () {
             );
         });
 
+        it("should ignore low level", async function () {
+            const writer = new WriteString();
+
+            const formatter = new CheckstyleFormatter(Levels.ERROR, {
+                writer,
+                indent: 0,
+            });
+            await formatter.notify("foo.yml", [
+                {
+                    file: "foo.yml",
+                    linter: "yaml-lint",
+                    rule: undefined,
+                    severity: Severities.WARN,
+                    message: "Bar.",
+                    locations: [],
+                },
+            ]);
+            await formatter.finalize();
+
+            assert.equal(
+                writer.toString(),
+                '<?xml version="1.0" encoding="UTF-8"?>\n' +
+                    '<checkstyle version="8.28">\n' +
+                    '<file name="foo.yml">\n' +
+                    "</file>\n" +
+                    "</checkstyle>\n",
+            );
+        });
+
         it("should support notices", async function () {
             const writer = new WriteString();
 

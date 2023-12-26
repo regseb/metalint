@@ -72,12 +72,7 @@ export default class JSHintWrapper extends Wrapper {
                     ? Severities.WARN
                     : Severities.ERROR,
                 message: result.reason,
-                locations: [
-                    {
-                        line: result.line,
-                        column: result.character,
-                    },
-                ],
+                locations: [{ line: result.line, column: result.character }],
             }))
             .filter((n) => this.level >= n.severity);
     }

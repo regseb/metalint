@@ -112,14 +112,14 @@ const printCodeSource = function (locations, content, writer) {
         printCodeSourceLine(line - 1, content, false, writer);
         printCodeSourceLine(line, content, true, writer);
         if (0 !== columns.length) {
-            let dashs = "-".repeat(6 + columns.at(-1));
+            let dashes = "-".repeat(6 + columns.at(-1));
             for (const column of columns) {
-                dashs =
-                    dashs.slice(0, 6 + column) +
+                dashes =
+                    dashes.slice(0, 6 + column) +
                     "^" +
-                    dashs.slice(6 + column + 1);
+                    dashes.slice(6 + column + 1);
             }
-            print(writer, dashs + "\n");
+            print(writer, dashes + "\n");
         }
         printCodeSourceLine(line + 1, content, false, writer);
         printCodeSourceLine(line + 2, content, false, writer);

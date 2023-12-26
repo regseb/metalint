@@ -1,6 +1,7 @@
 # Metalint
 
-<!-- Utiliser du HTML pour faire flotter l'image à droite. -->
+<!-- Utiliser du HTML (avec l'attribut "align" obsolète) pour faire flotter
+     l'image à droite. -->
 <!-- markdownlint-disable-next-line no-inline-html-->
 <img src="asset/logo.svg" align="right" alt="">
 
@@ -100,18 +101,12 @@ source) :
   <tr>
     <td>package.json</td>
     <td>
-      <!-- markdownlint-disable no-bare-urls -->
-      <!-- https://github.com/DavidAnson/markdownlint/issues/961 -->
       <a title="npm-check-updates"
          href="https://www.npmjs.com/package/npm-check-updates"
          >npm-check-updates</a>,
-      <!-- markdownlint-enable no-bare-urls -->
-      <!-- markdownlint-disable no-bare-urls -->
-      <!-- https://github.com/DavidAnson/markdownlint/issues/961 -->
       <a title="npm-package-json-lint"
          href="https://www.npmjs.com/package/npm-package-json-lint"
          >npm-package-json-lint</a>,
-      <!-- markdownlint-enable no-bare-urls -->
       <a title="sort-package-json"
          href="https://www.npmjs.com/package/sort-package-json">Sort
         Package.json</a>
