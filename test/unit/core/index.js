@@ -5,7 +5,7 @@
  */
 
 import assert from "node:assert/strict";
-import metalint from "../../../src/core/index.js";
+import Metalint from "../../../src/core/index.js";
 import Levels from "../../../src/core/levels.js";
 import Severities from "../../../src/core/severities.js";
 import AddonsLinterWrapper from "../../../src/core/wrapper/addons-linter.js";
@@ -16,179 +16,199 @@ import Prettier from "../../../src/core/wrapper/prettier.js";
 import createTempFileSystem from "../../utils/fake.js";
 
 describe("src/core/index.js", function () {
-    describe("metalint()", function () {
-        it("should return notices", async function () {
-            await createTempFileSystem({
-                "foo.html": "<HTML></HTML>",
-                "bar.md": "## baz",
-                "qux.js": "alert('quux')",
-            });
+    describe("Metalint", function () {
+        describe("lintFiles()", function () {
+            it("should return notices", async function () {
+                await createTempFileSystem({
+                    "foo.html": "<HTML></HTML>",
+                    "bar.md": "## baz",
+                    "qux.js": "alert('quux')",
+                });
 
-            const files = ["foo.html", "bar.md", "qux.js"];
-            const checkers = [
-                {
-                    patterns: ["*.js"],
-                    linters: [
-                        {
-                            wrapper: JSHintWrapper,
-                            level: Levels.WARN,
-                            fix: false,
-                            options: {},
-                        },
-                        {
-                            wrapper: ESLintWrapper,
-                            level: Levels.WARN,
-                            fix: false,
-                            options: {
-                                rules: {
-                                    "no-alert": "error",
-                                    quotes: "error",
+                const files = ["foo.html", "bar.md", "qux.js"];
+                const checkers = [
+                    {
+                        patterns: ["*.js"],
+                        linters: [
+                            {
+                                wrapper: JSHintWrapper,
+                                level: Levels.WARN,
+                                fix: false,
+                                options: {},
+                            },
+                            {
+                                wrapper: ESLintWrapper,
+                                level: Levels.WARN,
+                                fix: false,
+                                options: {
+                                    rules: {
+                                        "no-alert": "error",
+                                        quotes: "error",
+                                    },
                                 },
                             },
-                        },
-                    ],
-                    overrides: [],
-                },
-                {
-                    patterns: ["*.html"],
-                    linters: [
-                        {
-                            wrapper: HTMLHintWrapper,
-                            level: Levels.FATAL,
-                            fix: false,
-                            options: { "tagname-lowercase": true },
-                        },
-                    ],
-                    overrides: [],
-                },
-            ];
-
-            const results = await metalint(files, checkers, ".");
-            assert.deepEqual(results, {
-                "foo.html": [],
-                "bar.md": undefined,
-                "qux.js": [
+                        ],
+                        overrides: [],
+                    },
                     {
-                        file: "qux.js",
-                        linter: "eslint",
-                        rule: "no-alert",
-                        severity: Severities.ERROR,
-                        message: "Unexpected alert.",
-                        locations: [
+                        patterns: ["*.html"],
+                        linters: [
                             {
-                                line: 1,
-                                column: 1,
-                                endLine: 1,
-                                endColumn: 14,
+                                wrapper: HTMLHintWrapper,
+                                level: Levels.FATAL,
+                                fix: false,
+                                options: { "tagname-lowercase": true },
                             },
                         ],
+                        overrides: [],
                     },
-                    {
-                        file: "qux.js",
-                        linter: "eslint",
-                        rule: "quotes",
-                        severity: Severities.ERROR,
-                        message: "Strings must use doublequote.",
-                        locations: [
-                            {
-                                line: 1,
-                                column: 7,
-                                endLine: 1,
-                                endColumn: 13,
-                            },
-                        ],
-                    },
-                    {
-                        file: "qux.js",
-                        linter: "jshint",
-                        rule: "W033",
-                        severity: Severities.WARN,
-                        message: "Missing semicolon.",
-                        locations: [{ line: 1, column: 14 }],
-                    },
-                ],
-            });
-        });
+                ];
 
-        it("should add default properties", async function () {
-            await createTempFileSystem({
-                "foo.json": '{"bar":"baz"}',
-            });
-
-            const files = ["foo.json"];
-            const checkers = [
-                {
+                const metalint = new Metalint({
+                    root: ".",
                     patterns: ["**"],
-                    linters: [
+                    reporters: [],
+                    checkers,
+                });
+                const results = await metalint.lintFiles(files);
+                assert.deepEqual(results, {
+                    "foo.html": [],
+                    "bar.md": undefined,
+                    "qux.js": [
                         {
-                            wrapper: Prettier,
-                            level: Levels.INFO,
-                            fix: false,
-                            options: {},
+                            file: "qux.js",
+                            linter: "eslint",
+                            rule: "no-alert",
+                            severity: Severities.ERROR,
+                            message: "Unexpected alert.",
+                            locations: [
+                                {
+                                    line: 1,
+                                    column: 1,
+                                    endLine: 1,
+                                    endColumn: 14,
+                                },
+                            ],
+                        },
+                        {
+                            file: "qux.js",
+                            linter: "eslint",
+                            rule: "quotes",
+                            severity: Severities.ERROR,
+                            message: "Strings must use doublequote.",
+                            locations: [
+                                {
+                                    line: 1,
+                                    column: 7,
+                                    endLine: 1,
+                                    endColumn: 13,
+                                },
+                            ],
+                        },
+                        {
+                            file: "qux.js",
+                            linter: "jshint",
+                            rule: "W033",
+                            severity: Severities.WARN,
+                            message: "Missing semicolon.",
+                            locations: [{ line: 1, column: 14 }],
                         },
                     ],
-                    overrides: [],
-                },
-            ];
+                });
+            });
 
-            const results = await metalint(files, checkers, ".");
-            assert.deepEqual(results, {
-                "foo.json": [
+            it("should add default properties", async function () {
+                await createTempFileSystem({
+                    "foo.json": '{"bar":"baz"}',
+                });
+
+                const files = ["foo.json"];
+                const checkers = [
                     {
-                        file: "foo.json",
-                        linter: "prettier",
-                        rule: undefined,
-                        severity: Severities.ERROR,
-                        message: "Code style issues found.",
-                        locations: [],
+                        patterns: ["**"],
+                        linters: [
+                            {
+                                wrapper: Prettier,
+                                level: Levels.INFO,
+                                fix: false,
+                                options: {},
+                            },
+                        ],
+                        overrides: [],
                     },
-                ],
-            });
-        });
+                ];
 
-        it("should support sub-files", async function () {
-            await createTempFileSystem({
-                "foo/manifest.json": "{ 'name': 'foo' }",
-            });
-
-            const files = ["foo/"];
-            const checkers = [
-                {
-                    patterns: ["foo/"],
-                    linters: [
+                const metalint = new Metalint({
+                    root: ".",
+                    patterns: ["**"],
+                    reporters: [],
+                    checkers,
+                });
+                const results = await metalint.lintFiles(files);
+                assert.deepEqual(results, {
+                    "foo.json": [
                         {
-                            wrapper: AddonsLinterWrapper,
-                            level: Levels.INFO,
-                            fix: false,
-                            options: {},
+                            file: "foo.json",
+                            linter: "prettier",
+                            rule: undefined,
+                            severity: Severities.ERROR,
+                            message: "Code style issues found.",
+                            locations: [],
                         },
                     ],
-                    overrides: [],
-                },
-            ];
+                });
+            });
 
-            const results = await metalint(files, checkers, ".");
-            assert.deepEqual(results, {
-                "foo/": [
+            it("should support sub-files", async function () {
+                await createTempFileSystem({
+                    "foo/manifest.json": "{ 'name': 'foo' }",
+                });
+
+                const files = ["foo/"];
+                const checkers = [
                     {
-                        file: "foo/",
-                        linter: "addons-linter",
-                        rule: "JSON_INVALID",
-                        severity: Severities.ERROR,
-                        message: "Your JSON is not valid.",
-                        locations: [],
+                        patterns: ["foo/"],
+                        linters: [
+                            {
+                                wrapper: AddonsLinterWrapper,
+                                level: Levels.INFO,
+                                fix: false,
+                                options: {},
+                            },
+                        ],
+                        overrides: [],
                     },
-                ],
-                "foo/manifest.json": [
-                    {
-                        file: "foo/manifest.json",
-                        linter: "addons-linter",
-                        rule: "JSON_INVALID",
-                        severity: Severities.ERROR,
-                        message: "Your JSON is not valid.",
-                        locations: [],
-                    },
-                ],
+                ];
+
+                const metalint = new Metalint({
+                    root: ".",
+                    patterns: ["**"],
+                    reporters: [],
+                    checkers,
+                });
+                const results = await metalint.lintFiles(files);
+                assert.deepEqual(results, {
+                    "foo/": [
+                        {
+                            file: "foo/",
+                            linter: "addons-linter",
+                            rule: "JSON_INVALID",
+                            severity: Severities.ERROR,
+                            message: "Your JSON is not valid.",
+                            locations: [],
+                        },
+                    ],
+                    "foo/manifest.json": [
+                        {
+                            file: "foo/manifest.json",
+                            linter: "addons-linter",
+                            rule: "JSON_INVALID",
+                            severity: Severities.ERROR,
+                            message: "Your JSON is not valid.",
+                            locations: [],
+                        },
+                    ],
+                });
             });
         });
     });

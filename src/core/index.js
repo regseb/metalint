@@ -4,8 +4,14 @@
  * @author Sébastien Règne
  */
 
+import path from "node:path";
+import process from "node:process";
+import { pathToFileURL } from "node:url";
+import flatten from "./configuration/flatten.js";
+import normalize from "./configuration/normalize.js";
 import { mergeLinters } from "./configuration/override.js";
-import Severities from "./severities.js";
+import Results from "./results.js";
+import { exists } from "./utils/file.js";
 import Glob from "./utils/glob.js";
 
 /**
@@ -13,140 +19,144 @@ import Glob from "./utils/glob.js";
  * @typedef {import("../type/index.d.ts").Notice} Notice
  */
 
-/**
- * Compare deux notifications. En commençant par le numéro de la ligne, puis
- * celui de la colonne.
- *
- * @param {Notice} notice1 La première notification.
- * @param {Notice} notice2 La seconde notification.
- * @returns {number} Un nombre négatif si la 1<sup>re</sup> notification est
- *                   inférieure à la 2<sup>de</sup> ; <code>0</code> si elles
- *                   sont égales ; sinon un nombre positif.
- */
-const compare = function (notice1, notice2) {
-    for (
-        let i = 0;
-        i < notice1.locations.length && i < notice2.locations.length;
-        ++i
-    ) {
-        const locations1 = notice1.locations[i];
-        const locations2 = notice2.locations[i];
+export default class Metalint {
+    #root;
+    #glob;
+    #checkers;
+    #formatters;
+    #cache = new Map();
 
-        let diff = locations1.line - locations2.line;
-        if (0 !== diff) {
-            return diff;
+    static async fromFileSystem(options = {}) {
+        const config = options.config ?? ".metalint/metalint.config.js";
+
+        // Rechercher le fichier de configuration dans le répertoire courant,
+        // puis dans les parents, grands-parents...
+        let root = process.cwd();
+        while (!(await exists(path.join(root, config)))) {
+            // Si on est remonté à la racine.
+            if (path.join(root, "..") === root) {
+                throw new Error("No such config file.");
+            }
+            root = path.join(root, "..");
         }
 
-        diff = (locations1.column ?? -1) - (locations2.column ?? -1);
-        if (0 !== diff) {
-            return diff;
-        }
+        // eslint-disable-next-line no-unsanitized/method
+        const { default: configuration } = await import(
+            pathToFileURL(path.join(root, config))
+        );
+        const { patterns, reporters, checkers } = flatten(
+            await normalize(configuration, {
+                dir: path.dirname(path.join(root, config)),
+            }),
+            {
+                fix: options.fix,
+                formatter: options.formatter,
+                level: options.level,
+            },
+        );
+        return new Metalint({ root, patterns, reporters, checkers });
     }
-    return notice1.locations.length - notice2.locations.length;
-};
 
-const Results = class {
+    constructor(config) {
+        this.#root = config.root;
+        this.#glob = new Glob(config.patterns, { root: config.root });
+
+        this.#formatters = config.reporters.map((reporter) => {
+            // eslint-disable-next-line new-cap
+            return new reporter.formatter(reporter.level, reporter.options);
+        });
+
+        this.#checkers = config.checkers.map((checker) => ({
+            ...checker,
+            glob: new Glob(checker.patterns, { root: this.#root }),
+            overrides: checker.overrides.map((override) => ({
+                ...override,
+                glob: new Glob(override.patterns, { root: this.#root }),
+            })),
+        }));
+    }
+
     /**
-     * Les données des résultats.
+     * Vérifie (en appelant des linters) des répertoires et des fichiers.
      *
-     * @type {Record<string, Notice[]|undefined>}
+     * @param {string[]} bases Les répertoires et les fichiers.
+     * @returns {Promise<Record<string, Notice[]|undefined>>} Une promesse
+     *                                                        retournant la
+     *                                                        liste des
+     *                                                        notifications
+     *                                                        regroupées par
+     *                                                        fichier.
      */
-    #data;
-
-    constructor(files) {
-        this.#data = Object.fromEntries(files.map((f) => [f, undefined]));
-    }
-
-    add(file, notices) {
-        // Ajouter un tableau vide dans les données pour indiquer que le fichier
-        // a été analysé par au moins un linter.
-        if (undefined === this.#data[file]) {
-            this.#data[file] = [];
+    async lintFiles(bases) {
+        const files = [];
+        for (const base of bases) {
+            files.push(...(await this.#glob.walk(base)));
         }
-        for (const notice of notices) {
-            // Vérifier aussi le fichier de la notification, car il peut être
-            // différent du fichier d'origine (qui est peut-être un répertoire
-            // ou une archive).
-            if (undefined === this.#data[notice.file]) {
-                this.#data[notice.file] = [];
-            }
-            this.#data[notice.file].push({
-                rule: undefined,
-                severity: Severities.ERROR,
-                locations: [],
-                ...notice,
-            });
-        }
-    }
-
-    toObject() {
-        // Trier les notifications.
-        Object.values(this.#data)
-            .filter((r) => undefined !== r)
-            .forEach((r) => r.sort(compare));
-        return this.#data;
-    }
-};
-
-/**
- * Vérifie (en appelant des linters) une liste de fichiers.
- *
- * @param {string[]}                 files    La liste des fichiers.
- * @param {FlattenedConfigChecker[]} checkers La liste des vérifications faites
- *                                            sur les fichiers.
- * @param {string}                   root     L'adresse du répertoire où se
- *                                            trouve le répertoire
- *                                            <code>.metalint/</code>.
- * @returns {Promise<Record<string, Notice[]|undefined>>} Une promesse
- *                                                        retournant la liste
- *                                                        des notifications
- *                                                        regroupées par
- *                                                        fichier.
- */
-export default async function metalint(files, checkers, root) {
-    const cache = new Map();
-    const results = new Results(files);
-    for (const file of files) {
-        for (const checker of checkers) {
-            const glob = new Glob(checker.patterns, { root });
-            if (glob.test(file)) {
-                let key = checker.patterns.join();
-                const values = [checker.linters];
-                for (const override of checker.overrides) {
-                    const subglob = new Glob(override.patterns, { root });
-                    if (subglob.test(file)) {
-                        key += "|" + override.patterns.join();
-                        values.push(override.linters);
+        const results = new Results(files);
+        for (const file of files) {
+            for (const checker of this.#checkers) {
+                if (checker.glob.test(file)) {
+                    let key = checker.patterns.join();
+                    const values = [checker.linters];
+                    for (const override of checker.overrides) {
+                        if (override.glob.test(file)) {
+                            key += "|" + override.patterns.join();
+                            values.push(override.linters);
+                        }
                     }
-                }
 
-                let wrappers = [];
-                if (cache.has(key)) {
-                    wrappers = cache.get(key);
-                } else {
-                    const linters = values.reduce(mergeLinters);
-                    for (const linter of linters) {
-                        wrappers.push(
-                            // eslint-disable-next-line new-cap
-                            new linter.wrapper(
-                                {
-                                    fix: linter.fix,
-                                    level: linter.level,
-                                    root,
-                                    files,
-                                },
-                                linter.options,
-                            ),
-                        );
+                    let wrappers = [];
+                    if (this.#cache.has(key)) {
+                        wrappers = this.#cache.get(key);
+                    } else {
+                        const linters = values.reduce(mergeLinters);
+                        for (const linter of linters) {
+                            wrappers.push(
+                                // eslint-disable-next-line new-cap
+                                new linter.wrapper(
+                                    {
+                                        fix: linter.fix,
+                                        level: linter.level,
+                                        root: this.#root,
+                                        files,
+                                    },
+                                    linter.options,
+                                ),
+                            );
+                        }
+                        this.#cache.set(key, wrappers);
                     }
-                    cache.set(key, wrappers);
-                }
-                for (const wrapper of wrappers) {
-                    results.add(file, await wrapper.lint(file));
+                    for (const wrapper of wrappers) {
+                        results.add(file, await wrapper.lint(file));
+                    }
                 }
             }
         }
+
+        return results.toObject();
     }
 
-    return results.toObject();
+    async report(results) {
+        let severity;
+
+        for (const [file, notices] of Object.entries(results)) {
+            // Déterminer la sévérité la plus élevée des résultats.
+            if (undefined !== notices) {
+                for (const notice of notices) {
+                    if (undefined === severity || severity > notice.severity) {
+                        severity = notice.severity;
+                    }
+                }
+            }
+
+            // Afficher les notifications avec chaque rapporteur.
+            for (const formatter of this.#formatters) {
+                await formatter.notify(file, notices);
+            }
+        }
+
+        // Attendre tous les rapporteurs.
+        await Promise.all(this.#formatters.map((f) => f.finalize()));
+        return severity;
+    }
 }
