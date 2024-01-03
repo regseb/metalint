@@ -77,8 +77,9 @@ describe("src/core/wrapper/prettier.js", function () {
                 const root = await createTempFileSystem({
                     "foo.html": "<title>Bar</title>\n",
                 });
+                const { mtimeMs } = await fs.stat("foo.html");
                 // Attendre 10 ms pour être sûr d'avoir une date de modification
-                // différente de la date de création du fichier foo.html.
+                // différente du fichier foo.html.
                 await new Promise((resolve) => {
                     setTimeout(resolve, 10);
                 });
@@ -99,10 +100,9 @@ describe("src/core/wrapper/prettier.js", function () {
                 const content = await fs.readFile("foo.html", "utf8");
                 assert.equal(content, "<title>Bar</title>\n");
                 // Vérifier que le fichier n'a pas été ré-écrit avec le même
-                // contenu (en comparant la date de création et celle de
-                // dernière modification).
+                // contenu (en comparant la date de dernière modification).
                 const stat = await fs.stat("foo.html");
-                assert.equal(stat.mtimeMs, stat.birthtimeMs);
+                assert.equal(stat.mtimeMs, mtimeMs);
             });
 
             it("should return notices", async function () {
