@@ -230,6 +230,8 @@ export default {
 
 ## Intégration
 
+### npm
+
 Après avoir installé Metalint et les linters dans votre projet npm, vous pouvez
 ajouter le script suivant dans votre `package.json` :
 
@@ -242,6 +244,26 @@ ajouter le script suivant dans votre `package.json` :
 ```
 
 Metalint est maintenant utilisable avec la commande : `npm run lint`
+
+### GitHub Actions
+
+Pour lancer Metalint dans vos GitHub Actions, vous pouvez utiliser le formateur
+`github` pour rapporter les problèmes dans les pull requests.
+
+```YAML
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint files
+        run: npm run lint -- --formatter github
+```
 
 [img-npm]: https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=whitesmoke
 [img-build]: https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=whitesmoke
