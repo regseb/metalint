@@ -274,7 +274,6 @@ export const flatten = function (hierarchy, argv) {
     const level = flattenLevel(argv.level ?? Levels.INFO, {
         level: hierarchy.level,
     });
-    // TODO Vérifier que checkers n'est pas vide.
     return {
         patterns: hierarchy.patterns,
         reporters: flattenReporters(hierarchy.reporters, {
