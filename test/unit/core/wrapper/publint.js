@@ -128,10 +128,14 @@ describe("src/core/wrapper/publint.js", function () {
             });
 
             it("should return FATAL notice", async function () {
+                const root = await createTempFileSystem({
+                    "foo/package.json": "<version>1.0.0</version>",
+                });
+
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
-                    root: process.cwd(),
+                    root,
                     files: ["foo/package.json"],
                 };
                 const options = {};
@@ -145,7 +149,8 @@ describe("src/core/wrapper/publint.js", function () {
                         linter: "publint",
                         severity: Severities.FATAL,
                         message:
-                            "ENOENT: no such file or directory, scandir 'foo'",
+                            "Unexpected token '<', \"<version>1\"... is not" +
+                            " valid JSON",
                     },
                 ]);
             });
