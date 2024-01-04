@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.15.0](https://github.com/regseb/metalint/compare/v0.14.1...v0.15.0) (2024-01-04)
+
+
+### Features
+
+* Ajouter un wrapper pour Ajv. ([44c124b](https://github.com/regseb/metalint/commit/44c124ba6c8ed38285a88b807d0346fe0dde900c))
+* Ajouter un wrapper pour Depcheck. ([a48ffb9](https://github.com/regseb/metalint/commit/a48ffb94dae3a3c03d88a172b843fe695105d57b))
+* Ajouter un wrapper pour publint. ([709c8a3](https://github.com/regseb/metalint/commit/709c8a3761cd728e4fd0a7a172df799810fd2b5f))
+* Ajouter un wrapper pour SVGLint. ([ec38803](https://github.com/regseb/metalint/commit/ec388039229f4727af966ab88e586bacaf9569e9))
+* Refactoriser l'API. ([5763b04](https://github.com/regseb/metalint/commit/5763b044d70993e31bce9d3dea27f3b6e3d2bb82))
+
 ## [0.14.1](https://github.com/regseb/metalint/compare/v0.14.0...v0.14.1) (2023-09-10)
 
 
