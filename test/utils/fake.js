@@ -22,8 +22,8 @@ const temps = [];
  */
 export const restore = async () => {
     for (const temp of temps) {
-        await fs.rm(temp.root, { force: true, recursive: true });
         process.chdir(temp.cwd);
+        await fs.rm(temp.root, { force: true, recursive: true });
     }
     temps.length = 0;
 };
