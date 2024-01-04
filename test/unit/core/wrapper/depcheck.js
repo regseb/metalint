@@ -5,6 +5,7 @@
  */
 
 import assert from "node:assert/strict";
+import path from "node:path";
 import process from "node:process";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
@@ -121,20 +122,43 @@ describe("src/core/wrapper/depcheck.js", function () {
                 // Donc les chemins vers les fichiers du répertoire
                 // "node_module" n'ont pas les sous-répertoires de la sandbox.
                 // https://github.com/stryker-mutator/stryker-js/issues/3978
-                const nodeModules =
-                    context.root.replace(/\/\.stryker\/tmp\/sandbox\d+/u, "") +
-                    "/node_modules";
+                const nodeModules = path.join(
+                    context.root.replace(
+                        /[/\\]\.stryker[/\\]tmp[/\\]sandbox\d+/u,
+                        "",
+                    ),
+                    "node_modules",
+                );
                 assert.deepEqual(notices, [
                     {
                         file,
                         linter: "depcheck",
                         severity: Severities.FATAL,
                         message:
-                            `Cannot find module '${context.root}/foo` +
-                            `/package.json'\nRequire stack:\n- ${nodeModules}` +
-                            `/depcheck/dist/utils/index.js\n- ${nodeModules}` +
-                            `/depcheck/dist/check.js\n- ${nodeModules}` +
-                            "/depcheck/dist/index.js",
+                            "Cannot find module '" +
+                            path.join(context.root, "foo", "package.json") +
+                            "'\nRequire stack:\n- " +
+                            path.join(
+                                nodeModules,
+                                "depcheck",
+                                "dist",
+                                "utils",
+                                "index.js",
+                            ) +
+                            "\n- " +
+                            path.join(
+                                nodeModules,
+                                "depcheck",
+                                "dist",
+                                "check.js",
+                            ) +
+                            "\n- " +
+                            path.join(
+                                nodeModules,
+                                "depcheck",
+                                "dist",
+                                "index.js",
+                            ),
                     },
                 ]);
             });
