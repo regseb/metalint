@@ -7,7 +7,8 @@
 import Severities from "./severities.js";
 
 /**
- * @typedef {import("../type/index.d.ts").Notice} Notice
+ * @typedef {import("../types/notice.d.ts").Notice} Notice
+ * @typedef {import("../types/notice.d.ts").PartialNotice} PartialNotice
  */
 
 /**
@@ -42,6 +43,9 @@ const compare = function (notice1, notice2) {
     return notice1.locations.length - notice2.locations.length;
 };
 
+/**
+ * Les résultats d'une analyse.
+ */
 export default class Results {
     /**
      * Les données des résultats.
@@ -50,10 +54,21 @@ export default class Results {
      */
     #data;
 
+    /**
+     * Crée des résultats pour des fichiers.
+     *
+     * @param {string[]} files Les noms des fichiers.
+     */
     constructor(files) {
         this.#data = Object.fromEntries(files.map((f) => [f, undefined]));
     }
 
+    /**
+     * Ajoute des notifications d'un fichier dans les résultats.
+     *
+     * @param {string}          file    Le nom du fichier.
+     * @param {PartialNotice[]} notices Les notifications.
+     */
     add(file, notices) {
         // Ajouter un tableau vide dans les données pour indiquer que le fichier
         // a été analysé par au moins un linter.
@@ -76,6 +91,11 @@ export default class Results {
         }
     }
 
+    /**
+     * Retourne les résultats en objet.
+     *
+     * @returns {Record<string, Notice[]|undefined>} Les résultats.
+     */
     toObject() {
         // Trier les notifications.
         Object.values(this.#data)

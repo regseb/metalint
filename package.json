@@ -34,6 +34,9 @@
       "types": "./types/wrapper/wrapper.d.ts",
       "default": "./src/core/wrapper/wrapper.js"
     },
+    "./types/config": {
+      "types": "./src/types/config.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "main": "./src/core/index.js",

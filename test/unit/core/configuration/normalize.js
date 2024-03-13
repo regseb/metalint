@@ -926,7 +926,7 @@ describe("src/core/configuration/normalize.js", function () {
             const normalized = await normalize.normalize({}, { dir });
             assert.deepEqual(normalized, {
                 patterns: [],
-                fix: undefined,
+                fix: false,
                 level: Levels.INFO,
                 reporters: [
                     {

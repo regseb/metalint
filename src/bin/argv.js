@@ -15,8 +15,8 @@ import { FORMATTERS } from "../core/formatter/formatter.js";
 import Levels from "../core/levels.js";
 
 /**
- * @typedef {import("../core/formatter/formatter.js").default} TypeofFormatter
- * @typedef {import("../type/index.d.ts").Level} Level
+ * @typedef {import("../types/level.d.ts").Level} Level
+ * @typedef {import("../types/typeofformatter.d.ts").default} TypeofFormatter
  */
 
 /**
@@ -31,11 +31,13 @@ import Levels from "../core/levels.js";
  * @property {TypeofFormatter|undefined} formatter L'option
  *                                                 <code>--formatter</code> de
  *                                                 la ligne de commande.
- * @property {Level}                     level     L'option <code>--level</code>
- *                                                 de la ligne de commande.
+ * @property {Level}                     level     L'option
+ *                                                 <code>--level</code> de la
+ *                                                 ligne de commande.
  * @property {boolean}                   help      L'option <code>--help</code>
  *                                                 de la ligne de commande.
  */
+
 /**
  * Extrait, vérifie et normalise les paramètres et les options de la ligne de
  * commande.

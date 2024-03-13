@@ -4,6 +4,9 @@
  * @author Sébastien Règne
  */
 
+/**
+ * @type {import("../src/types/config.d.ts").default}
+ */
 export default {
     patterns: [
         "**",
@@ -55,6 +58,15 @@ export default {
             ],
         },
         {
+            patterns: "*.ts",
+            linters: [
+                "prettier",
+                "prettier_typescript",
+                "eslint",
+                "eslint_typescript",
+            ],
+        },
+        {
             patterns: "*.md",
             linters: ["prettier", "markdownlint"],
         },
@@ -69,10 +81,6 @@ export default {
         {
             patterns: "*.yml",
             linters: ["prettier", "yaml-lint"],
-        },
-        {
-            patterns: "*.ts",
-            linters: ["prettier", "prettier_javascript"],
         },
         {
             patterns: "*.svg",

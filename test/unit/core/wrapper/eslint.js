@@ -25,7 +25,7 @@ describe("src/core/wrapper/eslint.js", function () {
                     root,
                     files: ["foo.js"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.js";
 
                 const wrapper = new ESLintWrapper(context, options);
@@ -184,7 +184,7 @@ describe("src/core/wrapper/eslint.js", function () {
                     root,
                     files: ["foo.js"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.js";
 
                 const wrapper = new ESLintWrapper(context, options);

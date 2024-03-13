@@ -24,7 +24,7 @@ describe("src/core/wrapper/npm-check-updates.js", function () {
                     root,
                     files: ["package.json"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "package.json";
 
                 const wrapper = new NpmCheckUpdatesWrapper(context, options);
@@ -44,7 +44,7 @@ describe("src/core/wrapper/npm-check-updates.js", function () {
                     root,
                     files: ["package.json"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "package.json";
 
                 const wrapper = new NpmCheckUpdatesWrapper(context, options);
@@ -92,7 +92,7 @@ describe("src/core/wrapper/npm-check-updates.js", function () {
                     root,
                     files: ["package.json"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "package.json";
 
                 const wrapper = new NpmCheckUpdatesWrapper(context, options);
@@ -111,7 +111,7 @@ describe("src/core/wrapper/npm-check-updates.js", function () {
                     root,
                     files: ["package.json"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "package.json";
 
                 const wrapper = new NpmCheckUpdatesWrapper(context, options);

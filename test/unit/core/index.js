@@ -34,7 +34,8 @@ describe("src/core/index.js", function () {
                                 wrapper: JSHintWrapper,
                                 level: Levels.WARN,
                                 fix: false,
-                                options: {},
+                                options:
+                                    /** @type {Record<string, unknown>} */ ({}),
                             },
                             {
                                 wrapper: ESLintWrapper,
@@ -131,7 +132,8 @@ describe("src/core/index.js", function () {
                                 wrapper: Prettier,
                                 level: Levels.INFO,
                                 fix: false,
-                                options: {},
+                                options:
+                                    /** @type {Record<string, unknown>} */ ({}),
                             },
                         ],
                         overrides: [],
@@ -173,7 +175,8 @@ describe("src/core/index.js", function () {
                                 wrapper: AddonsLinterWrapper,
                                 level: Levels.INFO,
                                 fix: false,
-                                options: {},
+                                options:
+                                    /** @type {Record<string, unknown>} */ ({}),
                             },
                         ],
                         overrides: [],

@@ -8,8 +8,8 @@ import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 /**
- * @typedef {import("../../type/index.js").Level} Level
- * @typedef {import("../../type/index.js").Notice} Notice
+ * @typedef {import("../../types/level.d.ts").default} Level
+ * @typedef {import("../../types/notice.d.ts").default} Notice
  */
 
 /**

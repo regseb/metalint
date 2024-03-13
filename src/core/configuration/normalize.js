@@ -11,19 +11,21 @@ import Levels from "../levels.js";
 import Wrapper, { WRAPPERS } from "../wrapper/wrapper.js";
 
 /**
- * @typedef {import("../../type/index.d.ts").Level} Level
- * @typedef {import("../../type/index.d.ts").NormalizedConfig} NormalizedConfig
- * @typedef {import("../../type/index.d.ts").NormalizedConfigChecker} NormalizedConfigChecker
- * @typedef {import("../../type/index.d.ts").NormalizedConfigLinter} NormalizedConfigLinter
- * @typedef {import("../../type/index.d.ts").NormalizedConfigOverride} NormalizedConfigOverride
- * @typedef {import("../../type/index.d.ts").NormalizedConfigReporter} NormalizedConfigReporter
+ * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfig} NormalizedConfig
+ * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigChecker} NormalizedConfigChecker
+ * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigLinter} NormalizedConfigLinter
+ * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigOverride} NormalizedConfigOverride
+ * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigReporter} NormalizedConfigReporter
+ * @typedef {import("../../types/level.d.ts").default} Level
+ * @typedef {import("../../types/typeofformatter.d.ts").default} TypeofFormatter
+ * @typedef {import("../../types/typeofwrapper.d.ts").default} TypeofWrapper
  */
 
 /**
  * Lit un fichier JavaScript exportant un objet JSON.
  *
  * @param {string} file L'adresse du fichier qui sera lu.
- * @returns {Promise<Record<string, any>>} L'objet JSON récupéré.
+ * @returns {Promise<Record<string, unknown>>} L'objet JSON récupéré.
  */
 const read = async function (file) {
     try {
@@ -138,7 +140,7 @@ export const normalizeLevel = function (partial) {
  * Normalise une propriété <code>"formatter"</code>.
  *
  * @param {*} partial La valeur d'une propriété <code>"formatter"</code>.
- * @returns {Promise<typeof Formatter>} La valeur normalisée.
+ * @returns {Promise<TypeofFormatter>} La valeur normalisée.
  * @throws {Error}     Si le <code>"formatter"</code> est invalide.
  * @throws {TypeError} Si le <code>"formatter"</code> n'a pas le bon type.
  */
@@ -178,7 +180,7 @@ export const normalizeFormatter = async function (partial) {
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
  *                             <code>metalint.config.js</code>.
- * @returns {Promise<Record<string, any>>} La valeur normalisée.
+ * @returns {Promise<Record<string, unknown>>} La valeur normalisée.
  * @throws {TypeError} Si l'<code>"options"</code> n'a pas le bon type.
  */
 export const normalizeOption = async function (partial, { dir }) {
@@ -202,7 +204,7 @@ export const normalizeOption = async function (partial, { dir }) {
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
  *                             <code>metalint.config.js</code>.
- * @returns {Promise<Record<string, any>[]>} La valeur normalisée.
+ * @returns {Promise<Record<string, unknown>[]>} La valeur normalisée.
  * @throws {TypeError} Si l'<code>"options"</code> n'a pas le bon type.
  */
 export const normalizeOptions = async function (partials, { dir }) {
@@ -279,7 +281,7 @@ export const normalizeReporters = async function (partials, { dir }) {
  * Normalise une propriété <code>"wrapper"</code>.
  *
  * @param {*} partial La valeur d'une propriété <code>"wrapper"</code>.
- * @returns {Promise<typeof Wrapper>} La valeur normalisée.
+ * @returns {Promise<TypeofWrapper>} La valeur normalisée.
  * @throws {TypeError} Si le <code>"reporters"</code> n'a pas le bon type.
  */
 export const normalizeWrapper = async function (partial) {
@@ -358,7 +360,7 @@ export const normalizeLinter = async function (partial, { dir }) {
 export const normalizeLinters = async function (partials, { dir }) {
     let normalizeds;
     if (undefined === partials) {
-        normalizeds = [];
+        normalizeds = /** @type {NormalizedConfigLinter[]} */ ([]);
     } else if (Array.isArray(partials)) {
         normalizeds = await Promise.all(
             partials.map((p) => normalizeLinter(p, { dir })),
@@ -411,7 +413,7 @@ export const normalizeOverride = async function (partial, { dir }) {
 export const normalizeOverrides = async function (partials, { dir }) {
     let normalizeds;
     if (undefined === partials) {
-        normalizeds = [];
+        normalizeds = /** @type {NormalizedConfigOverride[]} */ ([]);
     } else if (Array.isArray(partials)) {
         normalizeds = await Promise.all(
             partials.map((p) => normalizeOverride(p, { dir })),
@@ -465,7 +467,7 @@ export const normalizeChecker = async function (partial, { dir }) {
 export const normalizeCheckers = async function (partials, { dir }) {
     let normalizeds;
     if (undefined === partials) {
-        normalizeds = [];
+        normalizeds = /** @type {NormalizedConfigChecker[]} */ ([]);
     } else if (Array.isArray(partials)) {
         normalizeds = await Promise.all(
             partials.map((p) => normalizeChecker(p, { dir })),
@@ -495,7 +497,7 @@ export const normalize = async function (partial, { dir }) {
     if ("object" === typeof partial) {
         normalized = {
             patterns: normalizePatterns(partial.patterns, { auto: [] }),
-            fix: normalizeFix(partial.fix),
+            fix: normalizeFix(partial.fix) ?? false,
             level: normalizeLevel(partial.level),
             reporters: await normalizeReporters(partial.reporters, { dir }),
             checkers: await normalizeCheckers(partial.checkers, { dir }),

@@ -15,17 +15,72 @@ import { exists } from "./utils/file.js";
 import Glob from "./utils/glob.js";
 
 /**
- * @typedef {import("../type/index.d.ts").FlattenedConfigChecker} FlattenedConfigChecker
- * @typedef {import("../type/index.d.ts").Notice} Notice
+ * @typedef {import("../types/configuration/flattened.d.ts").FlattenedConfig} FlattenedConfig
+ * @typedef {import("../types/configuration/flattened.d.ts").FlattenedConfigChecker} FlattenedConfigChecker
+ * @typedef {import("../types/level.d.ts").default} Level
+ * @typedef {import("../types/notice.d.ts").default} Notice
+ * @typedef {import("../types/severity.d.ts").default} Severity
+ * @typedef {import("../types/typeofformatter.d.ts").default} TypeofFormatter
+ * @typedef {import("./formatter/formatter.js").default} Formatter
+ * @typedef {import("./wrapper/wrapper.js").default} Wrapper
  */
 
 export default class Metalint {
+    /**
+     * Le répertoire racine.
+     *
+     * @type {string}
+     */
     #root;
+
+    /**
+     * Les motifs généraux des fichiers.
+     *
+     * @type {Glob}
+     */
     #glob;
+
+    /**
+     * Les checkers (avec leurs linters).
+     */
     #checkers;
+
+    /**
+     * Les formatters.
+     *
+     * @type {Formatter[]}
+     */
     #formatters;
+
+    /**
+     * Le cache des wrappers.
+     *
+     * @type {Map<string, Wrapper[]>}
+     */
     #cache = new Map();
 
+    /**
+     * Crée une instance de Metalint à partir d'une configuration sur le système
+     * de fichiers.
+     *
+     * @param {Object}          [options]           Les éventuelles options pour
+     *                                              créer une instance de
+     *                                              Metalint.
+     * @param {string}          [options.config]    L'éventuel chemin vers le
+     *                                              fichier de configuration de
+     *                                              Metalint.
+     * @param {boolean}         [options.fix]       L'éventuelle marque
+     *                                              indiquant si les linters
+     *                                              doivent corriger les
+     *                                              fichiers.
+     * @param {TypeofFormatter} [options.formatter] L'éventuel formatteur à
+     *                                              utiliser.
+     * @param {Level}           [options.level]     L'éventuel niveau minimum
+     *                                              des notifications à
+     *                                              rapporter.
+     * @returns {Promise<Metalint>} Une promesse contenant l'instance de
+     *                              Metalint.
+     */
     static async fromFileSystem(options = {}) {
         const config = options.config ?? ".metalint/metalint.config.js";
 
@@ -136,6 +191,18 @@ export default class Metalint {
         return results.toObject();
     }
 
+    /**
+     * Rapporte des résultats dans les formats choisis.
+     *
+     * @param {Record<string, Notice[]|undefined>} results La liste des
+     *                                                     notifications
+     *                                                     regroupées par
+     *                                                     fichier.
+     * @returns {Promise<Severity|undefined>} La sévérité la plus élevée des
+     *                                        notifications ; ou
+     *                                        <code>undefined</code> si les
+     *                                        résultats ont aucune notification.
+     */
     async report(results) {
         let severity;
 

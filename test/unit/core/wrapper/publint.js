@@ -21,7 +21,7 @@ describe("src/core/wrapper/publint.js", function () {
                     root: process.cwd(),
                     files: ["foo"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 // Utiliser un fichier qui n'existe pas pour faire échouer
                 // l'enrobage si le fichier est analysé.
                 const file = "foo";
@@ -38,7 +38,7 @@ describe("src/core/wrapper/publint.js", function () {
                     root: process.cwd(),
                     files: ["foo"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo";
 
                 const wrapper = new PublintWrapper(context, options);
@@ -68,7 +68,7 @@ describe("src/core/wrapper/publint.js", function () {
                     root,
                     files: ["package.json"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "package.json";
 
                 const wrapper = new PublintWrapper(context, options);
@@ -119,7 +119,7 @@ describe("src/core/wrapper/publint.js", function () {
                     root,
                     files: ["package.json"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "package.json";
 
                 const wrapper = new PublintWrapper(context, options);
@@ -138,7 +138,7 @@ describe("src/core/wrapper/publint.js", function () {
                     root,
                     files: ["foo/package.json"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo/package.json";
 
                 const wrapper = new PublintWrapper(context, options);

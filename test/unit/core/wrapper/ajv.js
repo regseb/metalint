@@ -25,7 +25,7 @@ describe("src/core/wrapper/ajv.js", function () {
                     root: process.cwd(),
                     files: ["foo"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 // Utiliser un fichier qui n'existe pas pour faire échouer
                 // l'enrobage si le fichier est analysé.
                 const file = "foo";

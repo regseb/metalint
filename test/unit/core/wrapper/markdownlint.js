@@ -23,7 +23,7 @@ describe("src/core/wrapper/markdownlint.js", function () {
                     root,
                     files: ["foo.md"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.md";
 
                 const wrapper = new MarkdownlintWrapper(context, options);
@@ -42,7 +42,7 @@ describe("src/core/wrapper/markdownlint.js", function () {
                     root,
                     files: ["foo.md"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.md";
 
                 const wrapper = new MarkdownlintWrapper(context, options);
@@ -71,7 +71,7 @@ describe("src/core/wrapper/markdownlint.js", function () {
                     root,
                     files: ["foo.md"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.md";
 
                 const wrapper = new MarkdownlintWrapper(context, options);
@@ -90,7 +90,7 @@ describe("src/core/wrapper/markdownlint.js", function () {
                     root,
                     files: ["foo.md"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.md";
 
                 const wrapper = new MarkdownlintWrapper(context, options);

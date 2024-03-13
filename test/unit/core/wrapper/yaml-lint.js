@@ -21,7 +21,7 @@ describe("src/core/wrapper/yaml-lint.js", function () {
                     root,
                     files: ["foo.yaml"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.yaml";
 
                 const wrapper = new YAMLLintWrapper(context, options);
@@ -38,7 +38,7 @@ describe("src/core/wrapper/yaml-lint.js", function () {
                     root,
                     files: ["foo.yaml"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.yaml";
 
                 const wrapper = new YAMLLintWrapper(context, options);

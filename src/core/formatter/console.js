@@ -12,10 +12,10 @@ import Formatter from "./formatter.js";
 
 /**
  * @typedef {import("node:stream").Writable} Writable
- * @typedef {import("../../type/index.js").Level} Level
- * @typedef {import("../../type/index.js").Location} Location
- * @typedef {import("../../type/index.js").Notice} Notice
- * @typedef {import("../../type/index.js").Severity} Severity
+ * @typedef {import("../../types/level.d.ts").default} Level
+ * @typedef {import("../../types/location.d.ts").default} Location
+ * @typedef {import("../../types/notice.d.ts").default} Notice
+ * @typedef {import("../../types/severity.d.ts").default} Severity
  */
 
 /**
@@ -97,7 +97,7 @@ const printCodeSource = function (locations, content, writer) {
         if (characters.length === i) {
             characters[i] = {
                 line: location.line,
-                columns: [],
+                columns: /** @type {number[]} */ ([]),
             };
             if (undefined !== location.column) {
                 characters[i].columns.push(location.column);

@@ -21,7 +21,7 @@ describe("src/core/wrapper/coffeelint__cli.js", function () {
                     root: process.cwd(),
                     files: ["foo"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 // Utiliser un fichier qui n'existe pas pour faire échouer
                 // l'enrobage si le fichier est analysé.
                 const file = "foo";
@@ -42,7 +42,7 @@ describe("src/core/wrapper/coffeelint__cli.js", function () {
                     root,
                     files: ["foo.coffee"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.coffee";
 
                 const wrapper = new CoffeeLintCliWrapper(context, options);

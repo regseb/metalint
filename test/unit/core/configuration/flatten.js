@@ -23,18 +23,13 @@ describe("src/core/configuration/flatten.js", function () {
     });
 
     describe("flattenFix()", function () {
-        it("should support two undefined", function () {
-            const flattened = flatten.flattenFix(undefined, { fix: undefined });
-            assert.equal(flattened, undefined);
-        });
-
-        it("should support boolean and undefined", function () {
-            const flattened = flatten.flattenFix(false, { fix: undefined });
+        it("should support undefined and boolean", function () {
+            const flattened = flatten.flattenFix(undefined, { fix: false });
             assert.equal(flattened, false);
         });
 
-        it("should support undefined and boolean", function () {
-            const flattened = flatten.flattenFix(undefined, { fix: true });
+        it("should support two boolean", function () {
+            const flattened = flatten.flattenFix(true, { fix: false });
             assert.equal(flattened, true);
         });
     });

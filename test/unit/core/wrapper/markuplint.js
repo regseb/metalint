@@ -21,7 +21,7 @@ describe("src/core/wrapper/markuplint.js", function () {
                     root: process.cwd(),
                     files: ["foo"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 // Utiliser un tableau vide pour les fichiers HTML pour faire
                 // échouer l'enrobage si le fichier est analysé.
                 const file = "foo";
@@ -42,7 +42,7 @@ describe("src/core/wrapper/markuplint.js", function () {
                     root,
                     files: ["foo.html"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.html";
 
                 const wrapper = new MarkuplintWrapper(context, options);

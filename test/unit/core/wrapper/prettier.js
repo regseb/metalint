@@ -22,7 +22,7 @@ describe("src/core/wrapper/prettier.js", function () {
                     root: process.cwd(),
                     files: ["foo"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 // Utiliser un fichier qui n'existe pas pour faire échouer
                 // l'enrobage si le fichier est analysé.
                 const file = "foo";
@@ -43,7 +43,7 @@ describe("src/core/wrapper/prettier.js", function () {
                     root,
                     files: ["foo.html"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.html";
 
                 const wrapper = new PrettierWrapper(context, options);
@@ -62,7 +62,7 @@ describe("src/core/wrapper/prettier.js", function () {
                     root,
                     files: ["foo.html"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.html";
 
                 const wrapper = new PrettierWrapper(context, options);
@@ -90,7 +90,7 @@ describe("src/core/wrapper/prettier.js", function () {
                     root,
                     files: ["foo.html"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.html";
 
                 const wrapper = new PrettierWrapper(context, options);
@@ -192,7 +192,7 @@ describe("src/core/wrapper/prettier.js", function () {
                     root,
                     files: ["foo.php"],
                 };
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.php";
 
                 const wrapper = new PrettierWrapper(context, options);

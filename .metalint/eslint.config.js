@@ -4,8 +4,12 @@
  * @author Sébastien Règne
  */
 
+/**
+ * @type {import("eslint").Linter.Config}
+ */
 export default {
     plugins: [
+        "@typescript-eslint",
         "array-func",
         "eslint-comments",
         "import",

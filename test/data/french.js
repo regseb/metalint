@@ -9,8 +9,8 @@ import Formatter from "../../src/core/formatter/formatter.js";
 
 /**
  * @typedef {import("node:stream").Writable} Writable
- * @typedef {import("../../src/type/index.js").Level} Level
- * @typedef {import("../../src/type/index.js").Notice} Notice
+ * @typedef {import("../../src/types/level.d.ts").default} Level
+ * @typedef {import("../../src/types/notice.d.ts").default} Notice
  */
 
 /**

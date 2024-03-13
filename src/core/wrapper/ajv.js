@@ -11,8 +11,8 @@ import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
 
 /**
- * @typedef {import("../../type/index.d.ts").Level} Level
- * @typedef {import("../../type/index.d.ts").PartialNotice} PartialNotice
+ * @typedef {import("../../types/notice.d.ts").PartialNotice} PartialNotice
+ * @typedef {import("../../types/level.d.ts").default} Level
  */
 
 /**
@@ -24,7 +24,7 @@ export default class AjvWrapper extends Wrapper {
     /**
      * Les options du linter.
      *
-     * @type {Record<string, any>}
+     * @type {Record<string, unknown>}
      * @see https://ajv.js.org/options.html#ajv-options
      */
     #options;
@@ -40,24 +40,25 @@ export default class AjvWrapper extends Wrapper {
     /**
      * Le schéma du fichier JSON.
      *
-     * @type {Record<string, any>}
+     * @type {Record<string, unknown>}
      */
     #schema;
 
     /**
      * Crée un enrobage pour le linter <strong>Ajv</strong>.
      *
-     * @param {Object}              context       Le contexte de l'enrobage.
-     * @param {Level}               context.level Le niveau de sévérité minimum
-     *                                            des notifications retournées.
-     * @param {boolean}             context.fix   La marque indiquant s'il faut
-     *                                            corriger le fichier.
-     * @param {string}              context.root  L'adresse du répertoire où se
-     *                                            trouve le répertoire
-     *                                            <code>.metalint/</code>.
-     * @param {string[]}            context.files La liste de tous les fichiers
-     *                                            analysés.
-     * @param {Record<string, any>} options       Les options du linter.
+     * @param {Object}                  context       Le contexte de l'enrobage.
+     * @param {Level}                   context.level Le niveau de sévérité
+     *                                                minimum des notifications
+     *                                                retournées.
+     * @param {boolean}                 context.fix   La marque indiquant s'il
+     *                                                faut corriger le fichier.
+     * @param {string}                  context.root  L'adresse du répertoire où
+     *                                                se trouve le répertoire
+     *                                                <code>.metalint/</code>.
+     * @param {string[]}                context.files La liste de tous les
+     *                                                fichiers analysés.
+     * @param {Record<string, unknown>} options       Les options du linter.
      */
     constructor(context, options) {
         super(context);

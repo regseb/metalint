@@ -26,7 +26,7 @@ describe("src/core/wrapper/npm-package-json-lint.js", function () {
                 };
                 // Ne pas définir de règles pour faire échouer l'enrobage si le
                 // fichier est analysé.
-                const options = {};
+                const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "package.json";
 
                 const wrapper = new NpmPackageJSONLintWrapper(context, options);

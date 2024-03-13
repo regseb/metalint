@@ -11,9 +11,15 @@ import process from "node:process";
 import JSZip from "jszip";
 
 /**
+ * @typedef {Object} Temp
+ * @property {string} root La racine du répertoire temporaire.
+ * @property {string} cwd  Le répertoire courant avant la création.
+ */
+
+/**
  * Les répertoires temporaires créés avec le précédent répertoire courant.
  *
- * @type {Object[]}
+ * @type {Temp[]}
  */
 const temps = [];
 
@@ -32,7 +38,7 @@ export const restore = async () => {
  * Remplit un zip avec des fichiers.
  *
  * @param {JSZip}                         zip   Le fichier zip.
- * @param {Object<string, Object|string>} files La liste des fichiers.
+ * @param {Record<string, Record|string>} files La liste des fichiers.
  */
 const fillZip = (zip, files) => {
     for (const [filename, content] of Object.entries(files)) {
@@ -59,7 +65,7 @@ const fillZip = (zip, files) => {
  * Crée un zip avec des fichiers.
  *
  * @param {string}                        parent Le chemin du fichier zip parent.
- * @param {Object<string, Object|string>} files  La liste des fichiers.
+ * @param {Record<string, Record|string>} files  La liste des fichiers.
  */
 const createZip = (parent, files) => {
     const zip = new JSZip();
@@ -75,7 +81,7 @@ const createZip = (parent, files) => {
  * Crée une arborescence avec des fichiers.
  *
  * @param {string}                        parent Le chemin du parent.
- * @param {Object<string, Object|string>} files  La liste des fichiers.
+ * @param {Record<string, Record|string>} files  La liste des fichiers.
  */
 const createTree = async (parent, files) => {
     for (const [filename, content] of Object.entries(files)) {
@@ -106,7 +112,7 @@ const createTree = async (parent, files) => {
 /**
  * Crée un <em>file system</em> dans un répertoire temporaire.
  *
- * @param {Object} files Les fichiers à créer dans le répertoire.
+ * @param {Record<string, Record|string>} files Les fichiers à créer dans le répertoire.
  * @returns {Promise<string>} Le chemin vers le répertoire temporaire.
  */
 export default async function createTempFileSystem(files) {

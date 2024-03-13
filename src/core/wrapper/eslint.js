@@ -18,8 +18,8 @@ import Wrapper from "./wrapper.js";
 const { FlatESLint } = pkg;
 
 /**
- * @typedef {import("../../type/index.d.ts").Level} Level
- * @typedef {import("../../type/index.d.ts").PartialNotice} PartialNotice
+ * @typedef {import("../../types/notice.d.ts").PartialNotice} PartialNotice
+ * @typedef {import("../../types/level.d.ts").default} Level
  */
 
 /**
@@ -31,7 +31,7 @@ export default class ESLintWrapper extends Wrapper {
     /**
      * L'instance de ESLint.
      *
-     * @type {typeof ESLint}
+     * @type {ESLint}
      * @see https://eslint.org/docs/latest/integrate/nodejs-api
      */
     #eslint;
@@ -39,17 +39,18 @@ export default class ESLintWrapper extends Wrapper {
     /**
      * Crée un enrobage pour le linter <strong>ESLint</strong>.
      *
-     * @param {Object}              context       Le contexte de l'enrobage.
-     * @param {Level}               context.level Le niveau de sévérité minimum
-     *                                            des notifications retournées.
-     * @param {boolean}             context.fix   La marque indiquant s'il faut
-     *                                            corriger le fichier.
-     * @param {string}              context.root  L'adresse du répertoire où se
-     *                                            trouve le répertoire
-     *                                            <code>.metalint/</code>.
-     * @param {string[]}            context.files La liste de tous les fichiers
-     *                                            analysés.
-     * @param {Record<string, any>} options       Les options du linter.
+     * @param {Object}                  context       Le contexte de l'enrobage.
+     * @param {Level}                   context.level Le niveau de sévérité
+     *                                                minimum des notifications
+     *                                                retournées.
+     * @param {boolean}                 context.fix   La marque indiquant s'il
+     *                                                faut corriger le fichier.
+     * @param {string}                  context.root  L'adresse du répertoire où
+     *                                                se trouve le répertoire
+     *                                                <code>.metalint/</code>.
+     * @param {string[]}                context.files La liste de tous les
+     *                                                fichiers analysés.
+     * @param {Record<string, unknown>} options       Les options du linter.
      */
     constructor(context, options) {
         super(context);

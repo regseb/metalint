@@ -9,8 +9,8 @@ import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 /**
- * @typedef {import("../../type/index.d.ts").Level} Level
- * @typedef {import("../../type/index.d.ts").PartialNotice} PartialNotice
+ * @typedef {import("../../types/notice.d.ts").PartialNotice} PartialNotice
+ * @typedef {import("../../types/level.d.ts").default} Level
  */
 
 /**
