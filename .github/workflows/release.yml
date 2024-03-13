@@ -15,25 +15,76 @@ jobs:
         uses: google-github-actions/release-please-action@v4
         id: release
         with:
-          release-type: node
+          config-file: .release-please/config.json
+          manifest-file: .release-please/manifest.json
 
+      # Si la PR (pull request) a été créée ou modifiée : formatter les fichiers
+      # modifiés par release-please, car ils ne respectent plus le formatage de
+      # Prettier (via Metalint).
+      # https://github.com/googleapis/release-please/issues/1802
       - name: Checkout repository
+        if: ${{ steps.release.outputs.pr }}
         uses: actions/checkout@v4
-        if: ${{ steps.release.outputs.release_created }}
+        with:
+          ref: ${{ fromJson(steps.release.outputs.pr).headBranchName }}
+
+      - name: Configure Git user
+        if: ${{ steps.release.outputs.pr }}
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
 
       - name: Setup Node.js
+        if: ${{ steps.release.outputs.pr }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        if: ${{ steps.release.outputs.pr }}
+        run: npm ci
+
+      - name: Format files
+        if: ${{ steps.release.outputs.pr }}
+        run: >
+          npm run lint:fix --
+          .release-please/manifest.json
+          CHANGELOG.md
+          package.json
+          package-lock.json
+
+      - name: Commit and push
+        if: ${{ steps.release.outputs.pr }}
+        run: |
+          git commit --all --message 'chore: format files'
+          git push
+
+      # Si la release a été créée : publier le paquet dans npm.
+      - name: Checkout repository
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: ${{ steps.release.outputs.release_created }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org
-        if: ${{ steps.release.outputs.release_created }}
 
       - name: Install dependencies
-        run: npm ci
         if: ${{ steps.release.outputs.release_created }}
+        run: npm ci
 
       - name: Publish in npm
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         if: ${{ steps.release.outputs.release_created }}
+        run: npm publish --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Download tarball from npm
+        if: ${{ steps.release.outputs.release_created }}
+        run: npm pack metalint
+
+      - name: Upload tarball to release
+        if: ${{ steps.release.outputs.release_created }}
+        run: gh release upload ${{ steps.release.outputs.tag_name }} metalint-*.tgz
