@@ -109,12 +109,19 @@ export default class Metalint {
                 level: options.level,
             },
         );
-        return new Metalint({ root, patterns, reporters, checkers });
+        return new Metalint({ patterns, reporters, checkers }, { root });
     }
 
-    constructor(config) {
-        this.#root = config.root;
-        this.#glob = new Glob(config.patterns, { root: config.root });
+    /**
+     * Crée une instance de Metalint.
+     *
+     * @param {FlattenedConfig} config       La configuration de Metalint.
+     * @param {Object}          context      Le contexte.
+     * @param {string}          context.root Le répertoire racine.
+     */
+    constructor(config, { root }) {
+        this.#root = root;
+        this.#glob = new Glob(config.patterns, { root: this.#root });
 
         this.#formatters = config.reporters.map((reporter) => {
             // eslint-disable-next-line new-cap
@@ -122,11 +129,11 @@ export default class Metalint {
         });
 
         this.#checkers = config.checkers.map((checker) => ({
-            ...checker,
             glob: new Glob(checker.patterns, { root: this.#root }),
+            linters: checker.linters,
             overrides: checker.overrides.map((override) => ({
-                ...override,
                 glob: new Glob(override.patterns, { root: this.#root }),
+                linters: override.linters,
             })),
         }));
     }
@@ -143,42 +150,41 @@ export default class Metalint {
      *                                                        fichier.
      */
     async lintFiles(bases) {
-        const files = [];
+        const files = /** @type {string[]} */ ([]);
         for (const base of bases) {
             files.push(...(await this.#glob.walk(base)));
         }
         const results = new Results(files);
         for (const file of files) {
-            for (const checker of this.#checkers) {
+            for (const [i, checker] of Object.entries(this.#checkers)) {
                 if (checker.glob.test(file)) {
-                    let key = checker.patterns.join();
+                    let key = i.toString();
                     const values = [checker.linters];
-                    for (const override of checker.overrides) {
+                    for (const [j, override] of Object.entries(
+                        checker.overrides,
+                    )) {
                         if (override.glob.test(file)) {
-                            key += "|" + override.patterns.join();
+                            key += `.${j}`;
                             values.push(override.linters);
                         }
                     }
 
-                    let wrappers = [];
+                    let wrappers;
                     if (this.#cache.has(key)) {
                         wrappers = this.#cache.get(key);
                     } else {
-                        const linters = values.reduce(mergeLinters);
-                        for (const linter of linters) {
-                            wrappers.push(
-                                // eslint-disable-next-line new-cap
-                                new linter.wrapper(
-                                    {
-                                        fix: linter.fix,
-                                        level: linter.level,
-                                        root: this.#root,
-                                        files,
-                                    },
-                                    linter.options,
-                                ),
+                        wrappers = values.reduce(mergeLinters).map((linter) => {
+                            // eslint-disable-next-line new-cap
+                            return new linter.wrapper(
+                                {
+                                    fix: linter.fix,
+                                    level: linter.level,
+                                    root: this.#root,
+                                    files,
+                                },
+                                linter.options,
                             );
-                        }
+                        });
                         this.#cache.set(key, wrappers);
                     }
                     for (const wrapper of wrappers) {

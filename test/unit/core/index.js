@@ -12,7 +12,8 @@ import AddonsLinterWrapper from "../../../src/core/wrapper/addons-linter.js";
 import ESLintWrapper from "../../../src/core/wrapper/eslint.js";
 import HTMLHintWrapper from "../../../src/core/wrapper/htmlhint.js";
 import JSHintWrapper from "../../../src/core/wrapper/jshint.js";
-import Prettier from "../../../src/core/wrapper/prettier.js";
+import MarkdownlintWrapper from "../../../src/core/wrapper/markdownlint.js";
+import PrettierWrapper from "../../../src/core/wrapper/prettier.js";
 import createTempFileSystem from "../../utils/fake.js";
 
 describe("src/core/index.js", function () {
@@ -65,12 +66,14 @@ describe("src/core/index.js", function () {
                     },
                 ];
 
-                const metalint = new Metalint({
-                    root: ".",
-                    patterns: ["**"],
-                    reporters: [],
-                    checkers,
-                });
+                const metalint = new Metalint(
+                    {
+                        patterns: ["**"],
+                        reporters: [],
+                        checkers,
+                    },
+                    { root: "." },
+                );
                 const results = await metalint.lintFiles(files);
                 assert.deepEqual(results, {
                     "foo.html": [],
@@ -129,7 +132,7 @@ describe("src/core/index.js", function () {
                         patterns: ["**"],
                         linters: [
                             {
-                                wrapper: Prettier,
+                                wrapper: PrettierWrapper,
                                 level: Levels.INFO,
                                 fix: false,
                                 options:
@@ -140,12 +143,14 @@ describe("src/core/index.js", function () {
                     },
                 ];
 
-                const metalint = new Metalint({
-                    root: ".",
-                    patterns: ["**"],
-                    reporters: [],
-                    checkers,
-                });
+                const metalint = new Metalint(
+                    {
+                        patterns: ["**"],
+                        reporters: [],
+                        checkers,
+                    },
+                    { root: "." },
+                );
                 const results = await metalint.lintFiles(files);
                 assert.deepEqual(results, {
                     "foo.json": [
@@ -183,12 +188,14 @@ describe("src/core/index.js", function () {
                     },
                 ];
 
-                const metalint = new Metalint({
-                    root: ".",
-                    patterns: ["**"],
-                    reporters: [],
-                    checkers,
-                });
+                const metalint = new Metalint(
+                    {
+                        patterns: ["**"],
+                        reporters: [],
+                        checkers,
+                    },
+                    { root: "." },
+                );
                 const results = await metalint.lintFiles(files);
                 assert.deepEqual(results, {
                     "foo/": [
@@ -209,6 +216,73 @@ describe("src/core/index.js", function () {
                             severity: Severities.ERROR,
                             message: "Your JSON is not valid.",
                             locations: [],
+                        },
+                    ],
+                });
+            });
+
+            it("should support same patterns", async function () {
+                await createTempFileSystem({
+                    "README.md": "# Foo",
+                });
+
+                const files = ["README.md"];
+                const checkers = [
+                    {
+                        patterns: ["*.md"],
+                        linters: [
+                            {
+                                wrapper: MarkdownlintWrapper,
+                                level: Levels.INFO,
+                                fix: false,
+                                options:
+                                    /** @type {Record<string, unknown>} */ ({}),
+                            },
+                        ],
+                        overrides: [],
+                    },
+                    {
+                        patterns: ["*.md"],
+                        linters: [
+                            {
+                                wrapper: PrettierWrapper,
+                                level: Levels.INFO,
+                                fix: false,
+                                options:
+                                    /** @type {Record<string, unknown>} */ ({}),
+                            },
+                        ],
+                        overrides: [],
+                    },
+                ];
+
+                const metalint = new Metalint(
+                    {
+                        patterns: ["**"],
+                        reporters: [],
+                        checkers,
+                    },
+                    { root: "." },
+                );
+                const results = await metalint.lintFiles(files);
+                assert.deepEqual(results, {
+                    "README.md": [
+                        {
+                            file: "README.md",
+                            linter: "prettier",
+                            rule: undefined,
+                            severity: Severities.ERROR,
+                            message: "Code style issues found.",
+                            locations: [],
+                        },
+                        {
+                            file: "README.md",
+                            linter: "markdownlint",
+                            rule: "MD047/single-trailing-newline",
+                            severity: Severities.ERROR,
+                            message:
+                                "Files should end with a single newline character []",
+                            locations: [{ line: 1 }],
                         },
                     ],
                 });
