@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.16.0](https://github.com/regseb/metalint/compare/v0.15.0...v0.16.0) (2024-04-02)
+
+
+### Features
+
+* Exporter le type de la configuration. ([fe12820](https://github.com/regseb/metalint/commit/fe128206c483e365a426275eef2dfa421c772f7a))
+
+
+### Bug Fixes
+
+* Gérer des patrons identiques. ([1af4024](https://github.com/regseb/metalint/commit/1af402432829fe7ae43731555e71d3333c76d522))
+
 ## [0.15.0](https://github.com/regseb/metalint/compare/v0.14.1...v0.15.0) (2024-01-04)
 
 ### Features
