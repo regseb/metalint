@@ -5,6 +5,7 @@
  */
 
 import fs from "node:fs/promises";
+// @ts-expect-error -- JSON Lint (mod) ne fournit pas de types.
 import jsonlint from "jsonlint-mod";
 import Levels from "../levels.js";
 import Wrapper from "./wrapper.js";

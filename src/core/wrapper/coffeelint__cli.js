@@ -5,6 +5,7 @@
  */
 
 import fs from "node:fs/promises";
+// @ts-expect-error -- CoffeeLint ne fournit pas de types.
 import coffeelint from "@coffeelint/cli";
 import Levels from "../levels.js";
 import Severities from "../severities.js";

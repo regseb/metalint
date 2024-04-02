@@ -5,6 +5,7 @@
  */
 
 import fs from "node:fs/promises";
+// @ts-expect-error -- htmllint ne fournit pas de types.
 import htmllint from "htmllint";
 import Levels from "../levels.js";
 import Wrapper from "./wrapper.js";

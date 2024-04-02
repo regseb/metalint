@@ -103,7 +103,7 @@ source) :
     <td>package.json</td>
     <td>
       <a title="depcheck"
-         href="https://www.npmjs.com/package/depcheck">Depcheck</a>
+         href="https://www.npmjs.com/package/depcheck">Depcheck</a>,
       <a title="npm-check-updates"
          href="https://www.npmjs.com/package/npm-check-updates"
          >npm-check-updates</a>,
@@ -267,7 +267,7 @@ jobs:
 
 [img-npm]: https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=whitesmoke
 [img-build]: https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=whitesmoke
-[img-coverage]: https://img.shields.io/endpoint?label=coverage&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fregseb%2Fmetalint%2Fmain&logo=stryker&logoColor=whitesmoke
+[img-coverage]: https://img.shields.io/endpoint?label=coverage&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fregseb%2Fmetalint%2Fmain
 [img-semver]: https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&logoColor=whitesmoke
 [link-npm]: https://www.npmjs.com/package/metalint
 [link-build]: https://github.com/regseb/metalint/actions/workflows/ci.yml?query=branch%3Amain

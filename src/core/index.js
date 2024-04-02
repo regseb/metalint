@@ -97,7 +97,7 @@ export default class Metalint {
 
         // eslint-disable-next-line no-unsanitized/method
         const { default: configuration } = await import(
-            pathToFileURL(path.join(root, config))
+            pathToFileURL(path.join(root, config)).href
         );
         const { patterns, reporters, checkers } = flatten(
             await normalize(configuration, {

@@ -30,7 +30,7 @@ import Wrapper, { WRAPPERS } from "../wrapper/wrapper.js";
 const read = async function (file) {
     try {
         // eslint-disable-next-line no-unsanitized/method
-        const module = await import(pathToFileURL(file));
+        const module = await import(pathToFileURL(file).href);
         return module.default;
     } catch (err) {
         throw new Error(`Cannot import '${file}'.`, { cause: err });

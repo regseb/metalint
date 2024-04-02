@@ -7,6 +7,7 @@
 // Ne pas utiliser la version promise de fs car la fonction createReadStream()
 // n'y est pas. https://github.com/nodejs/node/issues/38627
 import { createReadStream } from "node:fs";
+// @ts-expect-error -- doiuse ne fournit pas de types.
 // Désactiver la règle suivante pour cet import, car elle ne supporte pas la
 // propriété "exports" du package.json.
 // https://github.com/import-js/eslint-plugin-import/issues/1810

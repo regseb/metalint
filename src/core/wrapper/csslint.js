@@ -5,6 +5,7 @@
  */
 
 import fs from "node:fs/promises";
+// @ts-expect-error -- CSSLint ne fournit pas de types.
 import { CSSLint } from "csslint";
 import Levels from "../levels.js";
 import Severities from "../severities.js";

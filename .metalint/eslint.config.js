@@ -409,13 +409,7 @@ export default {
         "import/no-relative-parent-imports": "off",
         "import/no-restricted-paths": "off",
         "import/no-self-import": "error",
-        "import/no-unresolved": [
-            "error",
-            {
-                caseSensitive: true,
-                caseSensitiveStrict: true,
-            },
-        ],
+        "import/no-unresolved": ["error", { caseSensitiveStrict: true }],
         "import/no-useless-path-segments": "error",
         "import/no-webpack-loader-syntax": "error",
 
@@ -711,7 +705,7 @@ export default {
         "unicorn/no-useless-promise-resolve-reject": "error",
         "unicorn/no-useless-spread": "error",
         "unicorn/no-useless-switch-case": "error",
-        "unicorn/no-useless-undefined": ["error", { checkArguments: false }],
+        "unicorn/no-useless-undefined": "off",
         "unicorn/no-zero-fractions": "error",
         // Laisser Prettier gérer cette règle.
         "unicorn/number-literal-case": "off",
@@ -772,7 +766,17 @@ export default {
         "unicorn/require-post-message-target-origin": "off",
         "unicorn/string-content": "off",
         "unicorn/switch-case-braces": ["error", "avoid"],
-        "unicorn/template-indent": "error",
+        "unicorn/template-indent": [
+            "error",
+            // Configurer la règle pour qu'elle soit compatible avec Prettier.
+            // https://github.com/prettier/eslint-config-prettier#unicorntemplate-indent
+            {
+                tags: ["outdent", "dedent", "sql", "styled"],
+                functions: ["dedent", "stripIndent"],
+                selectors: [],
+                comments: ["indent"],
+            },
+        ],
         "unicorn/text-encoding-identifier-case": "error",
         "unicorn/throw-new-error": "error",
     },

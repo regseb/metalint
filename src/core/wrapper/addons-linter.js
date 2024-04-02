@@ -5,6 +5,7 @@
  */
 
 import path from "node:path/posix";
+// @ts-expect-error -- Add-ons Linter ne fournit pas de types.
 import linter from "addons-linter";
 import Levels from "../levels.js";
 import Severities from "../severities.js";

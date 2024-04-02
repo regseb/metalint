@@ -5,6 +5,7 @@
  */
 
 import process from "node:process";
+// @ts-expect-error -- JavaScript Standard Style ne fournit pas de types.
 import standard from "standard";
 import Levels from "../levels.js";
 import Severities from "../severities.js";
