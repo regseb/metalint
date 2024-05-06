@@ -6,5 +6,5 @@
     "emitDeclarationOnly": true,
     "newLine": "lf"
   },
-  "include": ["src/core/"]
+  "include": ["src/"]
 }

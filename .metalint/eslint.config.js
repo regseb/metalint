@@ -9,7 +9,6 @@
  */
 export default {
     plugins: [
-        "@typescript-eslint",
         "array-func",
         "eslint-comments",
         "import",
@@ -805,7 +804,7 @@ export default {
                 var: "member",
                 arg: "param",
                 argument: "param",
-                prop: "property",
+                property: "prop",
                 return: "returns",
                 exception: "throws",
                 yield: "yields",

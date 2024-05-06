@@ -23,24 +23,24 @@
   ],
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
+      "types": "./types/core/index.d.ts",
       "default": "./src/core/index.js"
     },
     "./api/formatter": {
-      "types": "./types/formatter/formatter.d.ts",
+      "types": "./types/core/formatter/formatter.d.ts",
       "default": "./src/core/formatter/formatter.js"
     },
     "./api/wrapper": {
-      "types": "./types/wrapper/wrapper.d.ts",
+      "types": "./types/core/wrapper/wrapper.d.ts",
       "default": "./src/core/wrapper/wrapper.js"
     },
-    "./types/config": {
-      "types": "./src/types/config.d.ts"
+    "./types": {
+      "types": "./types/core/types.d.ts"
     },
     "./package.json": "./package.json"
   },
   "main": "./src/core/index.js",
-  "types": "./types/index.d.ts",
+  "types": "./types/core/index.d.ts",
   "bin": "./src/bin/index.js",
   "repository": "regseb/metalint",
   "type": "module",

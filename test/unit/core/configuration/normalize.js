@@ -19,52 +19,39 @@ import YAMLLintWrapper from "../../../../src/core/wrapper/yaml-lint.js";
 
 describe("src/core/configuration/normalize.js", function () {
     describe("normalizePatterns()", function () {
-        it("should use default", function () {
-            const normalized = normalize.normalizePatterns(undefined, {
-                auto: ["foo"],
+        it("should reject undefined", function () {
+            assert.throws(() => normalize.normalizePatterns(undefined), {
+                name: "Error",
+                message: "Property 'patterns' is required.",
             });
-            assert.deepEqual(normalized, ["foo"]);
         });
 
         it("should support string", function () {
-            const normalized = normalize.normalizePatterns("foo", {
-                auto: ["bar"],
-            });
+            const normalized = normalize.normalizePatterns("foo");
             assert.deepEqual(normalized, ["foo"]);
         });
 
         it("should support array of strings", function () {
-            const normalized = normalize.normalizePatterns(["foo", "bar"], {
-                auto: ["baz"],
-            });
+            const normalized = normalize.normalizePatterns(["foo", "bar"]);
             assert.deepEqual(normalized, ["foo", "bar"]);
         });
 
         it("should reject array of non-strings", function () {
-            assert.throws(
-                () =>
-                    normalize.normalizePatterns(["foo", true], {
-                        auto: ["bar"],
-                    }),
-                {
-                    name: "TypeError",
-                    message:
-                        "Property 'patterns' is incorrect type (string and" +
-                        " array of strings are accepted).",
-                },
-            );
+            assert.throws(() => normalize.normalizePatterns(["foo", true]), {
+                name: "TypeError",
+                message:
+                    "Property 'patterns' is incorrect type (string and" +
+                    " array of strings are accepted).",
+            });
         });
 
         it("should reject non-array and non-strings", function () {
-            assert.throws(
-                () => normalize.normalizePatterns(true, { auto: ["foo"] }),
-                {
-                    name: "TypeError",
-                    message:
-                        "Property 'patterns' is incorrect type (string and" +
-                        " array of strings are accepted).",
-                },
-            );
+            assert.throws(() => normalize.normalizePatterns(true), {
+                name: "TypeError",
+                message:
+                    "Property 'patterns' is incorrect type (string and" +
+                    " array of strings are accepted).",
+            });
         });
     });
 
@@ -92,7 +79,7 @@ describe("src/core/configuration/normalize.js", function () {
     describe("normalizeLevel()", function () {
         it("should use default", function () {
             const normalized = normalize.normalizeLevel(undefined);
-            assert.equal(normalized, Levels.INFO);
+            assert.equal(normalized, undefined);
         });
 
         it("should support string", function () {
@@ -291,7 +278,7 @@ describe("src/core/configuration/normalize.js", function () {
             const normalized = await normalize.normalizeReporter({}, { dir });
             assert.deepEqual(normalized, {
                 formatter: ConsoleFormatter,
-                level: Levels.INFO,
+                level: undefined,
                 options: [{}],
             });
         });
@@ -334,7 +321,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, [
                 {
                     formatter: ConsoleFormatter,
-                    level: Levels.INFO,
+                    level: undefined,
                     options: [{}],
                 },
             ]);
@@ -354,7 +341,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, [
                 {
                     formatter: UnixFormatter,
-                    level: Levels.INFO,
+                    level: undefined,
                     options: [{}],
                 },
                 {
@@ -449,7 +436,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, {
                 wrapper: YAMLLintWrapper,
                 fix: undefined,
-                level: Levels.INFO,
+                level: undefined,
                 options: [{}],
             });
         });
@@ -467,7 +454,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, {
                 wrapper: PrettierWrapper,
                 fix: undefined,
-                level: Levels.INFO,
+                level: undefined,
                 options: [{ tabWidth: 4 }],
             });
         });
@@ -554,7 +541,7 @@ describe("src/core/configuration/normalize.js", function () {
                 {
                     wrapper: YAMLLintWrapper,
                     fix: undefined,
-                    level: Levels.INFO,
+                    level: undefined,
                     options: [{}],
                 },
             ]);
@@ -612,12 +599,12 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, {
                 patterns: ["*.js"],
                 fix: undefined,
-                level: Levels.INFO,
+                level: undefined,
                 linters: [
                     {
                         wrapper: ESLintWrapper,
                         fix: undefined,
-                        level: Levels.INFO,
+                        level: undefined,
                         options: [{}],
                     },
                 ],
@@ -676,7 +663,7 @@ describe("src/core/configuration/normalize.js", function () {
                         {
                             wrapper: YAMLLintWrapper,
                             fix: undefined,
-                            level: Levels.INFO,
+                            level: undefined,
                             options: [{ foo: "bar" }],
                         },
                     ],
@@ -690,6 +677,7 @@ describe("src/core/configuration/normalize.js", function () {
             );
             const normalized = await normalize.normalizeOverrides(
                 {
+                    patterns: "*.yml",
                     fix: true,
                     level: "warn",
                     linters: [
@@ -703,14 +691,14 @@ describe("src/core/configuration/normalize.js", function () {
             );
             assert.deepEqual(normalized, [
                 {
-                    patterns: ["**"],
+                    patterns: ["*.yml"],
                     fix: true,
                     level: Levels.WARN,
                     linters: [
                         {
                             wrapper: YAMLLintWrapper,
                             fix: undefined,
-                            level: Levels.INFO,
+                            level: undefined,
                             options: [{ foo: "bar" }],
                         },
                     ],
@@ -758,7 +746,7 @@ describe("src/core/configuration/normalize.js", function () {
                     {
                         wrapper: PrettierWrapper,
                         fix: undefined,
-                        level: Levels.INFO,
+                        level: undefined,
                         options: [{}],
                     },
                 ],
@@ -766,12 +754,12 @@ describe("src/core/configuration/normalize.js", function () {
                     {
                         patterns: ["*.js"],
                         fix: undefined,
-                        level: Levels.INFO,
+                        level: undefined,
                         linters: [
                             {
                                 wrapper: ESLintWrapper,
                                 fix: undefined,
-                                level: Levels.INFO,
+                                level: undefined,
                                 options: [{}],
                             },
                         ],
@@ -832,7 +820,7 @@ describe("src/core/configuration/normalize.js", function () {
                         {
                             wrapper: YAMLLintWrapper,
                             fix: undefined,
-                            level: Levels.INFO,
+                            level: undefined,
                             options: [{ foo: "bar" }],
                         },
                     ],
@@ -847,6 +835,7 @@ describe("src/core/configuration/normalize.js", function () {
             );
             const normalized = await normalize.normalizeCheckers(
                 {
+                    patterns: ["*.yml", "*.yaml"],
                     fix: true,
                     level: "warn",
                     linters: [
@@ -860,14 +849,14 @@ describe("src/core/configuration/normalize.js", function () {
             );
             assert.deepEqual(normalized, [
                 {
-                    patterns: ["**"],
+                    patterns: ["*.yml", "*.yaml"],
                     fix: true,
                     level: Levels.WARN,
                     linters: [
                         {
                             wrapper: YAMLLintWrapper,
                             fix: undefined,
-                            level: Levels.INFO,
+                            level: undefined,
                             options: [{ foo: "bar" }],
                         },
                     ],
@@ -911,7 +900,7 @@ describe("src/core/configuration/normalize.js", function () {
                 reporters: [
                     {
                         formatter: ConsoleFormatter,
-                        level: Levels.INFO,
+                        level: undefined,
                         options: [{}],
                     },
                 ],
@@ -923,15 +912,20 @@ describe("src/core/configuration/normalize.js", function () {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalize({}, { dir });
+            const normalized = await normalize.normalize(
+                {
+                    patterns: ["**"],
+                },
+                { dir },
+            );
             assert.deepEqual(normalized, {
-                patterns: [],
-                fix: false,
-                level: Levels.INFO,
+                patterns: ["**"],
+                fix: undefined,
+                level: undefined,
                 reporters: [
                     {
                         formatter: ConsoleFormatter,
-                        level: Levels.INFO,
+                        level: undefined,
                         options: [{}],
                     },
                 ],

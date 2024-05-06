@@ -18,8 +18,8 @@ import Wrapper from "./wrapper.js";
 const { FlatESLint } = pkg;
 
 /**
- * @typedef {import("../../types/notice.d.ts").PartialNotice} PartialNotice
- * @typedef {import("../../types/level.d.ts").default} Level
+ * @typedef {import("../results.js").PartialNotice} PartialNotice
+ * @typedef {import("../levels.js").Level} Level
  */
 
 /**
@@ -113,12 +113,8 @@ export default class ESLintWrapper extends Wrapper {
                         {
                             line: result.line,
                             column: result.column,
-                            ...(undefined === result.endLine
-                                ? {}
-                                : { endLine: result.endLine }),
-                            ...(undefined === result.endColumn
-                                ? {}
-                                : { endColumn: result.endColumn }),
+                            endLine: result.endLine,
+                            endColumn: result.endColumn,
                         },
                     ],
                 };

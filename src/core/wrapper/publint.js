@@ -18,9 +18,9 @@ import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
 
 /**
- * @typedef {import("../../types/notice.d.ts").PartialNotice} PartialNotice
- * @typedef {import("../../types/level.d.ts").default} Level
- * @typedef {import("../../types/severity.d.ts").default} Severity
+ * @typedef {import("../results.js").PartialNotice} PartialNotice
+ * @typedef {import("../levels.js").Level} Level
+ * @typedef {import("../severities.js").Severity} Severity
  */
 
 /**

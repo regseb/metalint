@@ -11,14 +11,67 @@ import Levels from "../levels.js";
 import Wrapper, { WRAPPERS } from "../wrapper/wrapper.js";
 
 /**
- * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfig} NormalizedConfig
- * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigChecker} NormalizedConfigChecker
- * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigLinter} NormalizedConfigLinter
- * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigOverride} NormalizedConfigOverride
- * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigReporter} NormalizedConfigReporter
- * @typedef {import("../../types/level.d.ts").default} Level
- * @typedef {import("../../types/typeofformatter.d.ts").default} TypeofFormatter
- * @typedef {import("../../types/typeofwrapper.d.ts").default} TypeofWrapper
+ * @typedef {import("../levels.js").Level} Level
+ * @typedef {import("../formatter/formatter.js").TypeofFormatter} TypeofFormatter
+ * @typedef {import("../wrapper/wrapper.js").TypeofWrapper} TypeofWrapper
+ */
+
+/**
+ * @typedef {Object} NormalizedConfigReporter Le type d'une configuration
+ *                                            normalisée d'un rapporteur.
+ * @prop {TypeofFormatter}           formatter La classe du formateur.
+ * @prop {Level}                     [level]   Le niveau de sévérité minimum des
+ *                                             notifications affichées.
+ * @prop {Record<string, unknown>[]} options   Les options du formateur.
+ */
+
+/**
+ * @typedef {Object} NormalizedConfigLinter Le type d'une configuration
+ *                                          normalisée d'un linter.
+ * @prop {TypeofWrapper}             wrapper La classe de l'enrobage.
+ * @prop {boolean}                   [fix]   La marque indiquant s'il faut
+ *                                           corriger les fichiers.
+ * @prop {Level}                     [level] Le niveau de sévérité minimum des
+ *                                           notifications retournées.
+ * @prop {Record<string, unknown>[]} options Les options du linter.
+ */
+
+/**
+ * @typedef {Object} NormalizedConfigOverride Le type d'une configuration
+ *                                            normalisée d'une surcharge.
+ * @prop {string[]}                 patterns Les motifs des fichiers à analyser.
+ * @prop {boolean}                  [fix]    La marque indiquant s'il faut
+ *                                           corriger les fichiers.
+ * @prop {Level}                    [level]  Le niveau de sévérité minimum des
+ *                                           notifications retournées.
+ * @prop {NormalizedConfigLinter[]} linters  Les configurations des linters.
+ */
+
+/**
+ * @typedef {Object} NormalizedConfigChecker Le type d'une configuration
+ *                                           normalisée d'un checker.
+ * @prop {string[]}                   patterns  Les motifs des fichiers à
+ *                                              analyser.
+ * @prop {boolean}                    [fix]     La marque indiquant s'il faut
+ *                                              corriger les fichiers.
+ * @prop {Level}                      [level]   Le niveau de sévérité minimum
+ *                                              des notifications retournées.
+ * @prop {NormalizedConfigLinter[]}   linters   Les configuration des linters.
+ * @prop {NormalizedConfigOverride[]} overrides Les configuration des
+ *                                              surcharges.
+ */
+
+/**
+ * @typedef {Object} NormalizedConfig Le type d'une configuration normalisée.
+ * @prop {string[]}                   patterns  Les motifs des fichiers à
+ *                                              analyser.
+ * @prop {boolean}                    [fix]     La marque indiquant s'il faut
+ *                                              corriger les fichiers.
+ * @prop {Level}                      [level]   Le niveau de sévérité minimum
+ *                                              des notifications.
+ * @prop {NormalizedConfigReporter[]} reporters Les configurations des
+ *                                              rapporteurs.
+ * @prop {NormalizedConfigChecker[]}  checkers  Les configurations des checkers.
  */
 
 /**
@@ -40,17 +93,15 @@ const read = async function (file) {
 /**
  * Normalise une propriété <code>"patterns"</code>.
  *
- * @param {*}        partials     La valeur d'un des propriétés
- *                                <code>"patterns"</code>.
- * @param {Object}   context      Le contexte de la propriété.
- * @param {string[]} context.auto La valeur par défaut.
+ * @param {*} partials La valeur d'un des propriétés <code>"patterns"</code>.
  * @returns {string[]} La valeur normalisée.
+ * @throws {Error} Si le <code>"patterns"</code> n'est pas renseigné.
  * @throws {TypeError} Si le <code>"patterns"</code> n'a pas le bon type.
  */
-export const normalizePatterns = function (partials, { auto }) {
+export const normalizePatterns = function (partials) {
     let normalized;
     if (undefined === partials) {
-        normalized = auto;
+        throw new Error("Property 'patterns' is required.");
     } else if ("string" === typeof partials) {
         normalized = [partials];
     } else if (Array.isArray(partials)) {
@@ -99,14 +150,14 @@ export const normalizeFix = function (partial) {
  * Normalise une propriété <code>"level"</code>.
  *
  * @param {*} partial La valeur d'une propriété <code>"level"</code>.
- * @returns {Level} La valeur normalisée.
+ * @returns {Level|undefined} La valeur normalisée.
  * @throws {Error}     Si le <code>"level"</code> est invalide.
  * @throws {TypeError} Si le <code>"level"</code> n'a pas le bon type.
  */
 export const normalizeLevel = function (partial) {
     let normalized;
     if (undefined === partial) {
-        normalized = Levels.INFO;
+        normalized = undefined;
     } else if ("string" === typeof partial) {
         if (partial.toUpperCase() in Levels) {
             normalized = Levels[partial.toUpperCase()];
@@ -118,7 +169,7 @@ export const normalizeLevel = function (partial) {
         }
     } else if ("number" === typeof partial) {
         if (Object.values(Levels).includes(partial)) {
-            normalized = partial;
+            normalized = /** @type {Level} */ (partial);
         } else {
             throw new Error(
                 "Value of property 'level' is unknown (possibles values:" +
@@ -388,7 +439,7 @@ export const normalizeOverride = async function (partial, { dir }) {
     let normalized;
     if ("object" === typeof partial) {
         normalized = {
-            patterns: normalizePatterns(partial.patterns, { auto: ["**"] }),
+            patterns: normalizePatterns(partial.patterns),
             fix: normalizeFix(partial.fix),
             level: normalizeLevel(partial.level),
             linters: await normalizeLinters(partial.linters, { dir }),
@@ -441,7 +492,7 @@ export const normalizeChecker = async function (partial, { dir }) {
     let normalized;
     if ("object" === typeof partial) {
         normalized = {
-            patterns: normalizePatterns(partial.patterns, { auto: ["**"] }),
+            patterns: normalizePatterns(partial.patterns),
             fix: normalizeFix(partial.fix),
             level: normalizeLevel(partial.level),
             linters: await normalizeLinters(partial.linters, { dir }),
@@ -496,8 +547,8 @@ export const normalize = async function (partial, { dir }) {
     let normalized;
     if ("object" === typeof partial) {
         normalized = {
-            patterns: normalizePatterns(partial.patterns, { auto: [] }),
-            fix: normalizeFix(partial.fix) ?? false,
+            patterns: normalizePatterns(partial.patterns),
+            fix: normalizeFix(partial.fix),
             level: normalizeLevel(partial.level),
             reporters: await normalizeReporters(partial.reporters, { dir }),
             checkers: await normalizeCheckers(partial.checkers, { dir }),

@@ -15,12 +15,12 @@ import { exists } from "./utils/file.js";
 import Glob from "./utils/glob.js";
 
 /**
- * @typedef {import("../types/configuration/flattened.d.ts").FlattenedConfig} FlattenedConfig
- * @typedef {import("../types/configuration/flattened.d.ts").FlattenedConfigChecker} FlattenedConfigChecker
- * @typedef {import("../types/level.d.ts").default} Level
- * @typedef {import("../types/notice.d.ts").default} Notice
- * @typedef {import("../types/severity.d.ts").default} Severity
- * @typedef {import("../types/typeofformatter.d.ts").default} TypeofFormatter
+ * @typedef {import("./configuration/flatten.js").FlattenedConfig} FlattenedConfig
+ * @typedef {import("./configuration/flatten.js").FlattenedConfigChecker} FlattenedConfigChecker
+ * @typedef {import("./levels.js").Level} Level
+ * @typedef {import("./results.js").Notice} Notice
+ * @typedef {import("./severities.js").Severity} Severity
+ * @typedef {import("./formatter/formatter.js").TypeofFormatter} TypeofFormatter
  * @typedef {import("./formatter/formatter.js").default} Formatter
  * @typedef {import("./wrapper/wrapper.js").default} Wrapper
  */
@@ -73,7 +73,7 @@ export default class Metalint {
      *                                              indiquant si les linters
      *                                              doivent corriger les
      *                                              fichiers.
-     * @param {TypeofFormatter} [options.formatter] L'éventuel formatteur à
+     * @param {TypeofFormatter} [options.formatter] L'éventuel formateur à
      *                                              utiliser.
      * @param {Level}           [options.level]     L'éventuel niveau minimum
      *                                              des notifications à

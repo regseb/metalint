@@ -5,7 +5,7 @@
  */
 
 /**
- * @type {import("../src/types/config.d.ts").default}
+ * @type {import("../src/core/types.js").Config}
  */
 export default {
     patterns: [
@@ -54,15 +54,6 @@ export default {
                     patterns: "*.config.js",
                     linters: "eslint_config",
                 },
-            ],
-        },
-        {
-            patterns: "*.ts",
-            linters: [
-                "prettier",
-                "prettier_typescript",
-                "eslint",
-                "eslint_typescript",
             ],
         },
         {

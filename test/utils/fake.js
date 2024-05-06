@@ -12,8 +12,8 @@ import JSZip from "jszip";
 
 /**
  * @typedef {Object} Temp
- * @property {string} root La racine du répertoire temporaire.
- * @property {string} cwd  Le répertoire courant avant la création.
+ * @prop {string} root La racine du répertoire temporaire.
+ * @prop {string} cwd  Le répertoire courant avant la création.
  */
 
 /**

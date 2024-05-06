@@ -12,10 +12,10 @@ import Formatter from "./formatter.js";
 
 /**
  * @typedef {import("node:stream").Writable} Writable
- * @typedef {import("../../types/level.d.ts").default} Level
- * @typedef {import("../../types/location.d.ts").default} Location
- * @typedef {import("../../types/notice.d.ts").default} Notice
- * @typedef {import("../../types/severity.d.ts").default} Severity
+ * @typedef {import("../levels.js").Level} Level
+ * @typedef {import("../results.js").Location} Location
+ * @typedef {import("../results.js").Notice} Notice
+ * @typedef {import("../severities.js").Severity} Severity
  */
 
 /**
@@ -176,9 +176,9 @@ export default class ConsoleFormatter extends Formatter {
     /**
      * Affiche les éventuelles notifications d'un fichier.
      *
-     * @param {string}             file    Le fichier analysé.
-     * @param {Notice[]|undefined} notices La liste des notifications ou
-     *                                     <code>undefined</code>.
+     * @param {string}   file      Le fichier analysé.
+     * @param {Notice[]} [notices] La liste des notifications ou
+     *                             <code>undefined</code>.
      * @returns {Promise<void>} La promesse indiquant que les notifications ont
      *                          été traitées.
      */

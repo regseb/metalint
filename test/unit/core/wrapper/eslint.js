@@ -196,7 +196,14 @@ describe("src/core/wrapper/eslint.js", function () {
                         rule: undefined,
                         severity: Severities.FATAL,
                         message: "Parsing error: Unexpected token ;",
-                        locations: [{ line: 1, column: 11 }],
+                        locations: [
+                            {
+                                line: 1,
+                                column: 11,
+                                endLine: undefined,
+                                endColumn: undefined,
+                            },
+                        ],
                     },
                 ]);
             });

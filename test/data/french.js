@@ -9,8 +9,8 @@ import Formatter from "../../src/core/formatter/formatter.js";
 
 /**
  * @typedef {import("node:stream").Writable} Writable
- * @typedef {import("../../src/types/level.d.ts").default} Level
- * @typedef {import("../../src/types/notice.d.ts").default} Notice
+ * @typedef {import("../../src/core/levels.js").Level} Level
+ * @typedef {import("../../src/core/results.js").Notice} Notice
  */
 
 /**
@@ -40,9 +40,9 @@ export default class FrenchFormatter extends Formatter {
     /**
      * Affiche les éventuelles notifications d'un fichier.
      *
-     * @param {string}             file    Le fichier analysé.
-     * @param {Notice[]|undefined} notices La liste des notifications ou
-     *                                     <code>undefined</code>.
+     * @param {string}   file      Le fichier analysé.
+     * @param {Notice[]} [notices] La liste des notifications ou
+     *                             <code>undefined</code>.
      */
     notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les

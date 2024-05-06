@@ -8,8 +8,8 @@ import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 /**
- * @typedef {import("../../types/level.d.ts").default} Level
- * @typedef {import("../../types/notice.d.ts").default} Notice
+ * @typedef {import("../levels.js").Level} Level
+ * @typedef {import("../results.js").Notice} Notice
  */
 
 /**
@@ -64,9 +64,9 @@ export default class Formatter {
     /**
      * Traite les notifications d'un fichier analysé.
      *
-     * @param {string}             _file    Le fichier analysé.
-     * @param {Notice[]|undefined} _notices La liste des notifications ou
-     *                                      <code>undefined</code>.
+     * @param {string}   _file      Le fichier analysé.
+     * @param {Notice[]} [_notices] La liste des notifications ou
+     *                              <code>undefined</code>.
      * @returns {Promise<void>} La promesse indiquant que les notifications ont
      *                          été traitées.
      */
@@ -86,3 +86,8 @@ export default class Formatter {
         return Promise.resolve();
     }
 }
+
+/**
+ * @typedef {Object} TypeofFormatter Le type d'une formateur.
+ * @prop {Function} constructor La fonction pour créer le formateur.
+ */

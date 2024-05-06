@@ -12,8 +12,8 @@ import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
 
 /**
- * @typedef {import("../../types/notice.d.ts").PartialNotice} PartialNotice
- * @typedef {import("../../types/level.d.ts").default} Level
+ * @typedef {import("../results.js").PartialNotice} PartialNotice
+ * @typedef {import("../levels.js").Level} Level
  */
 
 /**
@@ -82,12 +82,8 @@ export default class StandardWrapper extends Wrapper {
                         {
                             line: result.line,
                             column: result.column,
-                            ...(undefined === result.endLine
-                                ? {}
-                                : { endLine: result.endLine }),
-                            ...(undefined === result.endColumn
-                                ? {}
-                                : { endColumn: result.endColumn }),
+                            endLine: result.endLine,
+                            endColumn: result.endColumn,
                         },
                     ],
                 };

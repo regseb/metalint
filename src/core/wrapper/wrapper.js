@@ -9,8 +9,18 @@ import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 /**
- * @typedef {import("../../types/notice.d.ts").PartialNotice} PartialNotice
- * @typedef {import("../../types/level.d.ts").default} Level
+ * @typedef {import("../results.js").PartialNotice} PartialNotice
+ * @typedef {import("../levels.js").Level} Level
+ */
+
+/**
+ * @typedef {Object} WrapperContext Le type du contexte de l'enrobage.
+ * @prop {Level}    level Le niveau de sévérité minimum des notifications
+ *                        retournées.
+ * @prop {boolean}  fix   La marque indiquant s'il faut corriger le fichier.
+ * @prop {string}   root  L'adresse du répertoire où se trouve le répertoire
+ *                        <code>.metalint/</code>.
+ * @prop {string[]} files La liste de tous les fichiers analysés.
  */
 
 /**
@@ -68,14 +78,7 @@ export default class Wrapper {
     /**
      * Crée un enrobage pour un linter.
      *
-     * @param {Object}   context       Le contexte de l'enrobage.
-     * @param {Level}    context.level Le niveau de sévérité minimum des
-     *                                 notifications retournées.
-     * @param {boolean}  context.fix   La marque indiquant s'il faut corriger le
-     *                                 fichier.
-     * @param {string}   context.root  L'adresse du répertoire où se trouve le
-     *                                 répertoire <code>.metalint/</code>.
-     * @param {string[]} context.files La liste de tous les fichiers analysés.
+     * @param {WrapperContext} context Le contexte de l'enrobage.
      */
     constructor({ level, fix, root, files }) {
         this.#level = level;
@@ -135,3 +138,8 @@ export default class Wrapper {
         return Promise.resolve([]);
     }
 }
+
+/**
+ * @typedef {Object} TypeofWrapper Le type d'un enrobage.
+ * @prop {Function} constructor La fonction pour créer l'enrobage.
+ */

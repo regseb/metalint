@@ -139,7 +139,14 @@ describe("src/core/wrapper/standard.js", function () {
                         rule: undefined,
                         severity: Severities.FATAL,
                         message: "Parsing error: Unexpected token ;",
-                        locations: [{ line: 1, column: 13 }],
+                        locations: [
+                            {
+                                line: 1,
+                                column: 13,
+                                endLine: undefined,
+                                endColumn: undefined,
+                            },
+                        ],
                     },
                 ]);
             });

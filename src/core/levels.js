@@ -7,10 +7,17 @@
 import Severities from "./severities.js";
 
 /**
+ * @typedef {import("./severities.js").Severity} Severity
+ */
+
+/**
+ * @typedef {0|Severity} Level Le type des niveaux.
+ */
+
+/**
  * La liste des niveaux.
  *
- * @readonly
- * @enum {number}
+ * @type {Object<string, Level>}
  */
 export default {
     OFF: 0,

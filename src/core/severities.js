@@ -5,10 +5,13 @@
  */
 
 /**
+ * @typedef {1|2|3|4} Severity Le type des sévérités.
+ */
+
+/**
  * La liste des sévérités.
  *
- * @readonly
- * @enum {number}
+ * @type {Object<string, Severity>}
  */
 export default {
     FATAL: 1,

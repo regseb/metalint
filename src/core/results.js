@@ -7,8 +7,35 @@
 import Severities from "./severities.js";
 
 /**
- * @typedef {import("../types/notice.d.ts").Notice} Notice
- * @typedef {import("../types/notice.d.ts").PartialNotice} PartialNotice
+ * @typedef {import("./severities.js").Severity} Severity
+ */
+
+/**
+ * @typedef {Object} Location Le type d'une position d'une notification.
+ * @prop {number} line        Le numéro de la ligne du début.
+ * @prop {number} [column]    Le numéro de la colonne du début.
+ * @prop {number} [endLine]   Le numéro de la ligne de la fin.
+ * @prop {number} [endColumn] Le numéro de la colonne de la fin.
+ */
+
+/**
+ * @typedef {Object} PartialNotice Le type d'une notification partielle.
+ * @prop {string}     file        Le nom du fichier.
+ * @prop {string}     linter      Le nom du linter.
+ * @prop {string}     [rule]      L'éventuel nom de la règle.
+ * @prop {Severity}   [severity]  Le niveau de sévérité.
+ * @prop {string}     message     Le message de la notification.
+ * @prop {Location[]} [locations] Les positions de la notification.
+ */
+
+/**
+ * @typedef {Object} Notice Le type d'une notification.
+ * @prop {string}     file      Le nom du fichier.
+ * @prop {string}     linter    Le nom du linter.
+ * @prop {string}     [rule]    L'éventuel nom de la règle.
+ * @prop {Severity}   severity  Le niveau de sévérité.
+ * @prop {string}     message   Le message de la notification.
+ * @prop {Location[]} locations Les positions de la notification.
  */
 
 /**
@@ -83,10 +110,12 @@ export default class Results {
                 this.#data[notice.file] = [];
             }
             this.#data[notice.file].push({
-                rule: undefined,
-                severity: Severities.ERROR,
-                locations: [],
-                ...notice,
+                file: notice.file,
+                linter: notice.linter,
+                rule: notice.rule,
+                severity: notice.severity ?? Severities.ERROR,
+                message: notice.message,
+                locations: notice.locations ?? [],
             });
         }
     }

@@ -18,8 +18,8 @@ import Wrapper from "./wrapper.js";
 
 /**
  * @typedef {import("node:stream").Writable} Writable
- * @typedef {import("../../types/notice.d.ts").PartialNotice} PartialNotice
- * @typedef {import("../../types/level.d.ts").default} Level
+ * @typedef {import("../results.js").PartialNotice} PartialNotice
+ * @typedef {import("../levels.js").Level} Level
  */
 
 /**

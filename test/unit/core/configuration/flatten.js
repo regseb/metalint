@@ -23,14 +23,14 @@ describe("src/core/configuration/flatten.js", function () {
     });
 
     describe("flattenFix()", function () {
-        it("should support undefined and boolean", function () {
-            const flattened = flatten.flattenFix(undefined, { fix: false });
-            assert.equal(flattened, false);
-        });
-
-        it("should support two boolean", function () {
+        it("should keep", function () {
             const flattened = flatten.flattenFix(true, { fix: false });
             assert.equal(flattened, true);
+        });
+
+        it("should override", function () {
+            const flattened = flatten.flattenFix(undefined, { fix: false });
+            assert.equal(flattened, false);
         });
     });
 
@@ -43,10 +43,10 @@ describe("src/core/configuration/flatten.js", function () {
         });
 
         it("should override", function () {
-            const flattened = flatten.flattenLevel(Levels.WARN, {
-                level: Levels.OFF,
+            const flattened = flatten.flattenLevel(undefined, {
+                level: Levels.INFO,
             });
-            assert.equal(flattened, Levels.OFF);
+            assert.equal(flattened, Levels.INFO);
         });
     });
 
@@ -81,7 +81,7 @@ describe("src/core/configuration/flatten.js", function () {
             const flattened = flatten.flattenReporter(
                 {
                     formatter: ConsoleFormatter,
-                    level: Levels.INFO,
+                    level: undefined,
                     options: [{}],
                 },
                 { level: Levels.WARN },
@@ -100,11 +100,11 @@ describe("src/core/configuration/flatten.js", function () {
                 [
                     {
                         formatter: ConsoleFormatter,
-                        level: Levels.INFO,
+                        level: Levels.WARN,
                         options: [{}],
                     },
                 ],
-                { formatter: undefined, level: Levels.WARN },
+                { formatter: undefined, level: Levels.INFO },
             );
             assert.deepEqual(flattened, [
                 {
@@ -142,7 +142,7 @@ describe("src/core/configuration/flatten.js", function () {
                 {
                     wrapper: ESLintWrapper,
                     fix: false,
-                    level: Levels.INFO,
+                    level: Levels.ERROR,
                     options: [{ foo: "bar" }],
                 },
                 {
@@ -154,20 +154,32 @@ describe("src/core/configuration/flatten.js", function () {
             assert.deepEqual(flattened, {
                 wrapper: ESLintWrapper,
                 fix: false,
-                level: Levels.WARN,
+                level: Levels.ERROR,
                 options: { foo: "bar", baz: "qux" },
             });
         });
     });
 
     describe("flattenLinters()", function () {
-        it("should flattened", function () {
+        it("should flatten", function () {
             const flattened = flatten.flattenLinters(
                 [
                     {
                         wrapper: ESLintWrapper,
+                        fix: false,
+                        level: Levels.ERROR,
+                        options: [{ curly: "warn" }],
+                    },
+                    {
+                        wrapper: ESLintWrapper,
                         fix: true,
                         level: Levels.WARN,
+                        options: [{ "no-undef": "error" }],
+                    },
+                    {
+                        wrapper: PrettierWrapper,
+                        fix: undefined,
+                        level: undefined,
                         options: [{}],
                     },
                 ],
@@ -178,9 +190,50 @@ describe("src/core/configuration/flatten.js", function () {
                     wrapper: ESLintWrapper,
                     fix: true,
                     level: Levels.WARN,
+                    options: { curly: "warn", "no-undef": "error" },
+                },
+                {
+                    wrapper: PrettierWrapper,
+                    fix: false,
+                    level: Levels.INFO,
                     options: {},
                 },
             ]);
+        });
+    });
+
+    describe("flattenOverride()", function () {
+        it("should flatten", function () {
+            const flattened = flatten.flattenOverride(
+                {
+                    patterns: ["*.mjs"],
+                    fix: undefined,
+                    level: Levels.ERROR,
+                    linters: [
+                        {
+                            wrapper: ESLintWrapper,
+                            fix: false,
+                            level: undefined,
+                            options: [{}],
+                        },
+                    ],
+                },
+                {
+                    fix: true,
+                    level: Levels.WARN,
+                },
+            );
+            assert.deepEqual(flattened, {
+                patterns: ["*.mjs"],
+                linters: [
+                    {
+                        wrapper: ESLintWrapper,
+                        fix: false,
+                        level: Levels.ERROR,
+                        options: {},
+                    },
+                ],
+            });
         });
     });
 
@@ -188,40 +241,150 @@ describe("src/core/configuration/flatten.js", function () {
         it("should flatten", function () {
             const flattened = flatten.flattenChecker(
                 {
-                    patterns: ["foo"],
+                    patterns: ["**.js"],
                     fix: true,
-                    level: Levels.WARN,
+                    level: undefined,
                     linters: [
                         {
                             wrapper: PrettierWrapper,
                             fix: undefined,
-                            level: Levels.INFO,
+                            level: undefined,
                             options: [{}],
                         },
                     ],
-                    overrides: [],
+                    overrides: [
+                        {
+                            patterns: ["**.min.js"],
+                            fix: false,
+                            level: undefined,
+                            linters: [
+                                {
+                                    wrapper: ESLintWrapper,
+                                    fix: undefined,
+                                    level: undefined,
+                                    options: [{}],
+                                },
+                            ],
+                        },
+                    ],
                 },
                 {
                     fix: false,
-                    level: Levels.INFO,
+                    level: Levels.ERROR,
                 },
             );
             assert.deepEqual(flattened, {
-                patterns: ["foo"],
+                patterns: ["**.js"],
                 linters: [
                     {
                         wrapper: PrettierWrapper,
                         fix: true,
-                        level: Levels.WARN,
+                        level: Levels.ERROR,
                         options: {},
                     },
                 ],
-                overrides: [],
+                overrides: [
+                    {
+                        patterns: ["**.min.js"],
+                        linters: [
+                            {
+                                wrapper: ESLintWrapper,
+                                fix: false,
+                                level: Levels.ERROR,
+                                options: {},
+                            },
+                        ],
+                    },
+                ],
             });
         });
     });
 
     describe("flatten()", function () {
+        it("should use default", function () {
+            const flattened = flatten.flatten(
+                {
+                    patterns: ["**"],
+                    fix: undefined,
+                    level: undefined,
+                    reporters: [
+                        {
+                            formatter: ConsoleFormatter,
+                            level: undefined,
+                            options: [{}],
+                        },
+                    ],
+                    checkers: [
+                        {
+                            patterns: ["**.js"],
+                            fix: undefined,
+                            level: undefined,
+                            linters: [
+                                {
+                                    wrapper: PrettierWrapper,
+                                    fix: undefined,
+                                    level: undefined,
+                                    options: [{}],
+                                },
+                            ],
+                            overrides: [
+                                {
+                                    patterns: ["**.min.js"],
+                                    fix: undefined,
+                                    level: undefined,
+                                    linters: [
+                                        {
+                                            wrapper: ESLintWrapper,
+                                            fix: undefined,
+                                            level: undefined,
+                                            options: [{}],
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {},
+            );
+            assert.deepEqual(flattened, {
+                patterns: ["**"],
+                reporters: [
+                    {
+                        formatter: ConsoleFormatter,
+                        level: Levels.INFO,
+                        options: {},
+                    },
+                ],
+                checkers: [
+                    {
+                        patterns: ["**.js"],
+                        linters: [
+                            {
+                                wrapper: PrettierWrapper,
+                                fix: false,
+                                level: Levels.INFO,
+                                options: {},
+                            },
+                        ],
+                        overrides: [
+                            {
+                                patterns: ["**.min.js"],
+                                linters: [
+                                    {
+                                        wrapper: ESLintWrapper,
+                                        fix: false,
+                                        level: Levels.INFO,
+                                        options: {},
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            });
+        });
+
         it("should flatten", function () {
             const flattened = flatten.flatten(
                 {
@@ -235,7 +398,22 @@ describe("src/core/configuration/flatten.js", function () {
                             options: [{}],
                         },
                     ],
-                    checkers: [],
+                    checkers: [
+                        {
+                            patterns: ["**.js"],
+                            fix: undefined,
+                            level: undefined,
+                            linters: [
+                                {
+                                    wrapper: PrettierWrapper,
+                                    fix: undefined,
+                                    level: undefined,
+                                    options: [{}],
+                                },
+                            ],
+                            overrides: [],
+                        },
+                    ],
                 },
                 {},
             );
@@ -244,11 +422,76 @@ describe("src/core/configuration/flatten.js", function () {
                 reporters: [
                     {
                         formatter: ConsoleFormatter,
-                        level: Levels.FATAL,
+                        level: Levels.INFO,
                         options: {},
                     },
                 ],
-                checkers: [],
+                checkers: [
+                    {
+                        patterns: ["**.js"],
+                        linters: [
+                            {
+                                wrapper: PrettierWrapper,
+                                fix: true,
+                                level: Levels.FATAL,
+                                options: {},
+                            },
+                        ],
+                        overrides: [],
+                    },
+                ],
+            });
+        });
+
+        it("should use argv", function () {
+            const flattened = flatten.flatten(
+                {
+                    patterns: ["*"],
+                    fix: undefined,
+                    level: undefined,
+                    reporters: [],
+                    checkers: [
+                        {
+                            patterns: ["**.md"],
+                            fix: undefined,
+                            level: undefined,
+                            linters: [
+                                {
+                                    wrapper: PrettierWrapper,
+                                    fix: undefined,
+                                    level: undefined,
+                                    options: [{}],
+                                },
+                            ],
+                            overrides: [],
+                        },
+                    ],
+                },
+                { fix: true, level: Levels.WARN, formatter: ConsoleFormatter },
+            );
+            assert.deepEqual(flattened, {
+                patterns: ["*"],
+                reporters: [
+                    {
+                        formatter: ConsoleFormatter,
+                        level: Levels.WARN,
+                        options: {},
+                    },
+                ],
+                checkers: [
+                    {
+                        patterns: ["**.md"],
+                        linters: [
+                            {
+                                wrapper: PrettierWrapper,
+                                fix: true,
+                                level: Levels.WARN,
+                                options: {},
+                            },
+                        ],
+                        overrides: [],
+                    },
+                ],
             });
         });
     });

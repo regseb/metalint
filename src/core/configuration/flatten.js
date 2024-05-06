@@ -8,18 +8,60 @@ import Levels from "../levels.js";
 import { merge } from "../utils/object.js";
 
 /**
- * @typedef {import("../../types/configuration/flattened.d.ts").FlattenedConfig} FlattenedConfig
- * @typedef {import("../../types/configuration/flattened.d.ts").FlattenedConfigChecker} FlattenedConfigChecker
- * @typedef {import("../../types/configuration/flattened.d.ts").FlattenedConfigLinter} FlattenedConfigLinter
- * @typedef {import("../../types/configuration/flattened.d.ts").FlattenedConfigOverride} FlattenedConfigOverride
- * @typedef {import("../../types/configuration/flattened.d.ts").FlattenedConfigReporter} FlattenedConfigReporter
- * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfig} NormalizedConfig
- * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigChecker} NormalizedConfigChecker
- * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigLinter} NormalizedConfigLinter
- * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigOverride} NormalizedConfigOverride
- * @typedef {import("../../types/configuration/normalized.d.ts").NormalizedConfigReporter} NormalizedConfigReporter
- * @typedef {import("../../types/level.d.ts").default} Level
- * @typedef {import("../../types/typeofformatter.js").default} TypeofFormatter
+ * @typedef {import("./normalize.js").NormalizedConfig} NormalizedConfig
+ * @typedef {import("./normalize.js").NormalizedConfigChecker} NormalizedConfigChecker
+ * @typedef {import("./normalize.js").NormalizedConfigLinter} NormalizedConfigLinter
+ * @typedef {import("./normalize.js").NormalizedConfigOverride} NormalizedConfigOverride
+ * @typedef {import("./normalize.js").NormalizedConfigReporter} NormalizedConfigReporter
+ * @typedef {import("../levels.js").Level} Level
+ * @typedef {import("../formatter/formatter.js").TypeofFormatter} TypeofFormatter
+ * @typedef {import("../wrapper/wrapper.js").TypeofWrapper} TypeofWrapper
+ */
+
+/**
+ * @typedef {Object} FlattenedConfigReporter Le type d'une configuration aplatie
+ *                                           d'un rapporteur.
+ * @prop {TypeofFormatter}         formatter La classe du formateur.
+ * @prop {Level}                   level     Le niveau de sévérité minimum des
+ *                                           notifications affichées.
+ * @prop {Record<string, unknown>} options   Les options du formateur.
+ */
+
+/**
+ * @typedef {Object} FlattenedConfigLinter Le type d'une configuration aplatie
+ *                                         d'un linter.
+ * @prop {TypeofWrapper}           wrapper La classe de l'enrobage.
+ * @prop {boolean}                 fix     La marque indiquant s'il faut
+ *                                         corriger les fichiers.
+ * @prop {Level}                   level   Le niveau de sévérité minimum des
+ *                                         notifications retournées.
+ * @prop {Record<string, unknown>} options Les options du linter.
+ */
+
+/**
+ * @typedef {Object} FlattenedConfigOverride Le type d'une configuration aplatie
+ *                                           d'une surcharge.
+ * @prop {string[]}                patterns Les motifs des fichiers à analyser.
+ * @prop {FlattenedConfigLinter[]} linters  La configuration des linters.
+ */
+
+/**
+ * @typedef {Object} FlattenedConfigChecker Le type d'une configuration aplatie
+ *                                          d'un checker.
+ * @prop {string[]}                  patterns  Les motifs des fichiers à
+ *                                             analyser.
+ * @prop {FlattenedConfigLinter[]}   linters   La configuration des linters.
+ * @prop {FlattenedConfigOverride[]} overrides Les configurations des
+ *                                             surcharges.
+ */
+
+/**
+ * @typedef {Object} FlattenedConfig Le type d'une configuration aplatie.
+ * @prop {string[]}                  patterns  Les motifs des fichiers à
+ *                                             analyser.
+ * @prop {FlattenedConfigReporter[]} reporters Les configurations des
+ *                                             rapporteurs.
+ * @prop {FlattenedConfigChecker[]}  checkers  Les configurations des checkers.
  */
 
 /**
@@ -53,15 +95,15 @@ export const flattenFix = function (hierarchy, { fix }) {
 /**
  * Fusionne une propriété <code>"level"</code>.
  *
- * @param {Level}  hierarchy     La valeur d'une des propriétés
- *                               <code>"level"</code>.
- * @param {Object} context       Le contexte de la fusion.
- * @param {Level}  context.level La valeur de la propriété <code>"level"</code>
- *                               parente.
+ * @param {Level|undefined} hierarchy     La valeur d'une des propriétés
+ *                                        <code>"level"</code>.
+ * @param {Object}          context       Le contexte de la fusion.
+ * @param {Level}           context.level La valeur de la propriété
+ *                                        <code>"level"</code> parente.
  * @returns {Level} La valeur fusionnée.
  */
 export const flattenLevel = function (hierarchy, { level }) {
-    return Math.min(hierarchy, level);
+    return hierarchy ?? level;
 };
 
 /**
@@ -102,19 +144,19 @@ export const flattenReporter = function (hierarchy, { level }) {
 /**
  * Fusionne la propriété <code>"reporters"</code>.
  *
- * @param {NormalizedConfigReporter[]} hierarchies       La valeur de la
- *                                                       propriété
- *                                                       <code>"reporters"</code>.
- * @param {Object}                     context           Le contexte de la
- *                                                       fusion.
- * @param {TypeofFormatter|undefined}  context.formatter La valeur de la
- *                                                       propriété
- *                                                       <code>"formatter"</code>
- *                                                       parente.
- * @param {Level}                      context.level     La valeur de la
- *                                                       propriété
- *                                                       <code>"level"</code>
- *                                                       parente.
+ * @param {NormalizedConfigReporter[]} hierarchies         La valeur de la
+ *                                                         propriété
+ *                                                         <code>"reporters"</code>.
+ * @param {Object}                     context             Le contexte de la
+ *                                                         fusion.
+ * @param {TypeofFormatter}            [context.formatter] La valeur de la
+ *                                                         propriété
+ *                                                         <code>"formatter"</code>
+ *                                                         parente.
+ * @param {Level}                      context.level       La valeur de la
+ *                                                         propriété
+ *                                                         <code>"level"</code>
+ *                                                         parente.
  * @returns {FlattenedConfigReporter[]} La valeur fusionnée.
  */
 export const flattenReporters = function (hierarchies, { formatter, level }) {
@@ -254,26 +296,22 @@ export const flattenChecker = function (hierarchy, { fix, level }) {
 /**
  * Fusionne la configuration.
  *
- * @param {NormalizedConfig}          hierarchy        L'objet JSON normalisé
- *                                                     contenant la
- *                                                     configuration.
- * @param {Object}                    argv             Certaines options de la
- *                                                     ligne de commande.
- * @param {boolean|undefined}         [argv.fix]       L'option
- *                                                     <code>--fix</code> de la
- *                                                     ligne de commande.
- * @param {TypeofFormatter|undefined} [argv.formatter] L'option
- *                                                     <code>--formatter</code>
- *                                                     de la ligne de commande.
- * @param {Level|undefined}           [argv.level]     L'options
- *                                                     <code>--level</code> de
- *                                                     la ligne de commande.
+ * @param {NormalizedConfig} hierarchy        L'objet JSON normalisé contenant
+ *                                            la configuration.
+ * @param {Object}           argv             Certaines options de la ligne de
+ *                                            commande.
+ * @param {boolean}          [argv.fix]       L'option <code>--fix</code> de la
+ *                                            ligne de commande.
+ * @param {TypeofFormatter}  [argv.formatter] L'option <code>--formatter</code>
+ *                                            de la ligne de commande.
+ * @param {Level}            [argv.level]     L'options <code>--level</code> de
+ *                                            la ligne de commande.
  * @returns {FlattenedConfig} L'objet JSON fusionné.
  */
 export const flatten = function (hierarchy, argv) {
-    const fix = flattenFix(argv.fix, { fix: hierarchy.fix });
-    const level = flattenLevel(argv.level ?? Levels.INFO, {
-        level: hierarchy.level,
+    const fix = flattenFix(argv.fix ?? hierarchy.fix, { fix: false });
+    const level = flattenLevel(argv.level ?? hierarchy.level, {
+        level: Levels.INFO,
     });
     return {
         patterns: hierarchy.patterns,
