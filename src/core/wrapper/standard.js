@@ -23,6 +23,13 @@ import Wrapper from "./wrapper.js";
  */
 export default class StandardWrapper extends Wrapper {
     /**
+     * La marque indiquant que le linter n'est pas configurable.
+     *
+     * @type {boolean}
+     */
+    static configurable = false;
+
+    /**
      * Crée un enrobage pour le linter <strong>JavaScript Standard
      * Style</strong>.
      *

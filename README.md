@@ -74,6 +74,9 @@ source) :
     <td>JSON</td>
     <td>
       <a title="ajv" href="https://www.npmjs.com/package/ajv">Ajv</a>,
+      <a title="@mapbox/jsonlint-lines-primitives"
+         href="https://www.npmjs.com/package/@mapbox/jsonlint-lines-primitives">@mapbox/JSON
+        Lint lines-primitives</a>,
       <a title="@prantlf/jsonlint"
          href="https://www.npmjs.com/package/@prantlf/jsonlint">@prantlf/JSON
         Lint</a>,

@@ -5,9 +5,9 @@
  */
 
 import fs from "node:fs/promises";
-import { HTMLHint } from "htmlhint";
+// @ts-expect-error -- JSON Lint lines-primitive ne fournit pas de types.
+import { parser } from "@mapbox/jsonlint-lines-primitives";
 import Levels from "../levels.js";
-import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
 
 /**
@@ -16,28 +16,22 @@ import Wrapper from "./wrapper.js";
  */
 
 /**
- * L'enrobage du linter <strong>HTMLHint</strong>.
+ * L'enrobage du linter <strong>JSON Lint <code>lines-primitive</code></strong>
+ * de <strong>mapbox</strong>.
  *
- * @see https://www.npmjs.com/package/htmlhint
+ * @see https://www.npmjs.com/package/@mapbox/jsonlint-lines-primitives
  */
-export default class HTMLHintWrapper extends Wrapper {
+export default class MapboxJSONLintLinesPrimitivesWrapper extends Wrapper {
     /**
-     * La marque indiquant que le linter est configurable.
+     * La marque indiquant que le linter n'est pas configurable.
      *
      * @type {boolean}
      */
-    static configurable = true;
+    static configurable = false;
 
     /**
-     * Les options du linter.
-     *
-     * @type {Record<string, unknown>}
-     * @see https://htmlhint.com/docs/user-guide/list-rules
-     */
-    #options;
-
-    /**
-     * Crée un enrobage pour le linter <strong>HTMLHint</strong>.
+     * Crée un enrobage pour le linter <strong>JSON Lint
+     * <code>lines-primitive</code></strong> de <strong>mapbox</strong>.
      *
      * @param {Object}                  context       Le contexte de l'enrobage.
      * @param {Level}                   context.level Le niveau de sévérité
@@ -50,11 +44,10 @@ export default class HTMLHintWrapper extends Wrapper {
      *                                                <code>.metalint/</code>.
      * @param {string[]}                context.files La liste de tous les
      *                                                fichiers analysés.
-     * @param {Record<string, unknown>} options       Les options du linter.
+     * @param {Record<string, unknown>} _options      Les non-options du linter.
      */
-    constructor(context, options) {
+    constructor(context, _options) {
         super(context);
-        this.#options = options;
     }
 
     /**
@@ -70,18 +63,19 @@ export default class HTMLHintWrapper extends Wrapper {
         }
 
         const source = await fs.readFile(file, "utf8");
-        return HTMLHint.verify(source, this.#options)
-            .map((result) => ({
-                file,
-                linter: "htmlhint",
-                rule: result.rule.id,
-                severity:
-                    "warning" === result.type
-                        ? Severities.WARN
-                        : Severities.ERROR,
-                message: result.message,
-                locations: [{ line: result.line, column: result.col }],
-            }))
-            .filter((n) => this.level >= n.severity);
+        try {
+            parser.parse(source);
+            return [];
+        } catch (err) {
+            const result = err.message.split("\n");
+            return [
+                {
+                    file,
+                    linter: "mapbox__jsonlint-lines-primitives",
+                    message: result[3],
+                    locations: [{ line: Number(result[0].slice(20, -1)) }],
+                },
+            ];
+        }
     }
 }

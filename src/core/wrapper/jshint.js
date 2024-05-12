@@ -22,6 +22,13 @@ import Wrapper from "./wrapper.js";
  */
 export default class JSHintWrapper extends Wrapper {
     /**
+     * La marque indiquant que le linter est configurable.
+     *
+     * @type {boolean}
+     */
+    static configurable = true;
+
+    /**
      * Les options du linter.
      *
      * @type {Record<string, unknown>}

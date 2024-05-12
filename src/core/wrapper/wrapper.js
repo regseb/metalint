@@ -141,5 +141,7 @@ export default class Wrapper {
 
 /**
  * @typedef {Object} TypeofWrapper Le type d'un enrobage.
- * @prop {Function} constructor La fonction pour créer l'enrobage.
+ * @prop {boolean}  configurable La marque indiquant si le linter est
+ *                               configurable.
+ * @prop {Function} constructor  La fonction pour créer l'enrobage.
  */

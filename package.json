@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "@coffeelint/cli": "5.2.11",
+    "@mapbox/jsonlint-lines-primitives": "2.0.2",
     "@prantlf/jsonlint": "14.0.3",
     "@prettier/plugin-xml": "3.4.1",
     "@stryker-mutator/core": "8.2.6",

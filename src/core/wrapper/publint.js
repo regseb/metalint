@@ -54,6 +54,13 @@ const stripAnsi = function (input) {
  */
 export default class PublintWrapper extends Wrapper {
     /**
+     * La marque indiquant que le linter est configurable.
+     *
+     * @type {boolean}
+     */
+    static configurable = true;
+
+    /**
      * Les options du linter.
      *
      * @type {Record<string, unknown>}

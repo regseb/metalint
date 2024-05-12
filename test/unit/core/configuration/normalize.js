@@ -5,6 +5,7 @@
  */
 
 import assert from "node:assert/strict";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as normalize from "../../../../src/core/configuration/normalize.js";
 import ConsoleFormatter from "../../../../src/core/formatter/console.js";
@@ -13,7 +14,9 @@ import JSONFormatter from "../../../../src/core/formatter/json.js";
 import UnixFormatter from "../../../../src/core/formatter/unix.js";
 import Levels from "../../../../src/core/levels.js";
 import ESLintWrapper from "../../../../src/core/wrapper/eslint.js";
+import PrantlfJSONLintWrapper from "../../../../src/core/wrapper/prantlf__jsonlint.js";
 import PrettierWrapper from "../../../../src/core/wrapper/prettier.js";
+import StandardWrapper from "../../../../src/core/wrapper/standard.js";
 import Wrapper from "../../../../src/core/wrapper/wrapper.js";
 import YAMLLintWrapper from "../../../../src/core/wrapper/yaml-lint.js";
 
@@ -181,6 +184,24 @@ describe("src/core/configuration/normalize.js", function () {
                 },
             );
             assert.deepEqual(normalized["heading-style"], { style: "atx" });
+        });
+
+        it("should reject when no file", async function () {
+            const dir = fileURLToPath(
+                import.meta.resolve("../../../../.metalint/"),
+            );
+            await assert.rejects(
+                () => normalize.normalizeOption("./jshint.config.js", { dir }),
+                (err) => {
+                    assert.equal(err.name, "Error");
+                    assert.equal(
+                        err.message,
+                        `Cannot import '${path.join(dir, "./jshint.config.js")}'.`,
+                    );
+                    assert.ok(err.cause instanceof Error);
+                    return true;
+                },
+            );
         });
 
         it("should support Object", async function () {
@@ -401,7 +422,8 @@ describe("src/core/configuration/normalize.js", function () {
                     "Value of property 'wrapper' is unknown (possibles" +
                     ' values: "addons-linter", "ajv", "coffeelint__cli",' +
                     ' "csslint", "depcheck", "doiuse", "eslint", "htmlhint",' +
-                    ' "htmllint", "jshint", "jsonlint-mod", "markdownlint",' +
+                    ' "htmllint", "jshint", "jsonlint-mod",' +
+                    ' "mapbox__jsonlint-lines-primitives", "markdownlint",' +
                     ' "markuplint", "npm-check-updates",' +
                     ' "npm-package-json-lint", "prantlf__jsonlint",' +
                     ' "prettier", "publint", "purgecss", "sort-package-json",' +
@@ -430,14 +452,17 @@ describe("src/core/configuration/normalize.js", function () {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinter("yaml-lint", {
-                dir,
-            });
+            const normalized = await normalize.normalizeLinter(
+                "prantlf__jsonlint",
+                {
+                    dir,
+                },
+            );
             assert.deepEqual(normalized, {
-                wrapper: YAMLLintWrapper,
+                wrapper: PrantlfJSONLintWrapper,
                 fix: undefined,
                 level: undefined,
-                options: [{}],
+                options: [{ allowDuplicateObjectKeys: false }],
             });
         });
 
@@ -445,18 +470,49 @@ describe("src/core/configuration/normalize.js", function () {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinter(
-                "prettier_javascript",
-                {
-                    dir,
-                },
-            );
+            const normalized = await normalize.normalizeLinter("eslint_bin", {
+                dir,
+            });
             assert.deepEqual(normalized, {
-                wrapper: PrettierWrapper,
+                wrapper: ESLintWrapper,
                 fix: undefined,
                 level: undefined,
-                options: [{ tabWidth: 4 }],
+                options: [{ rules: { "n/no-process-exit": "off" } }],
             });
+        });
+
+        it("should support string for linter non-configurable", async function () {
+            const dir = fileURLToPath(
+                import.meta.resolve("../../../../.metalint/"),
+            );
+            const normalized = await normalize.normalizeLinter("standard", {
+                dir,
+            });
+            assert.deepEqual(normalized, {
+                wrapper: StandardWrapper,
+                fix: undefined,
+                level: undefined,
+                options: [{}],
+            });
+        });
+
+        it("should reject string with underscore for linter non-configurable", async function () {
+            const dir = fileURLToPath(
+                import.meta.resolve("../../../../.metalint/"),
+            );
+            await assert.rejects(
+                () =>
+                    normalize.normalizeLinter(
+                        "mapbox__jsonlint-lines-primitives_foo",
+                        { dir },
+                    ),
+                {
+                    name: "Error",
+                    message:
+                        "'mapbox__jsonlint-lines-primitives_foo' isn't" +
+                        " configurable.",
+                },
+            );
         });
 
         it("should support Object", async function () {

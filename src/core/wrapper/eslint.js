@@ -29,6 +29,13 @@ const { FlatESLint } = pkg;
  */
 export default class ESLintWrapper extends Wrapper {
     /**
+     * La marque indiquant que le linter est configurable.
+     *
+     * @type {boolean}
+     */
+    static configurable = true;
+
+    /**
      * L'instance de ESLint.
      *
      * @type {ESLint}

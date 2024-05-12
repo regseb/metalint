@@ -29,6 +29,13 @@ import Wrapper from "./wrapper.js";
  */
 export default class DoIUseWrapper extends Wrapper {
     /**
+     * La marque indiquant que le linter est configurable.
+     *
+     * @type {boolean}
+     */
+    static configurable = true;
+
+    /**
      * L'instance de DoIUse.
      *
      * @type {Writable}

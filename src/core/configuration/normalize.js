@@ -379,12 +379,26 @@ export const normalizeLinter = async function (partial, { dir }) {
         const name = /[0-9a-z]_[0-9a-z]/u.test(partial)
             ? partial.slice(0, partial.search(/[0-9a-z]_[0-9a-z]/u) + 1)
             : partial;
-        normalized = {
-            wrapper: await normalizeWrapper(name),
-            fix: normalizeFix(undefined),
-            level: normalizeLevel(undefined),
-            options: await normalizeOptions(`${partial}.config.js`, { dir }),
-        };
+        const wrapper = await normalizeWrapper(name);
+        if (wrapper.configurable) {
+            normalized = {
+                wrapper,
+                fix: normalizeFix(undefined),
+                level: normalizeLevel(undefined),
+                options: await normalizeOptions(`${partial}.config.js`, {
+                    dir,
+                }),
+            };
+        } else if (name === partial) {
+            normalized = {
+                wrapper,
+                fix: normalizeFix(undefined),
+                level: normalizeLevel(undefined),
+                options: await normalizeOptions(undefined, { dir }),
+            };
+        } else {
+            throw new Error(`'${partial}' isn't configurable.`);
+        }
     } else if ("object" === typeof partial) {
         normalized = {
             wrapper: await normalizeWrapper(partial.wrapper),
