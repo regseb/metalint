@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.17.0](https://github.com/regseb/metalint/compare/v0.16.0...v0.17.0) (2024-05-12)
+
+
+### Features
+
+* Gérer le linter JSON Lint lines-primitives. ([19308aa](https://github.com/regseb/metalint/commit/19308aad873577d63aaf26d4d2945d070fc0e93e))
+
+
+### Bug Fixes
+
+* Simplifier la configuration. ([1fc976c](https://github.com/regseb/metalint/commit/1fc976c69eb3640b3af1073e307db6cf3574c835))
+
 ## [0.16.0](https://github.com/regseb/metalint/compare/v0.15.0...v0.16.0) (2024-04-02)
 
 ### Features
