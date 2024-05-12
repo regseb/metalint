@@ -123,7 +123,7 @@ export default class PublintWrapper extends Wrapper {
                     linter: "publint",
                     rule: message.code,
                     severity: TYPES[message.type],
-                    // Enlever la mise à forme du message.
+                    // Enlever la mise en forme du message.
                     // https://github.com/bluwy/publint/pull/87
                     message: stripAnsi(
                         /** @type {string} */ (formatMessage(message, pkg)),

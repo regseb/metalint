@@ -168,7 +168,7 @@ source) :
 
 Vous pouvez installer Metalint en utilisant [npm][link-npm] :
 
-```Shell
+```shell
 npm install --save-dev --save-exact metalint
 ```
 
@@ -186,48 +186,50 @@ Dans cet exemple des fichiers de configuration, Metalint analyse les fichiers
 JavaScript (non-minifiés), HTML et CSS ; avec respectivement les linters ESLint,
 HTMLHint et Stylelint.
 
-```JavaScript
+```javascript
 // .metalint/metalint.config.js
 export default {
-    patterns: ["**", "!/.git/**", "!/node_modules/**"],
-    checkers: [
-        {
-            patterns: ["*.js", "!*.min.js"],
-            linters: "eslint",
-        }, {
-            patterns: "*.html",
-            linters: "htmlhint",
-        }, {
-            patterns: "*.css",
-            linters: "stylelint",
-        },
-    ],
+  patterns: ["**", "!/.git/**", "!/node_modules/**"],
+  checkers: [
+    {
+      patterns: ["*.js", "!*.min.js"],
+      linters: "eslint",
+    },
+    {
+      patterns: "*.html",
+      linters: "htmlhint",
+    },
+    {
+      patterns: "*.css",
+      linters: "stylelint",
+    },
+  ],
 };
 ```
 
-```JavaScript
+```javascript
 // .metalint/eslint.config.js
 export default {
-    rules: {
-        quotes: ["error", "double"],
-        semi: ["error", "always"],
-    },
+  rules: {
+    quotes: ["error", "double"],
+    semi: ["error", "always"],
+  },
 };
 ```
 
-```JavaScript
+```javascript
 // .metalint/htmlhint.config.js
 export default {
-    "attr-value-not-empty": false,
+  "attr-value-not-empty": false,
 };
 ```
 
-```JavaScript
+```javascript
 // .metalint/stylelint.config.js
 export default {
-    rules: {
-        "color-no-invalid-hex": true,
-    },
+  rules: {
+    "color-no-invalid-hex": true,
+  },
 };
 ```
 
@@ -238,11 +240,11 @@ export default {
 Après avoir installé Metalint et les linters dans votre projet npm, vous pouvez
 ajouter le script suivant dans votre `package.json` :
 
-```JSON
+```json
 {
-    "scripts": {
-        "lint": "metalint"
-    }
+  "scripts": {
+    "lint": "metalint"
+  }
 }
 ```
 
@@ -253,7 +255,7 @@ Metalint est maintenant utilisable avec la commande : `npm run lint`
 Pour lancer Metalint dans vos GitHub Actions, vous pouvez utiliser le formateur
 `github` pour rapporter les problèmes dans les pull requests.
 
-```YAML
+```yaml
 jobs:
   lint:
     runs-on: ubuntu-latest

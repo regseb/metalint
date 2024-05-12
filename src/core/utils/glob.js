@@ -17,7 +17,7 @@ import { wrap } from "./array.js";
  *                   protégés.
  */
 const sanitize = function (pattern) {
-    return pattern.replaceAll(/[$()*+.?[\\\]^{|}]/gu, "\\$&");
+    return pattern.replaceAll(/[$()*+.?[\\\]^{|}]/gu, String.raw`\$&`);
 };
 
 /**
