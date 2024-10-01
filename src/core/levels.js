@@ -7,7 +7,7 @@
 import Severities from "./severities.js";
 
 /**
- * @typedef {import("./severities.js").Severity} Severity
+ * @import { Severity } from "./severities.js"
  */
 
 /**

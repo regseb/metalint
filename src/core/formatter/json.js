@@ -8,15 +8,14 @@ import process from "node:process";
 import Formatter from "./formatter.js";
 
 /**
- * @typedef {import("node:stream").Writable} Writable
- * @typedef {import("../levels.js").Level} Level
- * @typedef {import("../results.js").Notice} Notice
+ * @import { Writable } from "node:stream"
+ * @import { Level } from "../levels.js"
+ * @import { Notice } from "../results.js"
  */
 
 /**
  * Le formateur qui écrit les résultats bruts (au format JSON). La seule
- * altération des résultats est le remplacement des <code>undefined</code> par
- * des <code>null</code>.
+ * altération des résultats est le remplacement des `undefined` par des `null`.
  *
  * @see https://www.json.org/
  */
@@ -63,8 +62,7 @@ export default class JSONFormatter extends Formatter {
      * Insère les notifications dans un objet JSON.
      *
      * @param {string}   file      Le fichier analysé.
-     * @param {Notice[]} [notices] La liste des notifications ou
-     *                             <code>undefined</code>.
+     * @param {Notice[]} [notices] La liste des notifications ou `undefined`.
      * @returns {Promise<void>} La promesse indiquant que les notifications ont
      *                          été traitées.
      */

@@ -5,9 +5,9 @@
  */
 
 /**
- * @typedef {import("../levels.js").Level} Level
- * @typedef {import("../formatter/formatter.js").TypeofFormatter} TypeofFormatter
- * @typedef {import("../wrapper/wrapper.js").TypeofWrapper} TypeofWrapper
+ * @import { Level } from "../levels.js"
+ * @import { TypeofFormatter } from "../formatter/formatter.js"
+ * @import { TypeofWrapper } from "../wrapper/wrapper.js"
  */
 
 /**

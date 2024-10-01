@@ -11,11 +11,9 @@ import Severities from "../severities.js";
 import Formatter from "./formatter.js";
 
 /**
- * @typedef {import("node:stream").Writable} Writable
- * @typedef {import("../levels.js").Level} Level
- * @typedef {import("../results.js").Location} Location
- * @typedef {import("../results.js").Notice} Notice
- * @typedef {import("../severities.js").Severity} Severity
+ * @import { Writable } from "node:stream"
+ * @import { Level } from "../levels.js"
+ * @import { Location, Notice } from "../results.js"
  */
 
 /**
@@ -177,8 +175,7 @@ export default class ConsoleFormatter extends Formatter {
      * Affiche les éventuelles notifications d'un fichier.
      *
      * @param {string}   file      Le fichier analysé.
-     * @param {Notice[]} [notices] La liste des notifications ou
-     *                             <code>undefined</code>.
+     * @param {Notice[]} [notices] La liste des notifications ou `undefined`.
      * @returns {Promise<void>} La promesse indiquant que les notifications ont
      *                          été traitées.
      */

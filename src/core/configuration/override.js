@@ -7,7 +7,7 @@
 import { flattenFix, flattenLevel, flattenOptions } from "./flatten.js";
 
 /**
- * @typedef {import("./flatten.js").FlattenedConfigLinter} FlattenedConfigLinter
+ * @import { FlattenedConfigLinter } from "./flatten.js"
  */
 
 /**

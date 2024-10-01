@@ -10,8 +10,8 @@ import fs from "node:fs/promises";
  * Teste si un fichier existe.
  *
  * @param {string} path Le chemin du fichier.
- * @returns {Promise<boolean>} Une promesse avec <code>true</code> si le
- *                             fichier existe ; sinon <code>false</code>.
+ * @returns {Promise<boolean>} Une promesse avec `true` si le fichier existe ;
+ *                             sinon `false`.
  */
 export const exists = async function (path) {
     try {

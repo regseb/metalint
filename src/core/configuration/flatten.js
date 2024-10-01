@@ -8,14 +8,14 @@ import Levels from "../levels.js";
 import { merge } from "../utils/object.js";
 
 /**
- * @typedef {import("./normalize.js").NormalizedConfig} NormalizedConfig
- * @typedef {import("./normalize.js").NormalizedConfigChecker} NormalizedConfigChecker
- * @typedef {import("./normalize.js").NormalizedConfigLinter} NormalizedConfigLinter
- * @typedef {import("./normalize.js").NormalizedConfigOverride} NormalizedConfigOverride
- * @typedef {import("./normalize.js").NormalizedConfigReporter} NormalizedConfigReporter
- * @typedef {import("../levels.js").Level} Level
- * @typedef {import("../formatter/formatter.js").TypeofFormatter} TypeofFormatter
- * @typedef {import("../wrapper/wrapper.js").TypeofWrapper} TypeofWrapper
+ * @import { NormalizedConfig } from "./normalize.js"
+ * @import { NormalizedConfigChecker } from "./normalize.js"
+ * @import { NormalizedConfigLinter } from "./normalize.js"
+ * @import { NormalizedConfigOverride } from "./normalize.js"
+ * @import { NormalizedConfigReporter } from "./normalize.js"
+ * @import { Level } from "../levels.js"
+ * @import { TypeofFormatter } from "../formatter/formatter.js"
+ * @import { TypeofWrapper } from "../wrapper/wrapper.js"
  */
 
 /**
@@ -65,13 +65,13 @@ import { merge } from "../utils/object.js";
  */
 
 /**
- * Fusionne une propriété <code>"patterns"</code>.
+ * Fusionne une propriété `"patterns"`.
  *
  * @param {string[]} hierarchies      La valeur d'une des propriétés
- *                                    <code>"patterns"</code>.
+ *                                    `"patterns"`.
  * @param {Object}   context          Le contexte de la fusion.
- * @param {string[]} context.patterns La valeur de la propriété
- *                                    <code>"patterns"</code> parente.
+ * @param {string[]} context.patterns La valeur de la propriété `"patterns"`
+ *                                    parente.
  * @returns {string[]} La valeur fusionnée.
  */
 export const flattenPatterns = function (hierarchies, { patterns }) {
@@ -79,13 +79,13 @@ export const flattenPatterns = function (hierarchies, { patterns }) {
 };
 
 /**
- * Fusionne une propriété <code>"fix"</code>.
+ * Fusionne une propriété `"fix"`.
  *
  * @param {boolean|undefined} hierarchy   La valeur d'une des propriétés
- *                                        <code>"fix"</code>.
+ *                                        `"fix"`.
  * @param {Object}            context     Le contexte de la fusion.
- * @param {boolean}           context.fix La valeur de la propriété
- *                                        <code>"fix"</code> parente.
+ * @param {boolean}           context.fix La valeur de la propriété `"fix"`
+ *                                        parente.
  * @returns {boolean} La valeur fusionnée.
  */
 export const flattenFix = function (hierarchy, { fix }) {
@@ -93,13 +93,13 @@ export const flattenFix = function (hierarchy, { fix }) {
 };
 
 /**
- * Fusionne une propriété <code>"level"</code>.
+ * Fusionne une propriété `"level"`.
  *
  * @param {Level|undefined} hierarchy     La valeur d'une des propriétés
- *                                        <code>"level"</code>.
+ *                                        `"level"`.
  * @param {Object}          context       Le contexte de la fusion.
- * @param {Level}           context.level La valeur de la propriété
- *                                        <code>"level"</code> parente.
+ * @param {Level}           context.level La valeur de la propriété `"level"`
+ *                                        parente.
  * @returns {Level} La valeur fusionnée.
  */
 export const flattenLevel = function (hierarchy, { level }) {
@@ -107,15 +107,13 @@ export const flattenLevel = function (hierarchy, { level }) {
 };
 
 /**
- * Fusionne une propriété <code>"options"</code>.
+ * Fusionne une propriété `"options"`.
  *
  * @param {Record<string, unknown>[]} hierarchies     La valeur d'une des
- *                                                    propriétés
- *                                                    <code>"options"</code>.
+ *                                                    propriétés `"options"`.
  * @param {Object}                    context         Le contexte de la fusion.
  * @param {Record<string, unknown>}   context.options La valeur de la propriété
- *                                                    <code>"options"</code>
- *                                                    parente.
+ *                                                    `"options"` parente.
  * @returns {Record<string, unknown>} La valeur fusionnée.
  */
 export const flattenOptions = function (hierarchies, { options }) {
@@ -123,14 +121,13 @@ export const flattenOptions = function (hierarchies, { options }) {
 };
 
 /**
- * Fusionne un élément de la propriété <code>"reporters"</code>.
+ * Fusionne un élément de la propriété `"reporters"`.
  *
  * @param {NormalizedConfigReporter} hierarchy     La valeur de l'élément de la
- *                                                 propriété
- *                                                 <code>"reporters"</code>.
+ *                                                 propriété `"reporters"`.
  * @param {Object}                   context       Le contexte de la fusion.
  * @param {Level}                    context.level La valeur de la propriété
- *                                                 <code>"level"</code> parente.
+ *                                                 `"level"` parente.
  * @returns {FlattenedConfigReporter} La valeur fusionnée.
  */
 export const flattenReporter = function (hierarchy, { level }) {
@@ -142,20 +139,19 @@ export const flattenReporter = function (hierarchy, { level }) {
 };
 
 /**
- * Fusionne la propriété <code>"reporters"</code>.
+ * Fusionne la propriété `"reporters"`.
  *
  * @param {NormalizedConfigReporter[]} hierarchies         La valeur de la
  *                                                         propriété
- *                                                         <code>"reporters"</code>.
+ *                                                         `"reporters"`.
  * @param {Object}                     context             Le contexte de la
  *                                                         fusion.
  * @param {TypeofFormatter}            [context.formatter] La valeur de la
  *                                                         propriété
- *                                                         <code>"formatter"</code>
+ *                                                         `"formatter"`
  *                                                         parente.
  * @param {Level}                      context.level       La valeur de la
- *                                                         propriété
- *                                                         <code>"level"</code>
+ *                                                         propriété `"level"`
  *                                                         parente.
  * @returns {FlattenedConfigReporter[]} La valeur fusionnée.
  */
@@ -174,20 +170,17 @@ export const flattenReporters = function (hierarchies, { formatter, level }) {
 };
 
 /**
- * Fusionne un élément d'une propriété <code>"linters"</code>.
+ * Fusionne un élément d'une propriété `"linters"`.
  *
  * @param {NormalizedConfigLinter}  hierarchy       La valeur de l'élément d'une
- *                                                  des propriétés
- *                                                  <code>"linters"</code>.
+ *                                                  des propriétés `"linters"`.
  * @param {Object}                  context         Le contexte de la fusion.
  * @param {boolean}                 context.fix     La valeur de la propriété
- *                                                  <code>"fix"</code> parente.
+ *                                                  `"fix"` parente.
  * @param {Level}                   context.level   La valeur de la propriété
- *                                                  <code>"level"</code>
- *                                                  parente.
+ *                                                  `"level"` parente.
  * @param {Record<string, unknown>} context.options La valeur de la propriété
- *                                                  <code>"options"</code>
- *                                                  parente.
+ *                                                  `"options"` parente.
  * @returns {FlattenedConfigLinter} La valeur fusionnée.
  */
 export const flattenLinter = function (hierarchy, { fix, level, options }) {
@@ -200,16 +193,15 @@ export const flattenLinter = function (hierarchy, { fix, level, options }) {
 };
 
 /**
- * Fusionne une propriété <code>"linters"</code>.
+ * Fusionne une propriété `"linters"`.
  *
  * @param {NormalizedConfigLinter[]} hierarchies   La valeur d'une des
- *                                                 propriétés
- *                                                 <code>"linters"</code>.
+ *                                                 propriétés `"linters"`.
  * @param {Object}                   context       Le contexte de la fusion.
  * @param {boolean}                  context.fix   La valeur de la propriété
- *                                                 <code>"fix"</code> parente.
+ *                                                 `"fix"` parente.
  * @param {Level}                    context.level La valeur de la propriété
- *                                                 <code>"level"</code> parente.
+ *                                                 `"level"` parente.
  * @returns {FlattenedConfigLinter[]} La valeur fusionnée.
  */
 export const flattenLinters = function (hierarchies, { fix, level }) {
@@ -240,16 +232,15 @@ export const flattenLinters = function (hierarchies, { fix, level }) {
 };
 
 /**
- * Fusionne un élément d'une propriété <code>"overrides"</code>.
+ * Fusionne un élément d'une propriété `"overrides"`.
  *
  * @param {NormalizedConfigOverride} hierarchy     La valeur de l'élément d'une
- *                                                 des propriétés
- *                                                 <code>"overrides"</code>.
+ *                                                 des propriétés `"overrides"`.
  * @param {Object}                   context       Le contexte de la fusion.
  * @param {boolean}                  context.fix   La valeur de la propriété
- *                                                 <code>"fix"</code> parente.
+ *                                                 `"fix"` parente.
  * @param {Level}                    context.level La valeur de la propriété
- *                                                 <code>"level"</code> parente.
+ *                                                 `"level"` parente.
  * @returns {FlattenedConfigOverride} La valeur fusionnée.
  */
 export const flattenOverride = function (hierarchy, { fix, level }) {
@@ -263,16 +254,15 @@ export const flattenOverride = function (hierarchy, { fix, level }) {
 };
 
 /**
- * Fusionne un élément de la propriété <code>"checkers"</code>.
+ * Fusionne un élément de la propriété `"checkers"`.
  *
  * @param {NormalizedConfigChecker} hierarchy     La valeur de l'élément de la
- *                                                propriété
- *                                                <code>"checkers"</code>.
+ *                                                propriété `"checkers"`.
  * @param {Object}                  context       Le contexte de la fusion.
  * @param {boolean}                 context.fix   La valeur de la propriété
- *                                                <code>"fix"</code> parente.
+ *                                                `"fix"` parente.
  * @param {Level}                   context.level La valeur de la propriété
- *                                                <code>"level"</code> parente.
+ *                                                `"level"` parente.
  * @returns {FlattenedConfigChecker} La valeur fusionnée.
  */
 export const flattenChecker = function (hierarchy, { fix, level }) {
@@ -300,12 +290,12 @@ export const flattenChecker = function (hierarchy, { fix, level }) {
  *                                            la configuration.
  * @param {Object}           argv             Certaines options de la ligne de
  *                                            commande.
- * @param {boolean}          [argv.fix]       L'option <code>--fix</code> de la
- *                                            ligne de commande.
- * @param {TypeofFormatter}  [argv.formatter] L'option <code>--formatter</code>
- *                                            de la ligne de commande.
- * @param {Level}            [argv.level]     L'options <code>--level</code> de
- *                                            la ligne de commande.
+ * @param {boolean}          [argv.fix]       L'option `--fix` de la ligne de
+ *                                            commande.
+ * @param {TypeofFormatter}  [argv.formatter] L'option `--formatter` de la ligne
+ *                                            de commande.
+ * @param {Level}            [argv.level]     L'options `--level` de la ligne de
+ *                                            commande.
  * @returns {FlattenedConfig} L'objet JSON fusionné.
  */
 export const flatten = function (hierarchy, argv) {

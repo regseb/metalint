@@ -1,11 +1,14 @@
 /**
- * @module
  * @license MIT
  * @author Sébastien Règne
  */
 
 /**
- * @type {import("markdownlint").Configuration}
+ * @import { ConfigurationStrict } from "markdownlint"
+ */
+
+/**
+ * @type {ConfigurationStrict}
  */
 export default {
     "heading-increment": true,

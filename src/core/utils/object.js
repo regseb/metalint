@@ -7,9 +7,9 @@
 /**
  * Fusionne deux objets.
  *
- * @param {*} first  Le premier objet.
- * @param {*} second Le second objet.
- * @returns {*} La fusion des deux objets.
+ * @param {any} first  Le premier objet.
+ * @param {any} second Le second objet.
+ * @returns {any} La fusion des deux objets.
  */
 export const merge = function (first, second) {
     let third;
@@ -20,7 +20,7 @@ export const merge = function (first, second) {
         "object" === typeof second &&
         !Array.isArray(second)
     ) {
-        third = {};
+        third = /** @type {Record<string, any>} */ ({});
         for (const key of new Set([
             ...Object.keys(first),
             ...Object.keys(second),

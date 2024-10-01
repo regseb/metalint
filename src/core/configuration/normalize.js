@@ -11,9 +11,9 @@ import Levels from "../levels.js";
 import Wrapper, { WRAPPERS } from "../wrapper/wrapper.js";
 
 /**
- * @typedef {import("../levels.js").Level} Level
- * @typedef {import("../formatter/formatter.js").TypeofFormatter} TypeofFormatter
- * @typedef {import("../wrapper/wrapper.js").TypeofWrapper} TypeofWrapper
+ * @import { Level } from "../levels.js"
+ * @import { TypeofFormatter } from "../formatter/formatter.js"
+ * @import { TypeofWrapper } from "../wrapper/wrapper.js"
  */
 
 /**
@@ -91,12 +91,12 @@ const read = async function (file) {
 };
 
 /**
- * Normalise une propriété <code>"patterns"</code>.
+ * Normalise une propriété `"patterns"`.
  *
- * @param {*} partials La valeur d'un des propriétés <code>"patterns"</code>.
+ * @param {any} partials La valeur d'un des propriétés `"patterns"`.
  * @returns {string[]} La valeur normalisée.
- * @throws {Error} Si le <code>"patterns"</code> n'est pas renseigné.
- * @throws {TypeError} Si le <code>"patterns"</code> n'a pas le bon type.
+ * @throws {Error} Si le `"patterns"` n'est pas renseigné.
+ * @throws {TypeError} Si le `"patterns"` n'a pas le bon type.
  */
 export const normalizePatterns = function (partials) {
     let normalized;
@@ -125,11 +125,11 @@ export const normalizePatterns = function (partials) {
 };
 
 /**
- * Normalise une propriété <code>"fix"</code>.
+ * Normalise une propriété `"fix"`.
  *
- * @param {*} partial La valeur d'une propriété <code>"fix"</code>.
+ * @param {any} partial La valeur d'une propriété `"fix"`.
  * @returns {boolean|undefined} La valeur normalisée.
- * @throws {TypeError} Si le <code>"fix"</code> n'a pas le bon type.
+ * @throws {TypeError} Si le `"fix"` n'a pas le bon type.
  */
 export const normalizeFix = function (partial) {
     let normalized;
@@ -147,12 +147,12 @@ export const normalizeFix = function (partial) {
 };
 
 /**
- * Normalise une propriété <code>"level"</code>.
+ * Normalise une propriété `"level"`.
  *
- * @param {*} partial La valeur d'une propriété <code>"level"</code>.
+ * @param {any} partial La valeur d'une propriété `"level"`.
  * @returns {Level|undefined} La valeur normalisée.
- * @throws {Error}     Si le <code>"level"</code> est invalide.
- * @throws {TypeError} Si le <code>"level"</code> n'a pas le bon type.
+ * @throws {Error}     Si le `"level"` est invalide.
+ * @throws {TypeError} Si le `"level"` n'a pas le bon type.
  */
 export const normalizeLevel = function (partial) {
     let normalized;
@@ -188,12 +188,12 @@ export const normalizeLevel = function (partial) {
 };
 
 /**
- * Normalise une propriété <code>"formatter"</code>.
+ * Normalise une propriété `"formatter"`.
  *
- * @param {*} partial La valeur d'une propriété <code>"formatter"</code>.
+ * @param {any} partial La valeur d'une propriété `"formatter"`.
  * @returns {Promise<TypeofFormatter>} La valeur normalisée.
- * @throws {Error}     Si le <code>"formatter"</code> est invalide.
- * @throws {TypeError} Si le <code>"formatter"</code> n'a pas le bon type.
+ * @throws {Error}     Si le `"formatter"` est invalide.
+ * @throws {TypeError} Si le `"formatter"` n'a pas le bon type.
  */
 export const normalizeFormatter = async function (partial) {
     let normalized;
@@ -225,14 +225,14 @@ export const normalizeFormatter = async function (partial) {
 };
 
 /**
- * Normalise une propriété <code>"options"</code>.
+ * Normalise une propriété `options"`.
  *
- * @param {*}      partial     La valeur d'une propriété <code>"options"</code>.
+ * @param {any}    partial     La valeur d'une propriété `"options"`.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<Record<string, unknown>>} La valeur normalisée.
- * @throws {TypeError} Si l'<code>"options"</code> n'a pas le bon type.
+ * @throws {TypeError} Si l'`"options"` n'a pas le bon type.
  */
 export const normalizeOption = async function (partial, { dir }) {
     let normalized;
@@ -249,14 +249,14 @@ export const normalizeOption = async function (partial, { dir }) {
 };
 
 /**
- * Normalise une propriété <code>"options"</code>.
+ * Normalise une propriété `"options"`.
  *
- * @param {*}      partials    La valeur d'une propriété <code>"options"</code>.
+ * @param {any}    partials    La valeur d'une propriété `"options"`.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<Record<string, unknown>[]>} La valeur normalisée.
- * @throws {TypeError} Si l'<code>"options"</code> n'a pas le bon type.
+ * @throws {TypeError} Si l'`"options"` n'a pas le bon type.
  */
 export const normalizeOptions = async function (partials, { dir }) {
     let normalizeds;
@@ -275,15 +275,14 @@ export const normalizeOptions = async function (partials, { dir }) {
 };
 
 /**
- * Normalise la propriété <code>"reporters"</code>.
+ * Normalise la propriété `"reporters"`.
  *
- * @param {*}      partial     La valeur de la propriété
- *                             <code>"reporter"</code>.
+ * @param {any}    partial     La valeur de la propriété `"reporter"`.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<NormalizedConfigReporter>} La valeur normalisée.
- * @throws {TypeError} Si le <code>"reporters"</code> n'a pas le bon type.
+ * @throws {TypeError} Si le `"reporters"` n'a pas le bon type.
  */
 export const normalizeReporter = async function (partial, { dir }) {
     let normalized;
@@ -300,15 +299,14 @@ export const normalizeReporter = async function (partial, { dir }) {
 };
 
 /**
- * Normalise la propriété <code>"reporters"</code>.
+ * Normalise la propriété `"reporters"`.
  *
- * @param {*}      partials    La valeur de la propriété
- *                             <code>"reporter"</code>.
+ * @param {any}    partials    La valeur de la propriété `"reporter"`.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<NormalizedConfigReporter[]>} La valeur normalisée.
- * @throws {TypeError} Si le <code>"reporters"</code> n'a pas le bon type.
+ * @throws {TypeError} Si le `"reporters"` n'a pas le bon type.
  */
 export const normalizeReporters = async function (partials, { dir }) {
     let normalizeds;
@@ -329,11 +327,11 @@ export const normalizeReporters = async function (partials, { dir }) {
 };
 
 /**
- * Normalise une propriété <code>"wrapper"</code>.
+ * Normalise une propriété `"wrapper"`.
  *
- * @param {*} partial La valeur d'une propriété <code>"wrapper"</code>.
+ * @param {any} partial La valeur d'une propriété `"wrapper"`.
  * @returns {Promise<TypeofWrapper>} La valeur normalisée.
- * @throws {TypeError} Si le <code>"reporters"</code> n'a pas le bon type.
+ * @throws {TypeError} Si le `"reporters"` n'a pas le bon type.
  */
 export const normalizeWrapper = async function (partial) {
     let normalized;
@@ -362,14 +360,14 @@ export const normalizeWrapper = async function (partial) {
 };
 
 /**
- * Normalise une propriété <code>"linters"</code>.
+ * Normalise une propriété `"linters"`.
  *
- * @param {*}      partial     La valeur d'une propriété <code>"linters"</code>.
+ * @param {any}    partial     La valeur d'une propriété `"linters"`.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<NormalizedConfigLinter>} La valeur normalisée.
- * @throws {TypeError} Si le <code>"linters"</code> n'a pas le bon type.
+ * @throws {TypeError} Si le `"linters"` n'a pas le bon type.
  */
 export const normalizeLinter = async function (partial, { dir }) {
     let normalized;
@@ -413,14 +411,14 @@ export const normalizeLinter = async function (partial, { dir }) {
 };
 
 /**
- * Normalise une propriété <code>"linters"</code>.
+ * Normalise une propriété `"linters"`.
  *
- * @param {*}      partials    La valeur d'une propriété <code>"linters"</code>.
+ * @param {any}    partials    La valeur d'une propriété `"linters"`.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<NormalizedConfigLinter[]>} La valeur normalisée.
- * @throws {TypeError} Si le <code>"linters"</code> n'a pas le bon type.
+ * @throws {TypeError} Si le `"linters"` n'a pas le bon type.
  */
 export const normalizeLinters = async function (partials, { dir }) {
     let normalizeds;
@@ -439,15 +437,14 @@ export const normalizeLinters = async function (partials, { dir }) {
 };
 
 /**
- * Normalise une propriété <code>"overrides"</code>.
+ * Normalise une propriété `"overrides"`.
  *
- * @param {*}      partial     La valeur d'une propriété
- *                             <code>"overrides"</code>.
+ * @param {any}    partial     La valeur d'une propriété `"overrides"`.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<NormalizedConfigOverride>} La valeur normalisée.
- * @throws {TypeError} Si le <code>"overrides"</code> n'a pas le bon type.
+ * @throws {TypeError} Si le `"overrides"` n'a pas le bon type.
  */
 export const normalizeOverride = async function (partial, { dir }) {
     let normalized;
@@ -465,15 +462,14 @@ export const normalizeOverride = async function (partial, { dir }) {
 };
 
 /**
- * Normalise une propriété <code>"overrides"</code>.
+ * Normalise une propriété `"overrides"`.
  *
- * @param {*}      partials    La valeur d'une propriété
- *                             <code>"overrides"</code>.
+ * @param {any}    partials    La valeur d'une propriété `"overrides"`.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<NormalizedConfigOverride[]>} La valeur normalisée.
- * @throws {TypeError} Si le <code>"overrides"</code> n'a pas le bon type.
+ * @throws {TypeError} Si le `"overrides"` n'a pas le bon type.
  */
 export const normalizeOverrides = async function (partials, { dir }) {
     let normalizeds;
@@ -492,15 +488,14 @@ export const normalizeOverrides = async function (partials, { dir }) {
 };
 
 /**
- * Normalise la propriété <code>"checkers"</code>.
+ * Normalise la propriété `"checkers"`.
  *
- * @param {*}      partial     La valeur de la propriété
- *                             <code>"checkers"</code>.
+ * @param {any}    partial     La valeur de la propriété `"checkers"`.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<NormalizedConfigChecker>} La valeur normalisée.
- * @throws {TypeError} Si le <code>"checkers"</code> n'a pas le bon type.
+ * @throws {TypeError} Si le `"checkers"` n'a pas le bon type.
  */
 export const normalizeChecker = async function (partial, { dir }) {
     let normalized;
@@ -519,15 +514,14 @@ export const normalizeChecker = async function (partial, { dir }) {
 };
 
 /**
- * Normalise la propriété <code>"checkers"</code>.
+ * Normalise la propriété `"checkers"`.
  *
- * @param {*}      partials    La valeur de la propriété
- *                             <code>"checkers"</code>.
+ * @param {any}    partials    La valeur de la propriété `"checkers"`.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<NormalizedConfigChecker[]>} La valeur normalisée.
- * @throws {TypeError} Si le <code>"checkers"</code> n'a pas le bon type.
+ * @throws {TypeError} Si le `"checkers"` n'a pas le bon type.
  */
 export const normalizeCheckers = async function (partials, { dir }) {
     let normalizeds;
@@ -550,10 +544,10 @@ export const normalizeCheckers = async function (partials, { dir }) {
  * configuration est souple pour rendre le fichier moins verbeux. Cette fonction
  * renseigne les valeurs par défaut pour les propriétés non-présentes.
  *
- * @param {*}      partial     L'objet JSON contenant la configuration.
+ * @param {any}    partial     L'objet JSON contenant la configuration.
  * @param {Object} context     Le context de la propriété.
  * @param {string} context.dir Le répertoire où se trouve le fichier
- *                             <code>metalint.config.js</code>.
+ *                             `metalint.config.js`.
  * @returns {Promise<NormalizedConfig>} La valeur normalisée.
  * @throws {TypeError} Si la configuration n'a pas le bon type.
  */

@@ -1,5 +1,4 @@
 /**
- * @module
  * @license MIT
  * @author Sébastien Règne
  */
@@ -12,7 +11,7 @@ import AjvWrapper from "../../../../src/core/wrapper/ajv.js";
 import createTempFileSystem from "../../../utils/fake.js";
 
 /**
- * @typedef {import("ajv").default} Ajv
+ * @import Ajv from "ajv"
  */
 
 describe("src/core/wrapper/ajv.js", function () {

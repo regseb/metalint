@@ -9,8 +9,8 @@ import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 /**
- * @typedef {import("../results.js").PartialNotice} PartialNotice
- * @typedef {import("../levels.js").Level} Level
+ * @import { PartialNotice } from "../results.js"
+ * @import { Level } from "../levels.js"
  */
 
 /**
@@ -19,7 +19,7 @@ import { fileURLToPath } from "node:url";
  *                        retournées.
  * @prop {boolean}  fix   La marque indiquant s'il faut corriger le fichier.
  * @prop {string}   root  L'adresse du répertoire où se trouve le répertoire
- *                        <code>.metalint/</code>.
+ *                        `.metalint/`.
  * @prop {string[]} files La liste de tous les fichiers analysés.
  */
 
@@ -61,8 +61,7 @@ export default class Wrapper {
     #fix;
 
     /**
-     * L'adresse du répertoire où se trouve le répertoire
-     * <code>.metalint/</code>.
+     * L'adresse du répertoire où se trouve le répertoire `.metalint/`.
      *
      * @type {string}
      */
@@ -107,11 +106,10 @@ export default class Wrapper {
     }
 
     /**
-     * Retourne l'adresse du répertoire où se trouve le répertoire
-     * <code>.metalint/</code>.
+     * Retourne l'adresse du répertoire où se trouve le répertoire `.metalint/`.
      *
      * @returns {string} L'adresse du répertoire où se trouve le répertoire
-     *                   <code>.metalint/</code>.
+     *                   `.metalint/`.
      */
     get root() {
         return this.#root;
@@ -127,9 +125,10 @@ export default class Wrapper {
     }
 
     /**
-     * Vérifie un fichier.
+     * Analyse un fichier ou un répertoire. Cette méthode doit être implémentée
+     * par les enrobages des linters héritant de cette classe.
      *
-     * @param {string} _file Le fichier qui sera vérifié.
+     * @param {string} _file Le fichier ou le répertoire qui sera analysé.
      * @returns {Promise<PartialNotice[]>} Une promesse retournant la liste des
      *                                     notifications.
      */

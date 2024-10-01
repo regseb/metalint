@@ -21,7 +21,7 @@ const sanitize = function (pattern) {
 };
 
 /**
- * Inverse un patron (en enlevant ou ajoutant un <code>!</code> en début).
+ * Inverse un patron (en enlevant ou ajoutant un `!` en début).
  *
  * @param {string} pattern Le patron.
  * @returns {string} L'inverse du patron.
@@ -131,12 +131,15 @@ export default class Glob {
 
     /**
      * Le chemin du répertoire courant.
+     *
+     * @type {string}
      */
     #cwd;
 
     /**
-     * Le chemin du répertoire où se trouve le répertoire
-     * <code>.metalint/</code>.
+     * Le chemin du répertoire où se trouve le répertoire `.metalint/`.
+     *
+     * @type {string}
      */
     #root;
 
@@ -148,8 +151,7 @@ export default class Glob {
      *                                        motif.
      * @param {string}          [options.cwd] Le chemin du répertoire courant.
      * @param {string}          options.root  Le chemin du répertoire où se
-     *                                        trouve le répertoire
-     *                                        <code>.metalint/</code>.
+     *                                        trouve le répertoire `.metalint/`.
      */
     constructor(patterns, { cwd, root }) {
         for (const [i, pattern] of wrap(patterns).entries()) {
@@ -181,13 +183,11 @@ export default class Glob {
      * Teste si un fichier / répertoire respecte les patrons.
      *
      * @param {string} file Le chemin du fichier / répertoire qui sera vérifié.
-     * @returns {string} <code>"DEEP_NEGATIVE"</code> pour un répertoire ne
-     *                   respectant pas un patron qui exclue aussi ses
-     *                   fichiers ; <code>"NEGATIVE"</code> si le fichier /
-     *                   répertoire ne respecte pas un patron négatif ;
-     *                   <code>"POSITIVE"</code> si le fichier / répertoire
-     *                   respecte un patron positif ; sinon
-     *                   <code>"NEGATIVE"</code>.
+     * @returns {string} `"DEEP_NEGATIVE"` pour un répertoire ne respectant pas
+     *                   un patron qui exclue aussi ses fichiers ; `"NEGATIVE"`
+     *                   si le fichier / répertoire ne respecte pas un patron
+     *                   négatif ; `"POSITIVE"` si le fichier / répertoire
+     *                   respecte un patron positif ; sinon `"NEGATIVE"`.
      */
     #exec(file) {
         if (0 === this.#positives.length) {
@@ -217,8 +217,8 @@ export default class Glob {
      * Vérifie si un fichier / répertoire respecte les patrons.
      *
      * @param {string} file Le chemin du fichier / répertoire qui sera vérifié.
-     * @returns {boolean} <code>true</code> si le fichier / répertoire respecte
-     *                    les patrons ; sinon <code>false</code>.
+     * @returns {boolean} `true` si le fichier / répertoire respecte les
+     *                    patrons ; sinon `false`.
      */
     test(file) {
         return "POSITIVE" === this.#exec(file);

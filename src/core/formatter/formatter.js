@@ -8,8 +8,8 @@ import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 /**
- * @typedef {import("../levels.js").Level} Level
- * @typedef {import("../results.js").Notice} Notice
+ * @import { Level } from "../levels.js"
+ * @import { Notice } from "../results.js"
  */
 
 /**
@@ -65,8 +65,7 @@ export default class Formatter {
      * Traite les notifications d'un fichier analysé.
      *
      * @param {string}   _file      Le fichier analysé.
-     * @param {Notice[]} [_notices] La liste des notifications ou
-     *                              <code>undefined</code>.
+     * @param {Notice[]} [_notices] La liste des notifications ou `undefined`.
      * @returns {Promise<void>} La promesse indiquant que les notifications ont
      *                          été traitées.
      */

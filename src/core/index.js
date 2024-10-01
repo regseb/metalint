@@ -15,14 +15,12 @@ import { exists } from "./utils/file.js";
 import Glob from "./utils/glob.js";
 
 /**
- * @typedef {import("./configuration/flatten.js").FlattenedConfig} FlattenedConfig
- * @typedef {import("./configuration/flatten.js").FlattenedConfigChecker} FlattenedConfigChecker
- * @typedef {import("./levels.js").Level} Level
- * @typedef {import("./results.js").Notice} Notice
- * @typedef {import("./severities.js").Severity} Severity
- * @typedef {import("./formatter/formatter.js").TypeofFormatter} TypeofFormatter
- * @typedef {import("./formatter/formatter.js").default} Formatter
- * @typedef {import("./wrapper/wrapper.js").default} Wrapper
+ * @import { FlattenedConfig } from "./configuration/flatten.js"
+ * @import { Level } from "./levels.js"
+ * @import { Notice } from "./results.js"
+ * @import { Severity } from "./severities.js"
+ * @import Formatter, { TypeofFormatter } from "./formatter/formatter.js"
+ * @import Wrapper from "./wrapper/wrapper.js"
  */
 
 export default class Metalint {
@@ -205,9 +203,9 @@ export default class Metalint {
      *                                                     regroupées par
      *                                                     fichier.
      * @returns {Promise<Severity|undefined>} La sévérité la plus élevée des
-     *                                        notifications ; ou
-     *                                        <code>undefined</code> si les
-     *                                        résultats ont aucune notification.
+     *                                        notifications ; ou `undefined` si
+     *                                        les résultats ont aucune
+     *                                        notification.
      */
     async report(results) {
         let severity;

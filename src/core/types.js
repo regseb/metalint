@@ -5,5 +5,9 @@
  */
 
 /**
- * @typedef {import("./configuration/partial.js").PartialConfig} Config
+ * @import { PartialConfig } from "./configuration/partial.js"
+ */
+
+/**
+ * @typedef {PartialConfig} Config
  */

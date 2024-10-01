@@ -7,7 +7,7 @@
 import Severities from "./severities.js";
 
 /**
- * @typedef {import("./severities.js").Severity} Severity
+ * @import { Severity } from "./severities.js"
  */
 
 /**
@@ -45,8 +45,8 @@ import Severities from "./severities.js";
  * @param {Notice} notice1 La première notification.
  * @param {Notice} notice2 La seconde notification.
  * @returns {number} Un nombre négatif si la 1<sup>re</sup> notification est
- *                   inférieure à la 2<sup>de</sup> ; <code>0</code> si elles
- *                   sont égales ; sinon un nombre positif.
+ *                   inférieure à la 2<sup>de</sup> ; `0` si elles sont égales ;
+ *                   sinon un nombre positif.
  */
 const compare = function (notice1, notice2) {
     for (

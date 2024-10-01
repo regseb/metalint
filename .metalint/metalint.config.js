@@ -1,11 +1,14 @@
 /**
- * @module
  * @license MIT
  * @author Sébastien Règne
  */
 
 /**
- * @type {import("../src/core/types.js").Config}
+ * @import { Config } from "metalint/types"
+ */
+
+/**
+ * @type {Config}
  */
 export default {
     patterns: [

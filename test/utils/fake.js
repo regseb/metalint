@@ -1,5 +1,4 @@
 /**
- * @module
  * @license MIT
  * @author Sébastien Règne
  */
@@ -110,7 +109,7 @@ const createTree = async (parent, files) => {
 };
 
 /**
- * Crée un <em>file system</em> dans un répertoire temporaire.
+ * Crée un _file system_ dans un répertoire temporaire.
  *
  * @param {Record<string, Record|string>} files Les fichiers à créer dans le répertoire.
  * @returns {Promise<string>} Le chemin vers le répertoire temporaire.

@@ -9,14 +9,14 @@ import Severities from "../severities.js";
 import Formatter from "./formatter.js";
 
 /**
- * @typedef {import("node:stream").Writable} Writable
- * @typedef {import("../levels.js").Level} Level
- * @typedef {import("../results.js").Notice} Notice
+ * @import { Writable } from "node:stream"
+ * @import { Level } from "../levels.js"
+ * @import { Notice } from "../results.js"
  */
 
 /**
- * Convertit les caractères spéciaux (<em>&amp;</em>, <em>&lt;</em>,
- * <em>&gt;</em>, <em>'</em> et <em>"</em>) en entités.
+ * Convertit les caractères spéciaux (_&amp;_, _&lt;_, _&gt;_, _'_ et _"_) en
+ * entités.
  *
  * @param {string} input Le texte qui sera converti.
  * @returns {string} Le texte converti.
@@ -37,8 +37,7 @@ const encode = function (input) {
 };
 
 /**
- * Le formateur qui écrit les résultats dans le format de
- * <strong>checkstyle</strong>.
+ * Le formateur qui écrit les résultats dans le format de **checkstyle**.
  *
  * @see https://checkstyle.sourceforge.io/
  */
@@ -51,7 +50,7 @@ export default class CheckstyleFormatter extends Formatter {
     #writer;
 
     /**
-     * La taille des indentations (en espace) ou <code>-1</code> pour ne pas
+     * La taille des indentations (en espace) ou `-1` pour ne pas
      * mettre de retour à la ligne.
      *
      * @type {number}
@@ -66,8 +65,8 @@ export default class CheckstyleFormatter extends Formatter {
      * @param {Object}   options          Les options du formateur.
      * @param {Writable} [options.writer] Le flux où écrire les résultats.
      * @param {number}   [options.indent] La taille des indentations (en espace)
-     *                                    ou <code>-1</code> (par défaut) pour
-     *                                    ne pas mettre de retour à la ligne.
+     *                                    ou `-1` (par défaut) pour ne pas
+     *                                    mettre de retour à la ligne.
      */
     constructor(level, options) {
         super(level);
@@ -94,8 +93,7 @@ export default class CheckstyleFormatter extends Formatter {
      * Affiche les éventuelles notifications d'un fichier.
      *
      * @param {string}   file      Le fichier analysé.
-     * @param {Notice[]} [notices] La liste des notifications ou
-     *                             <code>undefined</code>.
+     * @param {Notice[]} [notices] La liste des notifications ou `undefined`.
      * @returns {Promise<void>} La promesse indiquant que les notifications ont
      *                          été traitées.
      */

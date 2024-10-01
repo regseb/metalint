@@ -17,23 +17,22 @@ import { FORMATTERS } from "../core/formatter/formatter.js";
 import Levels from "../core/levels.js";
 
 /**
- * @typedef {import("../core/levels.js").Level} Level
- * @typedef {import("../core/formatter/formatter.js").TypeofFormatter} TypeofFormatter
+ * @import { Level } from "../core/levels.js"
+ * @import { TypeofFormatter } from "../core/formatter/formatter.js"
  */
 
 /**
  * @typedef {Object} Argv
- * @prop {string[]}        _           Les paramètress de la ligne de commande.
- * @prop {string}          config      L'option <code>--config</code> de la
- *                                     ligne de commande.
- * @prop {boolean}         [fix]       L'option <code>--fix</code> de la ligne
- *                                     de commande.
- * @prop {TypeofFormatter} [formatter] L'option <code>--formatter</code> de la
- *                                     ligne de commande.
- * @prop {Level}           [level]     L'option <code>--level</code> de la ligne
- *                                     de commande.
- * @prop {boolean}         help        L'option <code>--help</code> de la ligne
- *                                     de commande.
+ * @prop {string[]}        _           Les paramètres de la ligne de commande.
+ * @prop {string}          config      L'option `--config` de la ligne de
+ *                                     commande.
+ * @prop {boolean}         [fix]       L'option `--fix` de la ligne de commande.
+ * @prop {TypeofFormatter} [formatter] L'option `--formatter` de la ligne de
+ *                                     commande.
+ * @prop {Level}           [level]     L'option `--level` de la ligne de
+ *                                     commande.
+ * @prop {boolean}         help        L'option `--help` de la ligne de
+ *                                     commande.
  */
 
 /**
