@@ -23,17 +23,6 @@ import JSZip from "jszip";
 const temps = [];
 
 /**
- * Supprime les répertoires temporaires et retourne sur le répertoire courant.
- */
-export const restore = async () => {
-    for (const temp of temps) {
-        process.chdir(temp.cwd);
-        await fs.rm(temp.root, { force: true, recursive: true });
-    }
-    temps.length = 0;
-};
-
-/**
  * Remplit un zip avec des fichiers.
  *
  * @param {JSZip}                         zip   Le fichier zip.
@@ -114,12 +103,28 @@ const createTree = async (parent, files) => {
  * @param {Record<string, Record|string>} files Les fichiers à créer dans le répertoire.
  * @returns {Promise<string>} Le chemin vers le répertoire temporaire.
  */
-export default async function createTempFileSystem(files) {
-    const tmp = path.join(process.cwd(), "tmp");
+const create = async (files) => {
+    const tmp = path.join(process.cwd(), ".tmp");
     await fs.mkdir(tmp, { recursive: true });
     const root = await fs.mkdtemp(path.join(tmp, "filesystem-"));
     temps.unshift({ root, cwd: process.cwd() });
     process.chdir(root);
     await createTree(root, files);
     return root;
-}
+};
+
+/**
+ * Supprime les répertoires temporaires et retourne sur le répertoire courant.
+ *
+ * @returns {Promise<void>} Une promesse résolue lorsque les répertoires sont
+ *                          supprimés.
+ */
+const reset = async () => {
+    for (const temp of temps) {
+        process.chdir(temp.cwd);
+        await fs.rm(temp.root, { force: true, recursive: true });
+    }
+    temps.length = 0;
+};
+
+export default { create, reset };

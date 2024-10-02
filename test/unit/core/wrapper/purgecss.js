@@ -5,15 +5,20 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import PurgeCSSWrapper from "../../../../src/core/wrapper/purgecss.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/purgecss.js", function () {
-    describe("PurgeCSSWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with OFF level", async function () {
+describe("src/core/wrapper/purgecss.js", () => {
+    describe("PurgeCSSWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with OFF level", async () => {
                 const context = {
                     level: Levels.OFF,
                     fix: false,
@@ -30,7 +35,7 @@ describe("src/core/wrapper/purgecss.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return FATAL notice", async function () {
+            it("should return FATAL notice", async () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -52,8 +57,8 @@ describe("src/core/wrapper/purgecss.js", function () {
                 ]);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "foo.html": '<div class="bar"></div>',
                     "baz.css":
                         ".bar { color: blue; }\n" +
@@ -86,8 +91,8 @@ describe("src/core/wrapper/purgecss.js", function () {
                 ]);
             });
 
-            it("should ignore error with FATAL level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore error with FATAL level", async () => {
+                const root = await tempFs.create({
                     "foo.html": "<div></div>",
                     "bar.css": ".baz { margin: 0; }",
                 });

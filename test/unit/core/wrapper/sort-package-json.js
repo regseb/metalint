@@ -6,15 +6,20 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import process from "node:process";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import SortPackageJsonWrapper from "../../../../src/core/wrapper/sort-package-json.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/sort-package-json.js", function () {
-    describe("SortPackageJsonWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with OFF level and no fix", async function () {
+describe("src/core/wrapper/sort-package-json.js", () => {
+    describe("SortPackageJsonWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with OFF level and no fix", async () => {
                 const context = {
                     level: Levels.OFF,
                     fix: false,
@@ -31,8 +36,8 @@ describe("src/core/wrapper/sort-package-json.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should fix", async function () {
-                const root = await createTempFileSystem({
+            it("should fix", async () => {
+                const root = await tempFs.create({
                     "package.json": '{"version": "1.0.0","name":"foo"}',
                 });
 
@@ -53,8 +58,8 @@ describe("src/core/wrapper/sort-package-json.js", function () {
                 assert.equal(content, '{"name":"foo","version":"1.0.0"}');
             });
 
-            it("shouldn't fix when no problem", async function () {
-                const root = await createTempFileSystem({
+            it("shouldn't fix when no problem", async () => {
+                const root = await tempFs.create({
                     "package.json": '{"name":"foo"}',
                 });
                 const { mtimeMs } = await fs.stat("package.json");
@@ -85,8 +90,8 @@ describe("src/core/wrapper/sort-package-json.js", function () {
                 assert.equal(stat.mtimeMs, mtimeMs);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "package.json": '{"version":"1.0.0","name":"foo"}',
                 });
 
@@ -110,8 +115,8 @@ describe("src/core/wrapper/sort-package-json.js", function () {
                 ]);
             });
 
-            it("should ignore error with FATAL level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore error with FATAL level", async () => {
+                const root = await tempFs.create({
                     "package.json": '{"version":"1.0.0","name":"foo"}',
                 });
 
@@ -129,8 +134,8 @@ describe("src/core/wrapper/sort-package-json.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return FATAL notice", async function () {
-                const root = await createTempFileSystem({
+            it("should return FATAL notice", async () => {
+                const root = await tempFs.create({
                     "package.json": "name=foo",
                 });
 

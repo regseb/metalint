@@ -5,6 +5,7 @@
 
 import assert from "node:assert/strict";
 import path from "node:path";
+import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
 import * as normalize from "../../../../src/core/configuration/normalize.js";
 import ConsoleFormatter from "../../../../src/core/formatter/console.js";
@@ -19,26 +20,26 @@ import StandardWrapper from "../../../../src/core/wrapper/standard.js";
 import Wrapper from "../../../../src/core/wrapper/wrapper.js";
 import YAMLLintWrapper from "../../../../src/core/wrapper/yaml-lint.js";
 
-describe("src/core/configuration/normalize.js", function () {
-    describe("normalizePatterns()", function () {
-        it("should reject undefined", function () {
+describe("src/core/configuration/normalize.js", () => {
+    describe("normalizePatterns()", () => {
+        it("should reject undefined", () => {
             assert.throws(() => normalize.normalizePatterns(undefined), {
                 name: "Error",
                 message: "Property 'patterns' is required.",
             });
         });
 
-        it("should support string", function () {
+        it("should support string", () => {
             const normalized = normalize.normalizePatterns("foo");
             assert.deepEqual(normalized, ["foo"]);
         });
 
-        it("should support array of strings", function () {
+        it("should support array of strings", () => {
             const normalized = normalize.normalizePatterns(["foo", "bar"]);
             assert.deepEqual(normalized, ["foo", "bar"]);
         });
 
-        it("should reject array of non-strings", function () {
+        it("should reject array of non-strings", () => {
             assert.throws(() => normalize.normalizePatterns(["foo", true]), {
                 name: "TypeError",
                 message:
@@ -47,7 +48,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should reject non-array and non-strings", function () {
+        it("should reject non-array and non-strings", () => {
             assert.throws(() => normalize.normalizePatterns(true), {
                 name: "TypeError",
                 message:
@@ -57,18 +58,18 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeFix()", function () {
-        it("should use default", function () {
+    describe("normalizeFix()", () => {
+        it("should use default", () => {
             const normalized = normalize.normalizeFix(undefined);
             assert.equal(normalized, undefined);
         });
 
-        it("should support boolean", function () {
+        it("should support boolean", () => {
             const normalized = normalize.normalizeFix(true);
             assert.equal(normalized, true);
         });
 
-        it("should reject non-boolean", function () {
+        it("should reject non-boolean", () => {
             assert.throws(() => normalize.normalizeFix("foo"), {
                 name: "TypeError",
                 message:
@@ -78,23 +79,23 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeLevel()", function () {
-        it("should use default", function () {
+    describe("normalizeLevel()", () => {
+        it("should use default", () => {
             const normalized = normalize.normalizeLevel(undefined);
             assert.equal(normalized, undefined);
         });
 
-        it("should support string", function () {
+        it("should support string", () => {
             const normalized = normalize.normalizeLevel("warn");
             assert.equal(normalized, Levels.WARN);
         });
 
-        it("should support string in uppercase", function () {
+        it("should support string in uppercase", () => {
             const normalized = normalize.normalizeLevel("ERROR");
             assert.equal(normalized, Levels.ERROR);
         });
 
-        it("should reject unknown string", function () {
+        it("should reject unknown string", () => {
             assert.throws(() => normalize.normalizeLevel("foo"), {
                 name: "Error",
                 message:
@@ -104,12 +105,12 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should support number", function () {
+        it("should support number", () => {
             const normalized = normalize.normalizeLevel(1);
             assert.equal(normalized, Levels.FATAL);
         });
 
-        it("should reject unknown number", function () {
+        it("should reject unknown number", () => {
             assert.throws(() => normalize.normalizeLevel(42), {
                 name: "Error",
                 message:
@@ -119,7 +120,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should reject non-string and non-number", function () {
+        it("should reject non-string and non-number", () => {
             assert.throws(() => normalize.normalizeLevel(true), {
                 name: "TypeError",
                 message:
@@ -129,23 +130,23 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeFormatter()", function () {
-        it("should use default", async function () {
+    describe("normalizeFormatter()", () => {
+        it("should use default", async () => {
             const normalized = await normalize.normalizeFormatter(undefined);
             assert.equal(normalized, ConsoleFormatter);
         });
 
-        it("should support string", async function () {
+        it("should support string", async () => {
             const normalized = await normalize.normalizeFormatter("unix");
             assert.equal(normalized, UnixFormatter);
         });
 
-        it("should support string in uppercase", async function () {
+        it("should support string in uppercase", async () => {
             const normalized = await normalize.normalizeFormatter("JSON");
             assert.equal(normalized, JSONFormatter);
         });
 
-        it("should reject unknown string", async function () {
+        it("should reject unknown string", async () => {
             await assert.rejects(() => normalize.normalizeFormatter("foo"), {
                 name: "Error",
                 message:
@@ -155,13 +156,13 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should support Formatter", async function () {
+        it("should support Formatter", async () => {
             const MyFormatter = class extends Formatter {};
             const normalized = await normalize.normalizeFormatter(MyFormatter);
             assert.equal(normalized, MyFormatter);
         });
 
-        it("should reject non-string and non-Formatter", async function () {
+        it("should reject non-string and non-Formatter", async () => {
             await assert.rejects(() => normalize.normalizeFormatter(true), {
                 name: "TypeError",
                 message:
@@ -171,8 +172,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeOption()", function () {
-        it("should support string", async function () {
+    describe("normalizeOption()", () => {
+        it("should support string", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -182,10 +183,10 @@ describe("src/core/configuration/normalize.js", function () {
                     dir,
                 },
             );
-            assert.deepEqual(normalized["heading-style"], { style: "atx" });
+            assert.deepEqual(normalized["heading-increment"], true);
         });
 
-        it("should reject when no file", async function () {
+        it("should reject when no file", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -203,7 +204,7 @@ describe("src/core/configuration/normalize.js", function () {
             );
         });
 
-        it("should support Object", async function () {
+        it("should support Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -214,7 +215,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, { foo: "bar" });
         });
 
-        it("should reject non-string and non-Object", async function () {
+        it("should reject non-string and non-Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -230,8 +231,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeOptions()", function () {
-        it("should use default", async function () {
+    describe("normalizeOptions()", () => {
+        it("should use default", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -241,7 +242,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, [{}]);
         });
 
-        it("should support Array", async function () {
+        it("should support Array", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -254,7 +255,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized[0]["heading-style"], { style: "atx" });
         });
 
-        it("should support string", async function () {
+        it("should support string", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -267,7 +268,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized[0]["heading-style"], { style: "atx" });
         });
 
-        it("should support Object", async function () {
+        it("should support Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -278,7 +279,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, [{ foo: "bar" }]);
         });
 
-        it("should reject non-string and non-Object", async function () {
+        it("should reject non-string and non-Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -292,8 +293,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeReporter()", function () {
-        it("should use default", async function () {
+    describe("normalizeReporter()", () => {
+        it("should use default", async () => {
             const dir = ".";
             const normalized = await normalize.normalizeReporter({}, { dir });
             assert.deepEqual(normalized, {
@@ -303,7 +304,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should support Object", async function () {
+        it("should support Object", async () => {
             const dir = ".";
             const normalized = await normalize.normalizeReporter(
                 {
@@ -320,7 +321,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should reject non-Object", async function () {
+        it("should reject non-Object", async () => {
             const dir = ".";
             await assert.rejects(
                 () => normalize.normalizeReporter("foo", { dir }),
@@ -332,8 +333,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeReporters()", function () {
-        it("should use default", async function () {
+    describe("normalizeReporters()", () => {
+        it("should use default", async () => {
             const dir = ".";
             const normalized = await normalize.normalizeReporters(undefined, {
                 dir,
@@ -347,7 +348,7 @@ describe("src/core/configuration/normalize.js", function () {
             ]);
         });
 
-        it("should support Array", async function () {
+        it("should support Array", async () => {
             const dir = ".";
             const normalized = await normalize.normalizeReporters(
                 [
@@ -372,7 +373,7 @@ describe("src/core/configuration/normalize.js", function () {
             ]);
         });
 
-        it("should support Object", async function () {
+        it("should support Object", async () => {
             const dir = ".";
             const normalized = await normalize.normalizeReporters(
                 {
@@ -391,7 +392,7 @@ describe("src/core/configuration/normalize.js", function () {
             ]);
         });
 
-        it("should reject non-Array and non-Object", async function () {
+        it("should reject non-Array and non-Object", async () => {
             const dir = ".";
             await assert.rejects(
                 () => normalize.normalizeReporters("foo", { dir }),
@@ -403,18 +404,18 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeWrapper()", function () {
-        it("should support string", async function () {
+    describe("normalizeWrapper()", () => {
+        it("should support string", async () => {
             const normalized = await normalize.normalizeWrapper("eslint");
             assert.equal(normalized, ESLintWrapper);
         });
 
-        it("should support string in uppercase", async function () {
+        it("should support string in uppercase", async () => {
             const normalized = await normalize.normalizeWrapper("YAML-Lint");
             assert.equal(normalized, YAMLLintWrapper);
         });
 
-        it("should reject unknown string", async function () {
+        it("should reject unknown string", async () => {
             await assert.rejects(() => normalize.normalizeWrapper("foo"), {
                 name: "Error",
                 message:
@@ -430,13 +431,13 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should support Wrapper", async function () {
+        it("should support Wrapper", async () => {
             const MyWrapper = class extends Wrapper {};
             const normalized = await normalize.normalizeWrapper(MyWrapper);
             assert.equal(normalized, MyWrapper);
         });
 
-        it("should reject non-string and non-Wrapper", async function () {
+        it("should reject non-string and non-Wrapper", async () => {
             await assert.rejects(() => normalize.normalizeWrapper(true), {
                 name: "TypeError",
                 message:
@@ -446,8 +447,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeLinter()", function () {
-        it("should support string", async function () {
+    describe("normalizeLinter()", () => {
+        it("should support string", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -465,7 +466,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should support string with underscore", async function () {
+        it("should support string with underscore", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -480,7 +481,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should support string for linter non-configurable", async function () {
+        it("should support string for linter non-configurable", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -495,7 +496,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should reject string with underscore for linter non-configurable", async function () {
+        it("should reject string with underscore for linter non-configurable", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -514,7 +515,7 @@ describe("src/core/configuration/normalize.js", function () {
             );
         });
 
-        it("should support Object", async function () {
+        it("should support Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -535,7 +536,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should reject non-string and non-Object", async function () {
+        it("should reject non-string and non-Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -549,8 +550,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeLinters()", function () {
-        it("should use default", async function () {
+    describe("normalizeLinters()", () => {
+        it("should use default", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -560,7 +561,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, []);
         });
 
-        it("should support Array", async function () {
+        it("should support Array", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -585,7 +586,7 @@ describe("src/core/configuration/normalize.js", function () {
             ]);
         });
 
-        it("should support string", async function () {
+        it("should support string", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -602,7 +603,7 @@ describe("src/core/configuration/normalize.js", function () {
             ]);
         });
 
-        it("should support Object", async function () {
+        it("should support Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -625,7 +626,7 @@ describe("src/core/configuration/normalize.js", function () {
             ]);
         });
 
-        it("should reject non-Array, non-string and non-Object", async function () {
+        it("should reject non-Array, non-string and non-Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -639,8 +640,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeOverride()", function () {
-        it("should support Object", async function () {
+    describe("normalizeOverride()", () => {
+        it("should support Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -666,7 +667,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should reject non-Object", async function () {
+        it("should reject non-Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -680,8 +681,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeOverrides()", function () {
-        it("should use default", async function () {
+    describe("normalizeOverrides()", () => {
+        it("should use default", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -691,7 +692,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, []);
         });
 
-        it("should support Array", async function () {
+        it("should support Array", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -726,7 +727,7 @@ describe("src/core/configuration/normalize.js", function () {
             ]);
         });
 
-        it("should support Object", async function () {
+        it("should support Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -761,7 +762,7 @@ describe("src/core/configuration/normalize.js", function () {
             ]);
         });
 
-        it("should reject non-Array and non-Object", async function () {
+        it("should reject non-Array and non-Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -775,8 +776,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeChecker()", function () {
-        it("should support Object", async function () {
+    describe("normalizeChecker()", () => {
+        it("should support Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -823,7 +824,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should reject non-Object", async function () {
+        it("should reject non-Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -837,8 +838,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalizeCheckers()", function () {
-        it("should use default", async function () {
+    describe("normalizeCheckers()", () => {
+        it("should use default", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -848,7 +849,7 @@ describe("src/core/configuration/normalize.js", function () {
             assert.deepEqual(normalized, []);
         });
 
-        it("should support Array", async function () {
+        it("should support Array", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -884,7 +885,7 @@ describe("src/core/configuration/normalize.js", function () {
             ]);
         });
 
-        it("should support Object", async function () {
+        it("should support Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -920,7 +921,7 @@ describe("src/core/configuration/normalize.js", function () {
             ]);
         });
 
-        it("should reject non-Array and non-Object", async function () {
+        it("should reject non-Array and non-Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -934,8 +935,8 @@ describe("src/core/configuration/normalize.js", function () {
         });
     });
 
-    describe("normalize()", function () {
-        it("should support Object", async function () {
+    describe("normalize()", () => {
+        it("should support Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -963,7 +964,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should use default", async function () {
+        it("should use default", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
@@ -988,7 +989,7 @@ describe("src/core/configuration/normalize.js", function () {
             });
         });
 
-        it("should reject non-Object", async function () {
+        it("should reject non-Object", async () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );

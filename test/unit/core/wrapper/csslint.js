@@ -5,15 +5,20 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import CSSLintWrapper from "../../../../src/core/wrapper/csslint.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/csslint.js", function () {
-    describe("CSSLintWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with FATAL level", async function () {
+describe("src/core/wrapper/csslint.js", () => {
+    describe("CSSLintWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with FATAL level", async () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -30,8 +35,8 @@ describe("src/core/wrapper/csslint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should use default options", async function () {
-                const root = await createTempFileSystem({
+            it("should use default options", async () => {
+                const root = await tempFs.create({
                     "foo.css": `
                         button {
                             color: black;
@@ -54,8 +59,8 @@ describe("src/core/wrapper/csslint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "foo.css": `
                         a { }
                         #bar { width: 0px }
@@ -93,8 +98,8 @@ describe("src/core/wrapper/csslint.js", function () {
                 ]);
             });
 
-            it("should ignore warning with ERROR level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore warning with ERROR level", async () => {
+                const root = await tempFs.create({
                     "foo.css": `
                         a { }
                         #bar { width: 0px !important }

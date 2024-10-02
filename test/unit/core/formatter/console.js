@@ -4,15 +4,20 @@
  */
 
 import assert from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
 import ConsoleFormatter from "../../../../src/core/formatter/console.js";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
-import createTempFileSystem from "../../../utils/fake.js";
-import WriteString from "../../../utils/writestring.js";
+import tempFs from "../../../utils/temp-fs.js";
+import WriteString from "../../../utils/write-string.js";
 
-describe("src/core/formatter/console.js", function () {
-    describe("ConsoleFormatter", function () {
-        it("should support undefined notices", async function () {
+describe("src/core/formatter/console.js", () => {
+    describe("ConsoleFormatter", () => {
+        afterEach(async () => {
+            await tempFs.reset();
+        });
+
+        it("should support undefined notices", async () => {
             const writer = new WriteString();
 
             const formatter = new ConsoleFormatter(Levels.WARN, { writer });
@@ -22,7 +27,7 @@ describe("src/core/formatter/console.js", function () {
             assert.equal(writer.toString(), "");
         });
 
-        it("should print file with undefined notices", async function () {
+        it("should print file with undefined notices", async () => {
             const writer = new WriteString();
 
             const formatter = new ConsoleFormatter(Levels.FATAL, {
@@ -35,7 +40,7 @@ describe("src/core/formatter/console.js", function () {
             assert.equal(writer.toString(), "foo.js: No checked.\n\n");
         });
 
-        it("should support empty notices", async function () {
+        it("should support empty notices", async () => {
             const writer = new WriteString();
 
             const formatter = new ConsoleFormatter(Levels.WARN, { writer });
@@ -45,7 +50,7 @@ describe("src/core/formatter/console.js", function () {
             assert.equal(writer.toString(), "");
         });
 
-        it("should print file with empty notices", async function () {
+        it("should print file with empty notices", async () => {
             const writer = new WriteString();
 
             const formatter = new ConsoleFormatter(Levels.INFO, {
@@ -58,8 +63,8 @@ describe("src/core/formatter/console.js", function () {
             assert.equal(writer.toString(), "foo.css: 0 notice.\n\n");
         });
 
-        it("should support notices", async function () {
-            await createTempFileSystem({ "foo.js": "var foo = 0;" });
+        it("should support notices", async () => {
+            await tempFs.create({ "foo.js": "var foo = 0;" });
 
             const writer = new WriteString();
 
@@ -100,7 +105,7 @@ describe("src/core/formatter/console.js", function () {
             );
         });
 
-        it("should ignore error with FATAL level", async function () {
+        it("should ignore error with FATAL level", async () => {
             const writer = new WriteString();
 
             const formatter = new ConsoleFormatter(Levels.FATAL, { writer });

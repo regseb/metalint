@@ -5,16 +5,21 @@
 
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import ESLintWrapper from "../../../../src/core/wrapper/eslint.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/eslint.js", function () {
-    describe("ESLintWrapper", function () {
-        describe("lint()", function () {
-            it("should use default options", async function () {
-                const root = await createTempFileSystem({
+describe("src/core/wrapper/eslint.js", () => {
+    describe("ESLintWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should use default options", async () => {
+                const root = await tempFs.create({
                     "foo.js": 'consol.log("bar");',
                 });
 
@@ -32,10 +37,8 @@ describe("src/core/wrapper/eslint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should fix", async function () {
-                const root = await createTempFileSystem({
-                    "foo.js": "var bar = 42",
-                });
+            it("should fix", async () => {
+                const root = await tempFs.create({ "foo.js": "var bar = 42" });
 
                 const context = {
                     level: Levels.OFF,
@@ -54,10 +57,8 @@ describe("src/core/wrapper/eslint.js", function () {
                 assert.equal(content, "var bar = 42;");
             });
 
-            it("should ignore with OFF level and no fix", async function () {
-                const root = await createTempFileSystem({
-                    "foo.js": "alert(42);",
-                });
+            it("should ignore with OFF level and no fix", async () => {
+                const root = await tempFs.create({ "foo.js": "alert(42);" });
 
                 const context = {
                     level: Levels.OFF,
@@ -73,8 +74,8 @@ describe("src/core/wrapper/eslint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "foo.js":
                         "var bar = 1;\n" +
                         "switch (bar) {\n" +
@@ -135,8 +136,8 @@ describe("src/core/wrapper/eslint.js", function () {
                 ]);
             });
 
-            it("should ignore warning with ERROR level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore warning with ERROR level", async () => {
+                const root = await tempFs.create({
                     "foo.js": "var bar = 2 << 9; bar = bar;",
                 });
 
@@ -172,10 +173,8 @@ describe("src/core/wrapper/eslint.js", function () {
                 ]);
             });
 
-            it("should return FATAL notice", async function () {
-                const root = await createTempFileSystem({
-                    "foo.js": "var bar = ;",
-                });
+            it("should return FATAL notice", async () => {
+                const root = await tempFs.create({ "foo.js": "var bar = ;" });
 
                 const context = {
                     level: Levels.FATAL,
@@ -207,8 +206,8 @@ describe("src/core/wrapper/eslint.js", function () {
                 ]);
             });
 
-            it("should support plugins", async function () {
-                const root = await createTempFileSystem({
+            it("should support plugins", async () => {
+                const root = await tempFs.create({
                     "foo.js":
                         "// filenames/no-index\n" +
                         "bar(function(baz) { return baz; });\n" +
@@ -275,8 +274,8 @@ describe("src/core/wrapper/eslint.js", function () {
                 ]);
             });
 
-            it("should support flat config", async function () {
-                const root = await createTempFileSystem({
+            it("should support flat config", async () => {
+                const root = await tempFs.create({
                     "foo.js": "const bar = baz + qux;\n",
                 });
 

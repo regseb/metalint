@@ -4,15 +4,20 @@
  */
 
 import assert from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import YAMLLintWrapper from "../../../../src/core/wrapper/yaml-lint.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/yaml-lint.js", function () {
-    describe("YAMLLintWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with FATAL level", async function () {
-                const root = await createTempFileSystem({ "foo.yaml": ":" });
+describe("src/core/wrapper/yaml-lint.js", () => {
+    describe("YAMLLintWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with FATAL level", async () => {
+                const root = await tempFs.create({ "foo.yaml": ":" });
 
                 const context = {
                     level: Levels.FATAL,
@@ -28,8 +33,8 @@ describe("src/core/wrapper/yaml-lint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should use default options", async function () {
-                const root = await createTempFileSystem({ "foo.yaml": "bar" });
+            it("should use default options", async () => {
+                const root = await tempFs.create({ "foo.yaml": "bar" });
 
                 const context = {
                     level: Levels.INFO,
@@ -45,8 +50,8 @@ describe("src/core/wrapper/yaml-lint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({ "foo.yml": ": bar" });
+            it("should return notices", async () => {
+                const root = await tempFs.create({ "foo.yml": ": bar" });
 
                 const context = {
                     level: Levels.ERROR,

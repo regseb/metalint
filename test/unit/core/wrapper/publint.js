@@ -5,15 +5,20 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import PublintWrapper from "../../../../src/core/wrapper/publint.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/publint.js", function () {
-    describe("PublintWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with OFF level", async function () {
+describe("src/core/wrapper/publint.js", () => {
+    describe("PublintWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with OFF level", async () => {
                 const context = {
                     level: Levels.OFF,
                     fix: false,
@@ -30,7 +35,7 @@ describe("src/core/wrapper/publint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it('should reject file not ending "package.json"', async function () {
+            it('should reject file not ending "package.json"', async () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -52,8 +57,8 @@ describe("src/core/wrapper/publint.js", function () {
                 ]);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "foo.js": 'console.log("bar");',
                     "package.json": JSON.stringify({
                         exports: { "./bar.js": "./bar.js" },
@@ -105,8 +110,8 @@ describe("src/core/wrapper/publint.js", function () {
                 ]);
             });
 
-            it("should ignore error with FATAL level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore error with FATAL level", async () => {
+                const root = await tempFs.create({
                     "package.json": JSON.stringify({
                         dependencies: { foo: "1.0.0" },
                     }),
@@ -126,8 +131,8 @@ describe("src/core/wrapper/publint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return FATAL notice", async function () {
-                const root = await createTempFileSystem({
+            it("should return FATAL notice", async () => {
+                const root = await tempFs.create({
                     "foo/package.json": "<version>1.0.0</version>",
                 });
 

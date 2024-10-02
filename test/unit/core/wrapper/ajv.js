@@ -5,19 +5,24 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import AjvWrapper from "../../../../src/core/wrapper/ajv.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
 /**
  * @import Ajv from "ajv"
  */
 
-describe("src/core/wrapper/ajv.js", function () {
-    describe("AjvWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with OFF level", async function () {
+describe("src/core/wrapper/ajv.js", () => {
+    describe("AjvWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with OFF level", async () => {
                 const context = {
                     level: Levels.OFF,
                     fix: false,
@@ -34,8 +39,8 @@ describe("src/core/wrapper/ajv.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return empty when no problem", async function () {
-                const root = await createTempFileSystem({
+            it("should return empty when no problem", async () => {
+                const root = await tempFs.create({
                     "foo.json": '{ "bar": "baz" }',
                 });
 
@@ -58,8 +63,8 @@ describe("src/core/wrapper/ajv.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "foo.json": '{ "bar": "baz" }',
                 });
 
@@ -90,8 +95,8 @@ describe("src/core/wrapper/ajv.js", function () {
                 ]);
             });
 
-            it("should support addFormats()", async function () {
-                const root = await createTempFileSystem({
+            it("should support addFormats()", async () => {
+                const root = await tempFs.create({
                     "foo.json": '{ "bar": "baz" }',
                 });
 
@@ -127,8 +132,8 @@ describe("src/core/wrapper/ajv.js", function () {
                 ]);
             });
 
-            it("should ignore error with FATAL level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore error with FATAL level", async () => {
+                const root = await tempFs.create({
                     "foo.json": '{ "bar": "baz" }',
                 });
 
@@ -151,8 +156,8 @@ describe("src/core/wrapper/ajv.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should reject when no loadSchema()", async function () {
-                const root = await createTempFileSystem({
+            it("should reject when no loadSchema()", async () => {
+                const root = await tempFs.create({
                     "foo.json": '{ "bar": "baz" }',
                 });
 
@@ -182,8 +187,8 @@ describe("src/core/wrapper/ajv.js", function () {
                 ]);
             });
 
-            it("should support loadSchema()", async function () {
-                const root = await createTempFileSystem({
+            it("should support loadSchema()", async () => {
+                const root = await tempFs.create({
                     "foo.json": '{ "bar": "baz" }',
                 });
 
@@ -217,8 +222,8 @@ describe("src/core/wrapper/ajv.js", function () {
                 ]);
             });
 
-            it("should return FATAL notice", async function () {
-                const root = await createTempFileSystem({
+            it("should return FATAL notice", async () => {
+                const root = await tempFs.create({
                     "foo.json": "bar: baz",
                 });
 

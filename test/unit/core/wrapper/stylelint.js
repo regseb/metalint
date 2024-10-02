@@ -5,16 +5,21 @@
 
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import StylelintWrapper from "../../../../src/core/wrapper/stylelint.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/stylelint.js", function () {
-    describe("StylelintWrapper", function () {
-        describe("lint()", function () {
-            it("should fix", async function () {
-                const root = await createTempFileSystem({
+describe("src/core/wrapper/stylelint.js", () => {
+    describe("StylelintWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should fix", async () => {
+                const root = await tempFs.create({
                     "foo.css": "header { top: 0px; }",
                 });
 
@@ -35,8 +40,8 @@ describe("src/core/wrapper/stylelint.js", function () {
                 assert.equal(content, "header { top: 0; }");
             });
 
-            it("should ignore with FATAL level and no fix", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore with FATAL level and no fix", async () => {
+                const root = await tempFs.create({
                     "foo.css": "a { animation: 80ms; }",
                 });
 
@@ -56,10 +61,8 @@ describe("src/core/wrapper/stylelint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should use default options", async function () {
-                const root = await createTempFileSystem({
-                    "foo.css": "div {}",
-                });
+            it("should use default options", async () => {
+                const root = await tempFs.create({ "foo.css": "div {}" });
 
                 const context = {
                     level: Levels.INFO,
@@ -75,8 +78,8 @@ describe("src/core/wrapper/stylelint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("shouldn't return notice", async function () {
-                const root = await createTempFileSystem({
+            it("shouldn't return notice", async () => {
+                const root = await tempFs.create({
                     "foo.css": "a { color: #FFFFFF; }",
                 });
 
@@ -94,8 +97,8 @@ describe("src/core/wrapper/stylelint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "foo.css": "p { color: #y3 }\np { }",
                 });
 
@@ -137,8 +140,8 @@ describe("src/core/wrapper/stylelint.js", function () {
                 ]);
             });
 
-            it("should ignore warning with ERROR level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore warning with ERROR level", async () => {
+                const root = await tempFs.create({
                     "foo.css": "span { color: #bar; top: 0px; }",
                 });
 
@@ -170,8 +173,8 @@ describe("src/core/wrapper/stylelint.js", function () {
                 ]);
             });
 
-            it("should lint all files (cf. disableDefaultIgnores)", async function () {
-                const root = await createTempFileSystem({
+            it("should lint all files (cf. disableDefaultIgnores)", async () => {
+                const root = await tempFs.create({
                     "foo/node_modules/bar.css": "main { width: 100baz; }",
                 });
 

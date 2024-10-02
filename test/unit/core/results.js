@@ -4,13 +4,14 @@
  */
 
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import Results from "../../../src/core/results.js";
 import Severities from "../../../src/core/severities.js";
 
-describe("src/core/results.js", function () {
-    describe("Results", function () {
-        describe("constructor()", function () {
-            it("should return undefined", function () {
+describe("src/core/results.js", () => {
+    describe("Results", () => {
+        describe("constructor()", () => {
+            it("should return undefined", () => {
                 const results = new Results(["foo.mjs", "bar.cjs"]);
                 const obj = results.toObject();
                 assert.deepEqual(obj, {
@@ -20,8 +21,8 @@ describe("src/core/results.js", function () {
             });
         });
 
-        describe("add()", function () {
-            it("should support empty", function () {
+        describe("add()", () => {
+            it("should support empty", () => {
                 const results = new Results(["foo.css", "bar.php"]);
                 results.add("foo.css", []);
                 const obj = results.toObject();
@@ -31,7 +32,7 @@ describe("src/core/results.js", function () {
                 });
             });
 
-            it("should support notice", function () {
+            it("should support notice", () => {
                 const results = new Results(["foo.html", "bar.otf"]);
                 results.add("foo.html", [
                     {
@@ -59,7 +60,7 @@ describe("src/core/results.js", function () {
                 });
             });
 
-            it("should use default", function () {
+            it("should use default", () => {
                 const results = new Results(["foo.js"]);
                 results.add("foo.js", [
                     {
@@ -83,7 +84,7 @@ describe("src/core/results.js", function () {
                 });
             });
 
-            it("should suport sub-file", function () {
+            it("should suport sub-file", () => {
                 const results = new Results(["foo"]);
                 results.add("foo", [
                     {
@@ -109,8 +110,8 @@ describe("src/core/results.js", function () {
             });
         });
 
-        describe("toObject()", function () {
-            it("should sort notices", function () {
+        describe("toObject()", () => {
+            it("should sort notices", () => {
                 const results = new Results(["foo.xml"]);
                 results.add("foo.xml", [
                     {

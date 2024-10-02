@@ -4,14 +4,15 @@
  */
 
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import GitHubFormatter from "../../../../src/core/formatter/github.js";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
-import WriteString from "../../../utils/writestring.js";
+import WriteString from "../../../utils/write-string.js";
 
-describe("src/core/formatter/github.js", function () {
-    describe("GitHubFormatter", function () {
-        it("should ignore undefined notices", async function () {
+describe("src/core/formatter/github.js", () => {
+    describe("GitHubFormatter", () => {
+        it("should ignore undefined notices", async () => {
             const writer = new WriteString();
 
             const formatter = new GitHubFormatter(Levels.FATAL, { writer });
@@ -21,7 +22,7 @@ describe("src/core/formatter/github.js", function () {
             assert.equal(writer.toString(), "");
         });
 
-        it("should ignore empty notice", async function () {
+        it("should ignore empty notice", async () => {
             const writer = new WriteString();
 
             const formatter = new GitHubFormatter(Levels.WARN, { writer });
@@ -31,7 +32,7 @@ describe("src/core/formatter/github.js", function () {
             assert.equal(writer.toString(), "");
         });
 
-        it("should ignore low level", async function () {
+        it("should ignore low level", async () => {
             const writer = new WriteString();
 
             const formatter = new GitHubFormatter(Levels.FATAL, { writer });
@@ -61,7 +62,7 @@ describe("src/core/formatter/github.js", function () {
             );
         });
 
-        it("should support notices", async function () {
+        it("should support notices", async () => {
             const writer = new WriteString();
 
             const formatter = new GitHubFormatter(Levels.INFO, { writer });

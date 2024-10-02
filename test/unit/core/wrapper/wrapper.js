@@ -5,13 +5,14 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
+import { describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Wrapper from "../../../../src/core/wrapper/wrapper.js";
 
-describe("src/core/wrapper/wrapper.js", function () {
-    describe("Wrapper", function () {
-        describe("get level()", function () {
-            it("should return level", function () {
+describe("src/core/wrapper/wrapper.js", () => {
+    describe("Wrapper", () => {
+        describe("get level()", () => {
+            it("should return level", () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -24,8 +25,8 @@ describe("src/core/wrapper/wrapper.js", function () {
             });
         });
 
-        describe("get fix()", function () {
-            it("should return false", function () {
+        describe("get fix()", () => {
+            it("should return false", () => {
                 const context = {
                     level: Levels.ERROR,
                     fix: false,
@@ -37,7 +38,7 @@ describe("src/core/wrapper/wrapper.js", function () {
                 assert.equal(wrapper.fix, false);
             });
 
-            it("should return true", function () {
+            it("should return true", () => {
                 const context = {
                     level: Levels.ERROR,
                     fix: true,
@@ -50,8 +51,8 @@ describe("src/core/wrapper/wrapper.js", function () {
             });
         });
 
-        describe("get root()", function () {
-            it("should return root", function () {
+        describe("get root()", () => {
+            it("should return root", () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -64,8 +65,8 @@ describe("src/core/wrapper/wrapper.js", function () {
             });
         });
 
-        describe("get files()", function () {
-            it("should return files", function () {
+        describe("get files()", () => {
+            it("should return files", () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -78,8 +79,8 @@ describe("src/core/wrapper/wrapper.js", function () {
             });
         });
 
-        describe("lint()", function () {
-            it("should return no notice", async function () {
+        describe("lint()", () => {
+            it("should return no notice", async () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,

@@ -4,14 +4,15 @@
  */
 
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import FrenchFormatter from "../../../data/french.js";
-import WriteString from "../../../utils/writestring.js";
+import WriteString from "../../../utils/write-string.js";
 
-describe("test/data/french.js", function () {
-    describe("FrenchFormatter", function () {
-        it("should support undefined notices", async function () {
+describe("test/data/french.js", () => {
+    describe("FrenchFormatter", () => {
+        it("should support undefined notices", async () => {
             const writer = new WriteString();
 
             const formatter = new FrenchFormatter(Levels.WARN, { writer });
@@ -21,7 +22,7 @@ describe("test/data/french.js", function () {
             assert.equal(writer.toString(), "");
         });
 
-        it("should support empty notices", async function () {
+        it("should support empty notices", async () => {
             const writer = new WriteString();
 
             const formatter = new FrenchFormatter(Levels.ERROR, { writer });
@@ -31,7 +32,7 @@ describe("test/data/french.js", function () {
             assert.equal(writer.toString(), "");
         });
 
-        it("should support notices", async function () {
+        it("should support notices", async () => {
             const writer = new WriteString();
 
             const formatter = new FrenchFormatter(Levels.INFO, { writer });

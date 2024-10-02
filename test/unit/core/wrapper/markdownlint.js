@@ -4,17 +4,20 @@
  */
 
 import assert from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import MarkdownlintWrapper from "../../../../src/core/wrapper/markdownlint.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/markdownlint.js", function () {
-    describe("MarkdownlintWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with FATAL level", async function () {
-                const root = await createTempFileSystem({
-                    "foo.md": "Bar",
-                });
+describe("src/core/wrapper/markdownlint.js", () => {
+    describe("MarkdownlintWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with FATAL level", async () => {
+                const root = await tempFs.create({ "foo.md": "Bar" });
 
                 const context = {
                     level: Levels.FATAL,
@@ -30,8 +33,8 @@ describe("src/core/wrapper/markdownlint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should use default options", async function () {
-                const root = await createTempFileSystem({
+            it("should use default options", async () => {
+                const root = await tempFs.create({
                     "foo.md": "# bar\n\n1. baz\n3. qux\n",
                 });
 
@@ -59,8 +62,8 @@ describe("src/core/wrapper/markdownlint.js", function () {
                 ]);
             });
 
-            it("shouldn't return notice", async function () {
-                const root = await createTempFileSystem({
+            it("shouldn't return notice", async () => {
+                const root = await tempFs.create({
                     "foo.md": "# bar\n\nbaz\n",
                 });
 
@@ -78,10 +81,8 @@ describe("src/core/wrapper/markdownlint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
-                    "foo.md": "Bar!\n",
-                });
+            it("should return notices", async () => {
+                const root = await tempFs.create({ "foo.md": "Bar!\n" });
 
                 const context = {
                     level: Levels.ERROR,

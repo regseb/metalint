@@ -4,18 +4,21 @@
  */
 
 import assert from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import NpmPackageJSONLintWrapper from "../../../../src/core/wrapper/npm-package-json-lint.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/npm-package-json-lint.js", function () {
-    describe("NpmPackageJSONLintWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with FATAL level", async function () {
-                const root = await createTempFileSystem({
-                    "package.json": "{}",
-                });
+describe("src/core/wrapper/npm-package-json-lint.js", () => {
+    describe("NpmPackageJSONLintWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with FATAL level", async () => {
+                const root = await tempFs.create({ "package.json": "{}" });
 
                 const context = {
                     level: Levels.FATAL,
@@ -33,8 +36,8 @@ describe("src/core/wrapper/npm-package-json-lint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "package.json": '{ "name": "FOO" }',
                 });
 
@@ -72,10 +75,8 @@ describe("src/core/wrapper/npm-package-json-lint.js", function () {
                 ]);
             });
 
-            it("should ignore warning with ERROR level", async function () {
-                const root = await createTempFileSystem({
-                    "package.json": "{}",
-                });
+            it("should ignore warning with ERROR level", async () => {
+                const root = await tempFs.create({ "package.json": "{}" });
 
                 const context = {
                     level: Levels.ERROR,

@@ -5,17 +5,22 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
-import sinon from "sinon";
+import { afterEach, describe, it, mock } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import AddonsLinterWrapper from "../../../../src/core/wrapper/addons-linter.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/addons-linter.js", function () {
-    describe("AddonsLinterWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with FATAL level", async function () {
-                const spy = sinon.spy(console, "log");
+describe("src/core/wrapper/addons-linter.js", () => {
+    describe("AddonsLinterWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                mock.reset();
+                await tempFs.reset();
+            });
+
+            it("should ignore with FATAL level", async () => {
+                const spy = mock.method(console, "log");
 
                 const context = {
                     level: Levels.FATAL,
@@ -32,11 +37,11 @@ describe("src/core/wrapper/addons-linter.js", function () {
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, []);
 
-                assert.equal(spy.callCount, 0);
+                assert.equal(spy.mock.callCount(), 0);
             });
 
-            it("should return notice from zip", async function () {
-                const root = await createTempFileSystem({
+            it("should return notice from zip", async () => {
+                const root = await tempFs.create({
                     "addon.xpi": {
                         "manifest.json": JSON.stringify({
                             // eslint-disable-next-line camelcase
@@ -56,7 +61,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
                         }),
                     },
                 });
-                const spy = sinon.spy(console, "log");
+                const spy = mock.method(console, "log");
 
                 const context = {
                     level: Levels.INFO,
@@ -88,11 +93,11 @@ describe("src/core/wrapper/addons-linter.js", function () {
                     },
                 ]);
 
-                assert.equal(spy.callCount, 0);
+                assert.equal(spy.mock.callCount(), 0);
             });
 
-            it("should return notices found in file", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices found in file", async () => {
+                const root = await tempFs.create({
                     "foo/manifest.json": JSON.stringify({
                         // eslint-disable-next-line camelcase
                         browser_specific_settings: {
@@ -104,7 +109,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
                         permissions: ["god mode"],
                     }),
                 });
-                const spy = sinon.spy(console, "log");
+                const spy = mock.method(console, "log");
 
                 const context = {
                     level: Levels.WARN,
@@ -136,11 +141,11 @@ describe("src/core/wrapper/addons-linter.js", function () {
                     },
                 ]);
 
-                assert.equal(spy.callCount, 0);
+                assert.equal(spy.mock.callCount(), 0);
             });
 
-            it("should accept options", async function () {
-                const root = await createTempFileSystem({
+            it("should accept options", async () => {
+                const root = await tempFs.create({
                     "foo/manifest.json": JSON.stringify({
                         // eslint-disable-next-line camelcase
                         manifest_version: 1,
@@ -148,7 +153,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
                         name: "bar",
                     }),
                 });
-                const spy = sinon.spy(console, "log");
+                const spy = mock.method(console, "log");
 
                 const context = {
                     level: Levels.WARN,
@@ -163,12 +168,12 @@ describe("src/core/wrapper/addons-linter.js", function () {
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, []);
 
-                assert.equal(spy.callCount, 0);
+                assert.equal(spy.mock.callCount(), 0);
             });
 
-            it("should return notices on directory", async function () {
-                const root = await createTempFileSystem({ "foo/bar.txt": "" });
-                const spy = sinon.spy(console, "log");
+            it("should return notices on directory", async () => {
+                const root = await tempFs.create({ "foo/bar.txt": "" });
+                const spy = mock.method(console, "log");
 
                 const context = {
                     level: Levels.INFO,
@@ -191,11 +196,11 @@ describe("src/core/wrapper/addons-linter.js", function () {
                     },
                 ]);
 
-                assert.equal(spy.callCount, 0);
+                assert.equal(spy.mock.callCount(), 0);
             });
 
-            it("should ignore warning with ERROR level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore warning with ERROR level", async () => {
+                const root = await tempFs.create({
                     foo: {
                         "manifest.json": JSON.stringify({
                             // eslint-disable-next-line camelcase
@@ -206,7 +211,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
                         "index.js": 'document.write("baz");',
                     },
                 });
-                const spy = sinon.spy(console, "log");
+                const spy = mock.method(console, "log");
 
                 const context = {
                     level: Levels.ERROR,
@@ -229,14 +234,14 @@ describe("src/core/wrapper/addons-linter.js", function () {
                     },
                 ]);
 
-                assert.equal(spy.callCount, 0);
+                assert.equal(spy.mock.callCount(), 0);
             });
 
-            it("should support null file in result", async function () {
-                const root = await createTempFileSystem({
+            it("should support null file in result", async () => {
+                const root = await tempFs.create({
                     "foo/manifest.json": "{ name: 'foo' }",
                 });
-                const spy = sinon.spy(console, "log");
+                const spy = mock.method(console, "log");
 
                 const context = {
                     level: Levels.ERROR,
@@ -266,7 +271,7 @@ describe("src/core/wrapper/addons-linter.js", function () {
                     },
                 ]);
 
-                assert.equal(spy.callCount, 0);
+                assert.equal(spy.mock.callCount(), 0);
             });
         });
     });

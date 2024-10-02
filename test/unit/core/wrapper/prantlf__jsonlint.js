@@ -5,14 +5,19 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import PrantlfJSONLintWrapper from "../../../../src/core/wrapper/prantlf__jsonlint.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/prantlf__jsonlint.js", function () {
-    describe("PrantlfJSONLintWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with FATAL level", async function () {
+describe("src/core/wrapper/prantlf__jsonlint.js", () => {
+    describe("PrantlfJSONLintWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with FATAL level", async () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -29,10 +34,8 @@ describe("src/core/wrapper/prantlf__jsonlint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notice", async function () {
-                const root = await createTempFileSystem({
-                    "foo.json": '{ "bar":',
-                });
+            it("should return notice", async () => {
+                const root = await tempFs.create({ "foo.json": '{ "bar":' });
 
                 const context = {
                     level: Levels.ERROR,
@@ -55,8 +58,8 @@ describe("src/core/wrapper/prantlf__jsonlint.js", function () {
                 ]);
             });
 
-            it("shouldn't return notice", async function () {
-                const root = await createTempFileSystem({
+            it("shouldn't return notice", async () => {
+                const root = await tempFs.create({
                     "foo.json": '{ "bar": "baz" }',
                 });
 
@@ -74,8 +77,8 @@ describe("src/core/wrapper/prantlf__jsonlint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should take options", async function () {
-                const root = await createTempFileSystem({
+            it("should take options", async () => {
+                const root = await tempFs.create({
                     "foo.json": '{ "bar": "baz", "bar": "qux" }',
                 });
 

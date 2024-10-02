@@ -5,14 +5,19 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import MapboxJSONintLinesPrimitivesWrapper from "../../../../src/core/wrapper/mapbox__jsonlint-lines-primitives.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", function () {
-    describe("MapboxJSONintLinesPrimitivesWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with FATAL level", async function () {
+describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", () => {
+    describe("MapboxJSONintLinesPrimitivesWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with FATAL level", async () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -32,8 +37,8 @@ describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notice", async function () {
-                const root = await createTempFileSystem({
+            it("should return notice", async () => {
+                const root = await tempFs.create({
                     "foo.json": '{ "bar": 42\n"baz": 420 }',
                 });
 
@@ -61,8 +66,8 @@ describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", function () {
                 ]);
             });
 
-            it("shouldn't return notice", async function () {
-                const root = await createTempFileSystem({
+            it("shouldn't return notice", async () => {
+                const root = await tempFs.create({
                     "foo.json": '{ "bar": 42 }',
                 });
 

@@ -5,15 +5,20 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import MarkuplintWrapper from "../../../../src/core/wrapper/markuplint.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/markuplint.js", function () {
-    describe("MarkuplintWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with FATAL level", async function () {
+describe("src/core/wrapper/markuplint.js", () => {
+    describe("MarkuplintWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with FATAL level", async () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -30,8 +35,8 @@ describe("src/core/wrapper/markuplint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should use default options", async function () {
-                const root = await createTempFileSystem({
+            it("should use default options", async () => {
+                const root = await tempFs.create({
                     "foo.html": "<title>Bar</title>",
                 });
 
@@ -49,8 +54,8 @@ describe("src/core/wrapper/markuplint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "foo.html": '<img src=\'bar.svg\' src="" class="BAZ" />',
                 });
 
@@ -106,8 +111,8 @@ describe("src/core/wrapper/markuplint.js", function () {
                 ]);
             });
 
-            it("should ignore warning with ERROR level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore warning with ERROR level", async () => {
+                const root = await tempFs.create({
                     "foo.html": '<input required="required" required />',
                 });
 

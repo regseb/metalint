@@ -11,10 +11,6 @@
  * @type {Linter.Config}
  */
 export default {
-    env: {
-        mocha: true,
-    },
-
     rules: {
         // Suggestions.
         complexity: "off",
@@ -25,7 +21,8 @@ export default {
         "max-statements": "off",
         "prefer-arrow-callback": "off",
 
-        // Plugin eslint-plugin-mocha.
+        // Plugin eslint-plugin-mocha. Utiliser le plugin pour Mocha car il peut
+        // s'appliquer aussi sur les tests natifs de Node.js.
         "mocha/consistent-spacing-between-blocks": "error",
         "mocha/handle-done-callback": "error",
         "mocha/max-top-level-suites": "error",
@@ -34,7 +31,7 @@ export default {
         "mocha/no-exclusive-tests": "error",
         "mocha/no-exports": "error",
         "mocha/no-global-tests": "error",
-        "mocha/no-hooks": "error",
+        "mocha/no-hooks": ["error", { allow: ["afterEach"] }],
         "mocha/no-hooks-for-single-case": "error",
         "mocha/no-identical-title": "error",
         "mocha/no-mocha-arrows": "error",

@@ -12,10 +12,10 @@
   "exclude": [
     ".git/",
     ".stryker/",
+    ".tmp/",
     "jsdocs/",
     "node_modules/",
     "types/",
-    "tmp/",
     ".vscode/",
     ".idea/"
   ]

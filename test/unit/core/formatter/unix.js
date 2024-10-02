@@ -4,14 +4,15 @@
  */
 
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import UnixFormatter from "../../../../src/core/formatter/unix.js";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
-import WriteString from "../../../utils/writestring.js";
+import WriteString from "../../../utils/write-string.js";
 
-describe("src/core/formatter/unix.js", function () {
-    describe("UnixFormatter", function () {
-        it("should ignore undefined notices", async function () {
+describe("src/core/formatter/unix.js", () => {
+    describe("UnixFormatter", () => {
+        it("should ignore undefined notices", async () => {
             const writer = new WriteString();
 
             const formatter = new UnixFormatter(Levels.FATAL, { writer });
@@ -21,7 +22,7 @@ describe("src/core/formatter/unix.js", function () {
             assert.equal(writer.toString(), "");
         });
 
-        it("should ignore empty notice", async function () {
+        it("should ignore empty notice", async () => {
             const writer = new WriteString();
 
             const formatter = new UnixFormatter(Levels.WARN, { writer });
@@ -31,7 +32,7 @@ describe("src/core/formatter/unix.js", function () {
             assert.equal(writer.toString(), "");
         });
 
-        it("should ignore low level", async function () {
+        it("should ignore low level", async () => {
             const writer = new WriteString();
 
             const formatter = new UnixFormatter(Levels.WARN, { writer });
@@ -58,7 +59,7 @@ describe("src/core/formatter/unix.js", function () {
             assert.equal(writer.toString(), "foo.css::: Bar. (csslint)\n");
         });
 
-        it("should ignore when all low level of file", async function () {
+        it("should ignore when all low level of file", async () => {
             const writer = new WriteString();
 
             const formatter = new UnixFormatter(Levels.ERROR, { writer });
@@ -87,7 +88,7 @@ describe("src/core/formatter/unix.js", function () {
             assert.equal(writer.toString(), "foo.yml::: Bar. (yaml-lint)\n");
         });
 
-        it("should support notices", async function () {
+        it("should support notices", async () => {
             const writer = new WriteString();
 
             const formatter = new UnixFormatter(Levels.INFO, { writer });

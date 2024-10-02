@@ -4,14 +4,15 @@
  */
 
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import CSVFormatter from "../../../../src/core/formatter/csv.js";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
-import WriteString from "../../../utils/writestring.js";
+import WriteString from "../../../utils/write-string.js";
 
-describe("src/core/formatter/csv.js", function () {
-    describe("CSVFormatter", function () {
-        it("should ignore undefined notices", async function () {
+describe("src/core/formatter/csv.js", () => {
+    describe("CSVFormatter", () => {
+        it("should ignore undefined notices", async () => {
             const writer = new WriteString();
 
             const formatter = new CSVFormatter(Levels.FATAL, { writer });
@@ -24,7 +25,7 @@ describe("src/core/formatter/csv.js", function () {
             );
         });
 
-        it("should ignore empty notice", async function () {
+        it("should ignore empty notice", async () => {
             const writer = new WriteString();
 
             const formatter = new CSVFormatter(Levels.ERROR, { writer });
@@ -37,7 +38,7 @@ describe("src/core/formatter/csv.js", function () {
             );
         });
 
-        it("should ignore low level", async function () {
+        it("should ignore low level", async () => {
             const writer = new WriteString();
 
             const formatter = new CSVFormatter(Levels.ERROR, { writer });
@@ -68,7 +69,7 @@ describe("src/core/formatter/csv.js", function () {
             );
         });
 
-        it("should support notices", async function () {
+        it("should support notices", async () => {
             const writer = new WriteString();
 
             const formatter = new CSVFormatter(Levels.INFO, { writer });
@@ -114,7 +115,7 @@ describe("src/core/formatter/csv.js", function () {
             );
         });
 
-        it("should support quote", async function () {
+        it("should support quote", async () => {
             const writer = new WriteString();
 
             const formatter = new CSVFormatter(Levels.INFO, { writer });

@@ -6,15 +6,20 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import process from "node:process";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import PrettierWrapper from "../../../../src/core/wrapper/prettier.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/prettier.js", function () {
-    describe("PrettierWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with OFF level", async function () {
+describe("src/core/wrapper/prettier.js", () => {
+    describe("PrettierWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with OFF level", async () => {
                 const context = {
                     level: Levels.OFF,
                     fix: false,
@@ -31,10 +36,8 @@ describe("src/core/wrapper/prettier.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should use default options", async function () {
-                const root = await createTempFileSystem({
-                    "foo.html": "<span />\n",
-                });
+            it("should use default options", async () => {
+                const root = await tempFs.create({ "foo.html": "<span />\n" });
 
                 const context = {
                     level: Levels.INFO,
@@ -50,10 +53,8 @@ describe("src/core/wrapper/prettier.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should fix", async function () {
-                const root = await createTempFileSystem({
-                    "foo.html": "<img>",
-                });
+            it("should fix", async () => {
+                const root = await tempFs.create({ "foo.html": "<img>" });
 
                 const context = {
                     level: Levels.INFO,
@@ -72,8 +73,8 @@ describe("src/core/wrapper/prettier.js", function () {
                 assert.equal(content, "<img />\n");
             });
 
-            it("shouldn't fix when no problem", async function () {
-                const root = await createTempFileSystem({
+            it("shouldn't fix when no problem", async () => {
+                const root = await tempFs.create({
                     "foo.html": "<title>Bar</title>\n",
                 });
                 const { mtimeMs } = await fs.stat("foo.html");
@@ -104,8 +105,8 @@ describe("src/core/wrapper/prettier.js", function () {
                 assert.equal(stat.mtimeMs, mtimeMs);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "foo.js": "const bar = 42;\n",
                 });
 
@@ -129,8 +130,8 @@ describe("src/core/wrapper/prettier.js", function () {
                 ]);
             });
 
-            it("should ignore error with FATAL level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore error with FATAL level", async () => {
+                const root = await tempFs.create({
                     "foo.js": "const bar = 42;\n",
                 });
 
@@ -148,8 +149,8 @@ describe("src/core/wrapper/prettier.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return FATAL notice with locations", async function () {
-                const root = await createTempFileSystem({
+            it("should return FATAL notice with locations", async () => {
+                const root = await tempFs.create({
                     "foo.js":
                         "// Ajouter des lignes pour avoir le numéro de la \n" +
                         '// ligne avec deux chiffres (pour tester le "+" de\n' +
@@ -180,8 +181,8 @@ describe("src/core/wrapper/prettier.js", function () {
                 ]);
             });
 
-            it("should return default FATAL notice", async function () {
-                const root = await createTempFileSystem({
+            it("should return default FATAL notice", async () => {
+                const root = await tempFs.create({
                     "foo.php": "<?php echo 'bar'; ?>",
                 });
 

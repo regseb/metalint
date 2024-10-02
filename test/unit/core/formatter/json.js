@@ -4,14 +4,15 @@
  */
 
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import JSONFormatter from "../../../../src/core/formatter/json.js";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
-import WriteString from "../../../utils/writestring.js";
+import WriteString from "../../../utils/write-string.js";
 
-describe("src/core/formatter/json.js", function () {
-    describe("JSONFormatter", function () {
-        it("should support undefined notices", async function () {
+describe("src/core/formatter/json.js", () => {
+    describe("JSONFormatter", () => {
+        it("should support undefined notices", async () => {
             const writer = new WriteString();
 
             const formatter = new JSONFormatter(Levels.WARN, { writer });
@@ -21,7 +22,7 @@ describe("src/core/formatter/json.js", function () {
             assert.equal(writer.toString(), '{"foo.html":null}\n');
         });
 
-        it("should support empty notices", async function () {
+        it("should support empty notices", async () => {
             const writer = new WriteString();
 
             const formatter = new JSONFormatter(Levels.INFO, {
@@ -34,7 +35,7 @@ describe("src/core/formatter/json.js", function () {
             assert.equal(writer.toString(), '{"foo.js":[]}\n');
         });
 
-        it("should support notices", async function () {
+        it("should support notices", async () => {
             const writer = new WriteString();
 
             const formatter = new JSONFormatter(Levels.ERROR, {
@@ -84,7 +85,7 @@ describe("src/core/formatter/json.js", function () {
             );
         });
 
-        it("should ignore error with FATAL level", async function () {
+        it("should ignore error with FATAL level", async () => {
             const writer = new WriteString();
 
             const formatter = new JSONFormatter(Levels.FATAL, { writer });

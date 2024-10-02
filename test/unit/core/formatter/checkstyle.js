@@ -4,14 +4,15 @@
  */
 
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import CheckstyleFormatter from "../../../../src/core/formatter/checkstyle.js";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
-import WriteString from "../../../utils/writestring.js";
+import WriteString from "../../../utils/write-string.js";
 
-describe("src/core/formatter/checkstyle.js", function () {
-    describe("CheckstyleFormatter", function () {
-        it("should support undefined notices", async function () {
+describe("src/core/formatter/checkstyle.js", () => {
+    describe("CheckstyleFormatter", () => {
+        it("should support undefined notices", async () => {
             const writer = new WriteString();
 
             const formatter = new CheckstyleFormatter(Levels.INFO, { writer });
@@ -25,7 +26,7 @@ describe("src/core/formatter/checkstyle.js", function () {
             );
         });
 
-        it("should support empty notices", async function () {
+        it("should support empty notices", async () => {
             const writer = new WriteString();
 
             const formatter = new CheckstyleFormatter(Levels.ERROR, {
@@ -45,7 +46,7 @@ describe("src/core/formatter/checkstyle.js", function () {
             );
         });
 
-        it("should ignore low level", async function () {
+        it("should ignore low level", async () => {
             const writer = new WriteString();
 
             const formatter = new CheckstyleFormatter(Levels.ERROR, {
@@ -74,7 +75,7 @@ describe("src/core/formatter/checkstyle.js", function () {
             );
         });
 
-        it("should support notices", async function () {
+        it("should support notices", async () => {
             const writer = new WriteString();
 
             const formatter = new CheckstyleFormatter(Levels.INFO, {
@@ -146,7 +147,7 @@ describe("src/core/formatter/checkstyle.js", function () {
             );
         });
 
-        it("should support specials characters", async function () {
+        it("should support specials characters", async () => {
             const writer = new WriteString();
 
             const formatter = new CheckstyleFormatter(Levels.WARN, {

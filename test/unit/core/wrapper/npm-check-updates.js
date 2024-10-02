@@ -4,18 +4,21 @@
  */
 
 import assert from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import NpmCheckUpdatesWrapper from "../../../../src/core/wrapper/npm-check-updates.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/npm-check-updates.js", function () {
-    describe("NpmCheckUpdatesWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with OFF level", async function () {
-                const root = await createTempFileSystem({
-                    "package.json": "",
-                });
+describe("src/core/wrapper/npm-check-updates.js", () => {
+    describe("NpmCheckUpdatesWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with OFF level", async () => {
+                const root = await tempFs.create({ "package.json": "" });
 
                 const context = {
                     level: Levels.OFF,
@@ -31,8 +34,8 @@ describe("src/core/wrapper/npm-check-updates.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "package.json":
                         '{ "dependencies": { "metalint": "0.10.0" } }',
                 });
@@ -59,8 +62,8 @@ describe("src/core/wrapper/npm-check-updates.js", function () {
                 );
             });
 
-            it("should transmit options", async function () {
-                const root = await createTempFileSystem({
+            it("should transmit options", async () => {
+                const root = await tempFs.create({
                     "package.json":
                         '{ "dependencies": { "metalint": "0.10.0" } }',
                 });
@@ -79,8 +82,8 @@ describe("src/core/wrapper/npm-check-updates.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should ignore error with FATAL level", async function () {
-                const root = await createTempFileSystem({
+            it("should ignore error with FATAL level", async () => {
+                const root = await tempFs.create({
                     "package.json":
                         '{ "dependencies": { "metalint": "0.10.0" } }',
                 });
@@ -99,8 +102,8 @@ describe("src/core/wrapper/npm-check-updates.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return FATAL notice", async function () {
-                const root = await createTempFileSystem({
+            it("should return FATAL notice", async () => {
+                const root = await tempFs.create({
                     "package.json": '<deps><metalint version="0.10.0"></deps>',
                 });
 

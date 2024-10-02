@@ -5,15 +5,20 @@
 
 import assert from "node:assert/strict";
 import process from "node:process";
+import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import JSHintWrapper from "../../../../src/core/wrapper/jshint.js";
-import createTempFileSystem from "../../../utils/fake.js";
+import tempFs from "../../../utils/temp-fs.js";
 
-describe("src/core/wrapper/jshint.js", function () {
-    describe("JSHintWrapper", function () {
-        describe("lint()", function () {
-            it("should ignore with FATAL level", async function () {
+describe("src/core/wrapper/jshint.js", () => {
+    describe("JSHintWrapper", () => {
+        describe("lint()", () => {
+            afterEach(async () => {
+                await tempFs.reset();
+            });
+
+            it("should ignore with FATAL level", async () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -30,10 +35,8 @@ describe("src/core/wrapper/jshint.js", function () {
                 assert.deepEqual(notices, []);
             });
 
-            it("should use default options", async function () {
-                const root = await createTempFileSystem({
-                    "foo.js": 'eval("bar");',
-                });
+            it("should use default options", async () => {
+                const root = await tempFs.create({ "foo.js": 'eval("bar");' });
 
                 const context = {
                     level: Levels.WARN,
@@ -58,8 +61,8 @@ describe("src/core/wrapper/jshint.js", function () {
                 ]);
             });
 
-            it("should return notices", async function () {
-                const root = await createTempFileSystem({
+            it("should return notices", async () => {
+                const root = await tempFs.create({
                     "foo.js": `if (1 == "1") {
                                  console.log("bar");`,
                 });
@@ -103,10 +106,8 @@ describe("src/core/wrapper/jshint.js", function () {
                 ]);
             });
 
-            it("should ignore warning with ERROR level", async function () {
-                const root = await createTempFileSystem({
-                    "foo.js": "const foo;",
-                });
+            it("should ignore warning with ERROR level", async () => {
+                const root = await tempFs.create({ "foo.js": "const foo;" });
 
                 const context = {
                     level: Levels.ERROR,

@@ -4,6 +4,7 @@
  */
 
 import assert from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
 import Metalint from "../../../src/core/index.js";
 import Levels from "../../../src/core/levels.js";
 import Severities from "../../../src/core/severities.js";
@@ -13,13 +14,17 @@ import HTMLHintWrapper from "../../../src/core/wrapper/htmlhint.js";
 import JSHintWrapper from "../../../src/core/wrapper/jshint.js";
 import MarkdownlintWrapper from "../../../src/core/wrapper/markdownlint.js";
 import PrettierWrapper from "../../../src/core/wrapper/prettier.js";
-import createTempFileSystem from "../../utils/fake.js";
+import tempFs from "../../utils/temp-fs.js";
 
-describe("src/core/index.js", function () {
-    describe("Metalint", function () {
-        describe("lintFiles()", function () {
-            it("should return notices", async function () {
-                await createTempFileSystem({
+describe("src/core/index.js", () => {
+    describe("Metalint", () => {
+        afterEach(async () => {
+            await tempFs.reset();
+        });
+
+        describe("lintFiles()", () => {
+            it("should return notices", async () => {
+                await tempFs.create({
                     "foo.html": "<HTML></HTML>",
                     "bar.md": "## baz",
                     "qux.js": "alert('quux')",
@@ -120,10 +125,8 @@ describe("src/core/index.js", function () {
                 });
             });
 
-            it("should add default properties", async function () {
-                await createTempFileSystem({
-                    "foo.json": '{"bar":"baz"}',
-                });
+            it("should add default properties", async () => {
+                await tempFs.create({ "foo.json": '{"bar":"baz"}' });
 
                 const files = ["foo.json"];
                 const checkers = [
@@ -165,8 +168,8 @@ describe("src/core/index.js", function () {
                 });
             });
 
-            it("should support sub-files", async function () {
-                await createTempFileSystem({
+            it("should support sub-files", async () => {
+                await tempFs.create({
                     "foo/manifest.json": "{ 'name': 'foo' }",
                 });
 
@@ -220,10 +223,8 @@ describe("src/core/index.js", function () {
                 });
             });
 
-            it("should support same patterns", async function () {
-                await createTempFileSystem({
-                    "README.md": "# Foo",
-                });
+            it("should support same patterns", async () => {
+                await tempFs.create({ "README.md": "# Foo" });
 
                 const files = ["README.md"];
                 const checkers = [
