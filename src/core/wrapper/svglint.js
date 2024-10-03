@@ -71,6 +71,7 @@ export default class SVGLintWrapper extends Wrapper {
         const linting = await SVGLint.lintFile(file, this.#options);
         await new Promise((resolve) => {
             linting.on("done", resolve);
+            linting.lint();
         });
 
         const notices = [];
