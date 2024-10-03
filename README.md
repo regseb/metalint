@@ -5,18 +5,16 @@
 <!-- markdownlint-disable-next-line no-inline-html-->
 <img src="asset/logo.svg" align="right" alt="">
 
-[![npm][img-npm]][link-npm]
-[![build][img-build]][link-build]
-[![coverage][img-coverage]][link-coverage]
-[![semver][img-semver]][link-semver]
+[![npm][img-npm]][link-npm] [![build][img-build]][link-build]
+[![coverage][img-coverage]][link-coverage] [![semver][img-semver]][link-semver]
 
 > _Un linter pour les gouverner tous._
 
 ## Description
 
 **Metalint** est un outil pour analyser tous les fichiers de votre projet.
-L'analyse est déléguée à des linters (outils d'analyse statique de code
-source) :
+L'analyse est déléguée à des linters (outils d'analyse statique de code source)
+:
 
 <!-- markdownlint-disable no-inline-html -->
 <table>
@@ -270,11 +268,17 @@ jobs:
         run: npm run lint -- --formatter github
 ```
 
-[img-npm]: https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=whitesmoke
-[img-build]: https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=whitesmoke
-[img-coverage]: https://img.shields.io/endpoint?label=coverage&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fregseb%2Fmetalint%2Fmain
-[img-semver]: https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&logoColor=whitesmoke
+[img-npm]:
+  https://img.shields.io/npm/dm/metalint?label=npm&logo=npm&logoColor=whitesmoke
+[img-build]:
+  https://img.shields.io/github/actions/workflow/status/regseb/metalint/ci.yml?branch=main&logo=github&logoColor=whitesmoke
+[img-coverage]:
+  https://img.shields.io/endpoint?label=coverage&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fregseb%2Fmetalint%2Fmain
+[img-semver]:
+  https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&logoColor=whitesmoke
 [link-npm]: https://www.npmjs.com/package/metalint
-[link-build]: https://github.com/regseb/metalint/actions/workflows/ci.yml?query=branch%3Amain
-[link-coverage]: https://dashboard.stryker-mutator.io/reports/github.com/regseb/metalint/main
+[link-build]:
+  https://github.com/regseb/metalint/actions/workflows/ci.yml?query=branch%3Amain
+[link-coverage]:
+  https://dashboard.stryker-mutator.io/reports/github.com/regseb/metalint/main
 [link-semver]: https://semver.org/spec/v2.0.0.html "Semantic Versioning 2.0.0"

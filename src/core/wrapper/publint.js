@@ -35,20 +35,7 @@ const TYPES = {
 };
 
 /**
- * Enlève les séquences d'échappement ANSI d'une chaine de caractères.
- *
- * @param {string} input La chaine de caractères avec d'éventuelles séquences
- *                       d'échappement ANSI.
- * @returns {string} La chaine de caractères sans séquence d'échappement ANSI.
- * @see https://www.npmjs.com/package/picocolors
- */
-const stripAnsi = function (input) {
-    // eslint-disable-next-line no-control-regex, regexp/no-control-character
-    return input.replaceAll(/\u{1B}\[\d+m/gu, "");
-};
-
-/**
- * L'enrobage du linter <strong>publint</strong>.
+ * L'enrobage du linter **publint**.
  *
  * @see https://www.npmjs.com/package/publint
  */
@@ -123,11 +110,7 @@ export default class PublintWrapper extends Wrapper {
                     linter: "publint",
                     rule: message.code,
                     severity: TYPES[message.type],
-                    // Enlever la mise en forme du message.
-                    // https://github.com/bluwy/publint/pull/87
-                    message: stripAnsi(
-                        /** @type {string} */ (formatMessage(message, pkg)),
-                    ),
+                    message: formatMessage(message, pkg, { color: false }),
                 }))
                 .filter((n) => this.level >= n.severity);
         } catch (err) {

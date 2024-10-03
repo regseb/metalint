@@ -252,7 +252,7 @@ describe("src/core/configuration/normalize.js", () => {
                     dir,
                 },
             );
-            assert.deepEqual(normalized[0]["heading-style"], { style: "atx" });
+            assert.deepEqual(normalized[0]["heading-increment"], true);
         });
 
         it("should support string", async () => {
@@ -265,7 +265,7 @@ describe("src/core/configuration/normalize.js", () => {
                     dir,
                 },
             );
-            assert.deepEqual(normalized[0]["heading-style"], { style: "atx" });
+            assert.deepEqual(normalized[0]["heading-increment"], true);
         });
 
         it("should support Object", async () => {

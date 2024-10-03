@@ -12,7 +12,7 @@ jobs:
       id-token: write
     steps:
       - name: Run Release Please
-        uses: google-github-actions/release-please-action@v4
+        uses: googleapis/release-please-action@v4
         id: release
         with:
           release-type: node
@@ -37,7 +37,7 @@ jobs:
         if: ${{ steps.release.outputs.pr }}
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install dependencies
         if: ${{ steps.release.outputs.pr }}
@@ -45,11 +45,7 @@ jobs:
 
       - name: Format files
         if: ${{ steps.release.outputs.pr }}
-        run: >
-          npm run lint:fix --
-          CHANGELOG.md
-          package.json
-          package-lock.json
+        run: npm run lint:fix -- CHANGELOG.md package.json package-lock.json
 
       - name: Commit and push
         if: ${{ steps.release.outputs.pr }}
@@ -66,7 +62,7 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
@@ -75,7 +71,9 @@ jobs:
 
       - name: Publish in npm
         if: ${{ steps.release.outputs.release_created }}
-        run: npm publish --provenance
+        # Forcer l'access public, car la valeur par défaut n'est pas utilisée.
+        # https://github.com/npm/cli/issues/7706
+        run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -85,6 +83,7 @@ jobs:
 
       - name: Upload tarball to release
         if: ${{ steps.release.outputs.release_created }}
-        run: gh release upload ${{ steps.release.outputs.tag_name }} metalint-*.tgz
+        run:
+          gh release upload ${{ steps.release.outputs.tag_name }} metalint-*.tgz
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

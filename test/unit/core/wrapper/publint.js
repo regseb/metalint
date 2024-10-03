@@ -85,9 +85,9 @@ describe("src/core/wrapper/publint.js", () => {
                         rule: "USE_TYPE",
                         message:
                             "The package does not specify the type field." +
-                            " Environments may incorrectly identify a CJS" +
-                            " file as ESM in the future. Consider adding" +
-                            ' "type": "commonjs".',
+                            " NodeJS may attempt to detect the package type" +
+                            " causing a small performance hit. Consider" +
+                            ' adding "type": "commonjs".',
                     },
                     {
                         file,
