@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.18.0](https://github.com/regseb/metalint/compare/v0.17.0...v0.18.0) (2024-10-05)
+
+
+### Features
+
+* Supporter ESLint v9 et FlatConfig. ([3fff1e4](https://github.com/regseb/metalint/commit/3fff1e47a8a6423a56d3fdd8a4c4e73e0c2ac068))
+* Supporter SVGLint v3. ([e79639d](https://github.com/regseb/metalint/commit/e79639d166e970aafe517d74a4b0b65122c6509a))
+
 ## [0.17.0](https://github.com/regseb/metalint/compare/v0.16.0...v0.17.0) (2024-05-12)
 
 ### Features
