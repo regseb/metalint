@@ -128,7 +128,7 @@ describe("src/core/wrapper/depcheck.js", () => {
                 // https://github.com/stryker-mutator/stryker-js/issues/3978
                 const nodeModules = path.join(
                     context.root.replace(
-                        /[/\\]\.stryker[/\\]tmp[/\\]sandbox\d+/u,
+                        /[\/\\]\.stryker[\/\\]tmp[\/\\]sandbox\d+/v,
                         "",
                     ),
                     "node_modules",

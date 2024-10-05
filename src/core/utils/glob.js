@@ -17,7 +17,7 @@ import { wrap } from "./array.js";
  *                   protégés.
  */
 const sanitize = function (pattern) {
-    return pattern.replaceAll(/[$()*+.?[\\\]^{|}]/gu, String.raw`\$&`);
+    return pattern.replaceAll(/[$\(\)*+.?\[\\\]^\{\|\}]/gv, String.raw`\$&`);
 };
 
 /**
@@ -38,7 +38,7 @@ const reverse = function (pattern) {
  * @throws {Error} Si le patron est invalide.
  */
 const compile = function (pattern) {
-    const glob = pattern.replace(/^!/u, "");
+    const glob = pattern.replace(/^!/v, "");
     let regexp = glob.startsWith("/") ? "^" : "^(.*/)?";
 
     for (let i = 0; i < glob.length; ++i) {
@@ -62,7 +62,7 @@ const compile = function (pattern) {
             // Si c'est le dernier caractère ou qu'il n'est pas suivi par une
             // étoile.
             if (glob.length === i + 1 || "*" !== glob[i + 1]) {
-                regexp += "[^/]+";
+                regexp += String.raw`[^\/]+`;
                 // Sinon : Le prochain est une étoile et les doubles étoiles
                 // sont en début du patron.
             } else if (0 === i) {
@@ -72,7 +72,7 @@ const compile = function (pattern) {
                 throw new Error(`${pattern}: '**' not preceded by a slash.`);
             }
         } else if ("?" === glob[i]) {
-            regexp += "[^/]";
+            regexp += String.raw`[^\/]`;
         } else if ("[" === glob[i]) {
             const closing = glob.indexOf("]", i);
             if (-1 === closing) {
@@ -96,7 +96,7 @@ const compile = function (pattern) {
     }
     regexp += "$";
 
-    return new RegExp(regexp, "u");
+    return new RegExp(regexp, "v");
 };
 
 /**

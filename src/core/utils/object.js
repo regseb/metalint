@@ -15,10 +15,9 @@ export const merge = function (first, second) {
     let third;
 
     if (
-        "object" === typeof first &&
-        !Array.isArray(first) &&
-        "object" === typeof second &&
-        !Array.isArray(second)
+        first !== second &&
+        Object === first?.constructor &&
+        Object === second?.constructor
     ) {
         third = /** @type {Record<string, any>} */ ({});
         for (const key of new Set([

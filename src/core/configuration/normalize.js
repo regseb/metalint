@@ -374,8 +374,8 @@ export const normalizeLinter = async function (partial, { dir }) {
     if ("string" === typeof partial) {
         // Chercher un "_" entouré de lettres ou de chiffres pour éviter les
         // faux positifs des linters avec un double "__".
-        const name = /[0-9a-z]_[0-9a-z]/u.test(partial)
-            ? partial.slice(0, partial.search(/[0-9a-z]_[0-9a-z]/u) + 1)
+        const name = /[0-9a-z]_[0-9a-z]/v.test(partial)
+            ? partial.slice(0, partial.search(/[0-9a-z]_[0-9a-z]/v) + 1)
             : partial;
         const wrapper = await normalizeWrapper(name);
         if (wrapper.configurable) {

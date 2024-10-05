@@ -4,18 +4,10 @@
  * @author Sébastien Règne
  */
 
-import fs from "node:fs/promises";
 import { ESLint } from "eslint";
-// Désactiver la règle suivante pour cet import, car elle ne supporte pas la
-// propriété "exports" du package.json.
-// https://github.com/import-js/eslint-plugin-import/issues/1810
-// eslint-disable-next-line import/no-unresolved
-import pkg from "eslint/use-at-your-own-risk";
 import Levels from "../levels.js";
 import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
-
-const { FlatESLint } = pkg;
 
 /**
  * @import { PartialNotice } from "../results.js"
@@ -61,24 +53,13 @@ export default class ESLintWrapper extends Wrapper {
      */
     constructor(context, options) {
         super(context);
-        const { configType, ...baseConfig } = options;
-        if ("flat" === configType) {
-            this.#eslint = new FlatESLint({
-                globInputPaths: false,
-                ignore: false,
-                baseConfig,
-                fix: this.fix,
-                overrideConfigFile: true,
-            });
-        } else {
-            this.#eslint = new ESLint({
-                globInputPaths: false,
-                ignore: false,
-                baseConfig,
-                useEslintrc: false,
-                fix: this.fix,
-            });
-        }
+        this.#eslint = new ESLint({
+            globInputPaths: false,
+            ignore: false,
+            overrideConfigFile: true,
+            overrideConfig: options,
+            fix: this.fix,
+        });
     }
 
     /**
@@ -93,13 +74,12 @@ export default class ESLintWrapper extends Wrapper {
             return [];
         }
 
-        const [results] = await this.#eslint.lintFiles(file);
+        const results = await this.#eslint.lintFiles(file);
+        ESLint.outputFixes(results);
 
-        if (undefined !== results.output) {
-            await fs.writeFile(file, results.output);
-        }
-
-        return results.messages
+        // Récupérer seulement le premier résultat (et l'unique), car un seul
+        // fichier a été analysé.
+        return results[0].messages
             .map((result) => {
                 let severity;
                 if (result.fatal) {
@@ -113,6 +93,7 @@ export default class ESLintWrapper extends Wrapper {
                 return {
                     file,
                     linter: "eslint",
+                    // Convertir les éventuelles valeurs `null` en `undefined`.
                     rule: result.ruleId ?? undefined,
                     severity,
                     message: result.message,

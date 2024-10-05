@@ -114,7 +114,7 @@ describe("src/core/wrapper/ajv.js", () => {
                         },
                     },
                     addFormats(/** @type {Ajv} */ ajv) {
-                        ajv.addFormat("yes-no", /^(?:no|yes)$/u);
+                        ajv.addFormat("yes-no", /^(?:no|yes)$/v);
                     },
                 };
                 const file = "foo.json";

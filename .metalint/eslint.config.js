@@ -3,6 +3,16 @@
  * @author Sébastien Règne
  */
 
+import arrayFunc from "eslint-plugin-array-func";
+import eslintComments from "eslint-plugin-eslint-comments";
+import importPlugin from "eslint-plugin-import";
+import jsdoc from "eslint-plugin-jsdoc";
+import noUnsanitized from "eslint-plugin-no-unsanitized";
+import promise from "eslint-plugin-promise";
+import regexp from "eslint-plugin-regexp";
+import unicorn from "eslint-plugin-unicorn";
+import globals from "globals";
+
 /**
  * @import { Linter } from "eslint"
  */
@@ -11,26 +21,19 @@
  * @type {Linter.Config}
  */
 export default {
-    plugins: [
-        "array-func",
-        "eslint-comments",
-        "import",
-        "jsdoc",
-        "mocha",
-        "n",
-        "no-unsanitized",
-        "promise",
-        "regexp",
-        "unicorn",
-    ],
-
-    parserOptions: {
-        sourceType: "module",
+    languageOptions: {
+        globals: { ...globals["shared-node-browser"] },
     },
 
-    env: {
-        "shared-node-browser": true,
-        es2023: true,
+    plugins: {
+        "array-func": arrayFunc,
+        "eslint-comments": eslintComments,
+        import: importPlugin,
+        jsdoc,
+        "no-unsanitized": noUnsanitized,
+        promise,
+        regexp,
+        unicorn,
     },
 
     rules: {
@@ -74,7 +77,7 @@ export default {
             },
         ],
         "no-loss-of-precision": "error",
-        "no-misleading-character-class": "error",
+        "no-misleading-character-class": ["error", { allowEscape: true }],
         "no-new-native-nonconstructor": "error",
         "no-new-symbol": "error",
         "no-obj-calls": "error",
@@ -105,7 +108,6 @@ export default {
             {
                 args: "all",
                 argsIgnorePattern: "^_",
-                caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_",
             },
         ],
@@ -135,7 +137,7 @@ export default {
             },
         ],
         "class-methods-use-this": "error",
-        complexity: ["warn", { max: 50 }],
+        complexity: ["warn", { max: 50, variant: "modified" }],
         "consistent-return": "error",
         "consistent-this": "error",
         curly: "error",
@@ -181,7 +183,6 @@ export default {
         "max-nested-callbacks": "warn",
         "max-params": ["warn", { max: 5 }],
         "max-statements": ["warn", { max: 50 }],
-        "multiline-comment-style": ["error", "separate-lines"],
         "new-cap": "error",
         "no-alert": "error",
         "no-array-constructor": "error",
@@ -200,7 +201,10 @@ export default {
         "no-eval": "error",
         "no-extend-native": "error",
         "no-extra-bind": "error",
-        "no-extra-boolean-cast": "error",
+        "no-extra-boolean-cast": [
+            "error",
+            { enforceForInnerExpressions: true },
+        ],
         "no-extra-label": "error",
         "no-global-assign": "error",
         "no-implicit-coercion": ["error", { disallowTemplateShorthand: true }],
@@ -308,7 +312,7 @@ export default {
         "prefer-template": "off",
         radix: "error",
         "require-await": "error",
-        "require-unicode-regexp": "error",
+        "require-unicode-regexp": ["error", { requireFlag: "v" }],
         "require-yield": "error",
         "sort-imports": [
             "error",
@@ -326,7 +330,6 @@ export default {
         yoda: ["error", "always"],
 
         // Layout & Formatting.
-        "line-comment-position": "error",
         "unicode-bom": "error",
 
         // Plugin eslint-plugin-array-func.
@@ -659,7 +662,7 @@ export default {
 
         // Plugin eslint-plugin-unicorn.
         "unicorn/better-regex": "error",
-        "unicorn/catch-error-name": ["error", { ignore: [/^err$/u, /^e$/u] }],
+        "unicorn/catch-error-name": ["error", { ignore: [/^err$/v, /^e$/v] }],
         "unicorn/consistent-destructuring": "error",
         "unicorn/consistent-empty-array-spread": "error",
         "unicorn/consistent-existence-index-check": "error",

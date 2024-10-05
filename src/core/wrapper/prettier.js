@@ -105,7 +105,7 @@ export default class PrettierWrapper extends Wrapper {
                             linter: "prettier",
                             severity: Severities.FATAL,
                             message: err.message.replace(
-                                / \(\d+:\d+\)\n.*/su,
+                                / \(\d+:\d+\)\n.*/sv,
                                 "",
                             ),
                             locations: [

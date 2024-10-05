@@ -6,6 +6,8 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { afterEach, describe, it } from "node:test";
+import jsdoc from "eslint-plugin-jsdoc";
+import mocha from "eslint-plugin-mocha";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import ESLintWrapper from "../../../../src/core/wrapper/eslint.js";
@@ -227,7 +229,7 @@ describe("src/core/wrapper/eslint.js", () => {
                     files: ["foo.js"],
                 };
                 const options = {
-                    plugins: ["jsdoc", "mocha"],
+                    plugins: { jsdoc, mocha },
                     rules: {
                         "jsdoc/check-types": "error",
                         "jsdoc/check-syntax": "error",
@@ -268,45 +270,6 @@ describe("src/core/wrapper/eslint.js", () => {
                                 column: 1,
                                 endLine: 7,
                                 endColumn: 1,
-                            },
-                        ],
-                    },
-                ]);
-            });
-
-            it("should support flat config", async () => {
-                const root = await tempFs.create({
-                    "foo.js": "const bar = baz + qux;\n",
-                });
-
-                const context = {
-                    level: Levels.WARN,
-                    fix: false,
-                    root,
-                    files: ["foo.js"],
-                };
-                const options = {
-                    configType: "flat",
-                    languageOptions: { globals: { baz: "readonly" } },
-                    rules: { "no-undef": "error" },
-                };
-                const file = "foo.js";
-
-                const wrapper = new ESLintWrapper(context, options);
-                const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, [
-                    {
-                        file,
-                        linter: "eslint",
-                        rule: "no-undef",
-                        severity: Severities.ERROR,
-                        message: "'qux' is not defined.",
-                        locations: [
-                            {
-                                line: 1,
-                                column: 19,
-                                endLine: 1,
-                                endColumn: 22,
                             },
                         ],
                     },

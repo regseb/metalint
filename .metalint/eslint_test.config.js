@@ -3,6 +3,8 @@
  * @author Sébastien Règne
  */
 
+import mocha from "eslint-plugin-mocha";
+
 /**
  * @import { Linter } from "eslint"
  */
@@ -11,6 +13,8 @@
  * @type {Linter.Config}
  */
 export default {
+    plugins: { mocha },
+
     rules: {
         // Suggestions.
         complexity: "off",

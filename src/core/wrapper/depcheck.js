@@ -68,7 +68,7 @@ export default class DepcheckWrapper extends Wrapper {
             return [];
         }
 
-        if (!/(?:^|\/)package\.json$/u.test(file)) {
+        if (!/(?:^|\/)package\.json$/v.test(file)) {
             return [
                 {
                     file,
