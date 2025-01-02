@@ -39,7 +39,7 @@ describe("src/core/formatter/unix.js", () => {
             await formatter.notify("foo.css", [
                 {
                     file: "foo.css",
-                    linter: "csslint",
+                    linter: "stylelint",
                     rule: undefined,
                     severity: Severities.WARN,
                     message: "Bar.",
@@ -47,7 +47,7 @@ describe("src/core/formatter/unix.js", () => {
                 },
                 {
                     file: "foo.css",
-                    linter: "csslint",
+                    linter: "stylelint",
                     rule: undefined,
                     severity: Severities.INFO,
                     message: "Baz.",
@@ -56,7 +56,7 @@ describe("src/core/formatter/unix.js", () => {
             ]);
             await formatter.finalize();
 
-            assert.equal(writer.toString(), "foo.css::: Bar. (csslint)\n");
+            assert.equal(writer.toString(), "foo.css::: Bar. (stylelint)\n");
         });
 
         it("should ignore when all low level of file", async () => {

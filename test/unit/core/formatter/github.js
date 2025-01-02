@@ -39,7 +39,7 @@ describe("src/core/formatter/github.js", () => {
             await formatter.notify("foo.css", [
                 {
                     file: "foo.css",
-                    linter: "csslint",
+                    linter: "stylelint",
                     rule: undefined,
                     severity: Severities.ERROR,
                     message: "Bar.",
@@ -47,7 +47,7 @@ describe("src/core/formatter/github.js", () => {
                 },
                 {
                     file: "foo.css",
-                    linter: "csslint",
+                    linter: "stylelint",
                     rule: undefined,
                     severity: Severities.FATAL,
                     message: "Baz.",
@@ -58,7 +58,7 @@ describe("src/core/formatter/github.js", () => {
 
             assert.equal(
                 writer.toString(),
-                "::error file=foo.css::Baz. (csslint)\n",
+                "::error file=foo.css::Baz. (stylelint)\n",
             );
         });
 
