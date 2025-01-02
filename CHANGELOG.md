@@ -2,15 +2,15 @@
 
 ## [0.19.0](https://github.com/regseb/metalint/compare/v0.18.0...v0.19.0) (2025-01-02)
 
-
 ### Features
 
-* Auto-corriger des problèmes avec Markdownlint. ([6d748df](https://github.com/regseb/metalint/commit/6d748dfc8411c5b704b06d2b2ba4e42800bdc01f))
-
+- Auto-corriger des problèmes avec Markdownlint.
+  ([6d748df](https://github.com/regseb/metalint/commit/6d748dfc8411c5b704b06d2b2ba4e42800bdc01f))
 
 ### Bug Fixes
 
-* Enlever le linter obsolète CSSLint. ([170072f](https://github.com/regseb/metalint/commit/170072f54d9c4c4e4cad8a2e09d11cb87a54de17))
+- Enlever le linter obsolète CSSLint.
+  ([170072f](https://github.com/regseb/metalint/commit/170072f54d9c4c4e4cad8a2e09d11cb87a54de17))
 
 ## [0.18.0](https://github.com/regseb/metalint/compare/v0.17.0...v0.18.0) (2024-10-05)
 
