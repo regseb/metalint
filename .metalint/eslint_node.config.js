@@ -59,14 +59,20 @@ export default {
         "n/no-path-concat": "error",
         "n/no-process-exit": "error",
         "n/no-unpublished-bin": "error",
-        // Désactiver cette règle, car les linters ne sont pas publiés.
-        "n/no-unpublished-import": "off",
+        "n/no-unpublished-import": "error",
         // Ne pas vérifier les require(), car ils ne sont pas utilisés (en
         // faveur des imports).
         "n/no-unpublished-require": "off",
         "n/no-unsupported-features/es-builtins": "error",
         "n/no-unsupported-features/es-syntax": "error",
-        "n/no-unsupported-features/node-builtins": "error",
+        "n/no-unsupported-features/node-builtins": [
+            "error",
+            {
+                // Ignorer les vérifications de test.describe qui est en
+                // expérimental dans Node v20.
+                ignores: ["test.describe"],
+            },
+        ],
         "n/process-exit-as-throw": "error",
 
         // Best Practices.

@@ -84,7 +84,7 @@ describe("src/core/results.js", () => {
                 });
             });
 
-            it("should suport sub-file", () => {
+            it("should support sub-file", () => {
                 const results = new Results(["foo"]);
                 results.add("foo", [
                     {

@@ -204,7 +204,7 @@ export default class Metalint {
      *                                                     fichier.
      * @returns {Promise<Severity|undefined>} La sévérité la plus élevée des
      *                                        notifications ; ou `undefined` si
-     *                                        les résultats ont aucune
+     *                                        les résultats n'ont aucune
      *                                        notification.
      */
     async report(results) {

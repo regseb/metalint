@@ -128,7 +128,7 @@ describe("src/core/wrapper/depcheck.js", () => {
                 // https://github.com/stryker-mutator/stryker-js/issues/3978
                 const nodeModules = path.join(
                     context.root.replace(
-                        /[\/\\]\.stryker[\/\\]tmp[\/\\]sandbox\d+/v,
+                        /[\/\\]\.stryker[\/\\]tmp[\/\\]sandbox-\w+/v,
                         "",
                     ),
                     "node_modules",
@@ -167,7 +167,7 @@ describe("src/core/wrapper/depcheck.js", () => {
                 ]);
             });
 
-            it("should return notices from devDependancies", async () => {
+            it("should return notices from devDependencies", async () => {
                 const root = await tempFs.create({
                     "package.json": JSON.stringify({
                         devDependencies: { foo: "1.0.0" },

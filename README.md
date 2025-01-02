@@ -239,12 +239,14 @@ ajouter le script suivant dans votre `package.json` :
 ```json
 {
   "scripts": {
-    "lint": "metalint"
+    "lint": "metalint",
+    "lint:fix": "metalint --fix"
   }
 }
 ```
 
-Metalint est maintenant utilisable avec la commande : `npm run lint`
+Metalint est maintenant utilisable avec les commandes : `npm run lint` et
+`npm run lint:fix`
 
 ### GitHub Actions
 
@@ -256,10 +258,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v4
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - uses: actions/setup-node@v4
       - name: Install dependencies
         run: npm ci
       - name: Lint files

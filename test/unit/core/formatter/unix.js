@@ -92,28 +92,28 @@ describe("src/core/formatter/unix.js", () => {
             const writer = new WriteString();
 
             const formatter = new UnixFormatter(Levels.INFO, { writer });
-            await formatter.notify("foo.html", [
+            await formatter.notify("foo.md", [
                 {
-                    file: "foo.html",
-                    linter: "htmllint",
+                    file: "foo.md",
+                    linter: "markdownlint",
                     rule: undefined,
                     severity: Severities.ERROR,
                     message: "La cigale ayant chanté",
                     locations: [],
                 },
             ]);
-            await formatter.notify("bar.js", [
+            await formatter.notify("bar.less", [
                 {
-                    file: "bar.js",
-                    linter: "jslint",
+                    file: "bar.less",
+                    linter: "stylelint",
                     rule: "1",
                     severity: Severities.WARN,
                     message: "Tout l'été,",
                     locations: [{ line: 1, column: 2 }],
                 },
                 {
-                    file: "bar.js",
-                    linter: "jslint",
+                    file: "bar.less",
+                    linter: "stylelint",
                     rule: "2",
                     severity: Severities.INFO,
                     message: "Se trouva fort dépourvue",
@@ -124,10 +124,10 @@ describe("src/core/formatter/unix.js", () => {
 
             assert.equal(
                 writer.toString(),
-                "foo.html::: La cigale ayant chanté (htmllint)\n" +
+                "foo.md::: La cigale ayant chanté (markdownlint)\n" +
                     "\n" +
-                    "bar.js:1:2: Tout l'été, (jslint.1)\n" +
-                    "bar.js:3:: Se trouva fort dépourvue (jslint.2)\n",
+                    "bar.less:1:2: Tout l'été, (stylelint.1)\n" +
+                    "bar.less:3:: Se trouva fort dépourvue (stylelint.2)\n",
             );
         });
     });

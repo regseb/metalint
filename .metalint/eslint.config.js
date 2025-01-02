@@ -3,11 +3,16 @@
  * @author Sébastien Règne
  */
 
+// @ts-expect-error -- Le plugin array-func ne fournit pas de types.
 import arrayFunc from "eslint-plugin-array-func";
+// @ts-expect-error -- Le plugin eslint-comments ne fournit pas de types.
 import eslintComments from "eslint-plugin-eslint-comments";
+// @ts-expect-error -- Le plugin import ne fournit pas de types.
 import importPlugin from "eslint-plugin-import";
 import jsdoc from "eslint-plugin-jsdoc";
+// @ts-expect-error -- Le plugin no-unsanitized ne fournit pas de types.
 import noUnsanitized from "eslint-plugin-no-unsanitized";
+// @ts-expect-error -- Le plugin promise ne fournit pas de types.
 import promise from "eslint-plugin-promise";
 import regexp from "eslint-plugin-regexp";
 import unicorn from "eslint-plugin-unicorn";
@@ -563,6 +568,7 @@ export default {
         "promise/param-names": "error",
         "promise/prefer-await-to-callbacks": "off",
         "promise/prefer-await-to-then": ["error", { strict: true }],
+        "promise/prefer-catch": "error",
         "promise/spec-only": "error",
         "promise/valid-params": "error",
 
@@ -625,7 +631,10 @@ export default {
         "regexp/prefer-regexp-exec": "error",
         "regexp/prefer-regexp-test": "error",
         "regexp/prefer-set-operation": "error",
-        "regexp/require-unicode-regexp": "error",
+        // Désactiver cette règle qui est quasi-identique à la règle
+        // "require-unicode-regexp" (seule la position de la notification est
+        // différente).
+        "regexp/require-unicode-regexp": "off",
         "regexp/simplify-set-operations": "error",
         "regexp/sort-alternatives": "error",
         "regexp/use-ignore-case": "error",

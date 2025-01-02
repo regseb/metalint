@@ -4,8 +4,8 @@
  * @author Sébastien Règne
  */
 
-// La dépendance "@types/js-yaml" n'est inclue dans la projet "yaml-lint" alors
-// qu'elle est nécessaire. "@types/js-yaml" a donc été ajouté dans les
+// La dépendance "@types/js-yaml" n'est pas inclue dans le projet "yaml-lint"
+// alors qu'elle est nécessaire. "@types/js-yaml" a donc été ajoutée dans les
 // dépendances de Metalint. https://github.com/rasshofer/yaml-lint/pull/36
 import yamlLint from "yaml-lint";
 import Levels from "../levels.js";

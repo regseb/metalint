@@ -75,7 +75,7 @@ export default class ESLintWrapper extends Wrapper {
         }
 
         const results = await this.#eslint.lintFiles(file);
-        ESLint.outputFixes(results);
+        await ESLint.outputFixes(results);
 
         // Récupérer seulement le premier résultat (et l'unique), car un seul
         // fichier a été analysé.

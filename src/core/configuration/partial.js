@@ -126,11 +126,11 @@
  *                                                                   minimum des
  *                                                                   notifications.
  * @prop {PartialConfigReporter|PartialConfigReporter[]} [reporters] Les
- *                                                                   configuration
+ *                                                                   configurations
  *                                                                   des
  *                                                                   rapporteurs.
  * @prop {PartialConfigChecker|PartialConfigChecker[]}   [checkers]  Les
- *                                                                   configuration
+ *                                                                   configurations
  *                                                                   des
  *                                                                   checkers.
  */

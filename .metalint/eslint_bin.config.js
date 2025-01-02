@@ -12,6 +12,8 @@
  */
 export default {
     rules: {
+        // Plugin eslint-plugin-n.
+        // Possible Errors.
         "n/no-process-exit": "off",
     },
 };

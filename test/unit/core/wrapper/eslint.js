@@ -22,7 +22,7 @@ describe("src/core/wrapper/eslint.js", () => {
 
             it("should use default options", async () => {
                 const root = await tempFs.create({
-                    "foo.js": 'consol.log("bar");',
+                    "foo.js": 'terminal.log("bar");',
                 });
 
                 const context = {

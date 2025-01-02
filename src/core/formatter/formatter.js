@@ -87,6 +87,6 @@ export default class Formatter {
 }
 
 /**
- * @typedef {Object} TypeofFormatter Le type d'une formateur.
+ * @typedef {Object} TypeofFormatter Le type d'un formateur.
  * @prop {Function} constructor La fonction pour créer le formateur.
  */

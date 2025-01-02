@@ -10,14 +10,18 @@ import process from "node:process";
 import { wrap } from "./array.js";
 
 /**
- * Protège les caractères spéciaux pour les expressions rationnelles.
+ * Échappe les caractères spéciaux d'une expression régulière.
  *
- * @param {string} pattern Une chaine de caractères.
- * @returns {string} La chaine de caractères avec les caractères spéciaux
- *                   protégés.
+ * @param {string} text Le texte à échapper.
+ * @returns {string} Le texte échappé.
+ * @see https://developer.mozilla.org/Web/JavaScript/Reference/Global_Objects/RegExp/escape
+ * @see https://github.com/tc39/proposal-regex-escaping
+ * @see https://issues.chromium.org/353856236
+ * @see https://bugzil.la/1918235
+ * @see https://github.com/orgs/nodejs/discussions/37488
  */
-const sanitize = function (pattern) {
-    return pattern.replaceAll(/[$\(\)*+.?\[\\\]^\{\|\}]/gv, String.raw`\$&`);
+const escape = (text) => {
+    return text.replaceAll(/[$\(\)*+.?\[\\\]^\{\|\}]/gv, String.raw`\$&`);
 };
 
 /**
@@ -78,7 +82,7 @@ const compile = function (pattern) {
             if (-1 === closing) {
                 throw new Error(`${pattern}: ']' missing.`);
             }
-            regexp += "[" + sanitize(glob.slice(i + 1, closing)) + "]";
+            regexp += "[" + escape(glob.slice(i + 1, closing)) + "]";
             i = closing;
         } else if ("{" === glob[i]) {
             const closing = glob.indexOf("}", i);
@@ -87,11 +91,11 @@ const compile = function (pattern) {
             }
             regexp +=
                 "(" +
-                sanitize(glob.slice(i + 1, closing)).replaceAll(",", "|") +
+                escape(glob.slice(i + 1, closing)).replaceAll(",", "|") +
                 ")";
             i = closing;
         } else {
-            regexp += sanitize(glob[i]);
+            regexp += escape(glob[i]);
         }
     }
     regexp += "$";

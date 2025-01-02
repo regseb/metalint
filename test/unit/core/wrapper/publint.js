@@ -84,7 +84,7 @@ describe("src/core/wrapper/publint.js", () => {
                         linter: "publint",
                         rule: "USE_TYPE",
                         message:
-                            "The package does not specify the type field." +
+                            'The package does not specify the "type" field.' +
                             " NodeJS may attempt to detect the package type" +
                             " causing a small performance hit. Consider" +
                             ' adding "type": "commonjs".',

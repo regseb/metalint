@@ -25,8 +25,8 @@ export default {
         "max-statements": "off",
         "prefer-arrow-callback": "off",
 
-        // Plugin eslint-plugin-mocha. Utiliser le plugin pour Mocha car il peut
-        // s'appliquer aussi sur les tests natifs de Node.js.
+        // Plugin eslint-plugin-mocha. Utiliser le plugin pour Mocha, car il
+        // peut s'appliquer aussi sur les tests natifs de Node.js.
         "mocha/consistent-spacing-between-blocks": "error",
         "mocha/handle-done-callback": "error",
         "mocha/max-top-level-suites": "error",
@@ -35,8 +35,13 @@ export default {
         "mocha/no-exclusive-tests": "error",
         "mocha/no-exports": "error",
         "mocha/no-global-tests": "error",
+        // Autoriser les hooks "afterEach", car ils sont toujours exécutés après
+        // les tests (pour nettoyer l'environnement) même si les tests ont
+        // échoué.
         "mocha/no-hooks": ["error", { allow: ["afterEach"] }],
-        "mocha/no-hooks-for-single-case": "error",
+        // Désactiver cette règle, car il n'y a pas de condition différente avec
+        // la règle "no-hook".
+        "mocha/no-hooks-for-single-case": "off",
         "mocha/no-identical-title": "error",
         "mocha/no-mocha-arrows": "error",
         "mocha/no-nested-tests": "error",

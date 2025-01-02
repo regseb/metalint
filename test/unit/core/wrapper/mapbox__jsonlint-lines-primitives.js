@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import process from "node:process";
 import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
-import MapboxJSONintLinesPrimitivesWrapper from "../../../../src/core/wrapper/mapbox__jsonlint-lines-primitives.js";
+import MapboxJSONLintLinesPrimitivesWrapper from "../../../../src/core/wrapper/mapbox__jsonlint-lines-primitives.js";
 import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", () => {
@@ -29,7 +29,7 @@ describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", () => {
                 // l'enrobage si le fichier est analysé.
                 const file = "foo";
 
-                const wrapper = new MapboxJSONintLinesPrimitivesWrapper(
+                const wrapper = new MapboxJSONLintLinesPrimitivesWrapper(
                     context,
                     options,
                 );
@@ -51,7 +51,7 @@ describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", () => {
                 const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.json";
 
-                const wrapper = new MapboxJSONintLinesPrimitivesWrapper(
+                const wrapper = new MapboxJSONLintLinesPrimitivesWrapper(
                     context,
                     options,
                 );
@@ -80,7 +80,7 @@ describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", () => {
                 const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo.json";
 
-                const wrapper = new MapboxJSONintLinesPrimitivesWrapper(
+                const wrapper = new MapboxJSONLintLinesPrimitivesWrapper(
                     context,
                     options,
                 );

@@ -56,8 +56,8 @@ import Wrapper, { WRAPPERS } from "../wrapper/wrapper.js";
  *                                              corriger les fichiers.
  * @prop {Level}                      [level]   Le niveau de sévérité minimum
  *                                              des notifications retournées.
- * @prop {NormalizedConfigLinter[]}   linters   Les configuration des linters.
- * @prop {NormalizedConfigOverride[]} overrides Les configuration des
+ * @prop {NormalizedConfigLinter[]}   linters   Les configurations des linters.
+ * @prop {NormalizedConfigOverride[]} overrides Les configurations des
  *                                              surcharges.
  */
 

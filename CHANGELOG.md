@@ -68,7 +68,7 @@
 
 - Corriger le cache des wrappers et de leurs configurations.
   ([2a51a86](https://github.com/regseb/metalint/commit/2a51a86d1fdd5fad8dbc81c6ad247624eb7b3734))
-- Ne plus pré-remplir la configuration des linters.
+- Ne plus préremplir la configuration des linters.
   ([24b37ff](https://github.com/regseb/metalint/commit/24b37ff58cc8aac4bafe2c59b4beaa28a74b1832))
 
 ## [0.13.0](https://github.com/regseb/metalint/compare/v0.12.0...v0.13.0) (2023-07-22)
