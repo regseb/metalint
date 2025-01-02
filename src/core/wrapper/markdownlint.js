@@ -4,7 +4,17 @@
  * @author Sébastien Règne
  */
 
-import markdownlint from "markdownlint";
+import fs from "node:fs/promises";
+// Désactiver la règle suivante pour cet import, car elle ne supporte pas la
+// propriété "exports" du package.json.
+// https://github.com/import-js/eslint-plugin-import/issues/1810
+// eslint-disable-next-line import/no-unresolved
+import { applyFixes } from "markdownlint";
+// Désactiver la règle suivante pour cet import, car elle ne supporte pas la
+// propriété "exports" du package.json.
+// https://github.com/import-js/eslint-plugin-import/issues/1810
+// eslint-disable-next-line import/no-unresolved
+import { lint as markdownlint } from "markdownlint/promise";
 import Levels from "../levels.js";
 import Wrapper from "./wrapper.js";
 
@@ -71,22 +81,32 @@ export default class MarkdownlintWrapper extends Wrapper {
             files: file,
             config: this.#options,
         };
-        const results = await markdownlint.promises.markdownlint(config);
-        return Object.values(results)
-            .shift()
-            .map((result) => ({
-                file,
-                linter: "markdownlint",
-                rule: result.ruleNames.join("/"),
-                message:
-                    result.ruleDescription +
-                    " [" +
-                    (result.errorDetail ?? "") +
-                    (null === result.errorContext
-                        ? ""
-                        : `Context: "${result.errorContext}"`) +
-                    "]",
-                locations: [{ line: result.lineNumber }],
-            }));
+        const results = await markdownlint(config);
+
+        if (this.fix) {
+            const source = await fs.readFile(file, "utf8");
+            const fixed = applyFixes(source, results[file]);
+            await fs.writeFile(file, fixed);
+        }
+
+        return (
+            results[file]
+                // Enlever les notifications qui ont été corrigées.
+                .filter((result) => !this.fix || null === result.fixInfo)
+                .map((result) => ({
+                    file,
+                    linter: "markdownlint",
+                    rule: result.ruleNames.join("/"),
+                    message:
+                        result.ruleDescription +
+                        " [" +
+                        (result.errorDetail ?? "") +
+                        (null === result.errorContext
+                            ? ""
+                            : `Context: "${result.errorContext}"`) +
+                        "]",
+                    locations: [{ line: result.lineNumber }],
+                }))
+        );
     }
 }

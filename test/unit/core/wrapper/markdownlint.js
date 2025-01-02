@@ -4,6 +4,7 @@
  */
 
 import assert from "node:assert/strict";
+import fs from "node:fs/promises";
 import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import MarkdownlintWrapper from "../../../../src/core/wrapper/markdownlint.js";
@@ -82,7 +83,7 @@ describe("src/core/wrapper/markdownlint.js", () => {
             });
 
             it("should return notices", async () => {
-                const root = await tempFs.create({ "foo.md": "Bar!\n" });
+                const root = await tempFs.create({ "foo.md": "Bar\n" });
 
                 const context = {
                     level: Levels.ERROR,
@@ -102,10 +103,42 @@ describe("src/core/wrapper/markdownlint.js", () => {
                         rule: "MD041/first-line-heading/first-line-h1",
                         message:
                             "First line in a file should be a top-level" +
-                            ' heading [Context: "Bar!"]',
+                            ' heading [Context: "Bar"]',
                         locations: [{ line: 1 }],
                     },
                 ]);
+            });
+
+            it("should fix", async () => {
+                const root = await tempFs.create({
+                    "foo.md": "# Bar\n# Baz\n*  Qux\n",
+                });
+
+                const context = {
+                    level: Levels.ERROR,
+                    fix: true,
+                    root,
+                    files: ["foo.md"],
+                };
+                const options = /** @type {Record<string, unknown>} */ ({});
+                const file = "foo.md";
+
+                const wrapper = new MarkdownlintWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file,
+                        linter: "markdownlint",
+                        rule: "MD025/single-title/single-h1",
+                        message:
+                            "Multiple top-level headings in the same document" +
+                            ' [Context: "Baz"]',
+                        locations: [{ line: 2 }],
+                    },
+                ]);
+
+                const content = await fs.readFile("foo.md", "utf8");
+                assert.equal(content, "# Bar\n\n# Baz\n\n* Qux\n");
             });
         });
     });
