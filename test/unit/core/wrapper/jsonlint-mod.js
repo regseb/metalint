@@ -12,6 +12,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/jsonlint-mod.js", () => {
     describe("JSONLintModWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(!JSONLintModWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

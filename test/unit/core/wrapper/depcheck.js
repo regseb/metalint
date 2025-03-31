@@ -14,6 +14,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/depcheck.js", () => {
     describe("DepcheckWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(DepcheckWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();
@@ -41,10 +47,10 @@ describe("src/core/wrapper/depcheck.js", () => {
                     level: Levels.FATAL,
                     fix: false,
                     root: process.cwd(),
-                    files: ["foo"],
+                    files: ["package.jsonc"],
                 };
                 const options = /** @type {Record<string, unknown>} */ ({});
-                const file = "foo";
+                const file = "package.jsonc";
 
                 const wrapper = new DepcheckWrapper(context, options);
                 const notices = await wrapper.lint(file);
@@ -53,7 +59,7 @@ describe("src/core/wrapper/depcheck.js", () => {
                         file,
                         severity: Severities.FATAL,
                         linter: "depcheck",
-                        message: 'foo must end with "package.json".',
+                        message: 'package.jsonc must end with "package.json".',
                     },
                 ]);
             });

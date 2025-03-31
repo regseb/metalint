@@ -13,6 +13,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/htmlhint.js", () => {
     describe("HTMLHintWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(HTMLHintWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

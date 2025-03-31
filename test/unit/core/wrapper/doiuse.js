@@ -12,6 +12,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/doiuse.js", () => {
     describe("DoIUseWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(DoIUseWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

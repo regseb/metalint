@@ -12,6 +12,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", () => {
     describe("MapboxJSONintLinesPrimitivesWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(!MapboxJSONLintLinesPrimitivesWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

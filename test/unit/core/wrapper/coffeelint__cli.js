@@ -13,6 +13,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/coffeelint__cli.js", () => {
     describe("CoffeeLintCliWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(CoffeeLintCliWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

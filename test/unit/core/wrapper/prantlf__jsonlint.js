@@ -12,6 +12,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/prantlf__jsonlint.js", () => {
     describe("PrantlfJSONLintWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(PrantlfJSONLintWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

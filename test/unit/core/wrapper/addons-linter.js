@@ -13,6 +13,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/addons-linter.js", () => {
     describe("AddonsLinterWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(AddonsLinterWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 mock.reset();

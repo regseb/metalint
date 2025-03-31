@@ -11,6 +11,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/yaml-lint.js", () => {
     describe("YAMLLintWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(YAMLLintWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

@@ -13,6 +13,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/publint.js", () => {
     describe("PublintWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(PublintWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

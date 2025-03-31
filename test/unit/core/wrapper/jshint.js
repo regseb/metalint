@@ -13,6 +13,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/jshint.js", () => {
     describe("JSHintWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(JSHintWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

@@ -14,6 +14,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/prettier.js", () => {
     describe("PrettierWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(PrettierWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

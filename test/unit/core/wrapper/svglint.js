@@ -12,6 +12,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/svglint.js", () => {
     describe("SVGLintWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(SVGLintWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

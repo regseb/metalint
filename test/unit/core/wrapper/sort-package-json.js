@@ -14,6 +14,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/sort-package-json.js", () => {
     describe("SortPackageJsonWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(SortPackageJsonWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

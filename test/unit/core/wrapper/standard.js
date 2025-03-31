@@ -13,6 +13,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/standard.js", () => {
     describe("StandardWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(!StandardWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

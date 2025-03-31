@@ -12,6 +12,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/npm-package-json-lint.js", () => {
     describe("NpmPackageJSONLintWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(NpmPackageJSONLintWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

@@ -12,6 +12,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/htmllint.js", () => {
     describe("HtmllintWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(HtmllintWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();

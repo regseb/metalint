@@ -13,6 +13,12 @@ import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/markuplint.js", () => {
     describe("MarkuplintWrapper", () => {
+        describe("configurable", () => {
+            it("should be true", () => {
+                assert.ok(MarkuplintWrapper.configurable);
+            });
+        });
+
         describe("lint()", () => {
             afterEach(async () => {
                 await tempFs.reset();
