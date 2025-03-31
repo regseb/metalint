@@ -41,7 +41,7 @@ describe("src/core/wrapper/purgecss.js", () => {
                 assert.deepEqual(notices, []);
             });
 
-            it("should return FATAL notice", async () => {
+            it("should return FATAL notice when no content", async () => {
                 const context = {
                     level: Levels.FATAL,
                     fix: false,
@@ -93,6 +93,34 @@ describe("src/core/wrapper/purgecss.js", () => {
                         file,
                         linter: "purgecss",
                         message: "'.quux .corge' is never used.",
+                    },
+                ]);
+            });
+
+            it("should return FATAL notices", async () => {
+                const root = await tempFs.create({
+                    "foo.html": '<div class="bar"></div>',
+                    "baz.css": ".foo {}\n#bar { div { }\n",
+                });
+
+                const context = {
+                    level: Levels.FATAL,
+                    fix: false,
+                    root,
+                    files: ["foo.html", "baz.css"],
+                };
+                const options = { content: "*.html" };
+                const file = "baz.css";
+
+                const wrapper = new PurgeCSSWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file,
+                        linter: "purgecss",
+                        severity: Severities.FATAL,
+                        message: "Unclosed block",
+                        locations: [{ line: 2, column: 1 }],
                     },
                 ]);
             });

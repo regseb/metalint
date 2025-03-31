@@ -75,29 +75,41 @@ export default class PurgeCSSWrapper extends Wrapper {
             return [];
         }
 
-        const results = await new PurgeCSS().purge({
-            ...this.#options,
-            css: [file],
-        });
-        if (0 === results.length) {
+        try {
+            const results = await new PurgeCSS().purge({
+                ...this.#options,
+                css: [file],
+            });
+            if (0 === results.length) {
+                return [
+                    {
+                        file,
+                        linter: "purgecss",
+                        severity: Severities.FATAL,
+                        message: "No content provided.",
+                    },
+                ];
+            }
+
+            if (Levels.ERROR > this.level) {
+                return [];
+            }
+
+            return results[0].rejected.map((rejected) => ({
+                file,
+                linter: "purgecss",
+                message: `'${rejected}' is never used.`,
+            }));
+        } catch (err) {
             return [
                 {
                     file,
                     linter: "purgecss",
                     severity: Severities.FATAL,
-                    message: "No content provided.",
+                    message: err.reason,
+                    locations: [{ line: err.line, column: err.column }],
                 },
             ];
         }
-
-        if (Levels.ERROR > this.level) {
-            return [];
-        }
-
-        return results[0].rejected.map((rejected) => ({
-            file,
-            linter: "purgecss",
-            message: `'${rejected}' is never used.`,
-        }));
     }
 }
