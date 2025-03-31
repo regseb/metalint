@@ -8,18 +8,15 @@
 [![npm][img-npm]][link-npm] [![build][img-build]][link-build]
 [![coverage][img-coverage]][link-coverage] [![semver][img-semver]][link-semver]
 
-> _Un linter pour les gouverner tous._
+> _One linter to rule them all._
 
-## Description
-
-**Metalint** est un outil pour analyser tous les fichiers de votre projet.
-L'analyse est déléguée à des linters (outils d'analyse statique de code source)
-:
+**Metalint** is a tool for analyzing all the files in your project. Analysis is
+delegated to linters (static source code analysis tools):
 
 <!-- markdownlint-disable no-inline-html -->
 <table>
   <tr>
-    <th>Langage / Technologie</th>
+    <th>Language / Technology</th>
     <th>Linters</th>
   </tr>
   <tr>
@@ -167,27 +164,26 @@ L'analyse est déléguée à des linters (outils d'analyse statique de code sour
 </table>
 <!-- markdownlint-enable no-inline-html -->
 
-## Installation
+## Install
 
-Vous pouvez installer Metalint en utilisant [npm][link-npm] :
+You can install Metalint using [npm][link-npm]:
 
 ```shell
-npm install --save-dev --save-exact metalint
+npm install --save-dev metalint
 ```
 
 ## Configuration
 
-Tous les fichiers de configuration sont à regrouper dans le répertoire
-`.metalint/` qui doit être placé à la racine du projet. Le fichier
-`metalint.config.js` export un objet JSON indiquant les linters à utiliser pour
-chaque fichier. Les autres fichiers contiennent les options spécifiques pour les
-linters.
+All configuration files are grouped together in the `.metalint/` directory,
+which should be placed at the root of the project. The `metalint.config.js` file
+exports a JSON object indicating the linters to be used for each file. The other
+files contain the specific options for the linters.
 
-## Exemple
+## Example
 
-Dans cet exemple des fichiers de configuration, Metalint analyse les fichiers
-JavaScript (non-minifiés), HTML et CSS ; avec respectivement les linters ESLint,
-HTMLHint et Stylelint.
+In this example of configuration files, Metalint analyzes JavaScript
+(non-minified), HTML and CSS files; with ESLint, HTMLHint and Stylelint linters
+respectively.
 
 ```javascript
 // .metalint/metalint.config.js
@@ -236,12 +232,18 @@ export default {
 };
 ```
 
-## Intégration
+If you want to see real configurations, you've got the
+[Metalint configuration](https://github.com/regseb/metalint/tree/HEAD/.metalint)
+itself; or the
+[Cast Kodi configuration](https://github.com/regseb/castkodi/tree/HEAD/.metalint)
+(a browser WebExtension developed in JavaScript, HTML, CSS).
+
+## Integration
 
 ### npm
 
-Après avoir installé Metalint et les linters dans votre projet npm, vous pouvez
-ajouter le script suivant dans votre `package.json` :
+After installing Metalint and the linters in your npm project, you can add the
+following script to your `package.json`:
 
 ```json
 {
@@ -252,13 +254,13 @@ ajouter le script suivant dans votre `package.json` :
 }
 ```
 
-Metalint est maintenant utilisable avec les commandes : `npm run lint` et
-`npm run lint:fix`
+Metalint can now be used with the following commands: `npm run lint` and
+`npm run lint:fix`.
 
 ### GitHub Actions
 
-Pour lancer Metalint dans vos GitHub Actions, vous pouvez utiliser le formateur
-`github` pour rapporter les problèmes dans les pull requests.
+To launch Metalint in your GitHub Actions, you can use the `github` formatter to
+report problems in pull requests.
 
 ```yaml
 jobs:
