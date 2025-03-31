@@ -73,7 +73,7 @@ export default class MarkdownlintWrapper extends Wrapper {
      *                                     notifications.
      */
     async lint(file) {
-        if (Levels.ERROR > this.level) {
+        if (Levels.ERROR > this.level && !this.fix) {
             return [];
         }
 
@@ -87,6 +87,9 @@ export default class MarkdownlintWrapper extends Wrapper {
             const source = await fs.readFile(file, "utf8");
             const fixed = applyFixes(source, results[file]);
             await fs.writeFile(file, fixed);
+        }
+        if (Levels.ERROR > this.level) {
+            return [];
         }
 
         return (

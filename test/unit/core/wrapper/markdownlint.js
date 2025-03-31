@@ -23,7 +23,7 @@ describe("src/core/wrapper/markdownlint.js", () => {
                 await tempFs.reset();
             });
 
-            it("should ignore with FATAL level", async () => {
+            it("should ignore with FATAL level and no fix", async () => {
                 const root = await tempFs.create({ "foo.md": "Bar" });
 
                 const context = {
@@ -145,6 +145,28 @@ describe("src/core/wrapper/markdownlint.js", () => {
 
                 const content = await fs.readFile("foo.md", "utf8");
                 assert.equal(content, "# Bar\n\n# Baz\n\n* Qux\n");
+            });
+
+            it("should fix with FATAL level", async () => {
+                const root = await tempFs.create({
+                    "foo.md": "#  Bar  #",
+                });
+
+                const context = {
+                    level: Levels.FATAL,
+                    fix: true,
+                    root,
+                    files: ["foo.md"],
+                };
+                const options = /** @type {Record<string, unknown>} */ ({});
+                const file = "foo.md";
+
+                const wrapper = new MarkdownlintWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, []);
+
+                const content = await fs.readFile("foo.md", "utf8");
+                assert.equal(content, "# Bar #\n");
             });
         });
     });
