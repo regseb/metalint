@@ -23,11 +23,13 @@ describe("src/core/wrapper/npm-package-json-lint.js", () => {
                 await tempFs.reset();
             });
 
-            it("should ignore with FATAL level", async () => {
-                const root = await tempFs.create({ "package.json": "{}" });
+            it("should ignore with OFF level", async () => {
+                const root = await tempFs.create({
+                    "package.json": "<json />",
+                });
 
                 const context = {
-                    level: Levels.FATAL,
+                    level: Levels.OFF,
                     fix: false,
                     root,
                     files: ["package.json"],
@@ -40,6 +42,32 @@ describe("src/core/wrapper/npm-package-json-lint.js", () => {
                 const wrapper = new NpmPackageJSONLintWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, []);
+            });
+
+            it("should return FATAL notice", async () => {
+                const root = await tempFs.create({
+                    "package.json": "",
+                });
+
+                const context = {
+                    level: Levels.FATAL,
+                    fix: false,
+                    root,
+                    files: ["package.json"],
+                };
+                const options = /** @type {Record<string, unknown>} */ ({});
+                const file = "package.json";
+
+                const wrapper = new NpmPackageJSONLintWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file,
+                        linter: "npm-package-json-lint",
+                        severity: Severities.FATAL,
+                        message: "Unexpected end of JSON input",
+                    },
+                ]);
             });
 
             it("should return notices", async () => {

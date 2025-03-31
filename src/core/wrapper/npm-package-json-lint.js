@@ -65,15 +65,28 @@ export default class NpmPackageJSONLintWrapper extends Wrapper {
      *                                     notifications.
      */
     async lint(file) {
-        if (Levels.ERROR > this.level) {
+        if (Levels.FATAL > this.level) {
             return [];
         }
 
         const source = await fs.readFile(file, "utf8");
+        let json;
+        try {
+            json = JSON.parse(source);
+        } catch (e) {
+            return [
+                {
+                    file,
+                    linter: "npm-package-json-lint",
+                    severity: Severities.FATAL,
+                    message: e.message,
+                },
+            ];
+        }
         const npmPackageJsonLint = new NpmPackageJsonLint({
             // Ne pas utiliser la propriété "patterns" car celle-ci prend un
             // répertoire comme valeur (et y ajoute "/**/package.json").
-            packageJsonObject: JSON.parse(source),
+            packageJsonObject: json,
             packageJsonFilePath: file,
             config: this.#options,
         });
