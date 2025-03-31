@@ -115,8 +115,8 @@ describe("src/core/configuration/normalize.js", () => {
                 name: "Error",
                 message:
                     "Value of property 'level' is unknown (possibles" +
-                    " values: Level.OFF, Level.FATAL, Level.ERROR," +
-                    " Level.WARN and Level.INFO).",
+                    " values: Levels.OFF, Levels.FATAL, Levels.ERROR," +
+                    " Levels.WARN and Levels.INFO).",
             });
         });
 
@@ -426,8 +426,9 @@ describe("src/core/configuration/normalize.js", () => {
                     ' "mapbox__jsonlint-lines-primitives", "markdownlint",' +
                     ' "markuplint", "npm-check-updates",' +
                     ' "npm-package-json-lint", "prantlf__jsonlint",' +
-                    ' "prettier", "publint", "purgecss", "sort-package-json",' +
-                    ' "standard", "stylelint", "svglint", "yaml-lint").',
+                    ' "prettier", "publint", "purgecss", "secretlint",' +
+                    ' "sort-package-json", "standard", "stylelint",' +
+                    ' "svglint", "yaml-lint").',
             });
         });
 

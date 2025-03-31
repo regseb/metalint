@@ -173,8 +173,8 @@ export const normalizeLevel = function (partial) {
         } else {
             throw new Error(
                 "Value of property 'level' is unknown (possibles values:" +
-                    " Level.OFF, Level.FATAL, Level.ERROR, Level.WARN and" +
-                    " Level.INFO).",
+                    " Levels.OFF, Levels.FATAL, Levels.ERROR, Levels.WARN and" +
+                    " Levels.INFO).",
             );
         }
     } else {
