@@ -10,8 +10,8 @@ import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
 
 /**
- * @import { PartialNotice } from "../results.js"
  * @import { Level } from "../levels.js"
+ * @import { PartialNotice } from "../results.js"
  */
 
 /**

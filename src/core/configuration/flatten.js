@@ -8,14 +8,14 @@ import Levels from "../levels.js";
 import { merge } from "../utils/object.js";
 
 /**
+ * @import { TypeofFormatter } from "../formatter/formatter.js"
+ * @import { Level } from "../levels.js"
+ * @import { TypeofWrapper } from "../wrapper/wrapper.js"
  * @import { NormalizedConfig } from "./normalize.js"
  * @import { NormalizedConfigChecker } from "./normalize.js"
  * @import { NormalizedConfigLinter } from "./normalize.js"
  * @import { NormalizedConfigOverride } from "./normalize.js"
  * @import { NormalizedConfigReporter } from "./normalize.js"
- * @import { Level } from "../levels.js"
- * @import { TypeofFormatter } from "../formatter/formatter.js"
- * @import { TypeofWrapper } from "../wrapper/wrapper.js"
  */
 
 /**

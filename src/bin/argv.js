@@ -17,8 +17,8 @@ import { FORMATTERS } from "../core/formatter/formatter.js";
 import Levels from "../core/levels.js";
 
 /**
- * @import { Level } from "../core/levels.js"
  * @import { TypeofFormatter } from "../core/formatter/formatter.js"
+ * @import { Level } from "../core/levels.js"
  */
 
 /**

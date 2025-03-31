@@ -52,7 +52,8 @@ const fillZip = (zip, files) => {
 /**
  * Crée un zip avec des fichiers.
  *
- * @param {string}                        parent Le chemin du fichier zip parent.
+ * @param {string}                        parent Le chemin du fichier zip
+ *                                               parent.
  * @param {Record<string, Record|string>} files  La liste des fichiers.
  */
 const createZip = (parent, files) => {
@@ -100,7 +101,8 @@ const createTree = async (parent, files) => {
 /**
  * Crée un _file system_ dans un répertoire temporaire.
  *
- * @param {Record<string, Record|string>} files Les fichiers à créer dans le répertoire.
+ * @param {Record<string, Record|string>} files Les fichiers à créer dans le
+ *                                              répertoire.
  * @returns {Promise<string>} Le chemin vers le répertoire temporaire.
  */
 const create = async (files) => {

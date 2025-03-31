@@ -18,8 +18,8 @@ import Wrapper from "./wrapper.js";
 
 /**
  * @import { Writable } from "node:stream"
- * @import { PartialNotice } from "../results.js"
  * @import { Level } from "../levels.js"
+ * @import { PartialNotice } from "../results.js"
  */
 
 /**

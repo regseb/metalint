@@ -19,8 +19,8 @@ import Levels from "../levels.js";
 import Wrapper from "./wrapper.js";
 
 /**
- * @import { PartialNotice } from "../results.js"
  * @import { Level } from "../levels.js"
+ * @import { PartialNotice } from "../results.js"
  */
 
 /**

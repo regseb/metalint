@@ -16,10 +16,10 @@ import Glob from "./utils/glob.js";
 
 /**
  * @import { FlattenedConfig } from "./configuration/flatten.js"
+ * @import Formatter, { TypeofFormatter } from "./formatter/formatter.js"
  * @import { Level } from "./levels.js"
  * @import { Notice } from "./results.js"
  * @import { Severity } from "./severities.js"
- * @import Formatter, { TypeofFormatter } from "./formatter/formatter.js"
  * @import Wrapper from "./wrapper/wrapper.js"
  */
 

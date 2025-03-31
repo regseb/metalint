@@ -18,8 +18,8 @@ import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
 
 /**
- * @import { PartialNotice } from "../results.js"
  * @import { Level } from "../levels.js"
+ * @import { PartialNotice } from "../results.js"
  * @import { Severity } from "../severities.js"
  */
 
@@ -51,7 +51,7 @@ export default class PublintWrapper extends Wrapper {
      * Les options du linter.
      *
      * @type {Record<string, unknown>}
-     * @see https://www.npmjs.com/package/publint#api
+     * @see https://publint.dev/docs/javascript-api
      */
     #options;
 

@@ -11,8 +11,8 @@ import Glob from "../utils/glob.js";
 import Wrapper from "./wrapper.js";
 
 /**
- * @import { PartialNotice } from "../results.js"
  * @import { Level } from "../levels.js"
+ * @import { PartialNotice } from "../results.js"
  */
 
 /**

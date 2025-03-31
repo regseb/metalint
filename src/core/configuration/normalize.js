@@ -11,8 +11,8 @@ import Levels from "../levels.js";
 import Wrapper, { WRAPPERS } from "../wrapper/wrapper.js";
 
 /**
- * @import { Level } from "../levels.js"
  * @import { TypeofFormatter } from "../formatter/formatter.js"
+ * @import { Level } from "../levels.js"
  * @import { TypeofWrapper } from "../wrapper/wrapper.js"
  */
 
@@ -93,7 +93,7 @@ const read = async function (file) {
 /**
  * Normalise une propriété `"patterns"`.
  *
- * @param {any} partials La valeur d'un des propriétés `"patterns"`.
+ * @param {any} partials La valeur d'une des propriétés `"patterns"`.
  * @returns {string[]} La valeur normalisée.
  * @throws {Error} Si le `"patterns"` n'est pas renseigné.
  * @throws {TypeError} Si le `"patterns"` n'a pas le bon type.

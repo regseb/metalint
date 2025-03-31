@@ -9,8 +9,8 @@ import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 /**
- * @import { PartialNotice } from "../results.js"
  * @import { Level } from "../levels.js"
+ * @import { PartialNotice } from "../results.js"
  */
 
 /**

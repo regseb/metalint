@@ -5,8 +5,8 @@
  */
 
 /**
- * @import { Level } from "../levels.js"
  * @import { TypeofFormatter } from "../formatter/formatter.js"
+ * @import { Level } from "../levels.js"
  * @import { TypeofWrapper } from "../wrapper/wrapper.js"
  */
 

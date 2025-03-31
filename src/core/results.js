@@ -23,9 +23,10 @@ import Severities from "./severities.js";
  * @prop {string}     file        Le nom du fichier.
  * @prop {string}     linter      Le nom du linter.
  * @prop {string}     [rule]      L'éventuel nom de la règle.
- * @prop {Severity}   [severity]  Le niveau de sévérité.
+ * @prop {Severity}   [severity]  Le niveau de sévérité (`ERROR` par défaut).
  * @prop {string}     message     Le message de la notification.
- * @prop {Location[]} [locations] Les positions de la notification.
+ * @prop {Location[]} [locations] Les positions de la notification (aucune
+ *                                position par défaut).
  */
 
 /**
