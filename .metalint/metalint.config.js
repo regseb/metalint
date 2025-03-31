@@ -33,6 +33,10 @@ export default {
     ],
     checkers: [
         {
+            patterns: "*",
+            linters: "secretlint",
+        },
+        {
             patterns: "*.js",
             linters: [
                 "prettier",

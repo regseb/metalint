@@ -157,6 +157,13 @@ L'analyse est déléguée à des linters (outils d'analyse statique de code sour
          href="https://www.npmjs.com/package/prettier">Prettier</a>
     </td>
   </tr>
+  <tr>
+    <td></td>
+    <td>
+      <a title="secretlint"
+         href="https://www.npmjs.com/package/secretlint">Secretlint</a>
+    </td>
+  </tr>
 </table>
 <!-- markdownlint-enable no-inline-html -->
 
