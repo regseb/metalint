@@ -1,0 +1,13 @@
+{
+  "name": "@regseb/metalint",
+  "version": "0.19.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/core/index.js",
+    "./api/formatter": "./src/core/formatter/formatter.js",
+    "./api/wrapper": "./src/core/wrapper/wrapper.js"
+  },
+  "publish": {
+    "include": ["src/", "types/", "LICENSE", "README.md", "package.json"]
+  }
+}
