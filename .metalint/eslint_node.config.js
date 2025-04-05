@@ -65,14 +65,7 @@ export default {
         "n/no-unpublished-require": "off",
         "n/no-unsupported-features/es-builtins": "error",
         "n/no-unsupported-features/es-syntax": "error",
-        "n/no-unsupported-features/node-builtins": [
-            "error",
-            {
-                // Ignorer les vérifications de test.describe qui est en
-                // expérimental dans Node v20.
-                ignores: ["test.describe"],
-            },
-        ],
+        "n/no-unsupported-features/node-builtins": "error",
         "n/process-exit-as-throw": "error",
 
         // Best Practices.

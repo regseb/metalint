@@ -255,7 +255,7 @@ describe("src/core/wrapper/ajv.js", () => {
                         linter: "ajv",
                         severity: Severities.FATAL,
                         message:
-                            "Unexpected token 'b', \"bar: baz\" is not valid" +
+                            `Unexpected token 'b', "bar: baz" is not valid` +
                             " JSON",
                     },
                 ]);

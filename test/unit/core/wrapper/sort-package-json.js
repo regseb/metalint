@@ -162,7 +162,7 @@ describe("src/core/wrapper/sort-package-json.js", () => {
                         linter: "sort-package-json",
                         severity: Severities.FATAL,
                         message:
-                            "Unexpected token 'a', \"name=foo\" is not valid" +
+                            `Unexpected token 'a', "name=foo" is not valid` +
                             " JSON",
                     },
                 ]);

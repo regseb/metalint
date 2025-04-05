@@ -62,7 +62,7 @@ describe("src/core/wrapper/markuplint.js", () => {
 
             it("should return notices", async () => {
                 const root = await tempFs.create({
-                    "foo.html": '<img src=\'bar.svg\' src="" class="BAZ" />',
+                    "foo.html": `<img src='bar.svg' src="" class="BAZ" />`,
                 });
 
                 const context = {

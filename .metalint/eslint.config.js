@@ -30,6 +30,10 @@ export default {
         globals: { ...globals["shared-node-browser"] },
     },
 
+    linterOptions: {
+        reportUnusedInlineConfigs: "error",
+    },
+
     plugins: {
         "array-func": arrayFunc,
         "eslint-comments": eslintComments,
@@ -672,6 +676,8 @@ export default {
         // Plugin eslint-plugin-unicorn.
         "unicorn/better-regex": "error",
         "unicorn/catch-error-name": ["error", { ignore: [/^err$/v, /^e$/v] }],
+        "unicorn/consistent-assert": "error",
+        "unicorn/consistent-date-clone": "error",
         "unicorn/consistent-destructuring": "error",
         "unicorn/consistent-empty-array-spread": "error",
         "unicorn/consistent-existence-index-check": "error",
@@ -687,6 +693,7 @@ export default {
         "unicorn/import-style": "error",
         "unicorn/new-for-builtins": "error",
         "unicorn/no-abusive-eslint-disable": "error",
+        "unicorn/no-accessor-recursion": "error",
         "unicorn/no-anonymous-default-export": "error",
         "unicorn/no-array-callback-reference": "off",
         "unicorn/no-array-for-each": "off",
@@ -700,13 +707,14 @@ export default {
         "unicorn/no-empty-file": "error",
         "unicorn/no-for-loop": "error",
         "unicorn/no-hex-escape": "error",
-        "unicorn/no-instanceof-array": "error",
+        "unicorn/no-instanceof-builtins": "error",
         "unicorn/no-invalid-fetch-options": "error",
         "unicorn/no-invalid-remove-event-listener": "error",
         "unicorn/no-keyword-prefix": "error",
         "unicorn/no-length-as-slice-end": "error",
         "unicorn/no-lonely-if": "error",
         "unicorn/no-magic-array-flat-depth": "error",
+        "unicorn/no-named-default": "error",
         // Utiliser la règle no-negated-condition d'ESLint, car celle d'unicorn
         // apporte seulement la correction automatique.
         "unicorn/no-negated-condition": "off",

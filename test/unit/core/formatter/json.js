@@ -71,7 +71,7 @@ describe("src/core/formatter/json.js", () => {
                     '      "linter": "eslint",\n' +
                     '      "rule": "no-unused-vars",\n' +
                     '      "severity": 2,\n' +
-                    '      "message": "\'superfluous\' is defined but never' +
+                    `      "message": "'superfluous' is defined but never` +
                     ' used",\n' +
                     '      "locations": [\n' +
                     "        {\n" +

@@ -189,7 +189,7 @@ describe("src/core/utils/glob.js", () => {
             assert.equal(glob.test("foo()"), false);
         });
 
-        it('should sanitize "!" when it isn\'t first', () => {
+        it(`should sanitize "!" when it isn't first`, () => {
             const cwd = fileURLToPath(import.meta.resolve("."));
             const root = fileURLToPath(import.meta.resolve("."));
             const glob = new Glob(["foo!"], { cwd, root });

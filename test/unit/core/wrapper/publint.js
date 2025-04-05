@@ -46,10 +46,10 @@ describe("src/core/wrapper/publint.js", () => {
                     level: Levels.FATAL,
                     fix: false,
                     root: process.cwd(),
-                    files: ["foo"],
+                    files: ["package.jsonc"],
                 };
                 const options = /** @type {Record<string, unknown>} */ ({});
-                const file = "foo";
+                const file = "package.jsonc";
 
                 const wrapper = new PublintWrapper(context, options);
                 const notices = await wrapper.lint(file);
@@ -58,7 +58,7 @@ describe("src/core/wrapper/publint.js", () => {
                         file,
                         severity: Severities.FATAL,
                         linter: "publint",
-                        message: 'foo must end with "package.json".',
+                        message: 'package.jsonc must end with "package.json".',
                     },
                 ]);
             });
@@ -67,7 +67,9 @@ describe("src/core/wrapper/publint.js", () => {
                 const root = await tempFs.create({
                     "foo.js": 'console.log("bar");',
                     "package.json": JSON.stringify({
-                        exports: { "./bar.js": "./bar.js" },
+                        name: "baz",
+                        version: "1.0.0",
+                        exports: { "./qux.js": "./qux.js" },
                         jsnext: "foo.js",
                     }),
                 });
@@ -91,7 +93,7 @@ describe("src/core/wrapper/publint.js", () => {
                         rule: "USE_TYPE",
                         message:
                             'The package does not specify the "type" field.' +
-                            " NodeJS may attempt to detect the package type" +
+                            " Node.js may attempt to detect the package type" +
                             " causing a small performance hit. Consider" +
                             ' adding "type": "commonjs".',
                     },
@@ -101,7 +103,7 @@ describe("src/core/wrapper/publint.js", () => {
                         linter: "publint",
                         rule: "FILE_DOES_NOT_EXIST",
                         message:
-                            'pkg.exports["./bar.js"] is ./bar.js but the file' +
+                            'pkg.exports["./qux.js"] is ./qux.js but the file' +
                             " does not exist.",
                     },
                     {
@@ -116,10 +118,48 @@ describe("src/core/wrapper/publint.js", () => {
                 ]);
             });
 
+            it("should support options", async () => {
+                const root = await tempFs.create({
+                    "foo.js": "",
+                    "package.json": JSON.stringify({
+                        name: "bar",
+                        version: "1.0.0",
+                        jsnext: "foo.js",
+                    }),
+                });
+
+                const context = {
+                    level: Levels.WARN,
+                    fix: false,
+                    root,
+                    files: ["package.json"],
+                };
+                const options = /** @type {Record<string, unknown>} */ ({
+                    strict: true,
+                });
+                const file = "package.json";
+
+                const wrapper = new PublintWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file,
+                        severity: Severities.ERROR,
+                        linter: "publint",
+                        rule: "DEPRECATED_FIELD_JSNEXT",
+                        message:
+                            "pkg.jsnext is deprecated. pkg.module should be" +
+                            " used instead.",
+                    },
+                ]);
+            });
+
             it("should ignore error with FATAL level", async () => {
                 const root = await tempFs.create({
                     "package.json": JSON.stringify({
-                        dependencies: { foo: "1.0.0" },
+                        name: "foo",
+                        version: "1.0.0",
+                        dependencies: { bar: "2.0.0" },
                     }),
                 });
 
@@ -153,16 +193,16 @@ describe("src/core/wrapper/publint.js", () => {
 
                 const wrapper = new PublintWrapper(context, options);
                 const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, [
-                    {
-                        file,
-                        linter: "publint",
-                        severity: Severities.FATAL,
-                        message:
-                            "Unexpected token '<', \"<version>1\"... is not" +
-                            " valid JSON",
-                    },
-                ]);
+                assert.equal(notices.length, 1);
+                assert.equal(notices[0].file, file);
+                assert.equal(notices[0].linter, "publint");
+                assert.equal(notices[0].severity, Severities.FATAL);
+                assert.ok(
+                    notices[0].message.startsWith(
+                        "Command failed: npm pack --pack-destination ",
+                    ),
+                    `"${notices[0].message}".startsWith("...")`,
+                );
             });
         });
     });

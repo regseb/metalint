@@ -27,6 +27,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ fromJson(steps.release.outputs.pr).headBranchName }}
+          # Récupérer deux commits sinon la réparation du commit (pour le
+          # formatage) rompt le lien entre la branche de la release et la
+          # branche main.
+          fetch-depth: 2
 
       - name: Configure Git user
         if: ${{ steps.release.outputs.pr }}
@@ -53,8 +57,8 @@ jobs:
       - name: Commit and push
         if: ${{ steps.release.outputs.pr }}
         run: |
-          git commit --all --message 'chore: format files'
-          git push
+          git commit --all --amend --no-edit
+          git push --force
 
       # Si la release a été créée : publier le paquet dans npm et JSR.
       - name: Checkout repository
@@ -68,7 +72,7 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
-      - name: Install dependencies
+      - name: Install dependencies and build declaration files (d.ts)
         if: ${{ steps.release.outputs.release_created }}
         run: npm ci
 
@@ -92,7 +96,7 @@ jobs:
 
       - name: Download tarball from npm
         if: ${{ steps.release.outputs.release_created }}
-        run: npm pack ${{ env.NPM_NAME }}
+        run: npm pack ${{ env.NPM_NAME }}@${{ steps.release.outputs.tag_name }}
 
       - name: Upload tarball to release
         if: ${{ steps.release.outputs.release_created }}

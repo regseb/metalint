@@ -13,16 +13,18 @@
 export default {
     patterns: [
         "**",
-        // Ignorer les répertoires générés.
+        // Ignorer les répertoires et les fichiers générés.
         "!/.git/**",
         "!/.stryker/**",
         "!/.tmp/**",
         "!/jsdocs/**",
         "!/node_modules/**",
+        "!/stryker.log",
         "!/types/**",
         // Ignorer les fichiers de configuration de Visual Studio Code.
         "!/.vscode/**",
-        // Ignorer les fichiers de configuration de IntelliJ IDEA.
+        // Ignorer les fichiers de configuration des IDEs de JetBrains :
+        // WebStorm, IntelliJ IDEA...
         "!/.idea/**",
         // Ignorer les fichiers temporaires de Vim.
         "!*.swp",

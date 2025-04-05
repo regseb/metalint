@@ -88,6 +88,9 @@ export default class Results {
      * @param {string[]} files Les noms des fichiers.
      */
     constructor(files) {
+        // Ajouter tous les fichiers entrant dans les patrons globaux (car
+        // peut-être qu'ils n'entrent pas dans les patrons des checkers et ils
+        // n'ont pas été analysé).
         this.#data = Object.fromEntries(files.map((f) => [f, undefined]));
     }
 

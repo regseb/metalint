@@ -110,7 +110,7 @@ describe("src/core/formatter/csv.js", () => {
                     "pylint,\r\n" +
                     '"bar.xhtml",1,2,"Venant de perdre un chien de bonne' +
                     ' race",xmllint,"1"\r\n' +
-                    '"bar.xhtml",3,,"Qu\'il soupçonnait dans le corps d\'un' +
+                    `"bar.xhtml",3,,"Qu'il soupçonnait dans le corps d'un` +
                     ' Lion,",htmllint,"2"\r\n',
             );
         });
@@ -125,7 +125,7 @@ describe("src/core/formatter/csv.js", () => {
                     linter: "svglint",
                     rule: 'prefer-"',
                     severity: Severities.ERROR,
-                    message: "Use \" instead of '.",
+                    message: `Use " instead of '.`,
                     locations: [],
                 },
             ]);
@@ -134,7 +134,7 @@ describe("src/core/formatter/csv.js", () => {
             assert.equal(
                 writer.toString(),
                 "file,line,column,message,linter,rule\r\n" +
-                    '"foo""bar.svg",,,"Use "" instead of \'.",svglint,' +
+                    `"foo""bar.svg",,,"Use "" instead of '.",svglint,` +
                     '"prefer-"""\r\n',
             );
         });

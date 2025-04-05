@@ -134,7 +134,7 @@ describe("src/core/wrapper/addons-linter.js", () => {
                         linter: "addons-linter",
                         rule: "MANIFEST_FIELD_REQUIRED",
                         severity: Severities.ERROR,
-                        message: "\"/\" must have required property 'name'",
+                        message: `"/" must have required property 'name'`,
                     },
                     {
                         file: file + "manifest.json",

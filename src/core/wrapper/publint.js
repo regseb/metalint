@@ -4,7 +4,6 @@
  * @author Sébastien Règne
  */
 
-import fs from "node:fs/promises";
 import path from "node:path/posix";
 // eslint-disable-next-line import/no-unresolved
 import { publint } from "publint";
@@ -99,18 +98,19 @@ export default class PublintWrapper extends Wrapper {
             ];
         }
         try {
-            const { messages } = await publint({
+            const result = await publint({
                 pkgDir: path.dirname(file),
                 ...this.#options,
             });
-            const pkg = JSON.parse(await fs.readFile(file, "utf8"));
-            return messages
+            return result.messages
                 .map((message) => ({
                     file,
                     linter: "publint",
                     rule: message.code,
                     severity: TYPES[message.type],
-                    message: formatMessage(message, pkg, { color: false }),
+                    message: formatMessage(message, result.pkg, {
+                        color: false,
+                    }),
                 }))
                 .filter((n) => this.level >= n.severity);
         } catch (err) {
