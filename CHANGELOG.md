@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.20.0](https://github.com/regseb/metalint/compare/v0.19.0...v0.20.0) (2025-04-05)
+
+### Features
+
+- Add SecretLint support.
+  ([f135cc5](https://github.com/regseb/metalint/commit/f135cc5e963de70eca36e9f7a8ee98f1593fd0c9))
+
+### Bug Fixes
+
+- **markdownlint:** Fix file with ERROR level.
+  ([63a4964](https://github.com/regseb/metalint/commit/63a4964e05a9bf04007411e9e8acb27193c67600))
+- **npm-package-json-lint:** Reject invalid file.
+  ([dc0ced4](https://github.com/regseb/metalint/commit/dc0ced40319133477e706df78097821a22902b7a))
+- **purgecss:** Reject invalid file.
+  ([34ffc4c](https://github.com/regseb/metalint/commit/34ffc4cb9aac8f53abcedc0e90b1a63debef45c8))
+
 ## [0.19.0](https://github.com/regseb/metalint/compare/v0.18.0...v0.19.0) (2025-01-02)
 
 ### Features
