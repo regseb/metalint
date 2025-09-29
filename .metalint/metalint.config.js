@@ -45,6 +45,7 @@ export default {
                 "prettier_javascript",
                 "eslint",
                 "eslint_node",
+                "biomejs__js-api",
             ],
             overrides: [
                 {
@@ -71,7 +72,7 @@ export default {
         },
         {
             patterns: "*.json",
-            linters: ["prettier", "prantlf__jsonlint"],
+            linters: ["prettier", "prantlf__jsonlint", "biomejs__js-api"],
             overrides: {
                 patterns: "/package.json",
                 linters: ["npm-package-json-lint", "publint"],

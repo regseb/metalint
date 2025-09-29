@@ -318,6 +318,9 @@ export default {
         "prefer-regex-literals": "error",
         "prefer-rest-params": "error",
         "prefer-spread": "error",
+        // Désactiver cette règle qui force l'utilisation des templates même
+        // quand la concaténation est sur plusieurs lignes. Préférer les règles
+        // "useTemplate" de Biome.
         "prefer-template": "off",
         radix: "error",
         "require-await": "error",

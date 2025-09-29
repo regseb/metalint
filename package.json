@@ -64,6 +64,8 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
+    "@biomejs/js-api": "4.0.0",
+    "@biomejs/wasm-nodejs": "2.3.1",
     "@coffeelint/cli": "5.2.11",
     "@mapbox/jsonlint-lines-primitives": "2.0.2",
     "@prantlf/jsonlint": "16.0.0",

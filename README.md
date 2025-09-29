@@ -29,6 +29,8 @@ delegated to linters (static source code analysis tools):
   <tr>
     <td>CSS</td>
     <td>
+      <a title="@biomejs/js-api"
+         href="https://www.npmjs.com/package/@biomejs/js-api">Biome</a>,
       <a title="doiuse" href="https://www.npmjs.com/package/doiuse">DoIUse</a>,
       <a title="prettier"
          href="https://www.npmjs.com/package/prettier">Prettier</a>,
@@ -54,6 +56,8 @@ delegated to linters (static source code analysis tools):
   <tr>
     <td>JavaScript</td>
     <td>
+      <a title="@biomejs/js-api"
+         href="https://www.npmjs.com/package/@biomejs/js-api">Biome</a>,
       <a title="eslint" href="https://www.npmjs.com/package/eslint">ESLint</a>,
       <a title="jshint" href="https://www.npmjs.com/package/jshint">JSHint</a>,
       <a title="standard"
@@ -67,6 +71,8 @@ delegated to linters (static source code analysis tools):
     <td>JSON</td>
     <td>
       <a title="ajv" href="https://www.npmjs.com/package/ajv">Ajv</a>,
+      <a title="@biomejs/js-api"
+         href="https://www.npmjs.com/package/@biomejs/js-api">Biome</a>,
       <a title="@mapbox/jsonlint-lines-primitives"
          href="https://www.npmjs.com/package/@mapbox/jsonlint-lines-primitives">@mapbox/JSON
         Lint lines-primitives</a>,
