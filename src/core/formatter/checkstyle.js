@@ -21,7 +21,7 @@ import Formatter from "./formatter.js";
  * @param {string} input Le texte qui sera converti.
  * @returns {string} Le texte converti.
  */
-const encode = function (input) {
+const encode = (input) => {
     const ENTITIES = {
         "&": "&amp;",
         "<": "&lt;",
@@ -85,7 +85,7 @@ export default class CheckstyleFormatter extends Formatter {
      */
     #shift(depth) {
         if (-1 !== this.#indent) {
-            this.#writer.write("\n" + " ".repeat(depth * this.#indent));
+            this.#writer.write(`\n${" ".repeat(depth * this.#indent)}`);
         }
     }
 

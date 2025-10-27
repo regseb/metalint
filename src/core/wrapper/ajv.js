@@ -71,7 +71,7 @@ export default class AjvWrapper extends Wrapper {
         super(context);
         const { addFormats, schema, ...others } = options;
         this.#options = {
-            loadSchema: (uri) =>
+            loadSchema: (/** @type {string} */ uri) =>
                 Promise.reject(
                     new Error(
                         `loadSchema() must be implemented to load ${uri}`,

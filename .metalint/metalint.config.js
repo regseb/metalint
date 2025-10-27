@@ -1,5 +1,6 @@
 /**
  * @license MIT
+ * @see https://github.com/regseb/metalint
  * @author Sébastien Règne
  */
 
@@ -69,6 +70,16 @@ export default {
         {
             patterns: "*.md",
             linters: ["prettier", "markdownlint"],
+            overrides: {
+                patterns: "/.github/ISSUE_TEMPLATE/**",
+                linters: {
+                    wrapper: "markdownlint",
+                    options: {
+                        // eslint-disable-next-line camelcase
+                        "heading-increment": { front_matter_title: "" },
+                    },
+                },
+            },
         },
         {
             patterns: "*.json",

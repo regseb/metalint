@@ -6,15 +6,12 @@
 
 import fs from "node:fs/promises";
 import process from "node:process";
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
+import { parseArgs } from "node:util";
 import {
     normalizeFix,
     normalizeFormatter,
     normalizeLevel,
 } from "../core/configuration/normalize.js";
-import { FORMATTERS } from "../core/formatter/formatter.js";
-import Levels from "../core/levels.js";
 
 /**
  * @import { TypeofFormatter } from "../core/formatter/formatter.js"
@@ -23,7 +20,7 @@ import Levels from "../core/levels.js";
 
 /**
  * @typedef {Object} Argv
- * @prop {string[]}        _           Les paramètres de la ligne de commande.
+ * @prop {string[]}        bases       Les paramètres de la ligne de commande.
  * @prop {string}          config      L'option `--config` de la ligne de
  *                                     commande.
  * @prop {boolean}         [fix]       L'option `--fix` de la ligne de commande.
@@ -42,65 +39,54 @@ import Levels from "../core/levels.js";
  * @param {string[]} argv Les paramètres et les options de la ligne de commande.
  * @returns {Promise<Argv>} Les paramètres et les options normalisés.
  */
-export const parse = async function (argv = hideBin(process.argv)) {
-    // Désactiver cette règle, car il y a un faux-positif avec la méthode
-    // yargs.parseSync().
-    // eslint-disable-next-line n/no-sync
-    const args = yargs(argv)
-        .options({
+export const parse = async (argv = process.argv) => {
+    const { values, positionals } = parseArgs({
+        // Enlever les deux premiers arguments de la ligne de commande qui sont
+        // "node" et "index.js".
+        args: argv.slice(2),
+        options: {
             config: {
-                alias: "c",
-                default: ".metalint/metalint.config.js",
-                requiresArg: true,
                 type: "string",
+                short: "c",
+                default: ".metalint/metalint.config.js",
             },
             fix: {
                 type: "boolean",
             },
             formatter: {
-                alias: "f",
-                choices: FORMATTERS,
-                requiresArg: true,
                 type: "string",
+                short: "f",
             },
             level: {
-                alias: "l",
-                choices: Object.keys(Levels).map((l) => l.toLowerCase()),
-                default: undefined,
-                requiresArg: true,
                 type: "string",
+                short: "l",
             },
             help: {
-                default: false,
                 type: "boolean",
+                default: false,
             },
-        })
-        .help(false)
-        .parseSync();
+        },
+        allowPositionals: true,
+    });
 
     return {
         // Ajouter une barre oblique à la fin pour les répertoires.
-        _:
-            0 === args._.length
+        bases:
+            0 === positionals.length
                 ? ["./"]
                 : await Promise.all(
-                      args._.map(async (base) => {
-                          const stats = await fs.lstat(base.toString());
-                          return (
-                              base.toString() + (stats.isDirectory() ? "/" : "")
-                          );
+                      positionals.map(async (positional) => {
+                          const stats = await fs.lstat(positional);
+                          return positional + (stats.isDirectory() ? "/" : "");
                       }),
                   ),
-        config: args.config,
-        fix: normalizeFix(args.fix),
-        // Ne pas utiliser yargs.coerce() pour convertir les données, car cette
-        // méthode est incompatible avec yargs.choices().
-        // https://github.com/yargs/yargs/issues/1379
+        config: values.config,
+        fix: normalizeFix(values.fix),
         formatter:
-            undefined === args.formatter
+            undefined === values.formatter
                 ? undefined
-                : await normalizeFormatter(args.formatter),
-        level: normalizeLevel(args.level),
-        help: args.help,
+                : await normalizeFormatter(values.formatter),
+        level: normalizeLevel(values.level),
+        help: values.help,
     };
 };

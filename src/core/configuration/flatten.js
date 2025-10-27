@@ -74,7 +74,7 @@ import { merge } from "../utils/object.js";
  *                                    parente.
  * @returns {string[]} La valeur fusionnée.
  */
-export const flattenPatterns = function (hierarchies, { patterns }) {
+export const flattenPatterns = (hierarchies, { patterns }) => {
     return [...patterns, ...hierarchies];
 };
 
@@ -88,7 +88,7 @@ export const flattenPatterns = function (hierarchies, { patterns }) {
  *                                        parente.
  * @returns {boolean} La valeur fusionnée.
  */
-export const flattenFix = function (hierarchy, { fix }) {
+export const flattenFix = (hierarchy, { fix }) => {
     return hierarchy ?? fix;
 };
 
@@ -102,7 +102,7 @@ export const flattenFix = function (hierarchy, { fix }) {
  *                                        parente.
  * @returns {Level} La valeur fusionnée.
  */
-export const flattenLevel = function (hierarchy, { level }) {
+export const flattenLevel = (hierarchy, { level }) => {
     return hierarchy ?? level;
 };
 
@@ -116,7 +116,7 @@ export const flattenLevel = function (hierarchy, { level }) {
  *                                                    `"options"` parente.
  * @returns {Record<string, unknown>} La valeur fusionnée.
  */
-export const flattenOptions = function (hierarchies, { options }) {
+export const flattenOptions = (hierarchies, { options }) => {
     return [options, ...hierarchies].reduce(merge);
 };
 
@@ -130,7 +130,7 @@ export const flattenOptions = function (hierarchies, { options }) {
  *                                                 `"level"` parente.
  * @returns {FlattenedConfigReporter} La valeur fusionnée.
  */
-export const flattenReporter = function (hierarchy, { level }) {
+export const flattenReporter = (hierarchy, { level }) => {
     return {
         formatter: hierarchy.formatter,
         level: flattenLevel(hierarchy.level, { level }),
@@ -155,7 +155,7 @@ export const flattenReporter = function (hierarchy, { level }) {
  *                                                         parente.
  * @returns {FlattenedConfigReporter[]} La valeur fusionnée.
  */
-export const flattenReporters = function (hierarchies, { formatter, level }) {
+export const flattenReporters = (hierarchies, { formatter, level }) => {
     if (undefined === formatter) {
         return hierarchies.map((r) => flattenReporter(r, { level }));
     }
@@ -183,7 +183,7 @@ export const flattenReporters = function (hierarchies, { formatter, level }) {
  *                                                  `"options"` parente.
  * @returns {FlattenedConfigLinter} La valeur fusionnée.
  */
-export const flattenLinter = function (hierarchy, { fix, level, options }) {
+export const flattenLinter = (hierarchy, { fix, level, options }) => {
     return {
         wrapper: hierarchy.wrapper,
         fix: flattenFix(hierarchy.fix, { fix }),
@@ -204,7 +204,7 @@ export const flattenLinter = function (hierarchy, { fix, level, options }) {
  *                                                 `"level"` parente.
  * @returns {FlattenedConfigLinter[]} La valeur fusionnée.
  */
-export const flattenLinters = function (hierarchies, { fix, level }) {
+export const flattenLinters = (hierarchies, { fix, level }) => {
     const map = new Map();
     for (const hierarchy of hierarchies) {
         if (map.has(hierarchy.wrapper)) {
@@ -243,7 +243,7 @@ export const flattenLinters = function (hierarchies, { fix, level }) {
  *                                                 `"level"` parente.
  * @returns {FlattenedConfigOverride} La valeur fusionnée.
  */
-export const flattenOverride = function (hierarchy, { fix, level }) {
+export const flattenOverride = (hierarchy, { fix, level }) => {
     return {
         patterns: hierarchy.patterns,
         linters: flattenLinters(hierarchy.linters, {
@@ -265,7 +265,7 @@ export const flattenOverride = function (hierarchy, { fix, level }) {
  *                                                `"level"` parente.
  * @returns {FlattenedConfigChecker} La valeur fusionnée.
  */
-export const flattenChecker = function (hierarchy, { fix, level }) {
+export const flattenChecker = (hierarchy, { fix, level }) => {
     const base = {
         fix: flattenFix(hierarchy.fix, { fix }),
         level: flattenLevel(hierarchy.level, { level }),
@@ -298,7 +298,7 @@ export const flattenChecker = function (hierarchy, { fix, level }) {
  *                                            commande.
  * @returns {FlattenedConfig} L'objet JSON fusionné.
  */
-export const flatten = function (hierarchy, argv) {
+export const flatten = (hierarchy, argv) => {
     const fix = flattenFix(argv.fix ?? hierarchy.fix, { fix: false });
     const level = flattenLevel(argv.level ?? hierarchy.level, {
         level: Levels.INFO,

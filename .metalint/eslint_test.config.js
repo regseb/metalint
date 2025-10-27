@@ -1,5 +1,7 @@
 /**
  * @license MIT
+ * @see https://eslint.org/docs/latest/rules/
+ * @see https://github.com/lo1tuma/eslint-plugin-mocha#rules
  * @author Sébastien Règne
  */
 
@@ -23,15 +25,15 @@ export default {
         "max-lines": "off",
         "max-lines-per-function": "off",
         "max-statements": "off",
-        "prefer-arrow-callback": "off",
 
         // Plugin eslint-plugin-mocha. Utiliser le plugin pour Mocha, car il
         // peut s'appliquer aussi sur les tests natifs de Node.js.
+        "mocha/consistent-interface": "off",
         "mocha/consistent-spacing-between-blocks": "error",
         "mocha/handle-done-callback": "error",
         "mocha/max-top-level-suites": "error",
-        "mocha/no-async-describe": "error",
-        "mocha/no-empty-description": "error",
+        "mocha/no-async-suite": "error",
+        "mocha/no-empty-title": "error",
         "mocha/no-exclusive-tests": "error",
         "mocha/no-exports": "error",
         "mocha/no-global-tests": "error",
@@ -45,20 +47,19 @@ export default {
         "mocha/no-identical-title": "error",
         "mocha/no-mocha-arrows": "error",
         "mocha/no-nested-tests": "error",
-        "mocha/no-pending-tests": "error",
+        "mocha/no-pending-tests": "warn",
         "mocha/no-return-and-callback": "error",
         "mocha/no-return-from-async": "error",
         "mocha/no-setup-in-describe": "error",
         "mocha/no-sibling-hooks": "error",
-        "mocha/no-skipped-tests": "off",
         "mocha/no-synchronous-tests": "off",
         "mocha/no-top-level-hooks": "error",
         "mocha/prefer-arrow-callback": "error",
-        "mocha/valid-suite-description": "off",
-        "mocha/valid-test-description": "off",
+        "mocha/valid-suite-title": "off",
+        "mocha/valid-test-title": "off",
 
         // Plugin eslint-plugin-no-unsanitized.
-        "no-unsanitized/method": "off",
+        "noUnsanitized/method": "off",
 
         // Plugin eslint-plugin-unicorn.
         // Ne pas obliger à sortir les fonctions des tests.

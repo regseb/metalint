@@ -63,7 +63,9 @@ describe("src/core/wrapper/htmlhint.js", () => {
                         linter: "htmlhint",
                         rule: "doctype-first",
                         severity: Severities.ERROR,
-                        message: "Doctype must be declared first.",
+                        message:
+                            "Doctype must be declared before any non-comment" +
+                            " content.",
                         locations: [{ line: 1, column: 1 }],
                     },
                 ]);

@@ -9,20 +9,20 @@ import path from "node:path/posix";
 import process from "node:process";
 import { wrap } from "./array.js";
 
-/**
- * Échappe les caractères spéciaux d'une expression régulière.
- *
- * @param {string} text Le texte à échapper.
- * @returns {string} Le texte échappé.
- * @see https://developer.mozilla.org/Web/JavaScript/Reference/Global_Objects/RegExp/escape
- * @see https://github.com/tc39/proposal-regex-escaping
- * @see https://issues.chromium.org/353856236
- * @see https://bugzil.la/1918235
- * @see https://github.com/orgs/nodejs/discussions/37488
- */
-const escape = (text) => {
-    return text.replaceAll(/[$\(\)*+.?\[\\\]^\{\|\}]/gv, String.raw`\$&`);
-};
+if (undefined === RegExp.escape) {
+    /**
+     * Échappe les caractères spéciaux d'une expression régulière.
+     *
+     * @param {string} text Le texte à échapper.
+     * @returns {string} Le texte échappé.
+     * @see https://developer.mozilla.org/Web/JavaScript/Reference/Global_Objects/RegExp/escape
+     */
+    RegExp.escape = (text) => {
+        return text
+            .replaceAll(/[$\(\)*+.?\[\\\]^\{\|\}]/gv, String.raw`\$&`)
+            .replaceAll(",", String.raw`\x2c`);
+    };
+}
 
 /**
  * Inverse un patron (en enlevant ou ajoutant un `!` en début).
@@ -30,7 +30,7 @@ const escape = (text) => {
  * @param {string} pattern Le patron.
  * @returns {string} L'inverse du patron.
  */
-const reverse = function (pattern) {
+const reverse = (pattern) => {
     return pattern.startsWith("!") ? pattern.slice(1) : `!${pattern}`;
 };
 
@@ -41,7 +41,7 @@ const reverse = function (pattern) {
  * @returns {RegExp} L'expression rationnelle issue du patron.
  * @throws {Error} Si le patron est invalide.
  */
-const compile = function (pattern) {
+const compile = (pattern) => {
     const glob = pattern.replace(/^!/v, "");
     let regexp = glob.startsWith("/") ? "^" : "^(.*/)?";
 
@@ -82,7 +82,7 @@ const compile = function (pattern) {
             if (-1 === closing) {
                 throw new Error(`${pattern}: ']' missing.`);
             }
-            regexp += "[" + escape(glob.slice(i + 1, closing)) + "]";
+            regexp += `[${RegExp.escape(glob.slice(i + 1, closing))}]`;
             i = closing;
         } else if ("{" === glob[i]) {
             const closing = glob.indexOf("}", i);
@@ -91,11 +91,15 @@ const compile = function (pattern) {
             }
             regexp +=
                 "(" +
-                escape(glob.slice(i + 1, closing)).replaceAll(",", "|") +
+                RegExp.escape(glob.slice(i + 1, closing)).replaceAll(
+                    // Replacer la virgule (par son code Unicode hexadécimal).
+                    String.raw`\x2c`,
+                    "|",
+                ) +
                 ")";
             i = closing;
         } else {
-            regexp += escape(glob[i]);
+            regexp += RegExp.escape(glob[i]);
         }
     }
     regexp += "$";

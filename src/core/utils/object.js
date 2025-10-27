@@ -11,7 +11,7 @@
  * @param {any} second Le second objet.
  * @returns {any} La fusion des deux objets.
  */
-export const merge = function (first, second) {
+export const merge = (first, second) => {
     let third;
 
     if (

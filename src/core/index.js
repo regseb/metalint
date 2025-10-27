@@ -93,7 +93,7 @@ export default class Metalint {
             root = path.join(root, "..");
         }
 
-        // eslint-disable-next-line no-unsanitized/method
+        // eslint-disable-next-line noUnsanitized/method
         const { default: configuration } = await import(
             pathToFileURL(path.join(root, config)).href
         );

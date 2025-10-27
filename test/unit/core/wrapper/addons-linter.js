@@ -89,7 +89,7 @@ describe("src/core/wrapper/addons-linter.js", () => {
                         message: '"/manifest_version" must be >= 2',
                     },
                     {
-                        file: file + "/manifest.json",
+                        file: `${file}/manifest.json`,
                         linter: "addons-linter",
                         rule: "PERMISSION_FIREFOX_UNSUPPORTED_BY_MIN_VERSION",
                         severity: Severities.INFO,
@@ -130,14 +130,14 @@ describe("src/core/wrapper/addons-linter.js", () => {
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, [
                     {
-                        file: file + "manifest.json",
+                        file: `${file}manifest.json`,
                         linter: "addons-linter",
                         rule: "MANIFEST_FIELD_REQUIRED",
                         severity: Severities.ERROR,
                         message: `"/" must have required property 'name'`,
                     },
                     {
-                        file: file + "manifest.json",
+                        file: `${file}manifest.json`,
                         linter: "addons-linter",
                         rule: "MANIFEST_PERMISSIONS",
                         severity: Severities.WARN,
@@ -153,6 +153,10 @@ describe("src/core/wrapper/addons-linter.js", () => {
             it("should accept options", async () => {
                 const root = await tempFs.create({
                     "foo/manifest.json": JSON.stringify({
+                        // eslint-disable-next-line camelcase
+                        browser_specific_settings: {
+                            gecko: { id: "metalint@regseb.github.io" },
+                        },
                         // eslint-disable-next-line camelcase
                         manifest_version: 1,
                         version: "2.3.4",
@@ -232,7 +236,7 @@ describe("src/core/wrapper/addons-linter.js", () => {
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, [
                     {
-                        file: file + "manifest.json",
+                        file: `${file}manifest.json`,
                         linter: "addons-linter",
                         rule: "VERSION_FORMAT_INVALID",
                         severity: Severities.ERROR,
@@ -269,7 +273,7 @@ describe("src/core/wrapper/addons-linter.js", () => {
                         message: "Your JSON is not valid.",
                     },
                     {
-                        file: file + "manifest.json",
+                        file: `${file}manifest.json`,
                         linter: "addons-linter",
                         rule: "JSON_INVALID",
                         severity: Severities.ERROR,

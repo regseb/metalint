@@ -59,7 +59,6 @@ export default class AddonsLinterWrapper extends Wrapper {
             logLevel: "silent",
             // Ne rien afficher dans la console.
             output: "none",
-            shouldScanFile: (_fileOrDirName, _isDir) => true,
             ...options,
         };
     }
@@ -84,7 +83,9 @@ export default class AddonsLinterWrapper extends Wrapper {
         return [...results.errors, ...results.warnings, ...results.notices]
             .map((result) => {
                 let severity;
-                switch (result["_type"]) {
+                // https://github.com/eslint/eslint/issues/20162
+                // eslint-disable-next-line no-underscore-dangle
+                switch (result._type) {
                     case "error":
                         severity = Severities.ERROR;
                         break;

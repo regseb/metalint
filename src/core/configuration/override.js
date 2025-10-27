@@ -17,7 +17,7 @@ import { flattenFix, flattenLevel, flattenOptions } from "./flatten.js";
  * @param {FlattenedConfigLinter} child  La valeur enfante du linter.
  * @returns {FlattenedConfigLinter} La valeur surchargée.
  */
-export const mergeLinter = function (parent, child) {
+const mergeLinter = (parent, child) => {
     return {
         wrapper: parent.wrapper,
         fix: flattenFix(child.fix, { fix: parent.fix }),
@@ -33,7 +33,7 @@ export const mergeLinter = function (parent, child) {
  * @param {FlattenedConfigLinter[]} children Les valeurs enfantes des linters.
  * @returns {FlattenedConfigLinter[]} Les valeurs surchargées.
  */
-export const mergeLinters = function (parents, children) {
+export const mergeLinters = (parents, children) => {
     const map = new Map();
     for (const linter of [...parents, ...children]) {
         if (map.has(linter.wrapper)) {

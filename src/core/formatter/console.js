@@ -6,7 +6,7 @@
 
 import fs from "node:fs/promises";
 import process from "node:process";
-import chalk from "chalk";
+import { styleText } from "node:util";
 import Severities from "../severities.js";
 import Formatter from "./formatter.js";
 
@@ -17,38 +17,14 @@ import Formatter from "./formatter.js";
  */
 
 /**
- * Écrit un message avec un style / couleur.
+ * Écrit du texte avec un style / couleur.
  *
- * @param {Writable} writer  Le flux où afficher le message.
- * @param {string}   message Le message qui sera affiché.
- * @param {string}   [style] Le code du style.
+ * @param {Writable}        writer  Le flux où afficher le message.
+ * @param {string}          text    Le texte qui sera affiché.
+ * @param {string|string[]} [style] Le code du style.
  */
-const print = function (writer, message, style) {
-    let line;
-    if (process.stdout === writer) {
-        switch (style) {
-            case "BOLD":
-                line = chalk.bold(message);
-                break;
-            case "MAGENTA":
-                line = chalk.magenta(message);
-                break;
-            case "RED":
-                line = chalk.red(message);
-                break;
-            case "YELLOW":
-                line = chalk.yellow(message);
-                break;
-            case "BLUE":
-                line = chalk.blue(message);
-                break;
-            default:
-                line = message;
-        }
-    } else {
-        line = message;
-    }
-    writer.write(line);
+const print = (writer, text, style = []) => {
+    writer.write(styleText(style, text, { stream: writer }));
 };
 
 /**
@@ -60,7 +36,7 @@ const print = function (writer, message, style) {
  *                           ligne.
  * @param {Writable} writer  Le flux où afficher la ligne.
  */
-const printCodeSourceLine = function (line, content, active, writer) {
+const printCodeSourceLine = (line, content, active, writer) => {
     // Vérifier que le numéro de la ligne demandée existe dans le fichier.
     if (0 < line && line <= content.length) {
         print(writer, line.toString().padStart(5) + (active ? "‖" : "|"));
@@ -79,7 +55,7 @@ const printCodeSourceLine = function (line, content, active, writer) {
  * @param {string[]}   content   Toutes les lignes du fichier.
  * @param {Writable}   writer    Le flux où afficher les lignes incriminées.
  */
-const printCodeSource = function (locations, content, writer) {
+const printCodeSource = (locations, content, writer) => {
     const characters = [];
     for (const location of locations) {
         let i;
@@ -117,7 +93,7 @@ const printCodeSource = function (locations, content, writer) {
                     "^" +
                     dashes.slice(6 + column + 1);
             }
-            print(writer, dashes + "\n");
+            print(writer, `${dashes}\n`);
         }
         printCodeSourceLine(line + 1, content, false, writer);
         printCodeSourceLine(line + 2, content, false, writer);
@@ -184,14 +160,14 @@ export default class ConsoleFormatter extends Formatter {
         // critères des checkers).
         if (undefined === notices) {
             if (this.#showNoChecked) {
-                print(this.#writer, `${file}: No checked.`, "BOLD");
+                print(this.#writer, `${file}: No checked.`, "bold");
                 print(this.#writer, "\n\n");
             }
             return;
         }
         if (!notices.some((n) => this.level >= n.severity)) {
             if (this.#showZeroNotice) {
-                print(this.#writer, `${file}: 0 notice.`, "BOLD");
+                print(this.#writer, `${file}: 0 notice.`, "bold");
                 print(this.#writer, "\n\n");
             }
             return;
@@ -208,7 +184,7 @@ export default class ConsoleFormatter extends Formatter {
             counts[notice.severity] += 1;
         }
 
-        let line = file + ": ";
+        let line = `${file}: `;
         if (0 < counts[Severities.FATAL]) {
             line += `${counts[Severities.FATAL]} fatal`;
             if (1 < counts[Severities.FATAL]) {
@@ -237,8 +213,8 @@ export default class ConsoleFormatter extends Formatter {
             }
             line += ", ";
         }
-        line = line.slice(0, -2) + ".";
-        print(this.#writer, line, "BOLD");
+        line = `${line.slice(0, -2)}.`;
+        print(this.#writer, line, "bold");
         print(this.#writer, "\n");
 
         // Récupérer le code source du fichier si ce n'est pas un répertoire et
@@ -258,16 +234,16 @@ export default class ConsoleFormatter extends Formatter {
         for (const notice of notices.filter((n) => this.level >= n.severity)) {
             switch (notice.severity) {
                 case Severities.FATAL:
-                    print(this.#writer, "FATAL", "MAGENTA");
+                    print(this.#writer, "FATAL", "magenta");
                     break;
                 case Severities.ERROR:
-                    print(this.#writer, "ERROR", "RED");
+                    print(this.#writer, "ERROR", "red");
                     break;
                 case Severities.WARN:
-                    print(this.#writer, "WARN ", "YELLOW");
+                    print(this.#writer, "WARN ", "yellow");
                     break;
                 case Severities.INFO:
-                    print(this.#writer, "INFO ", "BLUE");
+                    print(this.#writer, "INFO ", "blue");
                     break;
                 default:
                     print(this.#writer, "      ");

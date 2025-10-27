@@ -49,7 +49,7 @@ import Severities from "./severities.js";
  *                   inférieure à la 2<sup>de</sup> ; `0` si elles sont égales ;
  *                   sinon un nombre positif.
  */
-const compare = function (notice1, notice2) {
+const compare = (notice1, notice2) => {
     for (
         let i = 0;
         i < notice1.locations.length && i < notice2.locations.length;
@@ -133,7 +133,9 @@ export default class Results {
         // Trier les notifications.
         Object.values(this.#data)
             .filter((r) => undefined !== r)
-            .forEach((r) => r.sort(compare));
+            .forEach((r) => {
+                r.sort(compare);
+            });
         return this.#data;
     }
 }

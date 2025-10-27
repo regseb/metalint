@@ -4,12 +4,18 @@
  */
 
 import assert from "node:assert/strict";
+import process from "node:process";
 import { afterEach, describe, it } from "node:test";
 import ConsoleFormatter from "../../../../src/core/formatter/console.js";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import tempFs from "../../../utils/temp-fs.js";
 import WriteString from "../../../utils/write-string.js";
+
+// Enlever la variable FORCE_COLOR, car elle est ajoutée par le test runner de
+// Node et elle corrompt la méthode styleText().
+// https://github.com/nodejs/node/issues/57921
+process.env.FORCE_COLOR = undefined;
 
 describe("src/core/formatter/console.js", () => {
     describe("ConsoleFormatter", () => {

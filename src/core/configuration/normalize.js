@@ -80,9 +80,9 @@ import Wrapper, { WRAPPERS } from "../wrapper/wrapper.js";
  * @param {string} file L'adresse du fichier qui sera lu.
  * @returns {Promise<Record<string, unknown>>} L'objet JSON récupéré.
  */
-const read = async function (file) {
+const read = async (file) => {
     try {
-        // eslint-disable-next-line no-unsanitized/method
+        // eslint-disable-next-line noUnsanitized/method
         const module = await import(pathToFileURL(file).href);
         return module.default;
     } catch (err) {
@@ -98,7 +98,7 @@ const read = async function (file) {
  * @throws {Error} Si le `"patterns"` n'est pas renseigné.
  * @throws {TypeError} Si le `"patterns"` n'a pas le bon type.
  */
-export const normalizePatterns = function (partials) {
+export const normalizePatterns = (partials) => {
     let normalized;
     if (undefined === partials) {
         throw new Error("Property 'patterns' is required.");
@@ -131,7 +131,7 @@ export const normalizePatterns = function (partials) {
  * @returns {boolean|undefined} La valeur normalisée.
  * @throws {TypeError} Si le `"fix"` n'a pas le bon type.
  */
-export const normalizeFix = function (partial) {
+export const normalizeFix = (partial) => {
     let normalized;
     if (undefined === partial) {
         normalized = undefined;
@@ -154,7 +154,7 @@ export const normalizeFix = function (partial) {
  * @throws {Error}     Si le `"level"` est invalide.
  * @throws {TypeError} Si le `"level"` n'a pas le bon type.
  */
-export const normalizeLevel = function (partial) {
+export const normalizeLevel = (partial) => {
     let normalized;
     if (undefined === partial) {
         normalized = undefined;
@@ -195,22 +195,22 @@ export const normalizeLevel = function (partial) {
  * @throws {Error}     Si le `"formatter"` est invalide.
  * @throws {TypeError} Si le `"formatter"` n'a pas le bon type.
  */
-export const normalizeFormatter = async function (partial) {
+export const normalizeFormatter = async (partial) => {
     let normalized;
     if (undefined === partial) {
         const imported = await import("../formatter/console.js");
         normalized = imported.default;
     } else if ("string" === typeof partial) {
         if (FORMATTERS.includes(partial.toLowerCase())) {
-            // eslint-disable-next-line no-unsanitized/method
+            // eslint-disable-next-line noUnsanitized/method
             const imported = await import(
                 `../formatter/${partial.toLowerCase()}.js`
             );
             normalized = imported.default;
         } else {
             throw new Error(
-                "Value of property 'formatter' is unknown (possibles" +
-                    ` values: "${FORMATTERS.join('", "')}").`,
+                "Value of property 'formatter' is unknown (possibles values:" +
+                    ` "${FORMATTERS.join('", "')}").`,
             );
         }
         // eslint-disable-next-line no-prototype-builtins
@@ -234,7 +234,7 @@ export const normalizeFormatter = async function (partial) {
  * @returns {Promise<Record<string, unknown>>} La valeur normalisée.
  * @throws {TypeError} Si l'`"options"` n'a pas le bon type.
  */
-export const normalizeOption = async function (partial, { dir }) {
+export const normalizeOption = async (partial, { dir }) => {
     let normalized;
     if ("string" === typeof partial) {
         normalized = await read(path.join(dir, partial));
@@ -258,7 +258,7 @@ export const normalizeOption = async function (partial, { dir }) {
  * @returns {Promise<Record<string, unknown>[]>} La valeur normalisée.
  * @throws {TypeError} Si l'`"options"` n'a pas le bon type.
  */
-export const normalizeOptions = async function (partials, { dir }) {
+export const normalizeOptions = async (partials, { dir }) => {
     let normalizeds;
     if (undefined === partials) {
         normalizeds = [await normalizeOption({}, { dir })];
@@ -284,7 +284,7 @@ export const normalizeOptions = async function (partials, { dir }) {
  * @returns {Promise<NormalizedConfigReporter>} La valeur normalisée.
  * @throws {TypeError} Si le `"reporters"` n'a pas le bon type.
  */
-export const normalizeReporter = async function (partial, { dir }) {
+export const normalizeReporter = async (partial, { dir }) => {
     let normalized;
     if ("object" === typeof partial) {
         normalized = {
@@ -308,7 +308,7 @@ export const normalizeReporter = async function (partial, { dir }) {
  * @returns {Promise<NormalizedConfigReporter[]>} La valeur normalisée.
  * @throws {TypeError} Si le `"reporters"` n'a pas le bon type.
  */
-export const normalizeReporters = async function (partials, { dir }) {
+export const normalizeReporters = async (partials, { dir }) => {
     let normalizeds;
     if (undefined === partials) {
         normalizeds = [await normalizeReporter({}, { dir })];
@@ -333,19 +333,19 @@ export const normalizeReporters = async function (partials, { dir }) {
  * @returns {Promise<TypeofWrapper>} La valeur normalisée.
  * @throws {TypeError} Si le `"reporters"` n'a pas le bon type.
  */
-export const normalizeWrapper = async function (partial) {
+export const normalizeWrapper = async (partial) => {
     let normalized;
     if ("string" === typeof partial) {
         if (WRAPPERS.includes(partial.toLowerCase())) {
-            // eslint-disable-next-line no-unsanitized/method
+            // eslint-disable-next-line noUnsanitized/method
             const imported = await import(
                 `../wrapper/${partial.toLowerCase()}.js`
             );
             normalized = imported.default;
         } else {
             throw new Error(
-                "Value of property 'wrapper' is unknown (possibles" +
-                    ` values: "${WRAPPERS.join('", "')}").`,
+                "Value of property 'wrapper' is unknown (possibles values:" +
+                    ` "${WRAPPERS.join('", "')}").`,
             );
         }
         // eslint-disable-next-line no-prototype-builtins
@@ -369,7 +369,7 @@ export const normalizeWrapper = async function (partial) {
  * @returns {Promise<NormalizedConfigLinter>} La valeur normalisée.
  * @throws {TypeError} Si le `"linters"` n'a pas le bon type.
  */
-export const normalizeLinter = async function (partial, { dir }) {
+export const normalizeLinter = async (partial, { dir }) => {
     let normalized;
     if ("string" === typeof partial) {
         // Chercher un "_" entouré de lettres ou de chiffres pour éviter les
@@ -420,7 +420,7 @@ export const normalizeLinter = async function (partial, { dir }) {
  * @returns {Promise<NormalizedConfigLinter[]>} La valeur normalisée.
  * @throws {TypeError} Si le `"linters"` n'a pas le bon type.
  */
-export const normalizeLinters = async function (partials, { dir }) {
+export const normalizeLinters = async (partials, { dir }) => {
     let normalizeds;
     if (undefined === partials) {
         normalizeds = /** @type {NormalizedConfigLinter[]} */ ([]);
@@ -446,7 +446,7 @@ export const normalizeLinters = async function (partials, { dir }) {
  * @returns {Promise<NormalizedConfigOverride>} La valeur normalisée.
  * @throws {TypeError} Si le `"overrides"` n'a pas le bon type.
  */
-export const normalizeOverride = async function (partial, { dir }) {
+export const normalizeOverride = async (partial, { dir }) => {
     let normalized;
     if ("object" === typeof partial) {
         normalized = {
@@ -471,7 +471,7 @@ export const normalizeOverride = async function (partial, { dir }) {
  * @returns {Promise<NormalizedConfigOverride[]>} La valeur normalisée.
  * @throws {TypeError} Si le `"overrides"` n'a pas le bon type.
  */
-export const normalizeOverrides = async function (partials, { dir }) {
+export const normalizeOverrides = async (partials, { dir }) => {
     let normalizeds;
     if (undefined === partials) {
         normalizeds = /** @type {NormalizedConfigOverride[]} */ ([]);
@@ -497,7 +497,7 @@ export const normalizeOverrides = async function (partials, { dir }) {
  * @returns {Promise<NormalizedConfigChecker>} La valeur normalisée.
  * @throws {TypeError} Si le `"checkers"` n'a pas le bon type.
  */
-export const normalizeChecker = async function (partial, { dir }) {
+export const normalizeChecker = async (partial, { dir }) => {
     let normalized;
     if ("object" === typeof partial) {
         normalized = {
@@ -523,7 +523,7 @@ export const normalizeChecker = async function (partial, { dir }) {
  * @returns {Promise<NormalizedConfigChecker[]>} La valeur normalisée.
  * @throws {TypeError} Si le `"checkers"` n'a pas le bon type.
  */
-export const normalizeCheckers = async function (partials, { dir }) {
+export const normalizeCheckers = async (partials, { dir }) => {
     let normalizeds;
     if (undefined === partials) {
         normalizeds = /** @type {NormalizedConfigChecker[]} */ ([]);
@@ -551,7 +551,7 @@ export const normalizeCheckers = async function (partials, { dir }) {
  * @returns {Promise<NormalizedConfig>} La valeur normalisée.
  * @throws {TypeError} Si la configuration n'a pas le bon type.
  */
-export const normalize = async function (partial, { dir }) {
+export const normalize = async (partial, { dir }) => {
     let normalized;
     if ("object" === typeof partial) {
         normalized = {

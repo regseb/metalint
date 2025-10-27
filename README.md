@@ -2,8 +2,8 @@
 
 <!-- Utiliser du HTML (avec l'attribut "align" obsolète) pour faire flotter
      l'image à droite. -->
-<!-- markdownlint-disable-next-line no-inline-html-->
-<img src="asset/logo.svg" align="right" alt="">
+<!-- markdownlint-disable-next-line no-inline-html -->
+<img src="asset/logo.svg" align="right" width="100" height="100" alt="">
 
 [![npm][img-npm]][link-npm] [![build][img-build]][link-build]
 [![coverage][img-coverage]][link-coverage] [![semver][img-semver]][link-semver]
@@ -273,10 +273,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
       - name: Install dependencies
         run: npm ci
       - name: Lint files

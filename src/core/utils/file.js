@@ -13,7 +13,7 @@ import fs from "node:fs/promises";
  * @returns {Promise<boolean>} Une promesse avec `true` si le fichier existe ;
  *                             sinon `false`.
  */
-export const exists = async function (path) {
+export const exists = async (path) => {
     try {
         await fs.access(path, fs.constants.F_OK);
         return true;

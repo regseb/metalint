@@ -22,7 +22,7 @@ try {
         formatter: argv.formatter,
         level: argv.level,
     });
-    const results = await metalint.lintFiles(argv._);
+    const results = await metalint.lintFiles(argv.bases);
     const severity = await metalint.report(results);
 
     let code;

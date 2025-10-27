@@ -1,5 +1,7 @@
 /**
  * @license MIT
+ * @see https://eslint.org/docs/latest/rules/
+ * @see https://github.com/eslint-community/eslint-plugin-n#-rules
  * @author Sébastien Règne
  */
 
@@ -65,7 +67,14 @@ export default {
         "n/no-unpublished-require": "off",
         "n/no-unsupported-features/es-builtins": "error",
         "n/no-unsupported-features/es-syntax": "error",
-        "n/no-unsupported-features/node-builtins": "error",
+        "n/no-unsupported-features/node-builtins": [
+            "error",
+            {
+                // Ignorer les vérifications de styleText qui est en
+                // expérimental dans Node v22.
+                ignores: ["util.styleText"],
+            },
+        ],
         "n/process-exit-as-throw": "error",
 
         // Best Practices.
@@ -83,6 +92,7 @@ export default {
         "n/no-restricted-import": ["error", ["node:assert"]],
         "n/no-restricted-require": "error",
         "n/no-sync": "error",
+        "n/no-top-level-await": "off",
         // Désactiver les règles n/prefer-global, car aucune variable globale de
         // Node n'est déclarée, donc si elles sont utilisées : la règle no-undef
         // remontera une erreur.

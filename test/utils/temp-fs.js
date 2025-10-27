@@ -62,7 +62,7 @@ const createZip = (parent, files) => {
     return new Promise((resolve) => {
         zip.generateNodeStream({ streamFiles: true })
             .pipe(createWriteStream(parent))
-            .on("finish", resolve);
+            .on("finish", /** @type {() => void} */ (resolve));
     });
 };
 

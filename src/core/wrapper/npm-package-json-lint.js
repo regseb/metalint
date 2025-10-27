@@ -73,13 +73,13 @@ export default class NpmPackageJSONLintWrapper extends Wrapper {
         let json;
         try {
             json = JSON.parse(source);
-        } catch (e) {
+        } catch (err) {
             return [
                 {
                     file,
                     linter: "npm-package-json-lint",
                     severity: Severities.FATAL,
-                    message: e.message,
+                    message: err.message,
                 },
             ];
         }

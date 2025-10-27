@@ -20,8 +20,8 @@ import Formatter from "./formatter.js";
  * @param {string} value Le texte qui sera protégé.
  * @returns {string} Le texte protégé.
  */
-const doublequote = function (value) {
-    return '"' + value.replaceAll('"', '""') + '"';
+const doublequote = (value) => {
+    return `"${value.replaceAll('"', '""')}"`;
 };
 
 /**
