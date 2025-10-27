@@ -77,6 +77,17 @@ export default class MarkuplintWrapper extends Wrapper {
         });
         const results = await engine.exec();
 
+        if (null === results) {
+            return [
+                {
+                    file,
+                    linter: "markuplint",
+                    severity: Severities.FATAL,
+                    message: "markuplint returns null result",
+                },
+            ];
+        }
+
         return results.violations
             .map((result) => {
                 let severity;

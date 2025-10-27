@@ -41,6 +41,30 @@ describe("src/core/wrapper/markuplint.js", () => {
                 assert.deepEqual(notices, []);
             });
 
+            it("should reject directory", async () => {
+                const root = await tempFs.create({ foo: {} });
+
+                const context = {
+                    level: Levels.INFO,
+                    fix: false,
+                    root,
+                    files: ["foo"],
+                };
+                const options = /** @type {Record<string, unknown>} */ ({});
+                const file = "foo";
+
+                const wrapper = new MarkuplintWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file,
+                        linter: "markuplint",
+                        message: "markuplint returns null result",
+                        severity: Severities.FATAL,
+                    },
+                ]);
+            });
+
             it("should use default options", async () => {
                 const root = await tempFs.create({
                     "foo.html": "<title>Bar</title>",
