@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.1](https://github.com/regseb/metalint/compare/v0.21.0...v0.21.1) (2025-10-27)
+
+### Bug Fixes
+
+- Fix publish in npm.
+  ([5117a99](https://github.com/regseb/metalint/commit/5117a99d1078f69035698c6685b3cb2aef241c41))
+
 ## [0.21.0](https://github.com/regseb/metalint/compare/v0.20.0...v0.21.0) (2025-10-27)
 
 ### Features
