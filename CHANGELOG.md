@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.21.0](https://github.com/regseb/metalint/compare/v0.20.0...v0.21.0) (2025-10-27)
+
+### Features
+
+- Add Biome support.
+  ([ed5fa53](https://github.com/regseb/metalint/commit/ed5fa53199b855a592b4f24be5ef59d114e92d33))
+
+### Bug Fixes
+
+- **markuplint:** Support `null` result.
+  ([b024ba4](https://github.com/regseb/metalint/commit/b024ba48c39001ffa1930ec9c038986677277ff6))
+
 ## [0.20.0](https://github.com/regseb/metalint/compare/v0.19.0...v0.20.0) (2025-04-05)
 
 ### Features
