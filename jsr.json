@@ -1,6 +1,6 @@
 {
   "name": "@regseb/metalint",
-  "version": "0.21.1",
+  "version": "0.21.2",
   "license": "MIT",
   "exports": {
     ".": "./src/core/index.js",

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.2](https://github.com/regseb/metalint/compare/v0.21.1...v0.21.2) (2026-01-01)
+
+### Bug Fixes
+
+- **Biome:** Support assist rules.
+  ([cea7614](https://github.com/regseb/metalint/commit/cea76149ce479343c3fb9662b96360083a0185c5))
+
 ## [0.21.1](https://github.com/regseb/metalint/compare/v0.21.0...v0.21.1) (2025-10-27)
 
 ### Bug Fixes
