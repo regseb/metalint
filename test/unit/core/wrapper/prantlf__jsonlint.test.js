@@ -54,13 +54,24 @@ describe("src/core/wrapper/prantlf__jsonlint.js", () => {
 
                 const wrapper = new PrantlfJSONLintWrapper(context, options);
                 const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, [
-                    {
-                        file,
-                        linter: "prantlf__jsonlint",
-                        message: "Unexpected end",
-                        locations: [{ line: 1, column: 9 }],
-                    },
+                assert.equal(notices.length, 1);
+                assert.equal(notices[0].file, file);
+                assert.equal(notices[0].linter, "prantlf__jsonlint");
+                assert.match(
+                    notices[0].message,
+                    new RegExp(
+                        "^(" +
+                            // Vérifier le message dans Node.js.
+                            RegExp.escape("Unexpected end") +
+                            ")|(" +
+                            // Vérifier le message dans Bun.
+                            RegExp.escape('No value found for key "bar"') +
+                            ")$",
+                        "v",
+                    ),
+                );
+                assert.deepEqual(notices[0].locations, [
+                    { line: 1, column: 9 },
                 ]);
             });
 

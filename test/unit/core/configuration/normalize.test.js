@@ -198,7 +198,13 @@ describe("src/core/configuration/normalize.js", () => {
                         err.message,
                         `Cannot import '${path.join(dir, "./jshint.config.js")}'.`,
                     );
-                    assert.ok(err.cause instanceof Error);
+                    assert.ok(
+                        // Vérifier le type de la cause dans Node.js.
+                        err.cause instanceof Error ||
+                            // Vérifier le type de la cause dans Bun.
+                            "ResolveMessage" === err.cause.name,
+                        err.cause,
+                    );
                     return true;
                 },
             );

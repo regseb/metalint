@@ -156,16 +156,29 @@ describe("src/core/wrapper/sort-package-json.js", () => {
 
                 const wrapper = new SortPackageJsonWrapper(context, options);
                 const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, [
-                    {
-                        file,
-                        linter: "sort-package-json",
-                        severity: Severities.FATAL,
-                        message:
-                            `Unexpected token 'a', "name=foo" is not valid` +
-                            " JSON",
-                    },
-                ]);
+                assert.equal(notices.length, 1);
+                assert.equal(notices[0].file, file);
+                assert.equal(notices[0].linter, "sort-package-json");
+                assert.equal(notices[0].severity, Severities.FATAL);
+                assert.match(
+                    notices[0].message,
+                    new RegExp(
+                        "^(" +
+                            // Vérifier le message dans Node.js.
+                            RegExp.escape(
+                                `Unexpected token 'a', "name=foo" is not` +
+                                    " valid JSON",
+                            ) +
+                            ")|(" +
+                            // Vérifier le message dans Bun.
+                            RegExp.escape(
+                                "JSON Parse error: Unexpected identifier" +
+                                    ' "name"',
+                            ) +
+                            ")$",
+                        "v",
+                    ),
+                );
             });
         });
     });

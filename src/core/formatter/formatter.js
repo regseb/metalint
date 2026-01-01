@@ -29,7 +29,10 @@ export const FORMATTERS = scripts
     // "formatter.js" qui n'est pas un vrai formateur.
     .filter((f) => f.endsWith(".js") && "formatter.js" !== f)
     // Enlever l'extension des fichiers.
-    .map((f) => f.slice(0, -3));
+    .map((f) => f.slice(0, -3))
+    // Trier la liste, car Bun retourne une liste non-triée.
+    // https://github.com/oven-sh/bun/issues/25734
+    .toSorted((a, b) => a.localeCompare(b));
 
 /**
  * Le formateur parent.

@@ -60,14 +60,23 @@ describe("src/core/wrapper/npm-package-json-lint.js", () => {
 
                 const wrapper = new NpmPackageJSONLintWrapper(context, options);
                 const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, [
-                    {
-                        file,
-                        linter: "npm-package-json-lint",
-                        severity: Severities.FATAL,
-                        message: "Unexpected end of JSON input",
-                    },
-                ]);
+                assert.equal(notices.length, 1);
+                assert.equal(notices[0].file, file);
+                assert.equal(notices[0].linter, "npm-package-json-lint");
+                assert.equal(notices[0].severity, Severities.FATAL);
+                assert.match(
+                    notices[0].message,
+                    new RegExp(
+                        "^(" +
+                            // Vérifier le message dans Node.js.
+                            RegExp.escape("Unexpected end of JSON input") +
+                            ")|(" +
+                            // Vérifier le message dans Bun.
+                            RegExp.escape("JSON Parse error: Unexpected EOF") +
+                            ")$",
+                        "v",
+                    ),
+                );
             });
 
             it("should return notices", async () => {

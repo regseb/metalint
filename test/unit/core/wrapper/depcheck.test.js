@@ -139,38 +139,68 @@ describe("src/core/wrapper/depcheck.js", () => {
                     ),
                     "node_modules",
                 );
-                assert.deepEqual(notices, [
-                    {
-                        file,
-                        linter: "depcheck",
-                        severity: Severities.FATAL,
-                        message:
-                            "Cannot find module '" +
-                            path.join(context.root, "foo", "package.json") +
-                            "'\nRequire stack:\n- " +
-                            path.join(
-                                nodeModules,
-                                "depcheck",
-                                "dist",
-                                "utils",
-                                "index.js",
+                assert.equal(notices.length, 1);
+                assert.equal(notices[0].file, file);
+                assert.equal(notices[0].linter, "depcheck");
+                assert.equal(notices[0].severity, Severities.FATAL);
+                assert.match(
+                    notices[0].message,
+                    new RegExp(
+                        "^(" +
+                            // Vérifier le message dans Node.js.
+                            RegExp.escape(
+                                "Cannot find module '" +
+                                    path.join(
+                                        context.root,
+                                        "foo",
+                                        "package.json",
+                                    ) +
+                                    "'\nRequire stack:\n- " +
+                                    path.join(
+                                        nodeModules,
+                                        "depcheck",
+                                        "dist",
+                                        "utils",
+                                        "index.js",
+                                    ) +
+                                    "\n- " +
+                                    path.join(
+                                        nodeModules,
+                                        "depcheck",
+                                        "dist",
+                                        "check.js",
+                                    ) +
+                                    "\n- " +
+                                    path.join(
+                                        nodeModules,
+                                        "depcheck",
+                                        "dist",
+                                        "index.js",
+                                    ),
                             ) +
-                            "\n- " +
-                            path.join(
-                                nodeModules,
-                                "depcheck",
-                                "dist",
-                                "check.js",
+                            ")|(" +
+                            // Vérifier le message dans Bun.
+                            RegExp.escape(
+                                "Cannot find module '" +
+                                    path.join(
+                                        context.root,
+                                        "foo",
+                                        "package.json",
+                                    ) +
+                                    "' from '" +
+                                    path.join(
+                                        nodeModules,
+                                        "depcheck",
+                                        "dist",
+                                        "utils",
+                                        "index.js",
+                                    ) +
+                                    "'",
                             ) +
-                            "\n- " +
-                            path.join(
-                                nodeModules,
-                                "depcheck",
-                                "dist",
-                                "index.js",
-                            ),
-                    },
-                ]);
+                            ")$",
+                        "v",
+                    ),
+                );
             });
 
             it("should return notices from devDependencies", async () => {

@@ -40,7 +40,10 @@ export const WRAPPERS = scripts
     // "wrapper.js" qui n'est pas un vrai enrobage.
     .filter((f) => f.endsWith(".js") && "wrapper.js" !== f)
     // Enlever l'extension des fichiers.
-    .map((f) => f.slice(0, -3));
+    .map((f) => f.slice(0, -3))
+    // Trier la liste, car Bun retourne une liste non-triée.
+    // https://github.com/oven-sh/bun/issues/25734
+    .toSorted((a, b) => a.localeCompare(b));
 
 /**
  * La classe mère des enrobages de linters.

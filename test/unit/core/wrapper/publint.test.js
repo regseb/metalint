@@ -80,22 +80,25 @@ describe("src/core/wrapper/publint.js", () => {
                     root,
                     files: ["package.json"],
                 };
-                const options = /** @type {Record<string, unknown>} */ ({});
+                const options = /** @type {Record<string, unknown>} */ ({
+                    pack: "npm",
+                });
                 const file = "package.json";
 
                 const wrapper = new PublintWrapper(context, options);
                 const notices = await wrapper.lint(file);
+                // Trier les notifications, car l'ordre est différent dans
+                // Node.js et Bun.
+                notices.sort((a, b) => a.rule.localeCompare(b.rule));
                 assert.deepEqual(notices, [
                     {
                         file,
-                        severity: Severities.INFO,
+                        severity: Severities.WARN,
                         linter: "publint",
-                        rule: "USE_TYPE",
+                        rule: "DEPRECATED_FIELD_JSNEXT",
                         message:
-                            'The package does not specify the "type" field.' +
-                            " Node.js may attempt to detect the package type" +
-                            " causing a small performance hit. Consider" +
-                            ' adding "type": "commonjs".',
+                            "pkg.jsnext is deprecated. pkg.module should be" +
+                            " used instead.",
                     },
                     {
                         file,
@@ -108,12 +111,14 @@ describe("src/core/wrapper/publint.js", () => {
                     },
                     {
                         file,
-                        severity: Severities.WARN,
+                        severity: Severities.INFO,
                         linter: "publint",
-                        rule: "DEPRECATED_FIELD_JSNEXT",
+                        rule: "USE_TYPE",
                         message:
-                            "pkg.jsnext is deprecated. pkg.module should be" +
-                            " used instead.",
+                            'The package does not specify the "type" field.' +
+                            " Node.js may attempt to detect the package type" +
+                            " causing a small performance hit. Consider" +
+                            ' adding "type": "commonjs".',
                     },
                 ]);
             });
@@ -135,6 +140,7 @@ describe("src/core/wrapper/publint.js", () => {
                     files: ["package.json"],
                 };
                 const options = /** @type {Record<string, unknown>} */ ({
+                    pack: "npm",
                     strict: true,
                 });
                 const file = "package.json";
@@ -169,7 +175,9 @@ describe("src/core/wrapper/publint.js", () => {
                     root,
                     files: ["package.json"],
                 };
-                const options = /** @type {Record<string, unknown>} */ ({});
+                const options = /** @type {Record<string, unknown>} */ ({
+                    pack: "npm",
+                });
                 const file = "package.json";
 
                 const wrapper = new PublintWrapper(context, options);
@@ -188,7 +196,9 @@ describe("src/core/wrapper/publint.js", () => {
                     root,
                     files: ["foo/package.json"],
                 };
-                const options = /** @type {Record<string, unknown>} */ ({});
+                const options = /** @type {Record<string, unknown>} */ ({
+                    pack: "npm",
+                });
                 const file = "foo/package.json";
 
                 const wrapper = new PublintWrapper(context, options);

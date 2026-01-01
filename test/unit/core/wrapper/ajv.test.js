@@ -249,16 +249,28 @@ describe("src/core/wrapper/ajv.js", () => {
 
                 const wrapper = new AjvWrapper(context, options);
                 const notices = await wrapper.lint(file);
-                assert.deepEqual(notices, [
-                    {
-                        file,
-                        linter: "ajv",
-                        severity: Severities.FATAL,
-                        message:
-                            `Unexpected token 'b', "bar: baz" is not valid` +
-                            " JSON",
-                    },
-                ]);
+                assert.equal(notices.length, 1);
+                assert.equal(notices[0].file, file);
+                assert.equal(notices[0].linter, "ajv");
+                assert.equal(notices[0].severity, Severities.FATAL);
+                assert.match(
+                    notices[0].message,
+                    new RegExp(
+                        "^(" +
+                            // Vérifier le message dans Node.js.
+                            RegExp.escape(
+                                `Unexpected token 'b', "bar: baz" is not` +
+                                    " valid JSON",
+                            ) +
+                            ")|(" +
+                            // Vérifier le message dans Bun.
+                            RegExp.escape(
+                                'JSON Parse error: Unexpected identifier "bar"',
+                            ) +
+                            ")$",
+                        "v",
+                    ),
+                );
             });
         });
     });

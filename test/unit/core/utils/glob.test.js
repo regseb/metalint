@@ -17,8 +17,8 @@ describe("src/core/utils/glob.js", () => {
 
     describe("test()", () => {
         it("should reject all file with no pattern", () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob([], { cwd, root });
             assert.equal(glob.test("./"), false);
             assert.equal(glob.test("foo/"), false);
@@ -28,8 +28,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it("should accept only root", () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["/"], { cwd, root });
             assert.equal(glob.test("./"), true);
             assert.equal(glob.test("foo/"), false);
@@ -39,8 +39,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it("should accept only files", () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["*"], { cwd, root });
             assert.equal(glob.test("./"), false);
             assert.equal(glob.test("foo/"), false);
@@ -50,8 +50,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it("should accept only directories", () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["*/"], { cwd, root });
             assert.equal(glob.test("./"), false);
             assert.equal(glob.test("foo/"), true);
@@ -61,8 +61,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it("should accept only files in first level", () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["/*"], { cwd, root });
             assert.equal(glob.test("./"), false);
             assert.equal(glob.test("foo/"), false);
@@ -72,8 +72,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it("should accept only directories in first level", () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["/*/"], { cwd, root });
             assert.equal(glob.test("./"), false);
             assert.equal(glob.test("foo/"), true);
@@ -83,8 +83,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it("should accept files in depth", () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["foo"], { cwd, root });
             assert.equal(glob.test("foo"), true);
             assert.equal(glob.test("bar"), false);
@@ -93,8 +93,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it('should support "/**/"', () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["/foo/**/bar"], { cwd, root });
             assert.equal(glob.test("foobar"), false);
             assert.equal(glob.test("foo/bar"), true);
@@ -106,8 +106,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it('should support "/**"', () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["/foo/**"], { cwd, root });
             assert.equal(glob.test("foobar"), false);
             assert.equal(glob.test("foo/bar"), true);
@@ -115,8 +115,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it('should support "?"', () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["foo?bar"], { cwd, root });
             assert.equal(glob.test("foobar"), false);
             assert.equal(glob.test("fooXbar"), true);
@@ -124,8 +124,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it('should support "[]"', () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["foo[12]"], { cwd, root });
             assert.equal(glob.test("foo"), false);
             assert.equal(glob.test("foo1"), true);
@@ -137,8 +137,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it('should support "{}"', () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["foo{bar,baz}"], { cwd, root });
             assert.equal(glob.test("foo"), false);
             assert.equal(glob.test("foobar"), true);
@@ -150,8 +150,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it("should reject file", () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["!foo", "**"], { cwd, root });
             assert.equal(glob.test("foo"), false);
             assert.equal(glob.test("foobar"), true);
@@ -159,8 +159,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it("should reject all sub-files in directory", () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["!/foo/**", "**"], { cwd, root });
             assert.equal(glob.test("foo/"), false);
             assert.equal(glob.test("foo/bar"), false);
@@ -171,8 +171,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it("should sanitize pattern", () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["foo("], { cwd, root });
             assert.equal(glob.test("foo"), false);
             assert.equal(glob.test("foo("), true);
@@ -180,8 +180,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it('should sanitize pattern in "[]"', () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["foo[)(]"], { cwd, root });
             assert.equal(glob.test("foo"), false);
             assert.equal(glob.test("foo("), true);
@@ -190,8 +190,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it(`should sanitize "!" when it isn't first`, () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             const glob = new Glob(["foo!"], { cwd, root });
             assert.equal(glob.test("foo"), false);
             assert.equal(glob.test("foo!"), true);
@@ -199,8 +199,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it('should reject "**" not followed by a slash', () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             assert.throws(() => new Glob(["/**foo"], { cwd, root }), {
                 name: "Error",
                 message: "/**foo: '**' not followed by a slash.",
@@ -208,8 +208,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it('should reject "**" not preceded by a slash', () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             assert.throws(() => new Glob(["foo**"], { cwd, root }), {
                 name: "Error",
                 message: "foo**: '**' not preceded by a slash.",
@@ -217,8 +217,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it('should reject "[" not closed', () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             assert.throws(() => new Glob(["foo[bar"], { cwd, root }), {
                 name: "Error",
                 message: "foo[bar: ']' missing.",
@@ -226,8 +226,8 @@ describe("src/core/utils/glob.js", () => {
         });
 
         it('should reject "{" not closed', () => {
-            const cwd = fileURLToPath(import.meta.resolve("."));
-            const root = fileURLToPath(import.meta.resolve("."));
+            const cwd = fileURLToPath(import.meta.resolve("./"));
+            const root = fileURLToPath(import.meta.resolve("./"));
             assert.throws(() => new Glob(["foo{bar"], { cwd, root }), {
                 name: "Error",
                 message: "foo{bar: '}' missing.",
