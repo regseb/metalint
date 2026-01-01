@@ -150,7 +150,7 @@ export default {
             "error",
             "always",
             {
-                ignorePattern: "prettier-ignore",
+                ignorePattern: "biome-ignore|prettier-ignore",
                 ignoreConsecutiveComments: true,
             },
         ],
@@ -328,7 +328,7 @@ export default {
         "prefer-rest-params": "error",
         "prefer-spread": "error",
         // Désactiver cette règle qui force l'utilisation des templates même
-        // quand la concaténation est sur plusieurs lignes. Préférer les règles
+        // quand la concaténation est sur plusieurs lignes. Préférer la règle
         // "useTemplate" de Biome.
         "prefer-template": "off",
         "preserve-caught-error": ["error", { requireCatchParameter: true }],
@@ -557,6 +557,8 @@ export default {
         "jsdoc/require-property-description": "error",
         "jsdoc/require-property-name": "error",
         "jsdoc/require-property-type": "error",
+        // Désactiver cette règle, car l'annotation @rejects n'est pas standard.
+        "jsdoc/require-rejects": "off",
         "jsdoc/require-returns": "off",
         "jsdoc/require-returns-check": "error",
         "jsdoc/require-returns-description": "error",

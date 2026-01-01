@@ -30,6 +30,11 @@ export default {
                 noUselessStringRaw: "error",
                 useSimpleNumberKeys: "error",
                 useSimplifiedLogicExpression: "error",
+                // Utiliser cette règle à la place de la règle ESLint
+                // prefer-arrow-callback, car la règle d'ESLint est incompatible
+                // avec Prettier et on ne peut pas désactiver le fix d'une
+                // règle. https://github.com/eslint/eslint/issues/18696
+                useArrowFunction: "error",
             },
             correctness: {
                 // https://biomejs.dev/linter/javascript/sources/

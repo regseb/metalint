@@ -17,9 +17,9 @@ assignees: ""
 
 ### Environment
 
-- Metalint version<!-- e.g. 0.21.1 -->:
-- Node version<!-- e.g. v22.21.0 -->:
-- Linter version (if appropriate)<!-- e.g. eslint 9.38.0 -->:
+- Metalint version<!-- e.g. 0.21.2 -->:
+- Node version<!-- e.g. v24.12.0 -->:
+- Linter version (if appropriate)<!-- e.g. eslint 9.39.2 -->:
 
 ### Additional context
 

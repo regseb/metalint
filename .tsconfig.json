@@ -1,22 +1,17 @@
 {
   "compilerOptions": {
     "module": "nodenext",
-
-    "allowJs": true,
-
-    "esModuleInterop": true,
-
-    "target": "esnext"
+    "allowJs": true
   },
   "include": ["**/*", "**/.*", "**/.*/**/*", "**/.*/**/.*"],
   "exclude": [
     ".git/",
+    ".idea/",
     ".stryker/",
     ".tmp/",
+    ".vscode/",
     "jsdocs/",
     "node_modules/",
-    "types/",
-    ".vscode/",
-    ".idea/"
+    "types/"
   ]
 }
