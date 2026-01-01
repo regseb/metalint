@@ -11,7 +11,7 @@ import MapboxJSONLintLinesPrimitivesWrapper from "../../../../src/core/wrapper/m
 import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", () => {
-    describe("MapboxJSONintLinesPrimitivesWrapper", () => {
+    describe("MapboxJSONLintLinesPrimitivesWrapper", () => {
         describe("configurable", () => {
             it("should be true", () => {
                 assert.ok(!MapboxJSONLintLinesPrimitivesWrapper.configurable);
