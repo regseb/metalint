@@ -16,7 +16,7 @@ import Wrapper from "./wrapper.js";
 
 /**
  * @import { Level } from "../levels.js"
- * @import { Notice, PartialNotice } from "../results.js"
+ * @import { PartialNotice } from "../results.js"
  */
 
 const SEVERITY_MAPPINGS = {
@@ -61,14 +61,17 @@ const getUtf8ByteLength = (codeUnit) => {
  * Convertit l'intervalle en décalages d'octets UTF-8 en un intervalle en
  * décalages d'unités de code.
  *
- * @param {number[]} span L'intervalle en octets UTF-8.
- * @param {string}   str  La chaine de caractères.
- * @returns {number[]} L'intervalle en unités de code.
+ * @param {[number, number]} span L'intervalle en octets UTF-8.
+ * @param {string}           str  La chaine de caractères.
+ * @returns {[number, number]} L'intervalle en unités de code.
  * @see https://github.com/biomejs/website/blob/main/src/playground/utils.ts#L381
  * @see https://stackoverflow.com/a/73096001/4668057
  */
 const spanInBytesToSpanInCodeUnits = ([startInBytes, endInBytes], str) => {
-    const spanInCodeUnits = [startInBytes, endInBytes];
+    const spanInCodeUnits = /** @type {[number, number]} */ ([
+        startInBytes,
+        endInBytes,
+    ]);
 
     let currCodeUnitIndex = 0;
 
@@ -111,8 +114,10 @@ const spanInBytesToSpanInCodeUnits = ([startInBytes, endInBytes], str) => {
  *
  * @param {number[]} lengths  Le tableau des longueurs de chaque ligne.
  * @param {number}   position La position à convertir.
- * @returns {object|undefined} La ligne et la colonne ; ou `undefined` si la
- *                             position est hors limites.
+ * @returns {{line: number, column: number}|undefined} La ligne et la colonne ;
+ *                                                     ou `undefined` si la
+ *                                                     position est hors
+ *                                                     limites.
  */
 const positionToLineColumn = (lengths, position) => {
     let index = 0;
@@ -202,70 +207,99 @@ export default class BiomeJsJsApiWrapper extends Wrapper {
         let source = await fs.readFile(file, "utf8");
         const notices = [];
 
-        // Formater le fichier seulement si le formateur est activé.
-        // https://github.com/biomejs/biome/issues/7814
-        if (this.#options.formatter?.enabled ?? true) {
-            const formatted = this.#biome.formatContent(
-                this.#projectKey,
-                source,
-                {
-                    filePath: file,
-                },
-            );
-            if (source !== formatted.content) {
-                if (this.fix) {
-                    source = formatted.content;
-                    await fs.writeFile(file, source);
-                } else {
-                    notices.push({
-                        file,
-                        linter: "biomejs__js-api",
-                        severity: Severities.ERROR,
-                        message: "Code style issues found.",
-                    });
+        try {
+            // Formater le fichier seulement si le formateur est activé.
+            // https://github.com/biomejs/biome/issues/7814
+            if (this.#options.formatter?.enabled ?? true) {
+                const formatted = this.#biome.formatContent(
+                    this.#projectKey,
+                    source,
+                    {
+                        filePath: file,
+                    },
+                );
+                if (source !== formatted.content) {
+                    if (this.fix) {
+                        source = formatted.content;
+                        await fs.writeFile(file, source);
+                    } else {
+                        notices.push({
+                            file,
+                            linter: "biomejs__js-api",
+                            severity: Severities.ERROR,
+                            message: "Code style issues found.",
+                        });
+                    }
                 }
             }
+
+            // Analyser le fichier seulement si le linter est activé.
+            // https://github.com/biomejs/biome/issues/7814
+            if (
+                (this.#options.linter?.enabled ?? true) ||
+                (this.#options.assist?.enabled ?? true)
+            ) {
+                const results = this.#biome.lintContent(
+                    this.#projectKey,
+                    source,
+                    {
+                        filePath: file,
+                    },
+                );
+                // Calculer le nombre d'octets de chaque ligne (et ajouter un pour le
+                // retour à ligne). https://github.com/biomejs/biome/issues/4035
+                const lengths = source.split("\n").map((l) => l.length + 1);
+                notices.push(
+                    ...results.diagnostics
+                        .filter(
+                            (d) =>
+                                undefined === d.category ||
+                                (d.category.startsWith("lint/") &&
+                                    (this.#options.linter?.enabled ?? true)) ||
+                                (d.category.startsWith("assist/") &&
+                                    (this.#options.assist?.enabled ?? true)),
+                        )
+                        .map((diagnostic) => {
+                            const span = spanInBytesToSpanInCodeUnits(
+                                diagnostic.location.span,
+                                source,
+                            );
+                            const start = positionToLineColumn(
+                                lengths,
+                                span[0],
+                            );
+                            const end = positionToLineColumn(lengths, span[1]);
+
+                            return {
+                                file,
+                                linter: "biomejs__js-api",
+                                rule: diagnostic.category,
+                                severity:
+                                    SEVERITY_MAPPINGS[diagnostic.severity],
+                                message: diagnostic.description,
+                                locations: [
+                                    {
+                                        line: start.line,
+                                        column: start.column,
+                                        endLine: end.line,
+                                        endColumn: end.column,
+                                    },
+                                ],
+                            };
+                        }),
+                );
+            }
+
+            return notices.filter((n) => this.level >= n.severity);
+        } catch (err) {
+            return [
+                {
+                    file,
+                    severity: Severities.FATAL,
+                    linter: "biomejs__js-api",
+                    message: err.stackTrace.message,
+                },
+            ];
         }
-
-        // Analyser le fichier seulement si le linter est activé.
-        // https://github.com/biomejs/biome/issues/7814
-        if (this.#options.linter?.enabled ?? true) {
-            const results = this.#biome.lintContent(this.#projectKey, source, {
-                filePath: file,
-            });
-            // Calculer le nombre d'octets de chaque ligne (et ajouter un pour le
-            // retour à ligne). https://github.com/biomejs/biome/issues/4035
-            const lengths = source.split("\n").map((l) => l.length + 1);
-            return results.diagnostics
-                .map((diagnostic) => {
-                    const span = spanInBytesToSpanInCodeUnits(
-                        diagnostic.location.span,
-                        source,
-                    );
-                    const start = positionToLineColumn(lengths, span[0]);
-                    const end = positionToLineColumn(lengths, span[1]);
-
-                    return {
-                        file,
-                        linter: "biomejs__js-api",
-                        // Enlever le préfixe "lint/".
-                        rule: diagnostic.category?.slice(5),
-                        severity: SEVERITY_MAPPINGS[diagnostic.severity],
-                        message: diagnostic.description,
-                        locations: [
-                            {
-                                line: start.line,
-                                column: start.column,
-                                endLine: end.line,
-                                endColumn: end.column,
-                            },
-                        ],
-                    };
-                })
-                .concat(notices)
-                .filter((n) => this.level >= n.severity);
-        }
-
-        return [];
     }
 }

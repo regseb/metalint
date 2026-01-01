@@ -62,18 +62,18 @@ describe("src/core/wrapper/biomejs__js-api.js", () => {
                     {
                         file,
                         linter: "biomejs__js-api",
-                        rule: "correctness/noUnusedVariables",
+                        severity: Severities.ERROR,
+                        message: "Code style issues found.",
+                    },
+                    {
+                        file,
+                        linter: "biomejs__js-api",
+                        rule: "lint/correctness/noUnusedVariables",
                         severity: Severities.WARN,
                         message: "This variable bar is unused.",
                         locations: [
                             { line: 1, column: 7, endLine: 1, endColumn: 10 },
                         ],
-                    },
-                    {
-                        file,
-                        linter: "biomejs__js-api",
-                        severity: Severities.ERROR,
-                        message: "Code style issues found.",
                     },
                 ]);
             });
@@ -173,7 +173,10 @@ describe("src/core/wrapper/biomejs__js-api.js", () => {
 
             it("should return notices", async () => {
                 const root = await tempFs.create({
-                    "foo.js": "let bar = undefined;\n",
+                    "foo.js":
+                        'import baz from "baz";\n' +
+                        'import bar from "bar";\n' +
+                        "let qux = bar + baz;\n",
                 });
 
                 const context = {
@@ -195,25 +198,23 @@ describe("src/core/wrapper/biomejs__js-api.js", () => {
                     {
                         file,
                         linter: "biomejs__js-api",
-                        rule: "complexity/noUselessUndefinedInitialization",
+                        rule: "assist/source/organizeImports",
                         severity: Severities.INFO,
-                        message:
-                            "It's not necessary to initialize bar to" +
-                            " undefined.",
+                        message: "The imports and exports are not sorted.",
                         locations: [
-                            { line: 1, column: 9, endLine: 1, endColumn: 20 },
+                            { line: 1, column: 1, endLine: 1, endColumn: 23 },
                         ],
                     },
                     {
                         file,
                         linter: "biomejs__js-api",
-                        rule: "style/useConst",
+                        rule: "lint/style/useConst",
                         severity: Severities.WARN,
                         message:
                             "This let declares a variable that is only" +
                             " assigned once.",
                         locations: [
-                            { line: 1, column: 1, endLine: 1, endColumn: 4 },
+                            { line: 3, column: 1, endLine: 3, endColumn: 4 },
                         ],
                     },
                 ]);
@@ -243,18 +244,18 @@ describe("src/core/wrapper/biomejs__js-api.js", () => {
                     {
                         file,
                         linter: "biomejs__js-api",
-                        rule: "correctness/noUnusedVariables",
+                        severity: Severities.ERROR,
+                        message: "Code style issues found.",
+                    },
+                    {
+                        file,
+                        linter: "biomejs__js-api",
+                        rule: "lint/correctness/noUnusedVariables",
                         severity: Severities.ERROR,
                         message: "This function bar is unused.",
                         locations: [
                             { line: 1, column: 10, endLine: 1, endColumn: 13 },
                         ],
-                    },
-                    {
-                        file,
-                        linter: "biomejs__js-api",
-                        severity: Severities.ERROR,
-                        message: "Code style issues found.",
                     },
                 ]);
             });
@@ -263,8 +264,8 @@ describe("src/core/wrapper/biomejs__js-api.js", () => {
                 const root = await tempFs.create({
                     "foo.js":
                         "/* Aéअ */ const bar = true;\n" +
-                        "/* \u007F\u0080\u07FF\u0800\uD800\uDBFF\uDC00\uDFFF */ const baz" +
-                        " = false;\n",
+                        "/* \u007F\u0080\u07FF\u0800\uD800\uDBFF\uDC00\uDFFF */" +
+                        " const baz = false;\n",
                 });
 
                 const context = {
@@ -282,7 +283,7 @@ describe("src/core/wrapper/biomejs__js-api.js", () => {
                     {
                         file,
                         linter: "biomejs__js-api",
-                        rule: "correctness/noUnusedVariables",
+                        rule: "lint/correctness/noUnusedVariables",
                         severity: Severities.WARN,
                         message: "This variable bar is unused.",
                         locations: [
@@ -292,12 +293,38 @@ describe("src/core/wrapper/biomejs__js-api.js", () => {
                     {
                         file,
                         linter: "biomejs__js-api",
-                        rule: "correctness/noUnusedVariables",
+                        rule: "lint/correctness/noUnusedVariables",
                         severity: Severities.WARN,
                         message: "This variable baz is unused.",
                         locations: [
                             { line: 2, column: 22, endLine: 2, endColumn: 25 },
                         ],
+                    },
+                ]);
+            });
+
+            it("should return FATAL notice", async () => {
+                const root = await tempFs.create({
+                    "foo.bar": "Baz",
+                });
+
+                const context = {
+                    level: Levels.INFO,
+                    fix: false,
+                    root,
+                    files: ["foo.bar"],
+                };
+                const options = /** @type {Record<string, unknown>} */ ({});
+                const file = "foo.bar";
+
+                const wrapper = new BiomeJsJsApiWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file,
+                        linter: "biomejs__js-api",
+                        severity: Severities.FATAL,
+                        message: "The file does not exist in the workspace.",
                     },
                 ]);
             });

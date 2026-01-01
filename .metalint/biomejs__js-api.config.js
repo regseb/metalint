@@ -83,4 +83,9 @@ export default {
             },
         },
     },
+    assist: {
+        actions: {
+            recommended: false,
+        },
+    },
 };
