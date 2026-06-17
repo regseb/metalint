@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/standard.d.ts" */
+
 import process from "node:process";
 // @ts-expect-error -- JavaScript Standard Style ne fournit pas de types.
 import standard from "standard";

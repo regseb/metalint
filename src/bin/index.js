@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 
+/**
+ * @module
+ * @license MIT
+ * @author Sébastien Règne
+ */
+
+/* @ts-self-types="../../types/bin/index.d.ts" */
+
 import fs from "node:fs/promises";
 import process from "node:process";
 import { fileURLToPath } from "node:url";

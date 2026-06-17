@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/configuration/normalize.d.ts" */
+
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import Formatter, { FORMATTERS } from "../formatter/formatter.js";

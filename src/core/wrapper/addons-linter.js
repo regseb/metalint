@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/addons-linter.d.ts" */
+
 import path from "node:path/posix";
 // @ts-expect-error -- Add-ons Linter ne fournit pas de types.
 import linter from "addons-linter";

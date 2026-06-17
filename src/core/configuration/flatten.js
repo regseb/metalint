@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/configuration/flatten.d.ts" */
+
 import Levels from "../levels.js";
 import { merge } from "../utils/object.js";
 

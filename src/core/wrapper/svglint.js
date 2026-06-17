@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/svglint.d.ts" */
+
 // @ts-expect-error -- SVGLint ne fournit pas de types.
 // eslint-disable-next-line import/no-unresolved
 import SVGLint from "svglint";

@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/jsonlint-mod.d.ts" */
+
 import fs from "node:fs/promises";
 // @ts-expect-error -- JSON Lint (mod) ne fournit pas de types.
 import jsonlint from "jsonlint-mod";

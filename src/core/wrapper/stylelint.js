@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/stylelint.d.ts" */
+
 import stylelint from "stylelint";
 import Levels from "../levels.js";
 import Severities from "../severities.js";

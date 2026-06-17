@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/htmllint.d.ts" */
+
 import fs from "node:fs/promises";
 // @ts-expect-error -- htmllint ne fournit pas de types.
 import htmllint from "htmllint";

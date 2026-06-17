@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/jshint.d.ts" */
+
 import fs from "node:fs/promises";
 import { JSHINT } from "jshint";
 import Levels from "../levels.js";

@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../types/core/levels.d.ts" */
+
 import Severities from "./severities.js";
 
 /**

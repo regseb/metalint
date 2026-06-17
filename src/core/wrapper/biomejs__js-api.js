@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/biomejs__js-api.d.ts" */
+
 import fs from "node:fs/promises";
 // Désactiver la règle suivante pour cet import, car elle ne supporte pas la
 // propriété "exports" du package.json.

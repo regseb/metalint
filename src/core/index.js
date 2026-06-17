@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../types/core/index.d.ts" */
+
 import path from "node:path";
 import process from "node:process";
 import { pathToFileURL } from "node:url";

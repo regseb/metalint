@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/secretlint.d.ts" */
+
 import process from "node:process";
 import { runSecretLint } from "secretlint";
 import Levels from "../levels.js";

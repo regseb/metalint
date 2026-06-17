@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../types/core/severities.d.ts" */
+
 /**
  * La liste des sévérités.
  *

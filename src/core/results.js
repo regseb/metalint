@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../types/core/results.d.ts" */
+
 import Severities from "./severities.js";
 
 /**

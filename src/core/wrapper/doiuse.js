@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/doiuse.d.ts" */
+
 // Ne pas utiliser la version promise de fs car la fonction createReadStream()
 // n'y est pas. https://github.com/nodejs/node/issues/38627
 import { createReadStream } from "node:fs";

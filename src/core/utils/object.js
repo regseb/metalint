@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/utils/object.d.ts" */
+
 /**
  * Fusionne deux objets.
  *

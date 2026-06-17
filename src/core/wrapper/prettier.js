@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/prettier.d.ts" */
+
 import fs from "node:fs/promises";
 // eslint-disable-next-line import/namespace
 import * as prettier from "prettier";

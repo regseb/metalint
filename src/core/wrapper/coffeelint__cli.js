@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/coffeelint__cli.d.ts" */
+
 import fs from "node:fs/promises";
 // @ts-expect-error -- CoffeeLint ne fournit pas de types.
 import coffeelint from "@coffeelint/cli";

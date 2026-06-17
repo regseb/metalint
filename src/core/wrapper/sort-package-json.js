@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/sort-package-json.d.ts" */
+
 import fs from "node:fs/promises";
 import sortPackageJson from "sort-package-json";
 import Levels from "../levels.js";

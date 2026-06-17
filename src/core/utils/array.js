@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/utils/array.d.ts" */
+
 /**
  * Empaquette un élément dans un tableau si ce n'est pas déjà un tableau.
  *

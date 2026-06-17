@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/npm-check-updates.d.ts" */
+
 // La dépendance "@types/semver-utils" n'est pas inclue dans le projet
 // "npm-check-updates" alors qu'elle est nécessaire. "@types/semver-utils" a
 // donc été ajoutée dans les dépendances de Metalint.

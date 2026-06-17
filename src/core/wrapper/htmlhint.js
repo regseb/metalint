@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/htmlhint.d.ts" */
+
 import fs from "node:fs/promises";
 import { HTMLHint } from "htmlhint";
 import Levels from "../levels.js";

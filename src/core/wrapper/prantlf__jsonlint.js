@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/prantlf__jsonlint.d.ts" */
+
 import fs from "node:fs/promises";
 import { parse } from "@prantlf/jsonlint";
 import Levels from "../levels.js";

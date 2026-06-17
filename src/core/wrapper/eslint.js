@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/eslint.d.ts" */
+
 import { ESLint } from "eslint";
 import Levels from "../levels.js";
 import Severities from "../severities.js";

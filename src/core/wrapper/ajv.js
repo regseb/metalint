@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/ajv.d.ts" */
+
 import fs from "node:fs/promises";
 import Ajv from "ajv";
 import Levels from "../levels.js";

@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/configuration/override.d.ts" */
+
 import { flattenFix, flattenLevel, flattenOptions } from "./flatten.js";
 
 /**

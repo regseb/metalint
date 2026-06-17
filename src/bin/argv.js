@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../types/bin/argv.d.ts" */
+
 import fs from "node:fs/promises";
 import process from "node:process";
 import { parseArgs } from "node:util";

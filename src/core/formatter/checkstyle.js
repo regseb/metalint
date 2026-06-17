@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/formatter/checkstyle.d.ts" */
+
 import process from "node:process";
 import Severities from "../severities.js";
 import Formatter from "./formatter.js";

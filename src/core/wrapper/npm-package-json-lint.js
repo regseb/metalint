@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/npm-package-json-lint.d.ts" */
+
 import fs from "node:fs/promises";
 import { NpmPackageJsonLint } from "npm-package-json-lint";
 import Levels from "../levels.js";

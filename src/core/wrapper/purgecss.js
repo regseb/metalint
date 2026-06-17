@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/purgecss.d.ts" */
+
 import { PurgeCSS } from "purgecss";
 import Levels from "../levels.js";
 import Severities from "../severities.js";

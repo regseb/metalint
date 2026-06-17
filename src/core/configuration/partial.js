@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/configuration/partial.d.ts" */
+
 /**
  * @import { TypeofFormatter } from "../formatter/formatter.js"
  * @import { Level } from "../levels.js"

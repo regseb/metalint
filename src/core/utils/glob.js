@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/utils/glob.d.ts" */
+
 import fs from "node:fs/promises";
 import path from "node:path/posix";
 import process from "node:process";

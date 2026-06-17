@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/formatter/formatter.d.ts" */
+
 import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 

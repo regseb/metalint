@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/mapbox__jsonlint-lines-primitives.d.ts" */
+
 import fs from "node:fs/promises";
 // @ts-expect-error -- JSON Lint lines-primitive ne fournit pas de types.
 import { parser } from "@mapbox/jsonlint-lines-primitives";

@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/utils/file.d.ts" */
+
 import fs from "node:fs/promises";
 
 /**

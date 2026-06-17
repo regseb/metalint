@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/formatter/json.d.ts" */
+
 import process from "node:process";
 import Formatter from "./formatter.js";
 

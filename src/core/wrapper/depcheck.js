@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/depcheck.d.ts" */
+
 import path from "node:path/posix";
 import depcheck from "depcheck";
 import Levels from "../levels.js";

@@ -4,6 +4,8 @@
  * @author Sébastien Règne
  */
 
+/* @ts-self-types="../../../types/core/wrapper/publint.d.ts" */
+
 import path from "node:path/posix";
 // eslint-disable-next-line import/no-unresolved
 import { publint } from "publint";
