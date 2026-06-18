@@ -6,10 +6,7 @@
     nameIsGenerated="true"
   >
     <package-json value="$PROJECT_DIR$/package.json" />
-    <command value="run" />
-    <scripts>
-      <script value="test" />
-    </scripts>
+    <command value="test" />
     <node-interpreter value="project" />
     <envs />
     <method v="2" />

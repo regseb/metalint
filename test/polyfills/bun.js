@@ -9,7 +9,7 @@ import { mock as mockNode } from "node:test";
 // eslint-disable-next-line unicorn/import-style
 import util from "node:util";
 // eslint-disable-next-line n/no-missing-import, import/no-unresolved
-import { mock, mock as mockBun, spyOn } from "bun:test";
+import { mock as mockBun, spyOn } from "bun:test";
 
 /**
  * @import { Mock } from "node:test"
@@ -36,8 +36,9 @@ const handler = {
         }
         return {
             callCount: () =>
-                target.mock.results.filter((r) => "incomplete" !== r.type)
-                    .length,
+                target.mock.results.filter(
+                    (/** @type {any} */ r) => "incomplete" !== r.type,
+                ).length,
 
             get calls() {
                 const calls = [];
@@ -61,7 +62,6 @@ const handler = {
  * @see https://nodejs.org/api/test.html#mockfnoriginal-implementation-options
  */
 mockNode.fn = (implementation) => {
-    // @ts-expect-error
     return new Proxy(mockBun(implementation), handler);
 };
 
@@ -88,7 +88,6 @@ mockNode.fn = (implementation) => {
  * @see https://nodejs.org/api/test.html#mockmethodobject-methodname-implementation-options
  */
 mockNode.method = (object, methodName, implementation) => {
-    // @ts-expect-error
     return new Proxy(
         spyOn(object, methodName).mockImplementation(implementation),
         handler,
@@ -106,7 +105,7 @@ mockNode.reset = () => {
 
 // Corriger la fonction styleText qui ne respecte pas la propriété isTTY.
 // https://github.com/oven-sh/bun/issues/25736
-mock.module("node:util", () => {
+mockBun.module("node:util", () => {
     return {
         ...util,
 

@@ -26,7 +26,7 @@ Steps to reproduce the behavior:
 ### Environment
 
 - Metalint version<!-- e.g. 0.21.2 -->:
-- Node version<!-- e.g. v24.12.0 -->:
+- Runtime version<!-- e.g. Node.js v26.3.0, Bun 1.3.11 -->:
 - Linter version (if appropriate)<!-- e.g. eslint 9.39.2 -->:
 
 ### Additional context
