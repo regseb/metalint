@@ -80,7 +80,7 @@ export default class Results {
     /**
      * Les données des résultats.
      *
-     * @type {Record<string, Notice[]|undefined>}
+     * @type {Record<string, Notice[] | undefined>}
      */
     #data;
 
@@ -129,7 +129,7 @@ export default class Results {
     /**
      * Retourne les résultats en objet.
      *
-     * @returns {Record<string, Notice[]|undefined>} Les résultats.
+     * @returns {Record<string, Notice[] | undefined>} Les résultats.
      */
     toObject() {
         // Trier les notifications.

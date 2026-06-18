@@ -142,12 +142,12 @@ export default class Metalint {
      * Vérifie (en appelant des linters) des répertoires et des fichiers.
      *
      * @param {string[]} bases Les répertoires et les fichiers.
-     * @returns {Promise<Record<string, Notice[]|undefined>>} Une promesse
-     *                                                        retournant la
-     *                                                        liste des
-     *                                                        notifications
-     *                                                        regroupées par
-     *                                                        fichier.
+     * @returns {Promise<Record<string, Notice[] | undefined>>} Une promesse
+     *                                                          retournant la
+     *                                                          liste des
+     *                                                          notifications
+     *                                                          regroupées par
+     *                                                          fichier.
      */
     async lintFiles(bases) {
         const files = /** @type {string[]} */ ([]);
@@ -200,14 +200,14 @@ export default class Metalint {
     /**
      * Rapporte des résultats dans les formats choisis.
      *
-     * @param {Record<string, Notice[]|undefined>} results La liste des
-     *                                                     notifications
-     *                                                     regroupées par
-     *                                                     fichier.
-     * @returns {Promise<Severity|undefined>} La sévérité la plus élevée des
-     *                                        notifications ; ou `undefined` si
-     *                                        les résultats n'ont aucune
-     *                                        notification.
+     * @param {Record<string, Notice[] | undefined>} results La liste des
+     *                                                       notifications
+     *                                                       regroupées par
+     *                                                       fichier.
+     * @returns {Promise<Severity | undefined>} La sévérité la plus élevée des
+     *                                          notifications ; ou `undefined`
+     *                                          si les résultats n'ont aucune
+     *                                          notification.
      */
     async report(results) {
         let severity;

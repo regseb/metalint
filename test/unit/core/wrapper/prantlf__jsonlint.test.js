@@ -9,6 +9,7 @@ import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import PrantlfJSONLintWrapper from "../../../../src/core/wrapper/prantlf__jsonlint.js";
 import tempFs from "../../../utils/temp-fs.js";
+import "../../../polyfills/regexp.js";
 
 describe("src/core/wrapper/prantlf__jsonlint.js", () => {
     describe("PrantlfJSONLintWrapper", () => {

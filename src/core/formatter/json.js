@@ -40,7 +40,7 @@ export default class JSONFormatter extends Formatter {
      * Les notifications (regroupées par fichiers) ayant une sévérité supérieure
      * au niveau minimum.
      *
-     * @type {Record<string, Notice[]|undefined>}
+     * @type {Record<string, Notice[] | undefined>}
      */
     #results = {};
 

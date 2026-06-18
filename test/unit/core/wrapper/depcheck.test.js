@@ -11,6 +11,7 @@ import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import DepcheckWrapper from "../../../../src/core/wrapper/depcheck.js";
 import tempFs from "../../../utils/temp-fs.js";
+import "../../../polyfills/regexp.js";
 
 describe("src/core/wrapper/depcheck.js", () => {
     describe("DepcheckWrapper", () => {

@@ -161,7 +161,7 @@ describe("src/core/wrapper/prettier.js", () => {
                         "// Ajouter des lignes pour avoir le numéro de la \n" +
                         '// ligne avec deux chiffres (pour tester le "+" de\n' +
                         '// "\\d+".\n' +
-                        "\n\n\n\n\n\n" +
+                        "\n".repeat(6) +
                         'const bar = { "baz;\n',
                 });
 

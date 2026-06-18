@@ -60,11 +60,9 @@ describe("src/core/wrapper/npm-check-updates.js", () => {
                 assert.equal(notices.length, 1);
                 assert.equal(notices[0].file, file);
                 assert.equal(notices[0].linter, "npm-check-updates");
-                assert.ok(
-                    notices[0].message.startsWith(
-                        "Dependency 'metalint' has a new version ",
-                    ),
-                    `"${notices[0].message}".startsWith("...")`,
+                assert.match(
+                    notices[0].message,
+                    /Dependency 'metalint' has a new version /v,
                 );
             });
 

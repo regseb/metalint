@@ -7,6 +7,7 @@
 /* @ts-self-types="../../../types/core/configuration/override.d.ts" */
 
 import { flattenFix, flattenLevel, flattenOptions } from "./flatten.js";
+import "../../polyfills/iterator.js";
 
 /**
  * @import { FlattenedConfigLinter } from "./flatten.js"
@@ -37,7 +38,8 @@ const mergeLinter = (parent, child) => {
  */
 export const mergeLinters = (parents, children) => {
     const map = new Map();
-    for (const linter of [...parents, ...children]) {
+    // @ts-expect-error -- La fonction concat n'est pas encore dans les types.
+    for (const linter of Iterator.concat(parents, children)) {
         if (map.has(linter.wrapper)) {
             const parent = map.get(linter.wrapper);
             map.set(linter.wrapper, mergeLinter(parent, linter));

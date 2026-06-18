@@ -6,6 +6,8 @@
 
 /* @ts-self-types="../../../types/core/utils/object.d.ts" */
 
+import "../../polyfills/iterator.js";
+
 /**
  * Fusionne deux objets.
  *
@@ -22,10 +24,10 @@ export const merge = (first, second) => {
         Object === second?.constructor
     ) {
         third = /** @type {Record<string, any>} */ ({});
-        for (const key of new Set([
-            ...Object.keys(first),
-            ...Object.keys(second),
-        ])) {
+        for (const key of new Set(
+            // @ts-expect-error -- La fonction concat n'est pas encore dans les types.
+            Iterator.concat(Object.keys(first), Object.keys(second)),
+        )) {
             // Si la propriété est dans les deux objets.
             if (key in first && key in second) {
                 third[key] = merge(first[key], second[key]);

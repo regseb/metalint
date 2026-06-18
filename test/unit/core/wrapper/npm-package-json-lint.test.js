@@ -9,6 +9,7 @@ import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import NpmPackageJSONLintWrapper from "../../../../src/core/wrapper/npm-package-json-lint.js";
 import tempFs from "../../../utils/temp-fs.js";
+import "../../../polyfills/regexp.js";
 
 describe("src/core/wrapper/npm-package-json-lint.js", () => {
     describe("NpmPackageJSONLintWrapper", () => {

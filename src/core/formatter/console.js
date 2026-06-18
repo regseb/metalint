@@ -14,6 +14,7 @@ import Formatter from "./formatter.js";
 
 /**
  * @import { Writable } from "node:stream"
+ * @import { InspectColor } from "node:util"
  * @import { Level } from "../levels.js"
  * @import { Location, Notice } from "../results.js"
  */
@@ -21,9 +22,10 @@ import Formatter from "./formatter.js";
 /**
  * Écrit du texte avec un style / couleur.
  *
- * @param {Writable}        writer  Le flux où afficher le message.
- * @param {string}          text    Le texte qui sera affiché.
- * @param {string|string[]} [style] Le code du style.
+ * @param {Writable}                      writer  Le flux où afficher le
+ *                                                message.
+ * @param {string}                        text    Le texte qui sera affiché.
+ * @param {InspectColor | InspectColor[]} [style] Le code du style.
  */
 const print = (writer, text, style = []) => {
     writer.write(styleText(style, text, { stream: writer }));
@@ -248,7 +250,7 @@ export default class ConsoleFormatter extends Formatter {
                     print(this.#writer, "INFO ", "blue");
                     break;
                 default:
-                    print(this.#writer, "      ");
+                    print(this.#writer, " ".repeat(5));
             }
             print(this.#writer, `: ${notice.message} (${notice.linter}`);
             if (undefined !== notice.rule) {

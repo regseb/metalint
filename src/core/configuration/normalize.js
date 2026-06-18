@@ -130,7 +130,7 @@ export const normalizePatterns = (partials) => {
  * Normalise une propriété `"fix"`.
  *
  * @param {any} partial La valeur d'une propriété `"fix"`.
- * @returns {boolean|undefined} La valeur normalisée.
+ * @returns {boolean | undefined} La valeur normalisée.
  * @throws {TypeError} Si le `"fix"` n'a pas le bon type.
  */
 export const normalizeFix = (partial) => {
@@ -152,7 +152,7 @@ export const normalizeFix = (partial) => {
  * Normalise une propriété `"level"`.
  *
  * @param {any} partial La valeur d'une propriété `"level"`.
- * @returns {Level|undefined} La valeur normalisée.
+ * @returns {Level | undefined} La valeur normalisée.
  * @throws {Error}     Si le `"level"` est invalide.
  * @throws {TypeError} Si le `"level"` n'a pas le bon type.
  */
@@ -215,8 +215,7 @@ export const normalizeFormatter = async (partial) => {
                     ` "${FORMATTERS.join('", "')}").`,
             );
         }
-        // eslint-disable-next-line no-prototype-builtins
-    } else if (Formatter.isPrototypeOf(partial)) {
+    } else if (Object.prototype.isPrototypeOf.call(Formatter, partial)) {
         normalized = partial;
     } else {
         throw new TypeError(
@@ -350,8 +349,7 @@ export const normalizeWrapper = async (partial) => {
                     ` "${WRAPPERS.join('", "')}").`,
             );
         }
-        // eslint-disable-next-line no-prototype-builtins
-    } else if (Wrapper.isPrototypeOf(partial)) {
+    } else if (Object.prototype.isPrototypeOf.call(Wrapper, partial)) {
         normalized = partial;
     } else {
         throw new TypeError(
@@ -553,7 +551,7 @@ export const normalizeCheckers = async (partials, { dir }) => {
  * @returns {Promise<NormalizedConfig>} La valeur normalisée.
  * @throws {TypeError} Si la configuration n'a pas le bon type.
  */
-export const normalize = async (partial, { dir }) => {
+export default async function normalize(partial, { dir }) {
     let normalized;
     if ("object" === typeof partial) {
         normalized = {
@@ -567,6 +565,4 @@ export const normalize = async (partial, { dir }) => {
         throw new TypeError("Configuration should be an object.");
     }
     return normalized;
-};
-
-export default normalize;
+}

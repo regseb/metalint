@@ -18,8 +18,8 @@ assignees: ""
 ### Environment
 
 - Metalint version<!-- e.g. 0.21.2 -->:
-- Runtime version<!-- e.g. Node.js v26.3.0, Bun 1.3.11 -->:
-- Linter version (if appropriate)<!-- e.g. eslint 9.39.2 -->:
+- Runtime version<!-- e.g. Node.js v26.5.0, Bun 1.3.14, Deno 2.9.4 -->:
+- Linter version (if appropriate)<!-- e.g. eslint 9.39.5 -->:
 
 ### Additional context
 

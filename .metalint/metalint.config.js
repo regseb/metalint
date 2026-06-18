@@ -5,7 +5,7 @@
  */
 
 /**
- * @import { Config } from "metalint/types"
+ * @import { Config } from "../src/core/types.js"
  */
 
 /**
@@ -30,6 +30,7 @@ export default {
         // Ignorer les fichiers temporaires de Vim.
         "!*.swp",
         // Ignorer les autres lockfiles.
+        "!/bun.lock",
         "!/pnpm-lock.yaml",
         "!/yarn.lock",
     ],

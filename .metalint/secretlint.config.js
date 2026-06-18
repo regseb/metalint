@@ -1,5 +1,6 @@
 /**
  * @license MIT
+ * @see https://github.com/secretlint/secretlint
  * @author Sébastien Règne
  */
 

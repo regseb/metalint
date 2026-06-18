@@ -130,7 +130,7 @@ describe("src/core/wrapper/stylelint.js", () => {
                         linter: "stylelint",
                         rule: "color-no-invalid-hex",
                         severity: Severities.WARN,
-                        message: 'Unexpected invalid hex color "#y3"',
+                        message: 'Invalid hex color "#y3"',
                         locations: [{ line: 1, column: 12 }],
                     },
                     {
@@ -138,9 +138,7 @@ describe("src/core/wrapper/stylelint.js", () => {
                         linter: "stylelint",
                         rule: "no-duplicate-selectors",
                         severity: Severities.ERROR,
-                        message:
-                            'Unexpected duplicate selector "p", first used at' +
-                            " line 1",
+                        message: 'Duplicate selector "p", first used at line 1',
                         locations: [{ line: 2, column: 1 }],
                     },
                 ]);
@@ -173,7 +171,7 @@ describe("src/core/wrapper/stylelint.js", () => {
                         linter: "stylelint",
                         rule: "color-no-invalid-hex",
                         severity: Severities.ERROR,
-                        message: 'Unexpected invalid hex color "#bar"',
+                        message: 'Invalid hex color "#bar"',
                         locations: [{ line: 1, column: 15 }],
                     },
                 ]);
@@ -201,7 +199,7 @@ describe("src/core/wrapper/stylelint.js", () => {
                         linter: "stylelint",
                         rule: "unit-no-unknown",
                         severity: Severities.ERROR,
-                        message: 'Unexpected unknown unit "baz"',
+                        message: 'Unknown unit "baz"',
                         locations: [{ line: 1, column: 18 }],
                     },
                 ]);

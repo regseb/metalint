@@ -149,7 +149,7 @@ describe("src/core/wrapper/markdownlint.js", () => {
 
             it("should fix with FATAL level", async () => {
                 const root = await tempFs.create({
-                    "foo.md": "#  Bar  #",
+                    "foo.md": "#  Bar  #\n",
                 });
 
                 const context = {

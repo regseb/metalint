@@ -11,6 +11,13 @@ import MapboxJSONLintLinesPrimitivesWrapper from "../../../../src/core/wrapper/m
 import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/mapbox__jsonlint-lines-primitives.js", () => {
+    // Ne pas exécuter ces tests sous Bun, car il n'arrive pas à interpréter le
+    // code source de "@mapbox/jsonlint-lines-primitives".
+    // https://github.com/oven-sh/bun/issues/25737
+    if (process.versions.bun) {
+        return;
+    }
+
     describe("MapboxJSONLintLinesPrimitivesWrapper", () => {
         describe("configurable", () => {
             it("should be true", () => {

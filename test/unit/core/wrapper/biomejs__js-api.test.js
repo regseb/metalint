@@ -200,9 +200,9 @@ describe("src/core/wrapper/biomejs__js-api.js", () => {
                         linter: "biomejs__js-api",
                         rule: "assist/source/organizeImports",
                         severity: Severities.INFO,
-                        message: "The imports and exports are not sorted.",
+                        message: "Some imports or exports are not organized.",
                         locations: [
-                            { line: 1, column: 1, endLine: 1, endColumn: 23 },
+                            { line: 1, column: 1, endLine: 3, endColumn: 21 },
                         ],
                     },
                     {
@@ -324,7 +324,8 @@ describe("src/core/wrapper/biomejs__js-api.js", () => {
                         file,
                         linter: "biomejs__js-api",
                         severity: Severities.FATAL,
-                        message: "The file does not exist in the workspace.",
+                        message:
+                            "The file foo.bar does not exist in the workspace.",
                     },
                 ]);
             });

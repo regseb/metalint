@@ -41,7 +41,7 @@ export default class AjvWrapper extends Wrapper {
     /**
      * L'éventuelle fonction pour ajouter des formats.
      *
-     * @type {Function|undefined}
+     * @type {Function | undefined}
      * @see https://ajv.js.org/guide/formats.html
      */
     #addFormats;

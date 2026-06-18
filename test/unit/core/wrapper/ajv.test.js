@@ -10,6 +10,7 @@ import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import AjvWrapper from "../../../../src/core/wrapper/ajv.js";
 import tempFs from "../../../utils/temp-fs.js";
+import "../../../polyfills/regexp.js";
 
 /**
  * @import Ajv from "ajv"

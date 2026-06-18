@@ -207,11 +207,9 @@ describe("src/core/wrapper/publint.js", () => {
                 assert.equal(notices[0].file, file);
                 assert.equal(notices[0].linter, "publint");
                 assert.equal(notices[0].severity, Severities.FATAL);
-                assert.ok(
-                    notices[0].message.startsWith(
-                        "Command failed: npm pack --pack-destination ",
-                    ),
-                    `"${notices[0].message}".startsWith("...")`,
+                assert.match(
+                    notices[0].message,
+                    /Failed to find packed tarball file /v,
                 );
             });
         });

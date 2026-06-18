@@ -116,10 +116,11 @@ const spanInBytesToSpanInCodeUnits = ([startInBytes, endInBytes], str) => {
  *
  * @param {number[]} lengths  Le tableau des longueurs de chaque ligne.
  * @param {number}   position La position à convertir.
- * @returns {{line: number, column: number}|undefined} La ligne et la colonne ;
- *                                                     ou `undefined` si la
- *                                                     position est hors
- *                                                     limites.
+ * @returns {{line: number, column: number} | undefined} La ligne et la
+ *                                                       colonne ; ou
+ *                                                       `undefined` si la
+ *                                                       position est hors
+ *                                                       limites.
  */
 const positionToLineColumn = (lengths, position) => {
     let index = 0;

@@ -16,6 +16,16 @@ import { mock as mockBun, spyOn } from "bun:test";
  */
 
 /**
+ * Résultat d'une fonction mockée.
+ *
+ * @typedef {Object} MockFunctionResult
+ * @prop {string} type  Type du résultat (`"incomplete"`, `"return"` ou
+ *                      `"throw"`).
+ * @prop {any}    value Valeur du résultat pour le type `"return"`.
+ * @see https://github.com/oven-sh/bun/blob/bun-v1.3.13/packages/bun-types/test.d.ts#L2101
+ */
+
+/**
  * Le gestionnaire du proxy pour adapter l'API de Bun à celle de Node.js.
  *
  * @type {Object}
@@ -35,10 +45,12 @@ const handler = {
             return Reflect.get(target, key);
         }
         return {
-            callCount: () =>
-                target.mock.results.filter(
-                    (/** @type {any} */ r) => "incomplete" !== r.type,
-                ).length,
+            callCount() {
+                return target.mock.results.filter(
+                    (/** @type {MockFunctionResult} */ r) =>
+                        "incomplete" !== r.type,
+                ).length;
+            },
 
             get calls() {
                 const calls = [];
@@ -57,12 +69,13 @@ const handler = {
 /**
  * Crée un mock de fonction.
  *
- * @param {Function} [implementation] L'implémentation de la fonction mockée.
- * @returns {Mock<Function>} La fonction mockée.
+ * @param {(...args: any[]) => any} [implementation] L'implémentation de la
+ *                                                   fonction mockée.
+ * @returns {Mock<(...args: any[]) => any>} La fonction mockée.
  * @see https://nodejs.org/api/test.html#mockfnoriginal-implementation-options
  */
 mockNode.fn = (implementation) => {
-    return new Proxy(mockBun(implementation), handler);
+    return /** @type {any} */ (new Proxy(mockBun(implementation), handler));
 };
 
 /**
@@ -88,9 +101,11 @@ mockNode.fn = (implementation) => {
  * @see https://nodejs.org/api/test.html#mockmethodobject-methodname-implementation-options
  */
 mockNode.method = (object, methodName, implementation) => {
-    return new Proxy(
-        spyOn(object, methodName).mockImplementation(implementation),
-        handler,
+    return /** @type {any} */ (
+        new Proxy(
+            spyOn(object, methodName).mockImplementation(implementation),
+            handler,
+        )
     );
 };
 

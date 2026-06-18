@@ -9,6 +9,9 @@ import path from "node:path";
 import process from "node:process";
 import JSZip from "jszip";
 
+// Simplifier le code en utilisant `mock.fs()` quand ça sera disponible.
+// https://github.com/nodejs/node/pull/61478
+
 /**
  * @typedef {Object} Temp
  * @prop {string} root La racine du répertoire temporaire.
@@ -25,8 +28,8 @@ const temps = [];
 /**
  * Remplit un zip avec des fichiers.
  *
- * @param {JSZip}                         zip   Le fichier zip.
- * @param {Record<string, Record|string>} files La liste des fichiers.
+ * @param {JSZip}                           zip   Le fichier zip.
+ * @param {Record<string, Record | string>} files La liste des fichiers.
  */
 const fillZip = (zip, files) => {
     for (const [filename, content] of Object.entries(files)) {
@@ -52,9 +55,9 @@ const fillZip = (zip, files) => {
 /**
  * Crée un zip avec des fichiers.
  *
- * @param {string}                        parent Le chemin du fichier zip
- *                                               parent.
- * @param {Record<string, Record|string>} files  La liste des fichiers.
+ * @param {string}                          parent Le chemin du fichier zip
+ *                                                 parent.
+ * @param {Record<string, Record | string>} files  La liste des fichiers.
  */
 const createZip = (parent, files) => {
     const zip = new JSZip();
@@ -69,8 +72,8 @@ const createZip = (parent, files) => {
 /**
  * Crée une arborescence avec des fichiers.
  *
- * @param {string}                        parent Le chemin du parent.
- * @param {Record<string, Record|string>} files  La liste des fichiers.
+ * @param {string}                          parent Le chemin du parent.
+ * @param {Record<string, Record | string>} files  La liste des fichiers.
  */
 const createTree = async (parent, files) => {
     for (const [filename, content] of Object.entries(files)) {
@@ -101,8 +104,8 @@ const createTree = async (parent, files) => {
 /**
  * Crée un _file system_ dans un répertoire temporaire.
  *
- * @param {Record<string, Record|string>} files Les fichiers à créer dans le
- *                                              répertoire.
+ * @param {Record<string, Record | string>} files Les fichiers à créer dans le
+ *                                                répertoire.
  * @returns {Promise<string>} Le chemin vers le répertoire temporaire.
  */
 const create = async (files) => {
@@ -129,4 +132,6 @@ const reset = async () => {
     temps.length = 0;
 };
 
-export default { create, reset };
+const tempFs = { create, reset };
+
+export default tempFs;

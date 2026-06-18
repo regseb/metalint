@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/no-empty-file */
 /**
  * @license MIT
  * @author Sébastien Règne

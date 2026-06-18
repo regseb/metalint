@@ -1,5 +1,7 @@
 /**
  * @license MIT
+ * @see https://github.com/eslint-community/eslint-plugin-n#-rules
+ * @see https://github.com/sindresorhus/eslint-plugin-unicorn#rules
  * @author Sébastien Règne
  */
 

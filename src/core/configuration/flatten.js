@@ -83,11 +83,11 @@ export const flattenPatterns = (hierarchies, { patterns }) => {
 /**
  * Fusionne une propriété `"fix"`.
  *
- * @param {boolean|undefined} hierarchy   La valeur d'une des propriétés
- *                                        `"fix"`.
- * @param {Object}            context     Le contexte de la fusion.
- * @param {boolean}           context.fix La valeur de la propriété `"fix"`
- *                                        parente.
+ * @param {boolean | undefined} hierarchy   La valeur d'une des propriétés
+ *                                          `"fix"`.
+ * @param {Object}              context     Le contexte de la fusion.
+ * @param {boolean}             context.fix La valeur de la propriété `"fix"`
+ *                                          parente.
  * @returns {boolean} La valeur fusionnée.
  */
 export const flattenFix = (hierarchy, { fix }) => {
@@ -97,11 +97,11 @@ export const flattenFix = (hierarchy, { fix }) => {
 /**
  * Fusionne une propriété `"level"`.
  *
- * @param {Level|undefined} hierarchy     La valeur d'une des propriétés
- *                                        `"level"`.
- * @param {Object}          context       Le contexte de la fusion.
- * @param {Level}           context.level La valeur de la propriété `"level"`
- *                                        parente.
+ * @param {Level | undefined} hierarchy     La valeur d'une des propriétés
+ *                                          `"level"`.
+ * @param {Object}            context       Le contexte de la fusion.
+ * @param {Level}             context.level La valeur de la propriété `"level"`
+ *                                          parente.
  * @returns {Level} La valeur fusionnée.
  */
 export const flattenLevel = (hierarchy, { level }) => {
@@ -300,7 +300,7 @@ export const flattenChecker = (hierarchy, { fix, level }) => {
  *                                            commande.
  * @returns {FlattenedConfig} L'objet JSON fusionné.
  */
-export const flatten = (hierarchy, argv) => {
+export default function flatten(hierarchy, argv) {
     const fix = flattenFix(argv.fix ?? hierarchy.fix, { fix: false });
     const level = flattenLevel(argv.level ?? hierarchy.level, {
         level: Levels.INFO,
@@ -315,6 +315,4 @@ export const flatten = (hierarchy, argv) => {
             flattenChecker(c, { fix, level }),
         ),
     };
-};
-
-export default flatten;
+}

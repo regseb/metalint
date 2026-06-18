@@ -50,20 +50,18 @@ describe("src/core/wrapper/addons-linter.js", () => {
                 const root = await tempFs.create({
                     "addon.xpi": {
                         "manifest.json": JSON.stringify({
-                            // eslint-disable-next-line camelcase
+                            /* eslint-disable camelcase */
                             browser_specific_settings: {
                                 gecko: {
                                     id: "addon@metalint",
-                                    // eslint-disable-next-line camelcase
                                     strict_min_version: "56.0",
                                 },
                             },
-                            // eslint-disable-next-line camelcase
                             manifest_version: 1,
                             name: "addon",
                             version: "1.0.0",
-                            // eslint-disable-next-line camelcase
                             optional_permissions: ["find"],
+                            /* eslint-enable camelcase */
                         }),
                     },
                 });
@@ -91,6 +89,14 @@ describe("src/core/wrapper/addons-linter.js", () => {
                     {
                         file: `${file}/manifest.json`,
                         linter: "addons-linter",
+                        rule: "MISSING_DATA_COLLECTION_PERMISSIONS",
+                        severity: Severities.WARN,
+                        message:
+                            'The "data_collection_permissions" property is missing.',
+                    },
+                    {
+                        file: `${file}/manifest.json`,
+                        linter: "addons-linter",
                         rule: "PERMISSION_FIREFOX_UNSUPPORTED_BY_MIN_VERSION",
                         severity: Severities.INFO,
                         message:
@@ -105,14 +111,19 @@ describe("src/core/wrapper/addons-linter.js", () => {
             it("should return notices found in file", async () => {
                 const root = await tempFs.create({
                     "foo/manifest.json": JSON.stringify({
-                        // eslint-disable-next-line camelcase
+                        /* eslint-disable camelcase */
                         browser_specific_settings: {
-                            gecko: { id: "bar@baz.com" },
+                            gecko: {
+                                id: "bar@baz.com",
+                                data_collection_permissions: {
+                                    required: ["none"],
+                                },
+                            },
                         },
-                        // eslint-disable-next-line camelcase
                         manifest_version: 2,
                         version: "1.0.0",
                         permissions: ["god mode"],
+                        /* eslint-enable camelcase */
                     }),
                 });
                 const spy = mock.method(console, "log");
@@ -153,14 +164,19 @@ describe("src/core/wrapper/addons-linter.js", () => {
             it("should accept options", async () => {
                 const root = await tempFs.create({
                     "foo/manifest.json": JSON.stringify({
-                        // eslint-disable-next-line camelcase
+                        /* eslint-disable camelcase */
                         browser_specific_settings: {
-                            gecko: { id: "metalint@regseb.github.io" },
+                            gecko: {
+                                id: "metalint@regseb.github.io",
+                                data_collection_permissions: {
+                                    required: ["none"],
+                                },
+                            },
                         },
-                        // eslint-disable-next-line camelcase
                         manifest_version: 1,
                         version: "2.3.4",
                         name: "bar",
+                        /* eslint-enable camelcase */
                     }),
                 });
                 const spy = mock.method(console, "log");

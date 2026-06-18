@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { afterEach, describe, it } from "node:test";
 import jsdoc from "eslint-plugin-jsdoc";
-import mocha from "eslint-plugin-mocha";
+import n from "eslint-plugin-n";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import ESLintWrapper from "../../../../src/core/wrapper/eslint.js";
@@ -216,16 +216,14 @@ describe("src/core/wrapper/eslint.js", () => {
 
             it("should support plugins", async () => {
                 const root = await tempFs.create({
-                    "foo.js":
-                        "// filenames/no-index\n" +
-                        "bar(function(baz) { return baz; });\n" +
-                        "\n" +
-                        "/**\n" +
-                        " * Qux.\n" +
-                        " *\n" +
-                        " * @returns {Object} Quux.\n" +
-                        " */\n" +
-                        "function corge() { return {}; }",
+                    "foo.js": `
+                        /**
+                         * Bar.
+                         *
+                         * @returns {Object} Baz.
+                         */
+                        function qux() { process.exit(); }
+                    `,
                 });
 
                 const context = {
@@ -235,11 +233,11 @@ describe("src/core/wrapper/eslint.js", () => {
                     files: ["foo.js"],
                 };
                 const options = {
-                    plugins: { jsdoc, mocha },
+                    plugins: { jsdoc, n },
                     rules: {
                         "jsdoc/check-types": "error",
                         "jsdoc/check-syntax": "error",
-                        "mocha/prefer-arrow-callback": "error",
+                        "n/no-process-exit": "error",
                     },
                 };
                 const file = "foo.js";
@@ -250,21 +248,6 @@ describe("src/core/wrapper/eslint.js", () => {
                     {
                         file,
                         linter: "eslint",
-                        rule: "mocha/prefer-arrow-callback",
-                        severity: Severities.ERROR,
-                        message: "Unexpected function expression.",
-                        locations: [
-                            {
-                                line: 2,
-                                column: 5,
-                                endLine: 2,
-                                endColumn: 34,
-                            },
-                        ],
-                    },
-                    {
-                        file,
-                        linter: "eslint",
                         rule: "jsdoc/check-types",
                         severity: Severities.ERROR,
                         message:
@@ -272,10 +255,26 @@ describe("src/core/wrapper/eslint.js", () => {
                             ' "object".',
                         locations: [
                             {
-                                line: 7,
+                                line: 5,
                                 column: 1,
-                                endLine: 7,
+                                endLine: 5,
                                 endColumn: 1,
+                            },
+                        ],
+                    },
+                    {
+                        file,
+                        linter: "eslint",
+                        rule: "n/no-process-exit",
+                        severity: Severities.ERROR,
+                        message:
+                            "Don't use process.exit(); throw an error instead.",
+                        locations: [
+                            {
+                                line: 7,
+                                column: 42,
+                                endLine: 7,
+                                endColumn: 56,
                             },
                         ],
                     },

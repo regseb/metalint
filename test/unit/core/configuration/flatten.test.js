@@ -5,7 +5,7 @@
 
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import * as flatten from "../../../../src/core/configuration/flatten.js";
+import flatten, * as flattens from "../../../../src/core/configuration/flatten.js";
 import ConsoleFormatter from "../../../../src/core/formatter/console.js";
 import JSONFormatter from "../../../../src/core/formatter/json.js";
 import Levels from "../../../../src/core/levels.js";
@@ -15,7 +15,7 @@ import PrettierWrapper from "../../../../src/core/wrapper/prettier.js";
 describe("src/core/configuration/flatten.js", () => {
     describe("flattenPatterns()", () => {
         it("should merge", () => {
-            const flattened = flatten.flattenPatterns(["foo", "bar"], {
+            const flattened = flattens.flattenPatterns(["foo", "bar"], {
                 patterns: ["baz", "qux"],
             });
             assert.deepEqual(flattened, ["baz", "qux", "foo", "bar"]);
@@ -24,26 +24,26 @@ describe("src/core/configuration/flatten.js", () => {
 
     describe("flattenFix()", () => {
         it("should keep", () => {
-            const flattened = flatten.flattenFix(true, { fix: false });
+            const flattened = flattens.flattenFix(true, { fix: false });
             assert.equal(flattened, true);
         });
 
         it("should override", () => {
-            const flattened = flatten.flattenFix(undefined, { fix: false });
+            const flattened = flattens.flattenFix(undefined, { fix: false });
             assert.equal(flattened, false);
         });
     });
 
     describe("flattenLevel()", () => {
         it("should keep", () => {
-            const flattened = flatten.flattenLevel(Levels.ERROR, {
+            const flattened = flattens.flattenLevel(Levels.ERROR, {
                 level: Levels.INFO,
             });
             assert.equal(flattened, Levels.ERROR);
         });
 
         it("should override", () => {
-            const flattened = flatten.flattenLevel(undefined, {
+            const flattened = flattens.flattenLevel(undefined, {
                 level: Levels.INFO,
             });
             assert.equal(flattened, Levels.INFO);
@@ -52,14 +52,14 @@ describe("src/core/configuration/flatten.js", () => {
 
     describe("flattenOptions()", () => {
         it("should support one element", () => {
-            const flattened = flatten.flattenOptions([{ foo: "bar" }], {
+            const flattened = flattens.flattenOptions([{ foo: "bar" }], {
                 options: { baz: "qux" },
             });
             assert.deepEqual(flattened, { baz: "qux", foo: "bar" });
         });
 
         it("should support many elements", () => {
-            const flattened = flatten.flattenOptions(
+            const flattened = flattens.flattenOptions(
                 [
                     {
                         foo: 1,
@@ -78,7 +78,7 @@ describe("src/core/configuration/flatten.js", () => {
 
     describe("flattenReporter()", () => {
         it("should flatten", () => {
-            const flattened = flatten.flattenReporter(
+            const flattened = flattens.flattenReporter(
                 {
                     formatter: ConsoleFormatter,
                     level: undefined,
@@ -96,7 +96,7 @@ describe("src/core/configuration/flatten.js", () => {
 
     describe("flattenReporters()", () => {
         it("should flatten", () => {
-            const flattened = flatten.flattenReporters(
+            const flattened = flattens.flattenReporters(
                 [
                     {
                         formatter: ConsoleFormatter,
@@ -116,7 +116,7 @@ describe("src/core/configuration/flatten.js", () => {
         });
 
         it("should flatten with argv", () => {
-            const flattened = flatten.flattenReporters(
+            const flattened = flattens.flattenReporters(
                 [
                     {
                         formatter: JSONFormatter,
@@ -138,7 +138,7 @@ describe("src/core/configuration/flatten.js", () => {
 
     describe("flattenLinter()", () => {
         it("should flatten", () => {
-            const flattened = flatten.flattenLinter(
+            const flattened = flattens.flattenLinter(
                 {
                     wrapper: ESLintWrapper,
                     fix: false,
@@ -162,7 +162,7 @@ describe("src/core/configuration/flatten.js", () => {
 
     describe("flattenLinters()", () => {
         it("should flatten", () => {
-            const flattened = flatten.flattenLinters(
+            const flattened = flattens.flattenLinters(
                 [
                     {
                         wrapper: ESLintWrapper,
@@ -204,7 +204,7 @@ describe("src/core/configuration/flatten.js", () => {
 
     describe("flattenOverride()", () => {
         it("should flatten", () => {
-            const flattened = flatten.flattenOverride(
+            const flattened = flattens.flattenOverride(
                 {
                     patterns: ["*.mjs"],
                     fix: undefined,
@@ -239,7 +239,7 @@ describe("src/core/configuration/flatten.js", () => {
 
     describe("flattenChecker()", () => {
         it("should flatten", () => {
-            const flattened = flatten.flattenChecker(
+            const flattened = flattens.flattenChecker(
                 {
                     patterns: ["**.js"],
                     fix: true,
@@ -302,7 +302,7 @@ describe("src/core/configuration/flatten.js", () => {
 
     describe("flatten()", () => {
         it("should use default", () => {
-            const flattened = flatten.flatten(
+            const flattened = flatten(
                 {
                     patterns: ["**"],
                     fix: undefined,
@@ -386,7 +386,7 @@ describe("src/core/configuration/flatten.js", () => {
         });
 
         it("should flatten", () => {
-            const flattened = flatten.flatten(
+            const flattened = flatten(
                 {
                     patterns: ["*"],
                     fix: true,
@@ -444,7 +444,7 @@ describe("src/core/configuration/flatten.js", () => {
         });
 
         it("should use argv", () => {
-            const flattened = flatten.flatten(
+            const flattened = flatten(
                 {
                     patterns: ["*"],
                     fix: undefined,

@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
-import * as normalize from "../../../../src/core/configuration/normalize.js";
+import normalize, * as normalizes from "../../../../src/core/configuration/normalize.js";
 import ConsoleFormatter from "../../../../src/core/formatter/console.js";
 import Formatter from "../../../../src/core/formatter/formatter.js";
 import JSONFormatter from "../../../../src/core/formatter/json.js";
@@ -23,24 +23,24 @@ import YAMLLintWrapper from "../../../../src/core/wrapper/yaml-lint.js";
 describe("src/core/configuration/normalize.js", () => {
     describe("normalizePatterns()", () => {
         it("should reject undefined", () => {
-            assert.throws(() => normalize.normalizePatterns(undefined), {
+            assert.throws(() => normalizes.normalizePatterns(undefined), {
                 name: "Error",
                 message: "Property 'patterns' is required.",
             });
         });
 
         it("should support string", () => {
-            const normalized = normalize.normalizePatterns("foo");
+            const normalized = normalizes.normalizePatterns("foo");
             assert.deepEqual(normalized, ["foo"]);
         });
 
         it("should support array of strings", () => {
-            const normalized = normalize.normalizePatterns(["foo", "bar"]);
+            const normalized = normalizes.normalizePatterns(["foo", "bar"]);
             assert.deepEqual(normalized, ["foo", "bar"]);
         });
 
         it("should reject array of non-strings", () => {
-            assert.throws(() => normalize.normalizePatterns(["foo", true]), {
+            assert.throws(() => normalizes.normalizePatterns(["foo", true]), {
                 name: "TypeError",
                 message:
                     "Property 'patterns' is incorrect type (string and" +
@@ -49,7 +49,7 @@ describe("src/core/configuration/normalize.js", () => {
         });
 
         it("should reject non-array and non-strings", () => {
-            assert.throws(() => normalize.normalizePatterns(true), {
+            assert.throws(() => normalizes.normalizePatterns(true), {
                 name: "TypeError",
                 message:
                     "Property 'patterns' is incorrect type (string and" +
@@ -60,17 +60,17 @@ describe("src/core/configuration/normalize.js", () => {
 
     describe("normalizeFix()", () => {
         it("should use default", () => {
-            const normalized = normalize.normalizeFix(undefined);
+            const normalized = normalizes.normalizeFix(undefined);
             assert.equal(normalized, undefined);
         });
 
         it("should support boolean", () => {
-            const normalized = normalize.normalizeFix(true);
+            const normalized = normalizes.normalizeFix(true);
             assert.equal(normalized, true);
         });
 
         it("should reject non-boolean", () => {
-            assert.throws(() => normalize.normalizeFix("foo"), {
+            assert.throws(() => normalizes.normalizeFix("foo"), {
                 name: "TypeError",
                 message:
                     "Property 'fix' is incorrect type (only boolean is" +
@@ -81,22 +81,22 @@ describe("src/core/configuration/normalize.js", () => {
 
     describe("normalizeLevel()", () => {
         it("should use default", () => {
-            const normalized = normalize.normalizeLevel(undefined);
+            const normalized = normalizes.normalizeLevel(undefined);
             assert.equal(normalized, undefined);
         });
 
         it("should support string", () => {
-            const normalized = normalize.normalizeLevel("warn");
+            const normalized = normalizes.normalizeLevel("warn");
             assert.equal(normalized, Levels.WARN);
         });
 
         it("should support string in uppercase", () => {
-            const normalized = normalize.normalizeLevel("ERROR");
+            const normalized = normalizes.normalizeLevel("ERROR");
             assert.equal(normalized, Levels.ERROR);
         });
 
         it("should reject unknown string", () => {
-            assert.throws(() => normalize.normalizeLevel("foo"), {
+            assert.throws(() => normalizes.normalizeLevel("foo"), {
                 name: "Error",
                 message:
                     "Value of property 'level' is unknown (possibles" +
@@ -106,12 +106,12 @@ describe("src/core/configuration/normalize.js", () => {
         });
 
         it("should support number", () => {
-            const normalized = normalize.normalizeLevel(1);
+            const normalized = normalizes.normalizeLevel(1);
             assert.equal(normalized, Levels.FATAL);
         });
 
         it("should reject unknown number", () => {
-            assert.throws(() => normalize.normalizeLevel(42), {
+            assert.throws(() => normalizes.normalizeLevel(42), {
                 name: "Error",
                 message:
                     "Value of property 'level' is unknown (possibles" +
@@ -121,7 +121,7 @@ describe("src/core/configuration/normalize.js", () => {
         });
 
         it("should reject non-string and non-number", () => {
-            assert.throws(() => normalize.normalizeLevel(true), {
+            assert.throws(() => normalizes.normalizeLevel(true), {
                 name: "TypeError",
                 message:
                     "Property 'level' is incorrect type (only string" +
@@ -132,22 +132,22 @@ describe("src/core/configuration/normalize.js", () => {
 
     describe("normalizeFormatter()", () => {
         it("should use default", async () => {
-            const normalized = await normalize.normalizeFormatter(undefined);
+            const normalized = await normalizes.normalizeFormatter(undefined);
             assert.equal(normalized, ConsoleFormatter);
         });
 
         it("should support string", async () => {
-            const normalized = await normalize.normalizeFormatter("unix");
+            const normalized = await normalizes.normalizeFormatter("unix");
             assert.equal(normalized, UnixFormatter);
         });
 
         it("should support string in uppercase", async () => {
-            const normalized = await normalize.normalizeFormatter("JSON");
+            const normalized = await normalizes.normalizeFormatter("JSON");
             assert.equal(normalized, JSONFormatter);
         });
 
         it("should reject unknown string", async () => {
-            await assert.rejects(() => normalize.normalizeFormatter("foo"), {
+            await assert.rejects(() => normalizes.normalizeFormatter("foo"), {
                 name: "Error",
                 message:
                     "Value of property 'formatter' is unknown (possibles" +
@@ -158,12 +158,12 @@ describe("src/core/configuration/normalize.js", () => {
 
         it("should support Formatter", async () => {
             const MyFormatter = class extends Formatter {};
-            const normalized = await normalize.normalizeFormatter(MyFormatter);
+            const normalized = await normalizes.normalizeFormatter(MyFormatter);
             assert.equal(normalized, MyFormatter);
         });
 
         it("should reject non-string and non-Formatter", async () => {
-            await assert.rejects(() => normalize.normalizeFormatter(true), {
+            await assert.rejects(() => normalizes.normalizeFormatter(true), {
                 name: "TypeError",
                 message:
                     "Property 'formatter' is incorrect type (only string is" +
@@ -177,7 +177,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeOption(
+            const normalized = await normalizes.normalizeOption(
                 "./markdownlint.config.js",
                 {
                     dir,
@@ -191,7 +191,7 @@ describe("src/core/configuration/normalize.js", () => {
                 import.meta.resolve("../../../../.metalint/"),
             );
             await assert.rejects(
-                () => normalize.normalizeOption("./jshint.config.js", { dir }),
+                () => normalizes.normalizeOption("./jshint.config.js", { dir }),
                 (err) => {
                     assert.equal(err.name, "Error");
                     assert.equal(
@@ -214,7 +214,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeOption(
+            const normalized = await normalizes.normalizeOption(
                 { foo: "bar" },
                 { dir },
             );
@@ -226,7 +226,7 @@ describe("src/core/configuration/normalize.js", () => {
                 import.meta.resolve("../../../../.metalint/"),
             );
             await assert.rejects(
-                () => normalize.normalizeOption(true, { dir }),
+                () => normalizes.normalizeOption(true, { dir }),
                 {
                     name: "TypeError",
                     message:
@@ -242,7 +242,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeOptions(undefined, {
+            const normalized = await normalizes.normalizeOptions(undefined, {
                 dir,
             });
             assert.deepEqual(normalized, [{}]);
@@ -252,7 +252,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeOptions(
+            const normalized = await normalizes.normalizeOptions(
                 ["./markdownlint.config.js"],
                 {
                     dir,
@@ -265,7 +265,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeOptions(
+            const normalized = await normalizes.normalizeOptions(
                 "./markdownlint.config.js",
                 {
                     dir,
@@ -278,7 +278,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeOptions(
+            const normalized = await normalizes.normalizeOptions(
                 { foo: "bar" },
                 { dir },
             );
@@ -290,7 +290,7 @@ describe("src/core/configuration/normalize.js", () => {
                 import.meta.resolve("../../../../.metalint/"),
             );
             await assert.rejects(
-                () => normalize.normalizeOptions(true, { dir }),
+                () => normalizes.normalizeOptions(true, { dir }),
                 {
                     name: "TypeError",
                     message: "'options' incorrect type.",
@@ -302,7 +302,7 @@ describe("src/core/configuration/normalize.js", () => {
     describe("normalizeReporter()", () => {
         it("should use default", async () => {
             const dir = ".";
-            const normalized = await normalize.normalizeReporter({}, { dir });
+            const normalized = await normalizes.normalizeReporter({}, { dir });
             assert.deepEqual(normalized, {
                 formatter: ConsoleFormatter,
                 level: undefined,
@@ -312,7 +312,7 @@ describe("src/core/configuration/normalize.js", () => {
 
         it("should support Object", async () => {
             const dir = ".";
-            const normalized = await normalize.normalizeReporter(
+            const normalized = await normalizes.normalizeReporter(
                 {
                     formatter: "unix",
                     level: Levels.ERROR,
@@ -330,7 +330,7 @@ describe("src/core/configuration/normalize.js", () => {
         it("should reject non-Object", async () => {
             const dir = ".";
             await assert.rejects(
-                () => normalize.normalizeReporter("foo", { dir }),
+                () => normalizes.normalizeReporter("foo", { dir }),
                 {
                     name: "TypeError",
                     message: "One of 'reporters' incorrect type.",
@@ -342,7 +342,7 @@ describe("src/core/configuration/normalize.js", () => {
     describe("normalizeReporters()", () => {
         it("should use default", async () => {
             const dir = ".";
-            const normalized = await normalize.normalizeReporters(undefined, {
+            const normalized = await normalizes.normalizeReporters(undefined, {
                 dir,
             });
             assert.deepEqual(normalized, [
@@ -356,7 +356,7 @@ describe("src/core/configuration/normalize.js", () => {
 
         it("should support Array", async () => {
             const dir = ".";
-            const normalized = await normalize.normalizeReporters(
+            const normalized = await normalizes.normalizeReporters(
                 [
                     {
                         formatter: "unix",
@@ -381,7 +381,7 @@ describe("src/core/configuration/normalize.js", () => {
 
         it("should support Object", async () => {
             const dir = ".";
-            const normalized = await normalize.normalizeReporters(
+            const normalized = await normalizes.normalizeReporters(
                 {
                     formatter: "json",
                     level: Levels.WARN,
@@ -401,7 +401,7 @@ describe("src/core/configuration/normalize.js", () => {
         it("should reject non-Array and non-Object", async () => {
             const dir = ".";
             await assert.rejects(
-                () => normalize.normalizeReporters("foo", { dir }),
+                () => normalizes.normalizeReporters("foo", { dir }),
                 {
                     name: "TypeError",
                     message: "'reporters' incorrect type.",
@@ -412,17 +412,17 @@ describe("src/core/configuration/normalize.js", () => {
 
     describe("normalizeWrapper()", () => {
         it("should support string", async () => {
-            const normalized = await normalize.normalizeWrapper("eslint");
+            const normalized = await normalizes.normalizeWrapper("eslint");
             assert.equal(normalized, ESLintWrapper);
         });
 
         it("should support string in uppercase", async () => {
-            const normalized = await normalize.normalizeWrapper("YAML-Lint");
+            const normalized = await normalizes.normalizeWrapper("YAML-Lint");
             assert.equal(normalized, YAMLLintWrapper);
         });
 
         it("should reject unknown string", async () => {
-            await assert.rejects(() => normalize.normalizeWrapper("foo"), {
+            await assert.rejects(() => normalizes.normalizeWrapper("foo"), {
                 name: "Error",
                 message:
                     "Value of property 'wrapper' is unknown (possibles" +
@@ -440,12 +440,12 @@ describe("src/core/configuration/normalize.js", () => {
 
         it("should support Wrapper", async () => {
             const MyWrapper = class extends Wrapper {};
-            const normalized = await normalize.normalizeWrapper(MyWrapper);
+            const normalized = await normalizes.normalizeWrapper(MyWrapper);
             assert.equal(normalized, MyWrapper);
         });
 
         it("should reject non-string and non-Wrapper", async () => {
-            await assert.rejects(() => normalize.normalizeWrapper(true), {
+            await assert.rejects(() => normalizes.normalizeWrapper(true), {
                 name: "TypeError",
                 message:
                     "Property 'wrapper' is incorrect type (only string is" +
@@ -459,7 +459,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinter(
+            const normalized = await normalizes.normalizeLinter(
                 "prantlf__jsonlint",
                 {
                     dir,
@@ -477,7 +477,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinter("eslint_bin", {
+            const normalized = await normalizes.normalizeLinter("eslint_bin", {
                 dir,
             });
             assert.deepEqual(normalized, {
@@ -492,7 +492,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinter("standard", {
+            const normalized = await normalizes.normalizeLinter("standard", {
                 dir,
             });
             assert.deepEqual(normalized, {
@@ -509,7 +509,7 @@ describe("src/core/configuration/normalize.js", () => {
             );
             await assert.rejects(
                 () =>
-                    normalize.normalizeLinter(
+                    normalizes.normalizeLinter(
                         "mapbox__jsonlint-lines-primitives_foo",
                         { dir },
                     ),
@@ -526,7 +526,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinter(
+            const normalized = await normalizes.normalizeLinter(
                 {
                     wrapper: "yaml-lint",
                     fix: true,
@@ -548,7 +548,7 @@ describe("src/core/configuration/normalize.js", () => {
                 import.meta.resolve("../../../../.metalint/"),
             );
             await assert.rejects(
-                () => normalize.normalizeLinter(true, { dir }),
+                () => normalizes.normalizeLinter(true, { dir }),
                 {
                     name: "TypeError",
                     message: "One of 'linters' incorrect type.",
@@ -562,7 +562,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinters(undefined, {
+            const normalized = await normalizes.normalizeLinters(undefined, {
                 dir,
             });
             assert.deepEqual(normalized, []);
@@ -572,7 +572,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinters(
+            const normalized = await normalizes.normalizeLinters(
                 [
                     {
                         wrapper: "yaml-lint",
@@ -597,7 +597,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinters("yaml-lint", {
+            const normalized = await normalizes.normalizeLinters("yaml-lint", {
                 dir,
             });
             assert.deepEqual(normalized, [
@@ -614,7 +614,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeLinters(
+            const normalized = await normalizes.normalizeLinters(
                 {
                     wrapper: "yaml-lint",
                     fix: true,
@@ -638,7 +638,7 @@ describe("src/core/configuration/normalize.js", () => {
                 import.meta.resolve("../../../../.metalint/"),
             );
             await assert.rejects(
-                () => normalize.normalizeLinters(true, { dir }),
+                () => normalizes.normalizeLinters(true, { dir }),
                 {
                     name: "TypeError",
                     message: "'linters' incorrect type.",
@@ -652,7 +652,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeOverride(
+            const normalized = await normalizes.normalizeOverride(
                 {
                     patterns: "*.js",
                     linters: { wrapper: "eslint" },
@@ -679,7 +679,7 @@ describe("src/core/configuration/normalize.js", () => {
                 import.meta.resolve("../../../../.metalint/"),
             );
             await assert.rejects(
-                () => normalize.normalizeOverride(true, { dir }),
+                () => normalizes.normalizeOverride(true, { dir }),
                 {
                     name: "TypeError",
                     message: "One of 'overrides' incorrect type.",
@@ -693,7 +693,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeOverrides(undefined, {
+            const normalized = await normalizes.normalizeOverrides(undefined, {
                 dir,
             });
             assert.deepEqual(normalized, []);
@@ -703,7 +703,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeOverrides(
+            const normalized = await normalizes.normalizeOverrides(
                 [
                     {
                         patterns: "*.yml",
@@ -738,7 +738,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeOverrides(
+            const normalized = await normalizes.normalizeOverrides(
                 {
                     patterns: "*.yml",
                     fix: true,
@@ -774,7 +774,7 @@ describe("src/core/configuration/normalize.js", () => {
                 import.meta.resolve("../../../../.metalint/"),
             );
             await assert.rejects(
-                () => normalize.normalizeOverrides(true, { dir }),
+                () => normalizes.normalizeOverrides(true, { dir }),
                 {
                     name: "TypeError",
                     message: "'overrides' is incorrect type.",
@@ -788,7 +788,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeChecker(
+            const normalized = await normalizes.normalizeChecker(
                 {
                     patterns: "*",
                     fix: true,
@@ -836,7 +836,7 @@ describe("src/core/configuration/normalize.js", () => {
                 import.meta.resolve("../../../../.metalint/"),
             );
             await assert.rejects(
-                () => normalize.normalizeChecker(true, { dir }),
+                () => normalizes.normalizeChecker(true, { dir }),
                 {
                     name: "TypeError",
                     message: "One of 'checkers' incorrect type.",
@@ -850,7 +850,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeCheckers(undefined, {
+            const normalized = await normalizes.normalizeCheckers(undefined, {
                 dir,
             });
             assert.deepEqual(normalized, []);
@@ -860,7 +860,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeCheckers(
+            const normalized = await normalizes.normalizeCheckers(
                 [
                     {
                         patterns: "*.yaml",
@@ -896,7 +896,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalizeCheckers(
+            const normalized = await normalizes.normalizeCheckers(
                 {
                     patterns: ["*.yml", "*.yaml"],
                     fix: true,
@@ -933,7 +933,7 @@ describe("src/core/configuration/normalize.js", () => {
                 import.meta.resolve("../../../../.metalint/"),
             );
             await assert.rejects(
-                () => normalize.normalizeCheckers(true, { dir }),
+                () => normalizes.normalizeCheckers(true, { dir }),
                 {
                     name: "TypeError",
                     message: "'checkers' is incorrect type.",
@@ -947,7 +947,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalize(
+            const normalized = await normalize(
                 {
                     patterns: "*",
                     fix: true,
@@ -975,7 +975,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            const normalized = await normalize.normalize(
+            const normalized = await normalize(
                 {
                     patterns: ["**"],
                 },
@@ -1000,7 +1000,7 @@ describe("src/core/configuration/normalize.js", () => {
             const dir = fileURLToPath(
                 import.meta.resolve("../../../../.metalint/"),
             );
-            await assert.rejects(() => normalize.normalize(true, { dir }), {
+            await assert.rejects(() => normalize(true, { dir }), {
                 name: "TypeError",
                 message: "Configuration should be an object.",
             });

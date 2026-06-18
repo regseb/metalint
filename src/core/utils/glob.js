@@ -156,12 +156,13 @@ export default class Glob {
     /**
      * Crée un développeur de motif.
      *
-     * @param {string|string[]} patterns      Le ou les patrons.
-     * @param {Object}          options       Les options du développeur de
-     *                                        motif.
-     * @param {string}          [options.cwd] Le chemin du répertoire courant.
-     * @param {string}          options.root  Le chemin du répertoire où se
-     *                                        trouve le répertoire `.metalint/`.
+     * @param {string | string[]} patterns      Le ou les patrons.
+     * @param {Object}            options       Les options du développeur de
+     *                                          motif.
+     * @param {string}            [options.cwd] Le chemin du répertoire courant.
+     * @param {string}            options.root  Le chemin du répertoire où se
+     *                                          trouve le répertoire
+     *                                          `.metalint/`.
      */
     constructor(patterns, { cwd, root }) {
         for (const [i, pattern] of wrap(patterns).entries()) {

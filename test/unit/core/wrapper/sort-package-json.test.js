@@ -11,6 +11,7 @@ import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
 import SortPackageJsonWrapper from "../../../../src/core/wrapper/sort-package-json.js";
 import tempFs from "../../../utils/temp-fs.js";
+import "../../../polyfills/regexp.js";
 
 describe("src/core/wrapper/sort-package-json.js", () => {
     describe("SortPackageJsonWrapper", () => {
