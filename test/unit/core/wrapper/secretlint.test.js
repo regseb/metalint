@@ -146,6 +146,43 @@ describe("src/core/wrapper/secretlint.js", () => {
                 assert.deepEqual(notices, []);
             });
 
+            it("should not ignore file in .gitignore", async () => {
+                const root = await tempFs.create({
+                    ".gitignore": ".npmrc",
+                    ".npmrc":
+                        "//registry.npmjs.org/:_authToken=" +
+                        "123e4567-e89b-12d3-a456-426614174000",
+                });
+
+                const context = {
+                    level: Levels.INFO,
+                    fix: false,
+                    root,
+                    files: [".npmrc"],
+                };
+                const options = {
+                    rules: [{ id: "@secretlint/secretlint-rule-npm" }],
+                };
+                const file = ".npmrc";
+
+                const wrapper = new SecretLintWrapper(context, options);
+                const notices = await wrapper.lint(file);
+                assert.deepEqual(notices, [
+                    {
+                        file,
+                        linter: "secretlint",
+                        rule: "Npmrc_authToken",
+                        severity: Severities.ERROR,
+                        message:
+                            "found npmrc authToken:" +
+                            " 123e4567-e89b-12d3-a456-426614174000",
+                        locations: [
+                            { line: 1, column: 23, endLine: 1, endColumn: 59 },
+                        ],
+                    },
+                ]);
+            });
+
             it("should return generic FATAL notices", async () => {
                 const context = {
                     level: Levels.FATAL,

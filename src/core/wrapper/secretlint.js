@@ -76,6 +76,7 @@ export default class SecretlintWrapper extends Wrapper {
                 cliOptions: {
                     cwd: process.cwd(),
                     filePathOrGlobList: [file],
+                    respectGitignore: false,
                 },
                 engineOptions: {
                     formatter: "json",
