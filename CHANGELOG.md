@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.22.0](https://github.com/regseb/metalint/compare/v0.21.2...v0.22.0) (2026-07-28)
+
+### Features
+
+- Add Bun support.
+  ([22f377c](https://github.com/regseb/metalint/commit/22f377cd090e11d71c90e1291a15405f637c99f4))
+- Add Deno support.
+  ([79a8235](https://github.com/regseb/metalint/commit/79a8235d92ae719aa65f96f2073ac2abe407b024))
+
+### Bug Fixes
+
+- Ignore .gitignore in Secretlint.
+  ([1d2dbc3](https://github.com/regseb/metalint/commit/1d2dbc33416ac3b01d6c0a9e97e2aa52b7b904bf))
+- Link source and types (JSR "slow types").
+  ([36e054b](https://github.com/regseb/metalint/commit/36e054bb5ccf0395f1c45e8f5618a92eafca894b))
+- Support npm-check-updates 21.
+  ([bc2e62c](https://github.com/regseb/metalint/commit/bc2e62c8df2d0cfbf4ad539225415e5efb2dc9be))
+
 ## [0.21.2](https://github.com/regseb/metalint/compare/v0.21.1...v0.21.2) (2026-01-01)
 
 ### Bug Fixes
