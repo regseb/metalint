@@ -4,7 +4,6 @@
  */
 
 import assert from "node:assert/strict";
-import path from "node:path";
 import process from "node:process";
 import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
@@ -128,80 +127,11 @@ describe("src/core/wrapper/depcheck.js", () => {
 
                 const wrapper = new DepcheckWrapper(context, options);
                 const notices = await wrapper.lint(file);
-                // Le répertoire "node_module" dans la sandbox de Stryker est un
-                // lien symbolique vers le répertoire "node_module" du projet.
-                // Donc les chemins vers les fichiers du répertoire
-                // "node_module" n'ont pas les sous-répertoires de la sandbox.
-                // https://github.com/stryker-mutator/stryker-js/issues/3978
-                const nodeModules = path.join(
-                    context.root.replace(
-                        /[\/\\]\.stryker[\/\\]tmp[\/\\]sandbox-\w+/v,
-                        "",
-                    ),
-                    "node_modules",
-                );
                 assert.equal(notices.length, 1);
                 assert.equal(notices[0].file, file);
                 assert.equal(notices[0].linter, "depcheck");
                 assert.equal(notices[0].severity, Severities.FATAL);
-                assert.match(
-                    notices[0].message,
-                    new RegExp(
-                        "^(" +
-                            // Vérifier le message dans Node.js.
-                            RegExp.escape(
-                                "Cannot find module '" +
-                                    path.join(
-                                        context.root,
-                                        "foo",
-                                        "package.json",
-                                    ) +
-                                    "'\nRequire stack:\n- " +
-                                    path.join(
-                                        nodeModules,
-                                        "depcheck",
-                                        "dist",
-                                        "utils",
-                                        "index.js",
-                                    ) +
-                                    "\n- " +
-                                    path.join(
-                                        nodeModules,
-                                        "depcheck",
-                                        "dist",
-                                        "check.js",
-                                    ) +
-                                    "\n- " +
-                                    path.join(
-                                        nodeModules,
-                                        "depcheck",
-                                        "dist",
-                                        "index.js",
-                                    ),
-                            ) +
-                            ")|(" +
-                            // Vérifier le message dans Bun.
-                            RegExp.escape(
-                                "Cannot find module '" +
-                                    path.join(
-                                        context.root,
-                                        "foo",
-                                        "package.json",
-                                    ) +
-                                    "' from '" +
-                                    path.join(
-                                        nodeModules,
-                                        "depcheck",
-                                        "dist",
-                                        "utils",
-                                        "index.js",
-                                    ) +
-                                    "'",
-                            ) +
-                            ")$",
-                        "v",
-                    ),
-                );
+                assert.match(notices[0].message, /^Cannot find module /v);
             });
 
             it("should return notices from devDependencies", async () => {

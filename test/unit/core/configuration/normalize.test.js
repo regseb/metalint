@@ -199,7 +199,7 @@ describe("src/core/configuration/normalize.js", () => {
                         `Cannot import '${path.join(dir, "./jshint.config.js")}'.`,
                     );
                     assert.ok(
-                        // Vérifier le type de la cause dans Node.js.
+                        // Vérifier le type de la cause dans Node.js et Deno.
                         err.cause instanceof Error ||
                             // Vérifier le type de la cause dans Bun.
                             "ResolveMessage" === err.cause.name,

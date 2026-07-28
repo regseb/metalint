@@ -15,7 +15,7 @@ import WriteString from "../../../utils/write-string.js";
 // Enlever la variable FORCE_COLOR, car elle est ajoutée par le test runner de
 // Node et elle corrompt la méthode styleText().
 // https://github.com/nodejs/node/issues/57921
-process.env.FORCE_COLOR = undefined;
+delete process.env.FORCE_COLOR;
 
 describe("src/core/formatter/console.js", () => {
     describe("ConsoleFormatter", () => {

@@ -258,7 +258,7 @@ describe("src/core/wrapper/ajv.js", () => {
                     notices[0].message,
                     new RegExp(
                         "^(" +
-                            // Vérifier le message dans Node.js.
+                            // Vérifier le message dans Node.js et Deno.
                             RegExp.escape(
                                 `Unexpected token 'b', "bar: baz" is not` +
                                     " valid JSON",

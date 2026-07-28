@@ -69,7 +69,7 @@ describe("src/core/wrapper/npm-package-json-lint.js", () => {
                     notices[0].message,
                     new RegExp(
                         "^(" +
-                            // Vérifier le message dans Node.js.
+                            // Vérifier le message dans Node.js et Deno.
                             RegExp.escape("Unexpected end of JSON input") +
                             ")|(" +
                             // Vérifier le message dans Bun.

@@ -165,7 +165,7 @@ describe("src/core/wrapper/sort-package-json.js", () => {
                     notices[0].message,
                     new RegExp(
                         "^(" +
-                            // Vérifier le message dans Node.js.
+                            // Vérifier le message dans Node.js et Deno.
                             RegExp.escape(
                                 `Unexpected token 'a', "name=foo" is not` +
                                     " valid JSON",
