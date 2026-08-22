@@ -7,15 +7,7 @@
 /* @ts-self-types="../../../types/core/wrapper/markdownlint.d.ts" */
 
 import fs from "node:fs/promises";
-// Désactiver la règle suivante pour cet import, car elle ne supporte pas la
-// propriété "exports" du package.json.
-// https://github.com/import-js/eslint-plugin-import/issues/1810
-// eslint-disable-next-line import/no-unresolved
 import { applyFixes } from "markdownlint";
-// Désactiver la règle suivante pour cet import, car elle ne supporte pas la
-// propriété "exports" du package.json.
-// https://github.com/import-js/eslint-plugin-import/issues/1810
-// eslint-disable-next-line import/no-unresolved
 import { lint as markdownlint } from "markdownlint/promise";
 import Levels from "../levels.js";
 import Wrapper from "./wrapper.js";

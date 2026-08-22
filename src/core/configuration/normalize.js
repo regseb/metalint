@@ -101,10 +101,12 @@ const read = async (file) => {
  * @throws {TypeError} Si le `"patterns"` n'a pas le bon type.
  */
 export const normalizePatterns = (partials) => {
-    let normalized;
     if (undefined === partials) {
         throw new Error("Property 'patterns' is required.");
-    } else if ("string" === typeof partials) {
+    }
+
+    let normalized;
+    if ("string" === typeof partials) {
         normalized = [partials];
     } else if (Array.isArray(partials)) {
         for (const partial of partials) {
@@ -161,7 +163,7 @@ export const normalizeLevel = (partial) => {
     if (undefined === partial) {
         normalized = undefined;
     } else if ("string" === typeof partial) {
-        if (partial.toUpperCase() in Levels) {
+        if (Object.hasOwn(Levels, partial.toUpperCase())) {
             normalized = Levels[partial.toUpperCase()];
         } else {
             throw new Error(

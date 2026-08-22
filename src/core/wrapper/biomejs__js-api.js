@@ -7,10 +7,6 @@
 /* @ts-self-types="../../../types/core/wrapper/biomejs__js-api.d.ts" */
 
 import fs from "node:fs/promises";
-// Désactiver la règle suivante pour cet import, car elle ne supporte pas la
-// propriété "exports" du package.json.
-// https://github.com/import-js/eslint-plugin-import/issues/1810
-// eslint-disable-next-line import/no-unresolved
 import { Biome } from "@biomejs/js-api/nodejs";
 import Levels from "../levels.js";
 import Severities from "../severities.js";
@@ -38,6 +34,7 @@ const SEVERITY_MAPPINGS = {
  * @throws {Error} Si le code unit est invalide.
  * @see https://github.com/biomejs/website/blob/main/src/playground/utils.ts#L354
  * @see https://stackoverflow.com/a/73096001/4668057
+ * @see https://github.com/biomejs/biome/pull/9940
  */
 const getUtf8ByteLength = (codeUnit) => {
     // eslint-disable-next-line unicorn/prefer-code-point
@@ -68,6 +65,7 @@ const getUtf8ByteLength = (codeUnit) => {
  * @returns {[number, number]} L'intervalle en unités de code.
  * @see https://github.com/biomejs/website/blob/main/src/playground/utils.ts#L381
  * @see https://stackoverflow.com/a/73096001/4668057
+ * @see https://github.com/biomejs/biome/pull/9940
  */
 const spanInBytesToSpanInCodeUnits = ([startInBytes, endInBytes], str) => {
     const spanInCodeUnits = /** @type {[number, number]} */ ([

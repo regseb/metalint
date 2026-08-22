@@ -6,6 +6,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { afterEach, describe, it } from "node:test";
+// eslint-disable-next-line importX/no-rename-default, importX/no-named-as-default
 import jsdoc from "eslint-plugin-jsdoc";
 import n from "eslint-plugin-n";
 import Levels from "../../../../src/core/levels.js";

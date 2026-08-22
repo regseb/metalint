@@ -33,7 +33,7 @@ export default class PurgeCSSWrapper extends Wrapper {
     /**
      * Les options du linter.
      *
-     * @type {Record<string, unknown>}
+     * @type {{ content: string[], rejected: boolean, [key: string]: any }}
      * @see https://purgecss.com/configuration.html
      */
     #options;

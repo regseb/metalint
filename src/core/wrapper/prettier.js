@@ -7,8 +7,7 @@
 /* @ts-self-types="../../../types/core/wrapper/prettier.d.ts" */
 
 import fs from "node:fs/promises";
-// eslint-disable-next-line import/namespace
-import * as prettier from "prettier";
+import { check, format } from "prettier";
 import Levels from "../levels.js";
 import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
@@ -77,16 +76,14 @@ export default class PrettierWrapper extends Wrapper {
 
         try {
             if (this.fix) {
-                // eslint-disable-next-line import/namespace
-                const output = await prettier.format(source, config);
+                const output = await format(source, config);
                 if (source !== output) {
                     await fs.writeFile(file, output);
                 }
                 return [];
             }
 
-            // eslint-disable-next-line import/namespace
-            const result = await prettier.check(source, config);
+            const result = await check(source, config);
             if (result || Levels.ERROR > this.level) {
                 return [];
             }

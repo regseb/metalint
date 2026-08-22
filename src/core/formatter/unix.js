@@ -56,12 +56,13 @@ export default class UnixFormatter extends Formatter {
      *                          été traitées.
      */
     notify(file, notices) {
+        const filteredNotices = notices?.filter(
+            (n) => this.level >= n.severity,
+        );
+
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
         // critères des checkers) ou si aucune notification a été remontée.
-        if (
-            undefined === notices ||
-            !notices.some((n) => this.level >= n.severity)
-        ) {
+        if (undefined === filteredNotices || 0 === filteredNotices.length) {
             return Promise.resolve();
         }
 
@@ -72,7 +73,7 @@ export default class UnixFormatter extends Formatter {
             this.#writer.write("\n");
         }
 
-        for (const notice of notices.filter((n) => this.level >= n.severity)) {
+        for (const notice of filteredNotices) {
             this.#writer.write(`${file}:`);
 
             if (0 === notice.locations.length) {

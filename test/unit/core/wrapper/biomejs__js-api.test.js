@@ -264,8 +264,8 @@ describe("src/core/wrapper/biomejs__js-api.js", () => {
                 const root = await tempFs.create({
                     "foo.js":
                         "/* Aéअ */ const bar = true;\n" +
-                        "/* \u007F\u0080\u07FF\u0800\uD800\uDBFF\uDC00\uDFFF */" +
-                        " const baz = false;\n",
+                        "/* \u{7F}\u{80}\u{7FF}\u{800}\u{D800}\u{DBFF}" +
+                        "\u{DC00}\u{DFFF} */ const baz = false;\n",
                 });
 
                 const context = {

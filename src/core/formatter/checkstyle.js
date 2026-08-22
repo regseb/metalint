@@ -24,18 +24,12 @@ import Formatter from "./formatter.js";
  * @returns {string} Le texte converti.
  */
 const encode = (input) => {
-    const ENTITIES = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        "'": "&apos;",
-        '"': "&quot;",
-    };
-    let output = input;
-    for (const [character, entity] of Object.entries(ENTITIES)) {
-        output = output.replaceAll(character, entity);
-    }
-    return output;
+    return input
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("'", "&apos;")
+        .replaceAll('"', "&quot;");
 };
 
 /**
@@ -108,7 +102,11 @@ export default class CheckstyleFormatter extends Formatter {
 
         this.#shift(1);
         this.#writer.write(`<file name="${encode(file)}">`);
-        for (const notice of notices.filter((n) => this.level >= n.severity)) {
+        for (const notice of notices) {
+            if (this.level < notice.severity) {
+                continue;
+            }
+
             this.#shift(2);
             this.#writer.write("<error");
 

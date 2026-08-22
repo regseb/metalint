@@ -27,39 +27,6 @@ import Glob from "./utils/glob.js";
 
 export default class Metalint {
     /**
-     * Le répertoire racine.
-     *
-     * @type {string}
-     */
-    #root;
-
-    /**
-     * Les motifs généraux des fichiers.
-     *
-     * @type {Glob}
-     */
-    #glob;
-
-    /**
-     * Les checkers (avec leurs linters).
-     */
-    #checkers;
-
-    /**
-     * Les formatters.
-     *
-     * @type {Formatter[]}
-     */
-    #formatters;
-
-    /**
-     * Le cache des wrappers.
-     *
-     * @type {Map<string, Wrapper[]>}
-     */
-    #cache = new Map();
-
-    /**
      * Crée une instance de Metalint à partir d'une configuration sur le système
      * de fichiers.
      *
@@ -113,6 +80,39 @@ export default class Metalint {
     }
 
     /**
+     * Le répertoire racine.
+     *
+     * @type {string}
+     */
+    #root;
+
+    /**
+     * Les motifs généraux des fichiers.
+     *
+     * @type {Glob}
+     */
+    #glob;
+
+    /**
+     * Les checkers (avec leurs linters).
+     */
+    #checkers;
+
+    /**
+     * Les formatters.
+     *
+     * @type {Formatter[]}
+     */
+    #formatters;
+
+    /**
+     * Le cache des wrappers.
+     *
+     * @type {Map<string, Wrapper[]>}
+     */
+    #cache = new Map();
+
+    /**
      * Crée une instance de Metalint.
      *
      * @param {FlattenedConfig} config       La configuration de Metalint.
@@ -157,39 +157,41 @@ export default class Metalint {
         const results = new Results(files);
         for (const file of files) {
             for (const [i, checker] of Object.entries(this.#checkers)) {
-                if (checker.glob.test(file)) {
-                    let key = i.toString();
-                    const values = [checker.linters];
-                    for (const [j, override] of Object.entries(
-                        checker.overrides,
-                    )) {
-                        if (override.glob.test(file)) {
-                            key += `.${j}`;
-                            values.push(override.linters);
-                        }
+                if (!checker.glob.test(file)) {
+                    continue;
+                }
+
+                let key = i.toString();
+                const values = [checker.linters];
+                for (const [j, override] of Object.entries(checker.overrides)) {
+                    if (!override.glob.test(file)) {
+                        continue;
                     }
 
-                    let wrappers;
-                    if (this.#cache.has(key)) {
-                        wrappers = this.#cache.get(key);
-                    } else {
-                        wrappers = values.reduce(mergeLinters).map((linter) => {
-                            // eslint-disable-next-line new-cap
-                            return new linter.wrapper(
-                                {
-                                    fix: linter.fix,
-                                    level: linter.level,
-                                    root: this.#root,
-                                    files,
-                                },
-                                linter.options,
-                            );
-                        });
-                        this.#cache.set(key, wrappers);
-                    }
-                    for (const wrapper of wrappers) {
-                        results.add(file, await wrapper.lint(file));
-                    }
+                    key += `.${j}`;
+                    values.push(override.linters);
+                }
+
+                let wrappers;
+                if (this.#cache.has(key)) {
+                    wrappers = this.#cache.get(key);
+                } else {
+                    wrappers = values.reduce(mergeLinters).map((linter) => {
+                        // eslint-disable-next-line new-cap
+                        return new linter.wrapper(
+                            {
+                                fix: linter.fix,
+                                level: linter.level,
+                                root: this.#root,
+                                files,
+                            },
+                            linter.options,
+                        );
+                    });
+                    this.#cache.set(key, wrappers);
+                }
+                for (const wrapper of wrappers) {
+                    results.add(file, await wrapper.lint(file));
                 }
             }
         }

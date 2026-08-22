@@ -41,14 +41,16 @@ const print = (writer, text, style = []) => {
  * @param {Writable} writer  Le flux où afficher la ligne.
  */
 const printCodeSourceLine = (line, content, active, writer) => {
-    // Vérifier que le numéro de la ligne demandée existe dans le fichier.
-    if (0 < line && line <= content.length) {
-        print(writer, line.toString().padStart(5) + (active ? "‖" : "|"));
-        if (0 !== content[line - 1].length) {
-            print(writer, ` ${content[line - 1]}`);
-        }
-        print(writer, "\n");
+    // Vérifier si le numéro de la ligne demandée est extérieur du fichier.
+    if (0 >= line || line > content.length) {
+        return;
     }
+
+    print(writer, line.toString().padStart(5) + (active ? "‖" : "|"));
+    if (0 !== content[line - 1].length) {
+        print(writer, ` ${content[line - 1]}`);
+    }
+    print(writer, "\n");
 };
 
 /**
@@ -169,7 +171,12 @@ export default class ConsoleFormatter extends Formatter {
             }
             return;
         }
-        if (!notices.some((n) => this.level >= n.severity)) {
+
+        const filteredNotices = notices?.filter(
+            (n) => this.level >= n.severity,
+        );
+
+        if (0 === filteredNotices.length) {
             if (this.#showZeroNotice) {
                 print(this.#writer, `${file}: 0 notice.`, "bold");
                 print(this.#writer, "\n\n");
@@ -184,7 +191,7 @@ export default class ConsoleFormatter extends Formatter {
             [Severities.INFO]: 0,
         };
 
-        for (const notice of notices.filter((n) => this.level >= n.severity)) {
+        for (const notice of filteredNotices) {
             counts[notice.severity] += 1;
         }
 
@@ -235,7 +242,7 @@ export default class ConsoleFormatter extends Formatter {
             }
         }
 
-        for (const notice of notices.filter((n) => this.level >= n.severity)) {
+        for (const notice of filteredNotices) {
             switch (notice.severity) {
                 case Severities.FATAL:
                     print(this.#writer, "FATAL", "magenta");

@@ -43,9 +43,8 @@ export const WRAPPERS = scripts
     .filter((f) => f.endsWith(".js") && "wrapper.js" !== f)
     // Enlever l'extension des fichiers.
     .map((f) => f.slice(0, -3))
-    // Trier la liste, car Bun et Deno retournent une liste non-triée.
+    // Trier la liste, car Bun retourne une liste non-triée.
     // https://github.com/oven-sh/bun/issues/25734
-    // https://github.com/denoland/deno/issues/36335
     .toSorted((a, b) => a.localeCompare(b));
 
 /**

@@ -6,11 +6,8 @@
 
 /* @ts-self-types="../../../types/core/wrapper/npm-check-updates.d.ts" */
 
-// La dépendance "@types/semver-utils" n'est pas inclue dans le projet
-// "npm-check-updates" alors qu'elle est nécessaire. "@types/semver-utils" a
-// donc été ajoutée dans les dépendances de Metalint.
-// https://github.com/raineorshine/npm-check-updates/issues/1461
-import * as ncu from "npm-check-updates";
+// eslint-disable-next-line importX/no-rename-default
+import ncu from "npm-check-updates";
 import Levels from "../levels.js";
 import Severities from "../severities.js";
 import Wrapper from "./wrapper.js";
@@ -74,10 +71,7 @@ export default class NpmCheckUpdatesWrapper extends Wrapper {
         }
 
         try {
-            const results = await ncu.run({
-                ...this.#options,
-                packageFile: file,
-            });
+            const results = await ncu({ ...this.#options, packageFile: file });
             if (Levels.ERROR > this.level) {
                 return [];
             }

@@ -17,9 +17,9 @@ assignees: ""
 
 ### Environment
 
-- Metalint version<!-- e.g. 0.21.2 -->:
-- Runtime version<!-- e.g. Node.js v26.5.0, Bun 1.3.14, Deno 2.9.4 -->:
-- Linter version (if appropriate)<!-- e.g. eslint 9.39.5 -->:
+- Metalint version<!-- e.g. 0.22.0 -->:
+- Runtime version<!-- e.g. Node.js v26.6.0, Bun 1.3.14, Deno 2.9.4 -->:
+- Linter version (if appropriate)<!-- e.g. eslint 10.8.0 -->:
 
 ### Additional context
 

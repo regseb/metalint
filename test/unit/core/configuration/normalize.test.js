@@ -19,6 +19,7 @@ import PrettierWrapper from "../../../../src/core/wrapper/prettier.js";
 import StandardWrapper from "../../../../src/core/wrapper/standard.js";
 import Wrapper from "../../../../src/core/wrapper/wrapper.js";
 import YAMLLintWrapper from "../../../../src/core/wrapper/yaml-lint.js";
+import "../../../polyfills/error.js";
 
 describe("src/core/configuration/normalize.js", () => {
     describe("normalizePatterns()", () => {
@@ -200,7 +201,7 @@ describe("src/core/configuration/normalize.js", () => {
                     );
                     assert.ok(
                         // Vérifier le type de la cause dans Node.js et Deno.
-                        err.cause instanceof Error ||
+                        Error.isError(err.cause) ||
                             // Vérifier le type de la cause dans Bun.
                             "ResolveMessage" === err.cause.name,
                         err.cause,

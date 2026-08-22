@@ -41,6 +41,8 @@ export default class FrenchFormatter extends Formatter {
      *
      * @param {string}   file      Le fichier analysé.
      * @param {Notice[]} [notices] La liste des notifications ou `undefined`.
+     * @returns {Promise<void>} La promesse indiquant que les notifications ont
+     *                          été traitées.
      */
     notify(file, notices) {
         // Si le fichier n'a pas été vérifié (car il ne rentrait pas dans les
@@ -49,7 +51,11 @@ export default class FrenchFormatter extends Formatter {
             return Promise.resolve();
         }
 
-        for (const notice of notices.filter((n) => this.level >= n.severity)) {
+        for (const notice of notices) {
+            if (this.level < notice.severity) {
+                continue;
+            }
+
             this.#writer.write(`Le linter ${notice.linter} a trouvé `);
             if (undefined === notice.rule) {
                 this.#writer.write("un problème ");

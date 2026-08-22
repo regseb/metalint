@@ -206,9 +206,9 @@ describe("src/core/wrapper/ajv.js", () => {
                     files: ["foo.json"],
                 };
                 const options = {
-                    loadSchema(/** @type {string} */ _uri) {
-                        return { type: "integer" };
-                    },
+                    loadSchema: (/** @type {string} */ _uri) => ({
+                        type: "integer",
+                    }),
                     schema: {
                         type: "object",
                         properties: { bar: { $ref: "qux" } },

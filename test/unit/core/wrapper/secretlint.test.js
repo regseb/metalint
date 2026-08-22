@@ -8,14 +8,14 @@ import process from "node:process";
 import { afterEach, describe, it } from "node:test";
 import Levels from "../../../../src/core/levels.js";
 import Severities from "../../../../src/core/severities.js";
-import SecretLintWrapper from "../../../../src/core/wrapper/secretlint.js";
+import SecretlintWrapper from "../../../../src/core/wrapper/secretlint.js";
 import tempFs from "../../../utils/temp-fs.js";
 
 describe("src/core/wrapper/secretlint.js", () => {
-    describe("SecretLintWrapper", () => {
+    describe("SecretlintWrapper", () => {
         describe("configurable", () => {
             it("should be true", () => {
-                assert.ok(SecretLintWrapper.configurable);
+                assert.ok(SecretlintWrapper.configurable);
             });
         });
 
@@ -36,7 +36,7 @@ describe("src/core/wrapper/secretlint.js", () => {
                 const options = /** @type {Record<string, unknown>} */ ({});
                 const file = "foo";
 
-                const wrapper = new SecretLintWrapper(context, options);
+                const wrapper = new SecretlintWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, []);
             });
@@ -59,7 +59,7 @@ describe("src/core/wrapper/secretlint.js", () => {
                 };
                 const file = ".npmrc";
 
-                const wrapper = new SecretLintWrapper(context, options);
+                const wrapper = new SecretlintWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, [
                     {
@@ -100,7 +100,7 @@ describe("src/core/wrapper/secretlint.js", () => {
                 };
                 const file = ".npmrc";
 
-                const wrapper = new SecretLintWrapper(context, options);
+                const wrapper = new SecretlintWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, [
                     {
@@ -141,7 +141,7 @@ describe("src/core/wrapper/secretlint.js", () => {
                 };
                 const file = ".npmrc";
 
-                const wrapper = new SecretLintWrapper(context, options);
+                const wrapper = new SecretlintWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, []);
             });
@@ -165,7 +165,7 @@ describe("src/core/wrapper/secretlint.js", () => {
                 };
                 const file = ".npmrc";
 
-                const wrapper = new SecretLintWrapper(context, options);
+                const wrapper = new SecretlintWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, [
                     {
@@ -197,7 +197,7 @@ describe("src/core/wrapper/secretlint.js", () => {
                 // linter.
                 const file = "foo";
 
-                const wrapper = new SecretLintWrapper(context, options);
+                const wrapper = new SecretlintWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, [
                     {
@@ -222,7 +222,7 @@ describe("src/core/wrapper/secretlint.js", () => {
                 };
                 const file = "foo.json";
 
-                const wrapper = new SecretLintWrapper(context, options);
+                const wrapper = new SecretlintWrapper(context, options);
                 const notices = await wrapper.lint(file);
                 assert.deepEqual(notices, [
                     {

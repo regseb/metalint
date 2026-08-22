@@ -7,7 +7,8 @@
 /* @ts-self-types="../../../types/core/wrapper/svglint.d.ts" */
 
 // @ts-expect-error -- SVGLint ne fournit pas de types.
-// eslint-disable-next-line import/no-unresolved
+// https://github.com/simple-icons/svglint/pull/163
+// eslint-disable-next-line importX/no-rename-default
 import SVGLint from "svglint";
 import Levels from "../levels.js";
 import Wrapper from "./wrapper.js";

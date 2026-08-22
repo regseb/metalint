@@ -10,10 +10,6 @@
 // n'y est pas. https://github.com/nodejs/node/issues/38627
 import { createReadStream } from "node:fs";
 // @ts-expect-error -- doiuse ne fournit pas de types.
-// Désactiver la règle suivante pour cet import, car elle ne supporte pas la
-// propriété "exports" du package.json.
-// https://github.com/import-js/eslint-plugin-import/issues/1810
-// eslint-disable-next-line import/no-unresolved
 import doiuse from "doiuse/stream";
 import Levels from "../levels.js";
 import Wrapper from "./wrapper.js";
@@ -78,9 +74,10 @@ export default class DoIUseWrapper extends Wrapper {
         }
 
         const results = await new Promise((resolve) => {
-            const data = [];
+            const data = /** @type {string[]} */ ([]);
             createReadStream(file)
                 .pipe(this.#doiuse)
+                // eslint-disable-next-line unicorn/no-return-array-push
                 .on("data", (d) => data.push(d))
                 .on("end", () => resolve(data));
         });

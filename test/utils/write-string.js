@@ -21,6 +21,7 @@ export default class WriteString extends Writable {
      * @param {Function} callback  La fonction appelée après que le texte est
      *                             écrit.
      */
+    // eslint-disable-next-line unicorn/prefer-private-class-fields
     _write(chunk, _encoding, callback) {
         this.#chunks.push(chunk);
         callback();

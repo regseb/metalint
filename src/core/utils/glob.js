@@ -255,9 +255,8 @@ export default class Glob {
         // Si c'est un répertoire : parcourir ses fichiers.
         if (base.endsWith("/")) {
             const dirents = await fs.readdir(base, { withFileTypes: true });
-            // Trier la liste, car Bun et Deno retournent une liste non-triée.
+            // Trier la liste, car Bun retourne une liste non-triée.
             // https://github.com/oven-sh/bun/issues/25734
-            // https://github.com/denoland/deno/issues/36335
             dirents.sort((a, b) => a.name.localeCompare(b.name));
             for (const dirent of dirents) {
                 files.push(

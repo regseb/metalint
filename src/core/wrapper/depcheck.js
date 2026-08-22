@@ -87,6 +87,7 @@ export default class DepcheckWrapper extends Wrapper {
                 this.#options,
             );
 
+            /* eslint-disable unicorn/prefer-array-from-map */
             const notices = [];
             for (const dependency of results.dependencies) {
                 notices.push({
@@ -98,6 +99,7 @@ export default class DepcheckWrapper extends Wrapper {
                         " 'package.json' file, but not used by any code.",
                 });
             }
+            /* eslint-enable unicorn/prefer-array-from-map */
             for (const devDependency of results.devDependencies) {
                 notices.push({
                     file,

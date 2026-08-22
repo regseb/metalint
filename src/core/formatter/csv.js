@@ -70,7 +70,11 @@ export default class CSVFormatter extends Formatter {
             return Promise.resolve();
         }
 
-        for (const notice of notices.filter((n) => this.level >= n.severity)) {
+        for (const notice of notices) {
+            if (this.level < notice.severity) {
+                continue;
+            }
+
             this.#writer.write(`${doublequote(file)},`);
 
             if (0 === notice.locations.length) {

@@ -6,10 +6,6 @@
 
 /* @ts-self-types="../../../types/core/wrapper/markuplint.d.ts" */
 
-// Désactiver la règle suivante pour cet import, car elle ne supporte pas la
-// propriété "exports" du package.json.
-// https://github.com/import-js/eslint-plugin-import/issues/1810
-// eslint-disable-next-line import/no-unresolved
 import { MLEngine } from "markuplint";
 import Levels from "../levels.js";
 import Severities from "../severities.js";

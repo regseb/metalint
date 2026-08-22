@@ -109,7 +109,7 @@ jobs:
         env:
           TAG_NAME: ${{ steps.release.outputs.tag_name }}
           NPM_NAME: ${{ env.NPM_NAME }}
-        run: npm pack ${NPM_NAME}@${TAG_NAME}
+        run: npm pack --min-release-age 0 ${NPM_NAME}@${TAG_NAME}
 
       - name: Upload tarball to release
         if: ${{ steps.release.outputs.release_created }}

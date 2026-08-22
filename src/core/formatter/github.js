@@ -17,7 +17,7 @@ import Formatter from "./formatter.js";
  */
 
 /**
- * Le formateur qui écrit les résultats pour les Github Actions.
+ * Le formateur qui écrit les résultats pour les GitHub Actions.
  *
  * @see https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions
  */
@@ -57,7 +57,11 @@ export default class GitHubFormatter extends Formatter {
             return Promise.resolve();
         }
 
-        for (const notice of notices.filter((n) => this.level >= n.severity)) {
+        for (const notice of notices) {
+            if (this.level < notice.severity) {
+                continue;
+            }
+
             this.#writer.write("::");
             switch (notice.severity) {
                 case Severities.FATAL:
