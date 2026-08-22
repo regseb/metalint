@@ -1,6 +1,6 @@
 {
   "name": "metalint",
-  "version": "0.22.0",
+  "version": "0.22.1",
   "description": "One linter to rule them all.",
   "keywords": [
     "checker",
