@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.22.1](https://github.com/regseb/metalint/compare/v0.22.0...v0.22.1) (2026-08-22)
+
+### Bug Fixes
+
+- **formatter/console:** Fix columns order.
+  ([5c0b98f](https://github.com/regseb/metalint/commit/5c0b98f3525f856f1c45a935d02c027f8d71e6c0))
+
 ## [0.22.0](https://github.com/regseb/metalint/compare/v0.21.2...v0.22.0) (2026-07-28)
 
 ### Features
