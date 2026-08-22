@@ -67,7 +67,7 @@ const printCodeSource = (locations, content, writer) => {
             if (characters[i].line === location.line) {
                 if (undefined !== location.column) {
                     characters[i].columns.push(location.column);
-                    characters[i].columns.sort();
+                    characters[i].columns.sort((a, b) => a - b);
                 }
                 break;
             }
@@ -79,7 +79,7 @@ const printCodeSource = (locations, content, writer) => {
             };
             if (undefined !== location.column) {
                 characters[i].columns.push(location.column);
-                characters[i].columns.sort();
+                characters[i].columns.sort((a, b) => a - b);
             }
         }
     }
